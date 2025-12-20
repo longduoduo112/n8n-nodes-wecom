@@ -112,14 +112,22 @@ export class WeComTrigger implements INodeType {
 				description: '选择要接收的消息和事件类型',
 				hint: '可以选择多个类型，如果选择"所有事件"则接收所有消息',
 			},
-			{
-				displayName: '返回原始数据',
-				name: 'returnRawData',
-				type: 'boolean',
-				default: false,
-				description: 'Whether to return unparsed raw XML data',
-				hint: '开启后会在输出中包含原始的 XML 字符串',
-			},
+		{
+			displayName: '被动回复消息',
+			name: 'enablePassiveReply',
+			type: 'boolean',
+			default: false,
+			description: 'Whether to enable passive reply',
+			hint: '启用后工作流可以通过"企业微信被动回复"节点回复消息。关闭时直接返回成功响应，响应更快。',
+		},
+		{
+			displayName: '返回原始数据',
+			name: 'returnRawData',
+			type: 'boolean',
+			default: false,
+			description: 'Whether to return unparsed raw XML data',
+			hint: '开启后会在输出中包含原始的 XML 字符串',
+		},
 		],
 	};
 
@@ -250,6 +258,7 @@ export class WeComTrigger implements INodeType {
 
 		// 准备返回数据
 		const returnRawData = this.getNodeParameter('returnRawData', false) as boolean;
+		const enablePassiveReply = this.getNodeParameter('enablePassiveReply', false) as boolean;
 		const outputData: IDataObject = {
 			...messageData,
 			receivedAt: new Date().toISOString(),
@@ -265,8 +274,23 @@ export class WeComTrigger implements INodeType {
 			encodingAESKey,
 			corpId,
 		};
+		// 根据是否启用被动回复决定响应方式
+		if (!enablePassiveReply) {
+			// 未启用被动回复：直接返回 success，不等待工作流执行
+			return {
+				workflowData: [
+					[
+						{
+							json: outputData,
+						},
+					],
+				],
+				webhookResponse: 'success',
+			};
+		}
 
-		// 返回数据给工作流
+		// 启用被动回复：不返回 webhookResponse，等待工作流执行完成
+		// 工作流最后的节点（通常是 WeComReply 节点）会返回加密的 XML 响应
 		return {
 			workflowData: [
 				[
