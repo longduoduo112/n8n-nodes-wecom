@@ -38,7 +38,7 @@ export class WeComTrigger implements INodeType {
 			{
 				name: 'default',
 				httpMethod: 'POST',
-				responseMode: 'lastNode',
+				responseMode: '={{$parameter.enablePassiveReply ? "lastNode" : "onReceived"}}',
 				path: '={{$parameter.path}}',
 				isFullPath: true,
 			},
@@ -276,7 +276,8 @@ export class WeComTrigger implements INodeType {
 		};
 		// 根据是否启用被动回复决定响应方式
 		if (!enablePassiveReply) {
-			// 未启用被动回复：直接返回 success，不等待工作流执行
+			// 未启用被动回复：使用 onReceived 模式
+			// 立即返回 'success'，工作流异步执行
 			return {
 				workflowData: [
 					[
@@ -289,8 +290,8 @@ export class WeComTrigger implements INodeType {
 			};
 		}
 
-		// 启用被动回复：不返回 webhookResponse，等待工作流执行完成
-		// 工作流最后的节点（通常是 WeComReply 节点）会返回加密的 XML 响应
+		// 启用被动回复：使用 lastNode 模式
+		// 等待工作流执行完成，由 WeComReply 节点返回响应
 		return {
 			workflowData: [
 				[
