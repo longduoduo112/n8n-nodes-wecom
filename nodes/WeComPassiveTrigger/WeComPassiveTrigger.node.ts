@@ -46,7 +46,7 @@ export class WeComPassiveTrigger implements INodeType {
 			{
 				name: 'default',
 				httpMethod: 'POST',
-				responseMode: 'lastNode',
+				responseMode: 'responseNode',
 				path: '={{$parameter.path}}',
 				isFullPath: true,
 			},
@@ -285,10 +285,9 @@ export class WeComPassiveTrigger implements INodeType {
 		};
 
 		// 被动回复模式：等待工作流执行完成，由被动回复节点返回响应
-		// responseMode: 'lastNode' 会自动等待最后一个节点的输出作为响应
-		// 参考官方 ChatTrigger 实现，需要同时返回 webhookResponse 和 workflowData
+		// responseMode: 'responseNode' 表示响应由被动回复节点通过 sendResponse() 发送
+		// 参考官方 Webhook 节点实现
 		return {
-			webhookResponse: { status: 200 },
 			workflowData: [
 				[
 					{

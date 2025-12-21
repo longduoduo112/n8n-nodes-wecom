@@ -139,15 +139,20 @@ export async function executePassiveReply(
 					this.getNode(),
 				);
 
-				// 返回加密的 XML 作为 webhook 响应
-				// n8n 的 responseMode: 'lastNode' 会检查 body/headers/statusCode 字段
+				// 使用 sendResponse 方法直接发送响应
+				// 参考官方 RespondToWebhook 节点的实现
+				this.sendResponse({
+					body: encryptedResponseXML,
+					headers: {
+						'content-type': 'application/xml; charset=utf-8',
+					},
+					statusCode: 200,
+				});
+
+				// 返回数据供下一个节点使用（如果有）
 				returnData.push({
 					json: {
-						body: encryptedResponseXML,
-						headers: {
-							'content-type': 'application/xml; charset=utf-8',
-						},
-						statusCode: 200,
+						success: true,
 						// 保留原始消息信息供调试
 						_debug: {
 							fromUserName,
