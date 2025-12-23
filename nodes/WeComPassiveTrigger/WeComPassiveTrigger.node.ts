@@ -46,7 +46,8 @@ export class WeComPassiveTrigger implements INodeType {
 			{
 				name: 'default',
 				httpMethod: 'POST',
-				responseMode: 'responseNode',
+				responseMode: 'lastNode',
+				responseData: 'noData',
 				path: '={{$parameter.path}}',
 				isFullPath: true,
 			},
