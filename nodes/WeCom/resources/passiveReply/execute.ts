@@ -43,12 +43,12 @@ export async function executePassiveReply(
 					);
 				}
 
-				const replyType = this.getNodeParameter('replyType', i) as 'text' | 'image' | 'voice' | 'video' | 'news' | 'update_template_card';
+				const replyType = this.getNodeParameter('replyType', 0, 'text') as 'text' | 'image' | 'voice' | 'video' | 'news' | 'update_template_card';
 				let replyContent: Record<string, unknown> = {};
 
 				switch (replyType) {
 					case 'text': {
-						const textContent = this.getNodeParameter('textContent', i) as string;
+						const textContent = this.getNodeParameter('textContent', 0) as string;
 						if (!textContent) {
 							throw new NodeOperationError(
 								this.getNode(),
@@ -63,7 +63,7 @@ export async function executePassiveReply(
 					case 'image':
 					case 'voice':
 					case 'video': {
-						const mediaId = this.getNodeParameter('mediaId', i) as string;
+						const mediaId = this.getNodeParameter('mediaId', 0) as string;
 						if (!mediaId) {
 							throw new NodeOperationError(
 								this.getNode(),
@@ -74,8 +74,8 @@ export async function executePassiveReply(
 						replyContent = { MediaId: mediaId };
 
 						if (replyType === 'video') {
-							const videoTitle = this.getNodeParameter('videoTitle', i, '') as string;
-							const videoDescription = this.getNodeParameter('videoDescription', i, '') as string;
+							const videoTitle = this.getNodeParameter('videoTitle', 0, '') as string;
+							const videoDescription = this.getNodeParameter('videoDescription', 0, '') as string;
 							if (videoTitle) replyContent.Title = videoTitle;
 							if (videoDescription) replyContent.Description = videoDescription;
 						}
@@ -83,7 +83,7 @@ export async function executePassiveReply(
 					}
 
 					case 'news': {
-						const articlesData = this.getNodeParameter('articles', i) as {
+						const articlesData = this.getNodeParameter('articles', 0) as {
 							article?: Array<{
 								title: string;
 								description?: string;
@@ -114,22 +114,22 @@ export async function executePassiveReply(
 					}
 
 					case 'update_template_card': {
-						const buttonReplaceName = this.getNodeParameter('buttonReplaceName', i, '') as string;
+						const buttonReplaceName = this.getNodeParameter('buttonReplaceName', 0, '') as string;
 
 						if (buttonReplaceName) {
 							replyContent = { Button: { ReplaceName: buttonReplaceName } };
 						} else {
-							const cardType = this.getNodeParameter('cardType', i) as string;
-							const cardSourceData = this.getNodeParameter('cardSource', i, {}) as IDataObject;
-							const cardMainTitleData = this.getNodeParameter('cardMainTitle', i, {}) as IDataObject;
-							const cardEmphasisContentData = this.getNodeParameter('cardEmphasisContent', i, {}) as IDataObject;
-							const cardQuoteAreaData = this.getNodeParameter('cardQuoteArea', i, {}) as IDataObject;
-							const cardSubTitleText = this.getNodeParameter('cardSubTitleText', i, '') as string;
-							const cardHorizontalContentListData = this.getNodeParameter('cardHorizontalContentList', i, {}) as IDataObject;
-							const cardJumpListData = this.getNodeParameter('cardJumpList', i, {}) as IDataObject;
-							const cardActionData = this.getNodeParameter('cardAction', i, {}) as IDataObject;
-							const cardTaskId = this.getNodeParameter('cardTaskId', i, '') as string;
-							const cardActionMenuData = this.getNodeParameter('cardActionMenu', i, {}) as IDataObject;
+							const cardType = this.getNodeParameter('cardType', 0) as string;
+							const cardSourceData = this.getNodeParameter('cardSource', 0, {}) as IDataObject;
+							const cardMainTitleData = this.getNodeParameter('cardMainTitle', 0, {}) as IDataObject;
+							const cardEmphasisContentData = this.getNodeParameter('cardEmphasisContent', 0, {}) as IDataObject;
+							const cardQuoteAreaData = this.getNodeParameter('cardQuoteArea', 0, {}) as IDataObject;
+							const cardSubTitleText = this.getNodeParameter('cardSubTitleText', 0, '') as string;
+							const cardHorizontalContentListData = this.getNodeParameter('cardHorizontalContentList', 0, {}) as IDataObject;
+							const cardJumpListData = this.getNodeParameter('cardJumpList', 0, {}) as IDataObject;
+							const cardActionData = this.getNodeParameter('cardAction', 0, {}) as IDataObject;
+							const cardTaskId = this.getNodeParameter('cardTaskId', 0, '') as string;
+							const cardActionMenuData = this.getNodeParameter('cardActionMenu', 0, {}) as IDataObject;
 
 							const templateCard: Record<string, unknown> = {
 								CardType: cardType,
@@ -189,16 +189,16 @@ export async function executePassiveReply(
 							}
 
 							if (cardType === 'button_interaction') {
-								const cardButtonListData = this.getNodeParameter('cardButtonList', i, {}) as IDataObject;
+								const cardButtonListData = this.getNodeParameter('cardButtonList', 0, {}) as IDataObject;
 								if (cardButtonListData.buttons && Array.isArray(cardButtonListData.buttons)) {
 									templateCard.ButtonList = cardButtonListData.buttons;
 								}
 							} else if (cardType === 'vote_interaction' || cardType === 'multiple_interaction') {
-								const cardCheckboxQuestionKey = this.getNodeParameter('cardCheckboxQuestionKey', i, '') as string;
-								const cardCheckboxMode = this.getNodeParameter('cardCheckboxMode', i, 'single') as string;
-								const cardOptionListData = this.getNodeParameter('cardOptionList', i, {}) as IDataObject;
-								const cardSubmitButtonText = this.getNodeParameter('cardSubmitButtonText', i, '提交') as string;
-								const cardSubmitButtonKey = this.getNodeParameter('cardSubmitButtonKey', i, '') as string;
+								const cardCheckboxQuestionKey = this.getNodeParameter('cardCheckboxQuestionKey', 0, '') as string;
+								const cardCheckboxMode = this.getNodeParameter('cardCheckboxMode', 0, 'single') as string;
+								const cardOptionListData = this.getNodeParameter('cardOptionList', 0, {}) as IDataObject;
+								const cardSubmitButtonText = this.getNodeParameter('cardSubmitButtonText', 0, '提交') as string;
+								const cardSubmitButtonKey = this.getNodeParameter('cardSubmitButtonKey', 0, '') as string;
 
 								if (cardCheckboxQuestionKey) {
 									templateCard.Checkbox = {
@@ -215,7 +215,7 @@ export async function executePassiveReply(
 									};
 								}
 							} else if (cardType === 'news_notice') {
-								const cardImageTextAreaData = this.getNodeParameter('cardImageTextArea', i, {}) as IDataObject;
+								const cardImageTextAreaData = this.getNodeParameter('cardImageTextArea', 0, {}) as IDataObject;
 								if (cardImageTextAreaData.imageText) {
 									templateCard.ImageTextArea = cardImageTextAreaData.imageText;
 								}

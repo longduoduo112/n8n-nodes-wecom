@@ -271,31 +271,36 @@ export class WeComBase implements INodeType {
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 		const items = this.getInputData();
 		const resource = this.getNodeParameter('resource', 0);
-		const operation = this.getNodeParameter('operation', 0);
 
 		let returnData: INodeExecutionData[] = [];
 
-		if (resource === 'contact') {
-			returnData = await executeContact.call(this, operation as string, items);
-		} else if (resource === 'message') {
-			returnData = await executeMessage.call(this, operation as string, items);
-		} else if (resource === 'appChat') {
-			returnData = await executeAppChat.call(this, operation as string, items);
-		} else if (resource === 'pushMessage') {
-			returnData = await executePushMessage.call(this, operation as string, items);
-		} else if (resource === 'linkedcorp') {
-			returnData = await executeLinkedcorp.call(this, operation as string, items);
-		} else if (resource === 'material') {
-			returnData = await executeMaterial.call(this, operation as string, items);
-		} else if (resource === 'system') {
+		if (resource === 'system') {
+			// System resource doesn't have an operation parameter
 			for (let i = 0; i < items.length; i++) {
 				const responseData = await executeSystem.call(this, i);
 				returnData.push({ json: responseData[0] });
 			}
-		} else if (resource === 'invoice') {
-			returnData = await executeInvoice.call(this, operation as string, items);
-		} else if (resource === 'passiveReply') {
-			returnData = await executePassiveReply.call(this, operation as string, items);
+		} else {
+			// All other resources have an operation parameter
+			const operation = this.getNodeParameter('operation', 0, 'reply') as string;
+
+			if (resource === 'contact') {
+				returnData = await executeContact.call(this, operation, items);
+			} else if (resource === 'message') {
+				returnData = await executeMessage.call(this, operation, items);
+			} else if (resource === 'appChat') {
+				returnData = await executeAppChat.call(this, operation, items);
+			} else if (resource === 'pushMessage') {
+				returnData = await executePushMessage.call(this, operation, items);
+			} else if (resource === 'linkedcorp') {
+				returnData = await executeLinkedcorp.call(this, operation, items);
+			} else if (resource === 'material') {
+				returnData = await executeMaterial.call(this, operation, items);
+			} else if (resource === 'invoice') {
+				returnData = await executeInvoice.call(this, operation, items);
+			} else if (resource === 'passiveReply') {
+				returnData = await executePassiveReply.call(this, operation, items);
+			}
 		}
 
 		return [returnData];
