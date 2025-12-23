@@ -227,7 +227,7 @@ export async function executePassiveReply(
 					}
 				}
 
-					const crypto = new WeComCrypto(wecomCrypto.encodingAESKey, wecomCrypto.corpId);
+				const crypto = new WeComCrypto(wecomCrypto.encodingAESKey, wecomCrypto.corpId);
 
 				const replyMessageXML = generateReplyMessageXML(
 					fromUserName,
@@ -236,17 +236,12 @@ export async function executePassiveReply(
 					replyContent,
 				);
 
-				console.log('[被动回复] 原始消息XML (前500字符):', replyMessageXML.substring(0, 500));
-
 				const encryptedResponseXML = generateEncryptedResponseXML(
 					crypto,
 					wecomCrypto.token,
 					replyMessageXML,
 					this.getNode(),
 				);
-
-				console.log('[被动回复] 加密响应XML (前500字符):', encryptedResponseXML.substring(0, 500));
-				console.log('[被动回复] ToUserName:', fromUserName, 'FromUserName:', toUserName);
 
 				this.sendResponse({
 					body: encryptedResponseXML,
@@ -255,8 +250,6 @@ export async function executePassiveReply(
 					},
 					statusCode: 200,
 				});
-
-				console.log('[被动回复] HTTP响应已发送');
 
 				returnData.push({
 					json: {
