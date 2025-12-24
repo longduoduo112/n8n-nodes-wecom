@@ -35,7 +35,7 @@ export class WeComBase implements INodeType {
 		icon: { light: 'file:../../icons/wecom.png', dark: 'file:../../icons/wecom.dark.png' },
 		group: ['transform'],
 		version: 1,
-		subtitle: '={{$parameter["resource"] === "passiveReply" ? "reply: " + $parameter["resource"] : $parameter["operation"] + ": " + $parameter["resource"]}}',
+		subtitle: '={{$parameter["resource"] === "passiveReply" ? "reply: " + $parameter["resource"] : ($parameter["resource"] === "system" ? $parameter["resource"] : $parameter["operation"] + ": " + $parameter["resource"])}}',
 		description: '企业微信基础功能 - 通讯录、应用消息、群聊、消息推送、企业互联、素材、系统、电子发票',
 		defaults: {
 			name: '企业微信-基础',

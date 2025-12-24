@@ -10,6 +10,9 @@ export const passiveReplyDescription: INodeProperties[] = [
 		name: 'operation',
 		type: 'hidden',
 		default: 'reply',
+		displayOptions: {
+			show: showOnlyForPassiveReply,
+		},
 	},
 	{
 		displayName: '回复消息类型',
