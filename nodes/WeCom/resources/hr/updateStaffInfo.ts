@@ -1,9 +1,6 @@
 import type { INodeProperties } from 'n8n-workflow';
 
-const showOnlyForUpdateStaffInfo = {
-	resource: ['hr'],
-	operation: ['updateStaffInfo'],
-};
+const showOnly = { resource: ['hr'], operation: ['updateStaffInfo'] };
 
 export const updateStaffInfoDescription: INodeProperties[] = [
 	{
@@ -11,24 +8,74 @@ export const updateStaffInfoDescription: INodeProperties[] = [
 		name: 'userid',
 		type: 'string',
 		required: true,
-		displayOptions: {
-			show: showOnlyForUpdateStaffInfo,
-		},
+		displayOptions: { show: showOnly },
 		default: '',
 		placeholder: 'zhangsan',
-		description: '要更新信息的员工UserID，即企业成员的唯一标识。<a href="https://developer.work.weixin.qq.com/document/path/99130" target="_blank">更多信息</a>',
+		description: '要更新信息的员工UserID',
 	},
 	{
-		displayName: '更新数据',
-		name: 'staffData',
-		type: 'json',
+		displayName: '更新字段',
+		name: 'fieldsCollection',
+		type: 'fixedCollection',
 		required: true,
-		displayOptions: {
-			show: showOnlyForUpdateStaffInfo,
-		},
-		default: '{}',
-		description: '要更新的员工花名册信息，JSON格式。字段名需使用字段ID，可通过获取字段列表接口获取。<a href="https://developer.work.weixin.qq.com/document/path/99130" target="_blank">更多信息</a>',
-		hint: '示例：{"field_id_1": "张三", "field_id_2": "研发部"}',
+		displayOptions: { show: showOnly },
+		default: {},
+		placeholder: '添加字段',
+		typeOptions: { multipleValues: true },
+		description: '要更新的字段列表。字段ID可通过获取字段列表接口获取',
+		options: [
+			{
+				displayName: '字段',
+				name: 'fields',
+				values: [
+					{
+						displayName: '字段ID',
+						name: 'fieldid',
+						type: 'string',
+						default: '',
+						required: true,
+						description: '字段的唯一标识ID',
+						placeholder: 'field_id_1',
+					},
+					{
+						displayName: '字段值类型',
+						name: 'value_type',
+						type: 'options',
+						default: 'text',
+						options: [
+							{ name: '文本', value: 'text', description: '文本类型的字段值' },
+							{ name: '日期', value: 'date', description: '日期类型的字段值（时间戳）' },
+							{ name: '数字', value: 'number', description: '数字类型的字段值' },
+						],
+						description: '字段值的类型',
+					},
+					{
+						displayName: '文本值',
+						name: 'value_text',
+						type: 'string',
+						default: '',
+						displayOptions: { show: { value_type: ['text'] } },
+						description: '文本类型的字段值',
+						placeholder: '张三',
+					},
+					{
+						displayName: '日期值',
+						name: 'value_date',
+						type: 'number',
+						default: 0,
+						displayOptions: { show: { value_type: ['date'] } },
+						description: '日期类型的字段值（Unix时间戳秒）',
+					},
+					{
+						displayName: '数字值',
+						name: 'value_number',
+						type: 'number',
+						default: 0,
+						displayOptions: { show: { value_type: ['number'] } },
+						description: '数字类型的字段值',
+					},
+				],
+			},
+		],
 	},
 ];
-

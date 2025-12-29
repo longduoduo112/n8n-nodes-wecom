@@ -1,22 +1,33 @@
 import type { INodeProperties } from 'n8n-workflow';
 
-const showOnlyForDeallocate = {
-	resource: ['meeting'],
-	operation: ['deallocateMeetingAdvancedAccount'],
-};
+const showOnly = { resource: ['meeting'], operation: ['deallocateMeetingAdvancedAccount'] };
 
 export const deallocateMeetingAdvancedAccountDescription: INodeProperties[] = [
 	{
-		displayName: '用户ID列表',
-		name: 'userids',
-		type: 'string',
+		displayName: '用户列表',
+		name: 'useridCollection',
+		type: 'fixedCollection',
 		required: true,
-		displayOptions: {
-			show: showOnlyForDeallocate,
-		},
-		default: '',
-		description: '需要回收会议高级账号的用户ID列表，多个用户ID用逗号分隔',
-		hint: '用户ID列表，用逗号分隔',
+		displayOptions: { show: showOnly },
+		default: {},
+		placeholder: '添加用户',
+		typeOptions: { multipleValues: true },
+		description: '要收回高级账号的用户列表',
+		options: [
+			{
+				displayName: '用户',
+				name: 'users',
+				values: [
+					{
+						displayName: '用户ID',
+						name: 'userid',
+						type: 'string',
+						default: '',
+						required: true,
+						description: '企业微信UserID',
+					},
+				],
+			},
+		],
 	},
 ];
-

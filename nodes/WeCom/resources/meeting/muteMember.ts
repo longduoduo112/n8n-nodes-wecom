@@ -1,9 +1,6 @@
 import type { INodeProperties } from 'n8n-workflow';
 
-const showOnlyForMute = {
-	resource: ['meeting'],
-	operation: ['muteMember'],
-};
+const showOnly = { resource: ['meeting'], operation: ['muteMember'] };
 
 export const muteMemberDescription: INodeProperties[] = [
 	{
@@ -11,40 +8,49 @@ export const muteMemberDescription: INodeProperties[] = [
 		name: 'meetingid',
 		type: 'string',
 		required: true,
-		displayOptions: {
-			show: showOnlyForMute,
-		},
+		displayOptions: { show: showOnly },
 		default: '',
-		description: '要进行静音操作的会议唯一标识ID',
+		description: '会议唯一标识ID',
 		hint: '会议ID',
 	},
 	{
 		displayName: '操作类型',
-		name: 'action',
+		name: 'mute_action',
 		type: 'options',
 		required: true,
-		displayOptions: {
-			show: showOnlyForMute,
-		},
+		displayOptions: { show: showOnly },
 		options: [
-			{ name: '静音', value: 'mute' },
-			{ name: '取消静音', value: 'unmute' },
+			{ name: '静音', value: 1, description: '将成员设为静音状态' },
+			{ name: '取消静音', value: 2, description: '取消成员的静音状态' },
 		],
-		default: 'mute',
-		description: '静音操作类型。mute表示静音，unmute表示取消静音',
-		hint: '静音操作类型',
+		default: 1,
+		description: '静音操作类型',
 	},
 	{
-		displayName: '用户ID列表',
-		name: 'userids',
-		type: 'string',
+		displayName: '目标成员',
+		name: 'membersCollection',
+		type: 'fixedCollection',
 		required: true,
-		displayOptions: {
-			show: showOnlyForMute,
-		},
-		default: '',
-		description: '要进行静音或取消静音操作的用户ID列表，多个用户ID用逗号分隔',
-		hint: '要静音/取消静音的用户ID列表，用逗号分隔',
+		displayOptions: { show: showOnly },
+		default: {},
+		placeholder: '添加成员',
+		typeOptions: { multipleValues: true },
+		description: '要操作的成员列表',
+		options: [
+			{
+				displayName: '成员',
+				name: 'members',
+				values: [
+					{
+						displayName: '用户ID',
+						name: 'userid',
+						type: 'string',
+						default: '',
+						required: true,
+						description: '成员的企业微信UserID',
+					},
+				],
+			},
+		],
 	},
 ];
-

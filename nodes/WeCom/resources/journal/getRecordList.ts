@@ -1,9 +1,6 @@
 import type { INodeProperties } from 'n8n-workflow';
 
-const showOnlyForGetRecordList = {
-	resource: ['journal'],
-	operation: ['getRecordList'],
-};
+const showOnly = { resource: ['journal'], operation: ['getRecordList'] };
 
 export const getRecordListDescription: INodeProperties[] = [
 	{
@@ -11,59 +8,79 @@ export const getRecordListDescription: INodeProperties[] = [
 		name: 'starttime',
 		type: 'number',
 		required: true,
-		displayOptions: {
-			show: showOnlyForGetRecordList,
-		},
+		displayOptions: { show: showOnly },
 		default: 0,
-		placeholder: '1609459200',
-		description: '查询的起始时间，Unix时间戳（秒）。<a href="https://developer.work.weixin.qq.com/document/path/93496" target="_blank">更多信息</a>',
+		description: '查询的起始时间，Unix时间戳（秒）',
 	},
 	{
 		displayName: '结束时间',
 		name: 'endtime',
 		type: 'number',
 		required: true,
-		displayOptions: {
-			show: showOnlyForGetRecordList,
-		},
+		displayOptions: { show: showOnly },
 		default: 0,
-		placeholder: '1609545600',
-		description: '查询的结束时间，Unix时间戳（秒）。<a href="https://developer.work.weixin.qq.com/document/path/93496" target="_blank">更多信息</a>',
+		description: '查询的结束时间，Unix时间戳（秒）',
 	},
 	{
 		displayName: '游标',
 		name: 'cursor',
 		type: 'number',
-		displayOptions: {
-			show: showOnlyForGetRecordList,
-		},
+		displayOptions: { show: showOnly },
 		default: 0,
-		placeholder: '0',
-		description: '可选。分页游标，首次请求传0，后续请求使用上次响应中的next_cursor值。<a href="https://developer.work.weixin.qq.com/document/path/93496" target="_blank">更多信息</a>',
+		description: '分页游标，首次请求传0',
 	},
 	{
 		displayName: '每次拉取数量',
 		name: 'limit',
 		type: 'number',
-		typeOptions: {
-			maxValue: 100,
-		},
-		displayOptions: {
-			show: showOnlyForGetRecordList,
-		},
+		typeOptions: { maxValue: 100 },
+		displayOptions: { show: showOnly },
 		default: 50,
-		description: '每次拉取的汇报记录数量，最大值为100。<a href="https://developer.work.weixin.qq.com/document/path/93496" target="_blank">更多信息</a>',
+		description: '每次拉取的汇报记录数量，最大100',
+	},
+	{
+		displayName: '启用筛选',
+		name: 'enableFilters',
+		type: 'boolean',
+		displayOptions: { show: showOnly },
+		default: false,
+		description: '是否启用筛选条件',
 	},
 	{
 		displayName: '筛选条件',
-		name: 'filters',
-		type: 'json',
-		displayOptions: {
-			show: showOnlyForGetRecordList,
-		},
-		default: '[]',
-		description: '可选。筛选条件数组，可按汇报人、接收人等条件筛选。<a href="https://developer.work.weixin.qq.com/document/path/93496" target="_blank">更多信息</a>',
-		hint: '示例：[{"key": "reporter", "value": "zhangsan"}]',
+		name: 'filtersCollection',
+		type: 'fixedCollection',
+		displayOptions: { show: { ...showOnly, enableFilters: [true] } },
+		default: {},
+		placeholder: '添加筛选条件',
+		typeOptions: { multipleValues: true },
+		description: '筛选条件列表',
+		options: [
+			{
+				displayName: '筛选项',
+				name: 'filters',
+				values: [
+					{
+						displayName: '筛选类型',
+						name: 'key',
+						type: 'options',
+						default: 'reporter',
+						options: [
+							{ name: '汇报人', value: 'reporter' },
+							{ name: '接收人', value: 'receiver' },
+							{ name: '模板ID', value: 'template_id' },
+						],
+
+					},
+					{
+						displayName: '筛选值',
+						name: 'value',
+						type: 'string',
+						default: '',
+						description: '筛选值（UserID或模板ID）',
+					},
+				],
+			},
+		],
 	},
 ];
-

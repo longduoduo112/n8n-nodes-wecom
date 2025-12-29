@@ -83,10 +83,21 @@ export async function executeExternalContact(
 			} else if (operation === 'addCorpTag') {
 				const group_id = this.getNodeParameter('group_id', i, '') as string;
 				const group_name = this.getNodeParameter('group_name', i, '') as string;
-				const tag = this.getNodeParameter('tag', i, '[]') as string;
+				const tagCollection = this.getNodeParameter('tagCollection', i, {}) as IDataObject;
 				const order = this.getNodeParameter('order', i, 0) as number;
 
-				const body: IDataObject = { tag: JSON.parse(tag) };
+				// 构建标签列表
+				const tag: IDataObject[] = [];
+				if (tagCollection.tags) {
+					const tagsList = tagCollection.tags as IDataObject[];
+					tagsList.forEach((t) => {
+						const tagItem: IDataObject = { name: t.name };
+						if (t.order) tagItem.order = t.order;
+						tag.push(tagItem);
+					});
+				}
+
+				const body: IDataObject = { tag };
 				if (group_id) body.group_id = group_id;
 				if (group_name) body.group_name = group_name;
 				if (order) body.order = order;
@@ -299,12 +310,51 @@ export async function executeExternalContact(
 				const user = this.getNodeParameter('user', i, '') as string;
 				const remark = this.getNodeParameter('remark', i, '') as string;
 				const skip_verify = this.getNodeParameter('skip_verify', i, true) as boolean;
-				const conclusions = this.getNodeParameter('conclusions', i, '{}') as string;
+				const enableConclusions = this.getNodeParameter('enableConclusions', i, false) as boolean;
 
 				const body: IDataObject = { type, scene, skip_verify };
 				if (user) body.user = user.split(',').map((id) => id.trim());
 				if (remark) body.remark = remark;
-				if (conclusions && conclusions !== '{}') body.conclusions = JSON.parse(conclusions);
+
+				// 构建结束语
+				if (enableConclusions) {
+					const conclusionType = this.getNodeParameter('conclusionType', i, 'text') as string;
+					const conclusions: IDataObject = {};
+
+					if (conclusionType === 'text') {
+						const content = this.getNodeParameter('conclusion_text', i, '') as string;
+						if (content) conclusions.text = { content };
+					} else if (conclusionType === 'image') {
+						const media_id = this.getNodeParameter('conclusion_image_media_id', i, '') as string;
+						if (media_id) conclusions.image = { media_id };
+					} else if (conclusionType === 'link') {
+						const link: IDataObject = {};
+						const title = this.getNodeParameter('conclusion_link_title', i, '') as string;
+						const picurl = this.getNodeParameter('conclusion_link_picurl', i, '') as string;
+						const desc = this.getNodeParameter('conclusion_link_desc', i, '') as string;
+						const url = this.getNodeParameter('conclusion_link_url', i, '') as string;
+						if (title) link.title = title;
+						if (picurl) link.picurl = picurl;
+						if (desc) link.desc = desc;
+						if (url) link.url = url;
+						if (Object.keys(link).length > 0) conclusions.link = link;
+					} else if (conclusionType === 'miniprogram') {
+						const miniprogram: IDataObject = {};
+						const title = this.getNodeParameter('conclusion_miniprogram_title', i, '') as string;
+						const appid = this.getNodeParameter('conclusion_miniprogram_appid', i, '') as string;
+						const pagepath = this.getNodeParameter('conclusion_miniprogram_pagepath', i, '') as string;
+						const pic_media_id = this.getNodeParameter('conclusion_miniprogram_pic_media_id', i, '') as string;
+						if (title) miniprogram.title = title;
+						if (appid) miniprogram.appid = appid;
+						if (pagepath) miniprogram.pagepath = pagepath;
+						if (pic_media_id) miniprogram.pic_media_id = pic_media_id;
+						if (Object.keys(miniprogram).length > 0) conclusions.miniprogram = miniprogram;
+					}
+
+					if (Object.keys(conclusions).length > 0) {
+						body.conclusions = conclusions;
+					}
+				}
 
 				response = await weComApiRequest.call(
 					this,
@@ -407,17 +457,49 @@ export async function executeExternalContact(
 			}
 			// 客户朋友圈
 			else if (operation === 'addMomentTask') {
-				const visible_range = this.getNodeParameter('visible_range', i) as string;
-				const text = this.getNodeParameter('text', i) as string;
+				const senderCollection = this.getNodeParameter('senderCollection', i, {}) as IDataObject;
+				const contentType = this.getNodeParameter('contentType', i) as string;
+
+				// 构建可见范围
+				const visible_range: IDataObject = {};
+				if (senderCollection.senders) {
+					const sendersList = senderCollection.senders as IDataObject[];
+					visible_range.sender_list = { user_list: sendersList.map((s) => s.userid) };
+				}
+
+				// 构建内容
+				const body: IDataObject = { visible_range };
+
+				const text_content = this.getNodeParameter('text_content', i, '') as string;
+				if (text_content) {
+					body.text = { content: text_content };
+				}
+
+				if (contentType === 'image') {
+					const imageCollection = this.getNodeParameter('imageCollection', i, {}) as IDataObject;
+					if (imageCollection.images) {
+						const imagesList = imageCollection.images as IDataObject[];
+						body.attachments = imagesList.map((img) => ({
+							msgtype: 'image',
+							image: { media_id: img.media_id },
+						}));
+					}
+				} else if (contentType === 'link') {
+					const link: IDataObject = { msgtype: 'link', link: {} };
+					const title = this.getNodeParameter('link_title', i, '') as string;
+					const url = this.getNodeParameter('link_url', i, '') as string;
+					const media_id = this.getNodeParameter('link_media_id', i, '') as string;
+					if (title) (link.link as IDataObject).title = title;
+					if (url) (link.link as IDataObject).url = url;
+					if (media_id) (link.link as IDataObject).media_id = media_id;
+					body.attachments = [link];
+				}
 
 				response = await weComApiRequest.call(
 					this,
 					'POST',
 					'/cgi-bin/externalcontact/add_moment_task',
-					{
-						visible_range: JSON.parse(visible_range),
-						text: JSON.parse(text),
-					},
+					body,
 				);
 			} else if (operation === 'cancelMomentTask') {
 				const moment_id = this.getNodeParameter('moment_id', i) as string;
@@ -463,17 +545,53 @@ export async function executeExternalContact(
 			// 消息推送
 			else if (operation === 'addMsgTemplate') {
 				const chat_type = this.getNodeParameter('chat_type', i, 'single') as string;
-				const sender = this.getNodeParameter('sender', i, '{}') as string;
-				const text = this.getNodeParameter('text', i) as string;
+				const senderCollection = this.getNodeParameter('senderCollection', i, {}) as IDataObject;
+				const msgContentType = this.getNodeParameter('msgContentType', i) as string;
 				const allow_select = this.getNodeParameter('allow_select', i, false) as boolean;
 
 				const body: IDataObject = {
 					chat_type,
-					text: JSON.parse(text),
 					allow_select: allow_select ? 1 : 0,
 				};
-				if (sender && sender !== '{}') {
-					Object.assign(body, JSON.parse(sender));
+
+				// 构建发送范围
+				if (senderCollection.senders) {
+					const sendersList = senderCollection.senders as IDataObject[];
+					if (sendersList.length > 0 && sendersList[0].sender_list) {
+						const senderListStr = sendersList[0].sender_list as string;
+						body.sender_list = senderListStr.split(',').map((id) => id.trim());
+					}
+				}
+
+				// 构建消息内容
+				if (msgContentType === 'text') {
+					const content = this.getNodeParameter('text_content', i, '') as string;
+					if (content) body.text = { content };
+				} else if (msgContentType === 'image') {
+					const media_id = this.getNodeParameter('image_media_id', i, '') as string;
+					if (media_id) body.attachments = [{ msgtype: 'image', image: { media_id } }];
+				} else if (msgContentType === 'link') {
+					const link: IDataObject = {};
+					const title = this.getNodeParameter('link_title', i, '') as string;
+					const picurl = this.getNodeParameter('link_picurl', i, '') as string;
+					const desc = this.getNodeParameter('link_desc', i, '') as string;
+					const url = this.getNodeParameter('link_url', i, '') as string;
+					if (title) link.title = title;
+					if (picurl) link.picurl = picurl;
+					if (desc) link.desc = desc;
+					if (url) link.url = url;
+					if (Object.keys(link).length > 0) body.attachments = [{ msgtype: 'link', link }];
+				} else if (msgContentType === 'miniprogram') {
+					const miniprogram: IDataObject = {};
+					const title = this.getNodeParameter('miniprogram_title', i, '') as string;
+					const appid = this.getNodeParameter('miniprogram_appid', i, '') as string;
+					const pagepath = this.getNodeParameter('miniprogram_pagepath', i, '') as string;
+					const pic_media_id = this.getNodeParameter('miniprogram_pic_media_id', i, '') as string;
+					if (title) miniprogram.title = title;
+					if (appid) miniprogram.appid = appid;
+					if (pagepath) miniprogram.pagepath = pagepath;
+					if (pic_media_id) miniprogram.pic_media_id = pic_media_id;
+					if (Object.keys(miniprogram).length > 0) body.attachments = [{ msgtype: 'miniprogram', miniprogram }];
 				}
 
 				response = await weComApiRequest.call(
@@ -520,11 +638,38 @@ export async function executeExternalContact(
 				);
 			} else if (operation === 'sendWelcomeMsg') {
 				const welcome_code = this.getNodeParameter('welcome_code', i) as string;
-				const text = this.getNodeParameter('text', i, '{}') as string;
+				const msgContentType = this.getNodeParameter('msgContentType', i, 'text') as string;
 
 				const body: IDataObject = { welcome_code };
-				if (text && text !== '{}') {
-					body.text = JSON.parse(text);
+
+				if (msgContentType === 'text') {
+					const content = this.getNodeParameter('text_content', i, '') as string;
+					if (content) body.text = { content };
+				} else if (msgContentType === 'image') {
+					const media_id = this.getNodeParameter('image_media_id', i, '') as string;
+					if (media_id) body.attachments = [{ msgtype: 'image', image: { media_id } }];
+				} else if (msgContentType === 'link') {
+					const link: IDataObject = {};
+					const title = this.getNodeParameter('link_title', i, '') as string;
+					const picurl = this.getNodeParameter('link_picurl', i, '') as string;
+					const desc = this.getNodeParameter('link_desc', i, '') as string;
+					const url = this.getNodeParameter('link_url', i, '') as string;
+					if (title) link.title = title;
+					if (picurl) link.picurl = picurl;
+					if (desc) link.desc = desc;
+					if (url) link.url = url;
+					if (Object.keys(link).length > 0) body.attachments = [{ msgtype: 'link', link }];
+				} else if (msgContentType === 'miniprogram') {
+					const miniprogram: IDataObject = {};
+					const title = this.getNodeParameter('miniprogram_title', i, '') as string;
+					const appid = this.getNodeParameter('miniprogram_appid', i, '') as string;
+					const pagepath = this.getNodeParameter('miniprogram_pagepath', i, '') as string;
+					const pic_media_id = this.getNodeParameter('miniprogram_pic_media_id', i, '') as string;
+					if (title) miniprogram.title = title;
+					if (appid) miniprogram.appid = appid;
+					if (pagepath) miniprogram.pagepath = pagepath;
+					if (pic_media_id) miniprogram.pic_media_id = pic_media_id;
+					if (Object.keys(miniprogram).length > 0) body.attachments = [{ msgtype: 'miniprogram', miniprogram }];
 				}
 
 				response = await weComApiRequest.call(
@@ -534,11 +679,42 @@ export async function executeExternalContact(
 					body,
 				);
 			} else if (operation === 'addGroupWelcomeTemplate') {
-				const text = this.getNodeParameter('text', i) as string;
+				const msgContentType = this.getNodeParameter('msgContentType', i) as string;
 				const agentid = this.getNodeParameter('agentid', i, 0) as number;
 				const notify = this.getNodeParameter('notify', i, false) as boolean;
 
-				const body: IDataObject = { text: JSON.parse(text) };
+				const body: IDataObject = {};
+
+				if (msgContentType === 'text') {
+					const content = this.getNodeParameter('text_content', i, '') as string;
+					if (content) body.text = { content };
+				} else if (msgContentType === 'image') {
+					const media_id = this.getNodeParameter('image_media_id', i, '') as string;
+					if (media_id) body.image = { media_id };
+				} else if (msgContentType === 'link') {
+					const link: IDataObject = {};
+					const title = this.getNodeParameter('link_title', i, '') as string;
+					const picurl = this.getNodeParameter('link_picurl', i, '') as string;
+					const desc = this.getNodeParameter('link_desc', i, '') as string;
+					const url = this.getNodeParameter('link_url', i, '') as string;
+					if (title) link.title = title;
+					if (picurl) link.picurl = picurl;
+					if (desc) link.desc = desc;
+					if (url) link.url = url;
+					if (Object.keys(link).length > 0) body.link = link;
+				} else if (msgContentType === 'miniprogram') {
+					const miniprogram: IDataObject = {};
+					const title = this.getNodeParameter('miniprogram_title', i, '') as string;
+					const appid = this.getNodeParameter('miniprogram_appid', i, '') as string;
+					const pagepath = this.getNodeParameter('miniprogram_pagepath', i, '') as string;
+					const pic_media_id = this.getNodeParameter('miniprogram_pic_media_id', i, '') as string;
+					if (title) miniprogram.title = title;
+					if (appid) miniprogram.appid = appid;
+					if (pagepath) miniprogram.pagepath = pagepath;
+					if (pic_media_id) miniprogram.pic_media_id = pic_media_id;
+					if (Object.keys(miniprogram).length > 0) body.miniprogram = miniprogram;
+				}
+
 				if (agentid) body.agentid = agentid;
 				if (notify) body.notify = 1;
 
@@ -550,11 +726,38 @@ export async function executeExternalContact(
 				);
 			} else if (operation === 'editGroupWelcomeTemplate') {
 				const template_id = this.getNodeParameter('template_id', i) as string;
-				const text = this.getNodeParameter('text', i, '{}') as string;
+				const msgContentType = this.getNodeParameter('msgContentType', i, 'text') as string;
 
 				const body: IDataObject = { template_id };
-				if (text && text !== '{}') {
-					body.text = JSON.parse(text);
+
+				if (msgContentType === 'text') {
+					const content = this.getNodeParameter('text_content', i, '') as string;
+					if (content) body.text = { content };
+				} else if (msgContentType === 'image') {
+					const media_id = this.getNodeParameter('image_media_id', i, '') as string;
+					if (media_id) body.image = { media_id };
+				} else if (msgContentType === 'link') {
+					const link: IDataObject = {};
+					const title = this.getNodeParameter('link_title', i, '') as string;
+					const picurl = this.getNodeParameter('link_picurl', i, '') as string;
+					const desc = this.getNodeParameter('link_desc', i, '') as string;
+					const url = this.getNodeParameter('link_url', i, '') as string;
+					if (title) link.title = title;
+					if (picurl) link.picurl = picurl;
+					if (desc) link.desc = desc;
+					if (url) link.url = url;
+					if (Object.keys(link).length > 0) body.link = link;
+				} else if (msgContentType === 'miniprogram') {
+					const miniprogram: IDataObject = {};
+					const title = this.getNodeParameter('miniprogram_title', i, '') as string;
+					const appid = this.getNodeParameter('miniprogram_appid', i, '') as string;
+					const pagepath = this.getNodeParameter('miniprogram_pagepath', i, '') as string;
+					const pic_media_id = this.getNodeParameter('miniprogram_pic_media_id', i, '') as string;
+					if (title) miniprogram.title = title;
+					if (appid) miniprogram.appid = appid;
+					if (pagepath) miniprogram.pagepath = pagepath;
+					if (pic_media_id) miniprogram.pic_media_id = pic_media_id;
+					if (Object.keys(miniprogram).length > 0) body.miniprogram = miniprogram;
 				}
 
 				response = await weComApiRequest.call(
@@ -601,10 +804,10 @@ export async function executeExternalContact(
 					'/cgi-bin/externalcontact/get_user_behavior_data',
 					body,
 				);
-			} else if (operation === 'getGroupChatStatistic') {
+			} 			else if (operation === 'getGroupChatStatistic') {
 				const day_begin_time = this.getNodeParameter('day_begin_time', i) as number;
 				const day_end_time = this.getNodeParameter('day_end_time', i, 0) as number;
-				const owner_filter = this.getNodeParameter('owner_filter', i, '{}') as string;
+				const filterByOwner = this.getNodeParameter('filterByOwner', i, false) as boolean;
 				const order_by = this.getNodeParameter('order_by', i, 1) as number;
 				const order_asc = this.getNodeParameter('order_asc', i, false) as boolean;
 				const offset = this.getNodeParameter('offset', i, 0) as number;
@@ -618,7 +821,15 @@ export async function executeExternalContact(
 					limit,
 				};
 				if (day_end_time) body.day_end_time = day_end_time;
-				if (owner_filter && owner_filter !== '{}') body.owner_filter = JSON.parse(owner_filter);
+
+				// 构建群主筛选
+				if (filterByOwner) {
+					const ownerCollection = this.getNodeParameter('ownerCollection', i, {}) as IDataObject;
+					if (ownerCollection.owners) {
+						const ownersList = ownerCollection.owners as IDataObject[];
+						body.owner_filter = { userid_list: ownersList.map((o) => o.userid) };
+					}
+				}
 
 				response = await weComApiRequest.call(
 					this,
@@ -629,13 +840,28 @@ export async function executeExternalContact(
 			}
 			// 其他接口
 			else if (operation === 'addProductAlbum') {
-				const product = this.getNodeParameter('product', i) as string;
+				const description = this.getNodeParameter('description', i) as string;
+				const price = this.getNodeParameter('price', i) as number;
+				const product_sn = this.getNodeParameter('product_sn', i, '') as string;
+				const attachmentCollection = this.getNodeParameter('attachmentCollection', i, {}) as IDataObject;
+
+				const product: IDataObject = { description, price };
+				if (product_sn) product.product_sn = product_sn;
+
+				// 构建附件列表
+				if (attachmentCollection.attachments) {
+					const attachmentsList = attachmentCollection.attachments as IDataObject[];
+					product.attachments = attachmentsList.map((att) => ({
+						type: 'image',
+						image: { media_id: att.media_id },
+					}));
+				}
 
 				response = await weComApiRequest.call(
 					this,
 					'POST',
 					'/cgi-bin/externalcontact/add_product_album',
-					{ product: JSON.parse(product) },
+					{ product },
 				);
 			} else if (operation === 'getProductAlbumList') {
 				const limit = this.getNodeParameter('limit', i, 50) as number;
@@ -661,16 +887,33 @@ export async function executeExternalContact(
 				);
 			} else if (operation === 'updateProductAlbum') {
 				const product_id = this.getNodeParameter('product_id', i) as string;
-				const product = this.getNodeParameter('product', i) as string;
+				const description = this.getNodeParameter('description', i, '') as string;
+				const price = this.getNodeParameter('price', i, 0) as number;
+				const product_sn = this.getNodeParameter('product_sn', i, '') as string;
+				const updateAttachments = this.getNodeParameter('updateAttachments', i, false) as boolean;
+
+				const product: IDataObject = {};
+				if (description) product.description = description;
+				if (price) product.price = price;
+				if (product_sn) product.product_sn = product_sn;
+
+				// 构建附件列表
+				if (updateAttachments) {
+					const attachmentCollection = this.getNodeParameter('attachmentCollection', i, {}) as IDataObject;
+					if (attachmentCollection.attachments) {
+						const attachmentsList = attachmentCollection.attachments as IDataObject[];
+						product.attachments = attachmentsList.map((att) => ({
+							type: 'image',
+							image: { media_id: att.media_id },
+						}));
+					}
+				}
 
 				response = await weComApiRequest.call(
 					this,
 					'POST',
 					'/cgi-bin/externalcontact/update_product_album',
-					{
-						product_id,
-						product: JSON.parse(product),
-					},
+					{ product_id, product },
 				);
 			} else if (operation === 'deleteProductAlbum') {
 				const product_id = this.getNodeParameter('product_id', i) as string;
@@ -684,17 +927,26 @@ export async function executeExternalContact(
 			} else if (operation === 'addInterceptRule') {
 				const rule_name = this.getNodeParameter('rule_name', i) as string;
 				const word_list = this.getNodeParameter('word_list', i) as string;
-				const semantics_list = this.getNodeParameter('semantics_list', i, '[]') as string;
+				const semanticsCollection = this.getNodeParameter('semanticsCollection', i, {}) as IDataObject;
+
+				const body: IDataObject = {
+					rule_name,
+					word_list: word_list.split(',').map((w) => w.trim()),
+				};
+
+				// 构建语义范围
+				if (semanticsCollection.semantics) {
+					const semanticsList = semanticsCollection.semantics as IDataObject[];
+					body.semantics_list = semanticsList.map((s) => s.type);
+				} else {
+					body.semantics_list = [];
+				}
 
 				response = await weComApiRequest.call(
 					this,
 					'POST',
 					'/cgi-bin/externalcontact/add_intercept_rule',
-					{
-						rule_name,
-						word_list: word_list.split(',').map((w) => w.trim()),
-						semantics_list: JSON.parse(semantics_list),
-					},
+					body,
 				);
 			} else if (operation === 'getInterceptRuleList') {
 				response = await weComApiRequest.call(
@@ -739,17 +991,21 @@ export async function executeExternalContact(
 			} else if (operation === 'uploadAttachment') {
 				const media_type = this.getNodeParameter('media_type', i) as string;
 				const attachment_type = this.getNodeParameter('attachment_type', i) as number;
-				const attachment = this.getNodeParameter('attachment', i) as string;
+				const attachmentSource = this.getNodeParameter('attachmentSource', i, 'mediaId') as string;
+
+				const body: IDataObject = { media_type, attachment_type };
+
+				if (attachmentSource === 'mediaId') {
+					const media_id = this.getNodeParameter('media_id', i, '') as string;
+					body.attachment = { [media_type]: { media_id } };
+				}
+				// 注意：二进制上传需要特殊处理，这里简化处理
 
 				response = await weComApiRequest.call(
 					this,
 					'POST',
 					'/cgi-bin/externalcontact/upload_attachment',
-					{
-						media_type,
-						attachment_type,
-						attachment: JSON.parse(attachment),
-					},
+					body,
 				);
 			} else if (operation === 'getCustomerAcquisitionQuota') {
 				response = await weComApiRequest.call(
@@ -773,27 +1029,59 @@ export async function executeExternalContact(
 				);
 			} else if (operation === 'createCustomerAcquisitionLink') {
 				const link_name = this.getNodeParameter('link_name', i) as string;
-				const range = this.getNodeParameter('range', i) as string;
+				const rangeType = this.getNodeParameter('rangeType', i) as string;
 				const skip_verify = this.getNodeParameter('skip_verify', i, true) as boolean;
+
+				const range: IDataObject = {};
+
+				if (rangeType === 'user') {
+					const userCollection = this.getNodeParameter('userCollection', i, {}) as IDataObject;
+					if (userCollection.users) {
+						const usersList = userCollection.users as IDataObject[];
+						range.user_list = usersList.map((u) => u.userid);
+					}
+				} else if (rangeType === 'department') {
+					const departmentCollection = this.getNodeParameter('departmentCollection', i, {}) as IDataObject;
+					if (departmentCollection.departments) {
+						const deptsList = departmentCollection.departments as IDataObject[];
+						range.department_list = deptsList.map((d) => d.department_id);
+					}
+				}
 
 				response = await weComApiRequest.call(
 					this,
 					'POST',
 					'/cgi-bin/externalcontact/customer_acquisition/create_link',
-					{
-						link_name,
-						range: JSON.parse(range),
-						skip_verify,
-					},
+					{ link_name, range, skip_verify },
 				);
 			} else if (operation === 'updateCustomerAcquisitionLink') {
 				const link_id = this.getNodeParameter('link_id', i) as string;
 				const link_name = this.getNodeParameter('link_name', i, '') as string;
-				const range = this.getNodeParameter('range', i, '[]') as string;
+				const updateRange = this.getNodeParameter('updateRange', i, false) as boolean;
 
 				const body: IDataObject = { link_id };
 				if (link_name) body.link_name = link_name;
-				if (range && range !== '[]') body.range = JSON.parse(range);
+
+				if (updateRange) {
+					const rangeType = this.getNodeParameter('rangeType', i) as string;
+					const range: IDataObject = {};
+
+					if (rangeType === 'user') {
+						const userCollection = this.getNodeParameter('userCollection', i, {}) as IDataObject;
+						if (userCollection.users) {
+							const usersList = userCollection.users as IDataObject[];
+							range.user_list = usersList.map((u) => u.userid);
+						}
+					} else if (rangeType === 'department') {
+						const departmentCollection = this.getNodeParameter('departmentCollection', i, {}) as IDataObject;
+						if (departmentCollection.departments) {
+							const deptsList = departmentCollection.departments as IDataObject[];
+							range.department_list = deptsList.map((d) => d.department_id);
+						}
+					}
+
+					if (Object.keys(range).length > 0) body.range = range;
+				}
 
 				response = await weComApiRequest.call(
 					this,

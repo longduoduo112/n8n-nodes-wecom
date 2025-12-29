@@ -1,5 +1,4 @@
 import type { IExecuteFunctions, INodeExecutionData, IDataObject } from 'n8n-workflow';
-import { NodeOperationError } from 'n8n-workflow';
 import { weComApiRequest } from '../../shared/transport';
 
 export async function executeMeeting(
@@ -19,7 +18,7 @@ export async function executeMeeting(
 				const start_time = this.getNodeParameter('start_time', i) as number;
 				const end_time = this.getNodeParameter('end_time', i) as number;
 				const type = this.getNodeParameter('type', i) as number;
-				const attendees = this.getNodeParameter('attendees', i, '[]') as string;
+				const attendeesCollection = this.getNodeParameter('attendeesCollection', i, {}) as IDataObject;
 
 				const body: IDataObject = {
 					subject,
@@ -28,15 +27,11 @@ export async function executeMeeting(
 					type,
 				};
 
-				if (attendees && attendees !== '[]') {
-					try {
-						body.attendees = JSON.parse(attendees);
-					} catch (error) {
-						throw new NodeOperationError(
-							this.getNode(),
-							`attendees 必须是有效的 JSON: ${error.message}`,
-							{ itemIndex: i },
-						);
+				// 处理参会人员
+				if (attendeesCollection.attendees) {
+					const attendeesList = attendeesCollection.attendees as IDataObject[];
+					if (attendeesList.length > 0) {
+						body.attendees = attendeesList.map((a) => ({ userid: a.userid }));
 					}
 				}
 
@@ -77,53 +72,68 @@ export async function executeMeeting(
 			}
 			// 会议统计管理
 			else if (operation === 'getMeetingRecords') {
-				const start_time = this.getNodeParameter('start_time', i) as number;
-				const end_time = this.getNodeParameter('end_time', i) as number;
-				const userid = this.getNodeParameter('userid', i, '') as string;
-				const cursor = this.getNodeParameter('cursor', i, '') as string;
-				const limit = this.getNodeParameter('limit', i, 20) as number;
+				const meetingid = this.getNodeParameter('meetingid', i) as string;
+				const start_time = this.getNodeParameter('start_time', i, 0) as number;
+				const end_time = this.getNodeParameter('end_time', i, 0) as number;
 
-				const body: IDataObject = { start_time, end_time, limit };
-				if (userid) body.userid = userid;
-				if (cursor) body.cursor = cursor;
+				const body: IDataObject = { meetingid };
+				if (start_time) body.start_time = start_time;
+				if (end_time) body.end_time = end_time;
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/meeting/get_user_meeting_list', body);
 			}
 			// 预约会议高级管理
 			else if (operation === 'createAdvancedMeeting') {
-				const meeting_info = this.getNodeParameter('meeting_info', i) as string;
+				const subject = this.getNodeParameter('subject', i) as string;
+				const start_time = this.getNodeParameter('start_time', i) as number;
+				const end_time = this.getNodeParameter('end_time', i) as number;
+				const admin_userid = this.getNodeParameter('admin_userid', i) as string;
+				const inviteesCollection = this.getNodeParameter('inviteesCollection', i, {}) as IDataObject;
+				const advancedSettings = this.getNodeParameter('advancedSettings', i, {}) as IDataObject;
 
-				let parsedInfo;
-				try {
-					parsedInfo = JSON.parse(meeting_info);
-				} catch (error) {
-					throw new NodeOperationError(
-						this.getNode(),
-						`meeting_info 必须是有效的 JSON: ${error.message}`,
-						{ itemIndex: i },
-					);
+				const body: IDataObject = {
+					subject,
+					start_time,
+					end_time,
+					admin_userid,
+				};
+
+				// 处理受邀成员
+				if (inviteesCollection.invitees) {
+					const inviteesList = inviteesCollection.invitees as IDataObject[];
+					if (inviteesList.length > 0) {
+						body.invitees = inviteesList.map((inv) => ({ userid: inv.userid }));
+					}
 				}
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/meeting/create', parsedInfo);
+				// 处理高级设置
+				if (advancedSettings.description) body.description = advancedSettings.description;
+				if (advancedSettings.password) body.password = advancedSettings.password;
+				if (advancedSettings.enable_mute_on_entry !== undefined) {
+					body.enable_mute_on_entry = advancedSettings.enable_mute_on_entry;
+				}
+				if (advancedSettings.allow_enter_before_host !== undefined) {
+					body.allow_enter_before_host = advancedSettings.allow_enter_before_host;
+				}
+
+				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/meeting/create', body);
 			} else if (operation === 'updateAdvancedMeeting') {
 				const meetingid = this.getNodeParameter('meetingid', i) as string;
-				const meeting_info = this.getNodeParameter('meeting_info', i) as string;
+				const subject = this.getNodeParameter('subject', i, '') as string;
+				const start_time = this.getNodeParameter('start_time', i, 0) as number;
+				const end_time = this.getNodeParameter('end_time', i, 0) as number;
+				const advancedSettings = this.getNodeParameter('advancedSettings', i, {}) as IDataObject;
 
-				let parsedInfo;
-				try {
-					parsedInfo = JSON.parse(meeting_info);
-				} catch (error) {
-					throw new NodeOperationError(
-						this.getNode(),
-						`meeting_info 必须是有效的 JSON: ${error.message}`,
-						{ itemIndex: i },
-					);
-				}
+				const body: IDataObject = { meetingid };
+				if (subject) body.subject = subject;
+				if (start_time) body.start_time = start_time;
+				if (end_time) body.end_time = end_time;
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/meeting/update', {
-					meetingid,
-					...parsedInfo,
-				});
+				// 处理高级设置
+				if (advancedSettings.description) body.description = advancedSettings.description;
+				if (advancedSettings.password) body.password = advancedSettings.password;
+
+				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/meeting/update', body);
 			} else if (operation === 'getMeetingInvitees') {
 				const meetingid = this.getNodeParameter('meetingid', i) as string;
 				const cursor = this.getNodeParameter('cursor', i, '') as string;
@@ -135,38 +145,43 @@ export async function executeMeeting(
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/meeting/get_invitees', body);
 			} else if (operation === 'updateMeetingInvitees') {
 				const meetingid = this.getNodeParameter('meetingid', i) as string;
-				const invitees = this.getNodeParameter('invitees', i) as string;
+				const addInviteesCollection = this.getNodeParameter('addInviteesCollection', i, {}) as IDataObject;
+				const delInviteesCollection = this.getNodeParameter('delInviteesCollection', i, {}) as IDataObject;
 
-				let parsedInvitees;
-				try {
-					parsedInvitees = JSON.parse(invitees);
-				} catch (error) {
-					throw new NodeOperationError(
-						this.getNode(),
-						`invitees 必须是有效的 JSON: ${error.message}`,
-						{ itemIndex: i },
-					);
+				const body: IDataObject = { meetingid };
+
+				// 处理添加的成员
+				if (addInviteesCollection.invitees) {
+					const addList = addInviteesCollection.invitees as IDataObject[];
+					if (addList.length > 0) {
+						body.add_invitees = addList.map((inv) => ({ userid: inv.userid }));
+					}
 				}
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/meeting/update_invitees', {
-					meetingid,
-					invitees: parsedInvitees,
-				});
+				// 处理删除的成员
+				if (delInviteesCollection.invitees) {
+					const delList = delInviteesCollection.invitees as IDataObject[];
+					if (delList.length > 0) {
+						body.del_invitees = delList.map((inv) => ({ userid: inv.userid }));
+					}
+				}
+
+				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/meeting/update_invitees', body);
 			} else if (operation === 'getLiveParticipants') {
 				const meetingid = this.getNodeParameter('meetingid', i) as string;
 				const cursor = this.getNodeParameter('cursor', i, '') as string;
-				const limit = this.getNodeParameter('limit', i, 20) as number;
+				const size = this.getNodeParameter('size', i, 100) as number;
 
-				const body: IDataObject = { meetingid, limit };
+				const body: IDataObject = { meetingid, size };
 				if (cursor) body.cursor = cursor;
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/meeting/get_participants', body);
 			} else if (operation === 'getParticipants') {
 				const meetingid = this.getNodeParameter('meetingid', i) as string;
 				const cursor = this.getNodeParameter('cursor', i, '') as string;
-				const limit = this.getNodeParameter('limit', i, 20) as number;
+				const size = this.getNodeParameter('size', i, 100) as number;
 
-				const body: IDataObject = { meetingid, limit };
+				const body: IDataObject = { meetingid, size };
 				if (cursor) body.cursor = cursor;
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/meeting/get_user_meeting_list', body);
@@ -174,21 +189,37 @@ export async function executeMeeting(
 			// 会中控制管理
 			else if (operation === 'muteMember') {
 				const meetingid = this.getNodeParameter('meetingid', i) as string;
-				const action = this.getNodeParameter('action', i) as string;
-				const userids = this.getNodeParameter('userids', i) as string;
+				const mute_action = this.getNodeParameter('mute_action', i) as number;
+				const membersCollection = this.getNodeParameter('membersCollection', i, {}) as IDataObject;
+
+				const userid_list: string[] = [];
+				if (membersCollection.members) {
+					const membersList = membersCollection.members as IDataObject[];
+					membersList.forEach((m) => {
+						if (m.userid) userid_list.push(m.userid as string);
+					});
+				}
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/meeting/mute', {
 					meetingid,
-					action,
-					userid_list: userids.split(',').map((id) => id.trim()),
+					action: mute_action,
+					userid_list,
 				});
 			} else if (operation === 'removeMember') {
 				const meetingid = this.getNodeParameter('meetingid', i) as string;
-				const userids = this.getNodeParameter('userids', i) as string;
+				const membersCollection = this.getNodeParameter('membersCollection', i, {}) as IDataObject;
+
+				const userid_list: string[] = [];
+				if (membersCollection.members) {
+					const membersList = membersCollection.members as IDataObject[];
+					membersList.forEach((m) => {
+						if (m.userid) userid_list.push(m.userid as string);
+					});
+				}
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/meeting/kick_user', {
 					meetingid,
-					userid_list: userids.split(',').map((id) => id.trim()),
+					userid_list,
 				});
 			} else if (operation === 'endMeeting') {
 				const meetingid = this.getNodeParameter('meetingid', i) as string;
@@ -200,29 +231,50 @@ export async function executeMeeting(
 			// 录制管理
 			else if (operation === 'listRecordings') {
 				const meetingid = this.getNodeParameter('meetingid', i) as string;
+				const cursor = this.getNodeParameter('cursor', i, '') as string;
+				const size = this.getNodeParameter('size', i, 100) as number;
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/meeting/get_meeting_record_list', {
-					meetingid,
-				});
+				const body: IDataObject = { meetingid, size };
+				if (cursor) body.cursor = cursor;
+
+				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/meeting/get_meeting_record_list', body);
 			} else if (operation === 'getRecordingAddress') {
+				const meetingid = this.getNodeParameter('meetingid', i) as string;
 				const record_file_id = this.getNodeParameter('record_file_id', i) as string;
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/meeting/get_meeting_record', {
+					meetingid,
 					record_file_id,
 				});
 			}
 			// 高级功能账号管理
 			else if (operation === 'allocateMeetingAdvancedAccount') {
-				const userids = this.getNodeParameter('userids', i) as string;
+				const useridCollection = this.getNodeParameter('useridCollection', i, {}) as IDataObject;
+
+				const userid_list: string[] = [];
+				if (useridCollection.users) {
+					const usersList = useridCollection.users as IDataObject[];
+					usersList.forEach((u) => {
+						if (u.userid) userid_list.push(u.userid as string);
+					});
+				}
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/meeting/vip_batch_add', {
-					userid_list: userids.split(',').map((id) => id.trim()),
+					userid_list,
 				});
 			} else if (operation === 'deallocateMeetingAdvancedAccount') {
-				const userids = this.getNodeParameter('userids', i) as string;
+				const useridCollection = this.getNodeParameter('useridCollection', i, {}) as IDataObject;
+
+				const userid_list: string[] = [];
+				if (useridCollection.users) {
+					const usersList = useridCollection.users as IDataObject[];
+					usersList.forEach((u) => {
+						if (u.userid) userid_list.push(u.userid as string);
+					});
+				}
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/meeting/vip_batch_del', {
-					userid_list: userids.split(',').map((id) => id.trim()),
+					userid_list,
 				});
 			} else if (operation === 'getMeetingAdvancedAccountList') {
 				const limit = this.getNodeParameter('limit', i, 100) as number;
@@ -256,4 +308,3 @@ export async function executeMeeting(
 
 	return returnData;
 }
-

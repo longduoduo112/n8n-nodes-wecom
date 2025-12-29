@@ -1,9 +1,6 @@
 import type { INodeProperties } from 'n8n-workflow';
 
-const showOnlyForUpdate = {
-	resource: ['meeting'],
-	operation: ['updateAdvancedMeeting'],
-};
+const showOnly = { resource: ['meeting'], operation: ['updateAdvancedMeeting'] };
 
 export const updateAdvancedMeetingDescription: INodeProperties[] = [
 	{
@@ -11,24 +8,61 @@ export const updateAdvancedMeetingDescription: INodeProperties[] = [
 		name: 'meetingid',
 		type: 'string',
 		required: true,
-		displayOptions: {
-			show: showOnlyForUpdate,
-		},
+		displayOptions: { show: showOnly },
 		default: '',
 		description: '要更新的高级会议唯一标识ID',
 		hint: '会议ID',
 	},
 	{
-		displayName: '会议详情',
-		name: 'meeting_info',
-		type: 'json',
-		required: true,
-		displayOptions: {
-			show: showOnlyForUpdate,
-		},
-		default: '{\n  "subject": "会议主题",\n  "start_time": 1577836800,\n  "end_time": 1577840400\n}',
-		description: '要更新的会议信息，JSON格式。包含subject（会议主题）、start_time（开始时间）、end_time（结束时间）等字段',
-		hint: '要更新的会议信息，JSON格式',
+		displayName: '会议主题',
+		name: 'subject',
+		type: 'string',
+		displayOptions: { show: showOnly },
+		default: '',
+		description: '新的会议主题，留空则不修改',
+		hint: '新会议主题（可选）',
+	},
+	{
+		displayName: '会议开始时间',
+		name: 'start_time',
+		type: 'number',
+		displayOptions: { show: showOnly },
+		default: 0,
+		description: '新的开始时间（Unix时间戳秒），0表示不修改',
+		typeOptions: { minValue: 0 },
+	},
+	{
+		displayName: '会议结束时间',
+		name: 'end_time',
+		type: 'number',
+		displayOptions: { show: showOnly },
+		default: 0,
+		description: '新的结束时间（Unix时间戳秒），0表示不修改',
+		typeOptions: { minValue: 0 },
+	},
+	{
+		displayName: '高级设置',
+		name: 'advancedSettings',
+		type: 'collection',
+		displayOptions: { show: showOnly },
+		default: {},
+		placeholder: '添加高级设置',
+		options: [
+			{
+				displayName: '会议描述',
+				name: 'description',
+				type: 'string',
+				default: '',
+				description: '新的会议描述信息',
+			},
+			{
+				displayName: '会议密码',
+				name: 'password',
+				type: 'string',
+				typeOptions: { password: true },
+				default: '',
+				description: '新的会议密码',
+			},
+		],
 	},
 ];
-

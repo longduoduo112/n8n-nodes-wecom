@@ -73,21 +73,34 @@ export async function executeCalendar(
 			}
 			// 管理日程
 			else if (operation === 'createSchedule') {
-				const schedule = this.getNodeParameter('schedule', i) as string;
+				const organizer = this.getNodeParameter('organizer', i) as string;
+				const summary = this.getNodeParameter('summary', i) as string;
+				const start_time = this.getNodeParameter('start_time', i) as number;
+				const end_time = this.getNodeParameter('end_time', i) as number;
+				const attendeesCollection = this.getNodeParameter('attendeesCollection', i, {}) as IDataObject;
+				const description = this.getNodeParameter('description', i, '') as string;
+				const location = this.getNodeParameter('location', i, '') as string;
+				const cal_id = this.getNodeParameter('cal_id', i, '') as string;
 				const agentid = this.getNodeParameter('agentid', i, 0) as number;
 
-				let parsedSchedule;
-				try {
-					parsedSchedule = JSON.parse(schedule);
-				} catch (error) {
-					throw new NodeOperationError(
-						this.getNode(),
-						`schedule 必须是有效的 JSON: ${error.message}`,
-						{ itemIndex: i },
-					);
+				const schedule: IDataObject = {
+					organizer,
+					summary,
+					start_time,
+					end_time,
+				};
+
+				// 构建参与者列表
+				if (attendeesCollection.attendees) {
+					const attendeesList = attendeesCollection.attendees as IDataObject[];
+					schedule.attendees = attendeesList.map((a) => ({ userid: a.userid }));
 				}
 
-				const body: IDataObject = { schedule: parsedSchedule };
+				if (description) schedule.description = description;
+				if (location) schedule.location = location;
+				if (cal_id) schedule.cal_id = cal_id;
+
+				const body: IDataObject = { schedule };
 				if (agentid) body.agentid = agentid;
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/oa/schedule/add', body);
@@ -140,41 +153,35 @@ export async function executeCalendar(
 				);
 			} else if (operation === 'addScheduleAttendees') {
 				const schedule_id = this.getNodeParameter('schedule_id', i) as string;
-				const attendees = this.getNodeParameter('attendees', i) as string;
+				const attendeesCollection = this.getNodeParameter('attendeesCollection', i, {}) as IDataObject;
 
-				let parsedAttendees;
-				try {
-					parsedAttendees = JSON.parse(attendees);
-				} catch (error) {
-					throw new NodeOperationError(
-						this.getNode(),
-						`attendees 必须是有效的 JSON: ${error.message}`,
-						{ itemIndex: i },
-					);
+				const attendees: IDataObject[] = [];
+				if (attendeesCollection.attendees) {
+					const attendeesList = attendeesCollection.attendees as IDataObject[];
+					attendeesList.forEach((a) => {
+						attendees.push({ userid: a.userid });
+					});
 				}
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/oa/schedule/add_attendees', {
 					schedule_id,
-					attendees: parsedAttendees,
+					attendees,
 				});
 			} else if (operation === 'deleteScheduleAttendees') {
 				const schedule_id = this.getNodeParameter('schedule_id', i) as string;
-				const attendees = this.getNodeParameter('attendees', i) as string;
+				const attendeesCollection = this.getNodeParameter('attendeesCollection', i, {}) as IDataObject;
 
-				let parsedAttendees;
-				try {
-					parsedAttendees = JSON.parse(attendees);
-				} catch (error) {
-					throw new NodeOperationError(
-						this.getNode(),
-						`attendees 必须是有效的 JSON: ${error.message}`,
-						{ itemIndex: i },
-					);
+				const attendees: IDataObject[] = [];
+				if (attendeesCollection.attendees) {
+					const attendeesList = attendeesCollection.attendees as IDataObject[];
+					attendeesList.forEach((a) => {
+						attendees.push({ userid: a.userid });
+					});
 				}
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/oa/schedule/del_attendees', {
 					schedule_id,
-					attendees: parsedAttendees,
+					attendees,
 				});
 			} else if (operation === 'listCalendarSchedules') {
 				const cal_id = this.getNodeParameter('cal_id', i) as string;

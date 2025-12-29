@@ -1,36 +1,104 @@
 import type { INodeProperties } from 'n8n-workflow';
 
-const showOnlyForCreate = {
-	resource: ['calendar'],
-	operation: ['createSchedule'],
-};
+const showOnly = { resource: ['calendar'], operation: ['createSchedule'] };
 
 export const createScheduleDescription: INodeProperties[] = [
 	{
-		displayName: '日程详情',
-		name: 'schedule',
-		type: 'json',
+		displayName: '组织者UserID',
+		name: 'organizer',
+		type: 'string',
 		required: true,
-		displayOptions: {
-			show: showOnlyForCreate,
-		},
-		default: '{\n  "organizer": "zhangsan",\n  "start_time": 1577836800,\n  "end_time": 1577840400,\n  "summary": "周例会",\n  "attendees": [{"userid": "lisi"}]\n}',
-		description: '日程详情，JSON格式。必填字段：organizer（组织者UserID）、start_time（开始时间，秒级Unix时间戳）、end_time（结束时间，秒级Unix时间戳）、summary（日程主题，最长128字符）、attendees（参与者列表）。<a href="https://developer.work.weixin.qq.com/document/path/93648" target="_blank">官方文档</a>',
-		hint: '日程详情，JSON格式',
+		displayOptions: { show: showOnly },
+		default: '',
+		description: '日程组织者的UserID',
+		placeholder: 'zhangsan',
+	},
+	{
+		displayName: '日程主题',
+		name: 'summary',
+		type: 'string',
+		required: true,
+		displayOptions: { show: showOnly },
+		default: '',
+		description: '日程主题，最长128字符',
+		placeholder: '周例会',
+	},
+	{
+		displayName: '开始时间',
+		name: 'start_time',
+		type: 'number',
+		required: true,
+		displayOptions: { show: showOnly },
+		default: 0,
+		description: '开始时间，秒级Unix时间戳',
+	},
+	{
+		displayName: '结束时间',
+		name: 'end_time',
+		type: 'number',
+		required: true,
+		displayOptions: { show: showOnly },
+		default: 0,
+		description: '结束时间，秒级Unix时间戳',
+	},
+	{
+		displayName: '参与者',
+		name: 'attendeesCollection',
+		type: 'fixedCollection',
+		displayOptions: { show: showOnly },
+		default: {},
+		placeholder: '添加参与者',
+		typeOptions: { multipleValues: true },
+		description: '日程参与者列表',
+		options: [
+			{
+				displayName: '参与者',
+				name: 'attendees',
+				values: [
+					{
+						displayName: '成员UserID',
+						name: 'userid',
+						type: 'string',
+						default: '',
+						required: true,
+						description: '参与者的UserID',
+					},
+				],
+			},
+		],
+	},
+	{
+		displayName: '日程描述',
+		name: 'description',
+		type: 'string',
+		displayOptions: { show: showOnly },
+		default: '',
+		typeOptions: { rows: 3 },
+		description: '日程描述（可选）',
+	},
+	{
+		displayName: '日程地点',
+		name: 'location',
+		type: 'string',
+		displayOptions: { show: showOnly },
+		default: '',
+		description: '日程地点（可选）',
+	},
+	{
+		displayName: '所属日历ID',
+		name: 'cal_id',
+		type: 'string',
+		displayOptions: { show: showOnly },
+		default: '',
+		description: '所属日历ID（可选）',
 	},
 	{
 		displayName: '应用ID',
 		name: 'agentid',
 		type: 'number',
-		displayOptions: {
-			show: showOnlyForCreate,
-		},
+		displayOptions: { show: showOnly },
 		default: 0,
-		description: '可选。应用ID，不填则默认使用当前应用。<a href="https://developer.work.weixin.qq.com/document/path/93648" target="_blank">官方文档</a>',
-		placeholder: '1000001',
-		typeOptions: {
-			minValue: 0,
-		},
+		description: '应用ID（可选），不填则使用当前应用',
+		typeOptions: { minValue: 0 },
 	},
 ];
-

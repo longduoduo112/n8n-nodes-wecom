@@ -19,15 +19,23 @@ export async function executeJournal(
 				const endtime = this.getNodeParameter('endtime', i) as number;
 				const cursor = this.getNodeParameter('cursor', i, 0) as number;
 				const limit = this.getNodeParameter('limit', i, 50) as number;
-				const filters = this.getNodeParameter('filters', i, '[]') as string;
+				const enableFilters = this.getNodeParameter('enableFilters', i, false) as boolean;
 
-				responseData = await weComApiRequest.call(this, 'POST', '/cgi-bin/oa/journal/get_record_list', {
+				const body: { starttime: number; endtime: number; cursor: number; limit: number; filters?: Array<{ key: string; value: string }> } = {
 					starttime,
 					endtime,
 					cursor,
 					limit,
-					filters: JSON.parse(filters),
-				});
+				};
+
+				if (enableFilters) {
+					const filtersCollection = this.getNodeParameter('filtersCollection', i, {}) as { filters?: Array<{ key: string; value: string }> };
+					if (filtersCollection.filters && filtersCollection.filters.length > 0) {
+						body.filters = filtersCollection.filters.map((f) => ({ key: f.key, value: f.value }));
+					}
+				}
+
+				responseData = await weComApiRequest.call(this, 'POST', '/cgi-bin/oa/journal/get_record_list', body);
 			} else if (operation === 'getRecordDetail') {
 				// 获取汇报记录详情
 				// https://developer.work.weixin.qq.com/document/path/93394

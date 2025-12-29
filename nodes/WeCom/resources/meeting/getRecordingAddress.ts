@@ -1,22 +1,26 @@
 import type { INodeProperties } from 'n8n-workflow';
 
-const showOnlyForGet = {
-	resource: ['meeting'],
-	operation: ['getRecordingAddress'],
-};
+const showOnly = { resource: ['meeting'], operation: ['getRecordingAddress'] };
 
 export const getRecordingAddressDescription: INodeProperties[] = [
 	{
-		displayName: '会议录制ID',
+		displayName: '会议ID',
+		name: 'meetingid',
+		type: 'string',
+		required: true,
+		displayOptions: { show: showOnly },
+		default: '',
+		description: '会议唯一标识ID',
+		hint: '会议ID',
+	},
+	{
+		displayName: '录制文件ID',
 		name: 'record_file_id',
 		type: 'string',
 		required: true,
-		displayOptions: {
-			show: showOnlyForGet,
-		},
+		displayOptions: { show: showOnly },
 		default: '',
-		description: '会议录制文件的唯一标识ID',
-		hint: '会议录制文件ID',
+		description: '录制文件的唯一标识ID',
+		hint: '录制文件ID',
 	},
 ];
-

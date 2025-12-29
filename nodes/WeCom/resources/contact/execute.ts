@@ -296,31 +296,52 @@ export async function executeContact(
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/tag/deltagusers', body);
 			} else if (operation === 'batchSyncUser') {
 				const media_ID = this.getNodeParameter('media_ID', i) as string;
+				const enableCallback = this.getNodeParameter('enableCallback', i, false) as boolean;
 				const body: IDataObject = { media_ID };
 
-				const callback = this.getNodeParameter('callback', i, '{}') as string;
-				if (callback && callback !== '{}') {
-					body.callback = JSON.parse(callback);
+				if (enableCallback) {
+					const callback: IDataObject = {};
+					const url = this.getNodeParameter('callback_url', i, '') as string;
+					const token = this.getNodeParameter('callback_token', i, '') as string;
+					const encodingaeskey = this.getNodeParameter('callback_encodingaeskey', i, '') as string;
+					if (url) callback.url = url;
+					if (token) callback.token = token;
+					if (encodingaeskey) callback.encodingaeskey = encodingaeskey;
+					if (Object.keys(callback).length > 0) body.callback = callback;
 				}
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/batch/syncuser', body);
 			} else if (operation === 'batchReplaceUser') {
 				const media_ID = this.getNodeParameter('media_ID', i) as string;
+				const enableCallback = this.getNodeParameter('enableCallback', i, false) as boolean;
 				const body: IDataObject = { media_ID };
 
-				const callback = this.getNodeParameter('callback', i, '{}') as string;
-				if (callback && callback !== '{}') {
-					body.callback = JSON.parse(callback);
+				if (enableCallback) {
+					const callback: IDataObject = {};
+					const url = this.getNodeParameter('callback_url', i, '') as string;
+					const token = this.getNodeParameter('callback_token', i, '') as string;
+					const encodingaeskey = this.getNodeParameter('callback_encodingaeskey', i, '') as string;
+					if (url) callback.url = url;
+					if (token) callback.token = token;
+					if (encodingaeskey) callback.encodingaeskey = encodingaeskey;
+					if (Object.keys(callback).length > 0) body.callback = callback;
 				}
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/batch/replaceuser', body);
 			} else if (operation === 'batchReplaceDepartment') {
 				const media_ID = this.getNodeParameter('media_ID', i) as string;
+				const enableCallback = this.getNodeParameter('enableCallback', i, false) as boolean;
 				const body: IDataObject = { media_ID };
 
-				const callback = this.getNodeParameter('callback', i, '{}') as string;
-				if (callback && callback !== '{}') {
-					body.callback = JSON.parse(callback);
+				if (enableCallback) {
+					const callback: IDataObject = {};
+					const url = this.getNodeParameter('callback_url', i, '') as string;
+					const token = this.getNodeParameter('callback_token', i, '') as string;
+					const encodingaeskey = this.getNodeParameter('callback_encodingaeskey', i, '') as string;
+					if (url) callback.url = url;
+					if (token) callback.token = token;
+					if (encodingaeskey) callback.encodingaeskey = encodingaeskey;
+					if (Object.keys(callback).length > 0) body.callback = callback;
 				}
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/batch/replaceparty', body);

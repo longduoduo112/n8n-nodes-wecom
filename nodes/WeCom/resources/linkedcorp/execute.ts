@@ -1,5 +1,4 @@
 import type { IExecuteFunctions, INodeExecutionData, IDataObject } from 'n8n-workflow';
-import { NodeOperationError } from 'n8n-workflow';
 import { weComApiRequest } from '../../shared/transport';
 
 export async function executeLinkedcorp(
@@ -139,23 +138,31 @@ export async function executeLinkedcorp(
 			} else if (operation === 'addChainRule') {
 				const chain_id = this.getNodeParameter('chain_id', i) as string;
 				const rule_name = this.getNodeParameter('rule_name', i) as string;
-				const rule_config = this.getNodeParameter('rule_config', i) as string;
+				const match_type = this.getNodeParameter('match_type', i) as number;
+				const rangeCollection = this.getNodeParameter('rangeCollection', i, {}) as IDataObject;
 
-				let parsedConfig;
-				try {
-					parsedConfig = JSON.parse(rule_config);
-				} catch (error) {
-					throw new NodeOperationError(
-						this.getNode(),
-						`rule_config 必须是有效的 JSON: ${error.message}`,
-						{ itemIndex: i },
-					);
+				// 构建range数组
+				const range: IDataObject[] = [];
+				if (rangeCollection.ranges) {
+					const rangesList = rangeCollection.ranges as IDataObject[];
+					rangesList.forEach((r) => {
+						const rangeItem: IDataObject = { type: r.type };
+						if (r.type === 1 && r.userid) {
+							rangeItem.userid = r.userid;
+						} else if (r.type === 2 && r.partyid) {
+							rangeItem.partyid = r.partyid;
+						}
+						range.push(rangeItem);
+					});
 				}
 
 				const body: IDataObject = {
 					chain_id,
 					rule_name,
-					rule_config: parsedConfig,
+					rule_config: {
+						match_type,
+						range,
+					},
 				};
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/externalcontact/customer/add_rule', body);
@@ -163,7 +170,7 @@ export async function executeLinkedcorp(
 				const chain_id = this.getNodeParameter('chain_id', i) as string;
 				const rule_id = this.getNodeParameter('rule_id', i) as string;
 				const rule_name = this.getNodeParameter('rule_name', i, '') as string;
-				const rule_config = this.getNodeParameter('rule_config', i, '{}') as string;
+				const updateConfig = this.getNodeParameter('updateConfig', i, false) as boolean;
 
 				const body: IDataObject = {
 					chain_id,
@@ -172,16 +179,29 @@ export async function executeLinkedcorp(
 
 				if (rule_name) body.rule_name = rule_name;
 
-				if (rule_config && rule_config !== '{}') {
-					try {
-						body.rule_config = JSON.parse(rule_config);
-					} catch (error) {
-						throw new NodeOperationError(
-							this.getNode(),
-							`rule_config 必须是有效的 JSON: ${error.message}`,
-							{ itemIndex: i },
-						);
+				if (updateConfig) {
+					const match_type = this.getNodeParameter('match_type', i) as number;
+					const rangeCollection = this.getNodeParameter('rangeCollection', i, {}) as IDataObject;
+
+					// 构建range数组
+					const range: IDataObject[] = [];
+					if (rangeCollection.ranges) {
+						const rangesList = rangeCollection.ranges as IDataObject[];
+						rangesList.forEach((r) => {
+							const rangeItem: IDataObject = { type: r.type };
+							if (r.type === 1 && r.userid) {
+								rangeItem.userid = r.userid;
+							} else if (r.type === 2 && r.partyid) {
+								rangeItem.partyid = r.partyid;
+							}
+							range.push(rangeItem);
+						});
 					}
+
+					body.rule_config = {
+						match_type,
+						range,
+					};
 				}
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/externalcontact/customer/update_rule', body);
@@ -209,4 +229,3 @@ export async function executeLinkedcorp(
 
 	return returnData;
 }
-

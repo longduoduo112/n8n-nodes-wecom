@@ -1,9 +1,6 @@
 import type { INodeProperties } from 'n8n-workflow';
 
-const showOnlyForAdd = {
-	resource: ['calendar'],
-	operation: ['addScheduleAttendees'],
-};
+const showOnly = { resource: ['calendar'], operation: ['addScheduleAttendees'] };
 
 export const addScheduleAttendeesDescription: INodeProperties[] = [
 	{
@@ -11,24 +8,35 @@ export const addScheduleAttendeesDescription: INodeProperties[] = [
 		name: 'schedule_id',
 		type: 'string',
 		required: true,
-		displayOptions: {
-			show: showOnlyForAdd,
-		},
+		displayOptions: { show: showOnly },
 		default: '',
-		description: '要添加参与者的日程唯一标识ID',
-		hint: '日程ID',
+		description: '要添加参与者的日程ID',
 	},
 	{
 		displayName: '参与者',
-		name: 'attendees',
-		type: 'json',
+		name: 'attendeesCollection',
+		type: 'fixedCollection',
 		required: true,
-		displayOptions: {
-			show: showOnlyForAdd,
-		},
-		default: '[{"userid": "userid1"}]',
-		description: '要添加的参与者列表，JSON格式数组。可包含userid（成员ID）等字段。示例：[{"userid": "userid1"}]',
-		hint: '要添加的参与者，JSON格式数组',
+		displayOptions: { show: showOnly },
+		default: {},
+		placeholder: '添加参与者',
+		typeOptions: { multipleValues: true },
+		description: '要添加的参与者列表',
+		options: [
+			{
+				displayName: '参与者',
+				name: 'attendees',
+				values: [
+					{
+						displayName: '成员UserID',
+						name: 'userid',
+						type: 'string',
+						default: '',
+						required: true,
+						description: '参与者的UserID',
+					},
+				],
+			},
+		],
 	},
 ];
-

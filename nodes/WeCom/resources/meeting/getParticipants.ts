@@ -1,9 +1,6 @@
 import type { INodeProperties } from 'n8n-workflow';
 
-const showOnlyForGet = {
-	resource: ['meeting'],
-	operation: ['getParticipants'],
-};
+const showOnly = { resource: ['meeting'], operation: ['getParticipants'] };
 
 export const getParticipantsDescription: INodeProperties[] = [
 	{
@@ -11,37 +8,27 @@ export const getParticipantsDescription: INodeProperties[] = [
 		name: 'meetingid',
 		type: 'string',
 		required: true,
-		displayOptions: {
-			show: showOnlyForGet,
-		},
+		displayOptions: { show: showOnly },
 		default: '',
-		description: '要查询参会成员的会议ID',
+		description: '会议唯一标识ID',
 		hint: '会议ID',
 	},
 	{
-		displayName: '游标',
+		displayName: '分页游标',
 		name: 'cursor',
 		type: 'string',
-		displayOptions: {
-			show: showOnlyForGet,
-		},
+		displayOptions: { show: showOnly },
 		default: '',
-		description: '分页游标，用于获取下一页数据',
-		hint: '分页游标',
+		description: '分页游标，首次请求留空，后续请求使用返回的cursor',
+		hint: '分页游标（可选）',
 	},
 	{
-		displayName: '限制数量',
-		name: 'limit',
+		displayName: '每页数量',
+		name: 'size',
 		type: 'number',
-		typeOptions: {
-			minValue: 1,
-		},
-		displayOptions: {
-			show: showOnlyForGet,
-		},
-		default: 50,
-		description: '单次返回的最大参会成员数量',
-		hint: '返回的已参会成员数量',
+		displayOptions: { show: showOnly },
+		default: 100,
+		description: '每页返回的参会者数量',
+		typeOptions: { minValue: 1, maxValue: 1000 },
 	},
 ];
-

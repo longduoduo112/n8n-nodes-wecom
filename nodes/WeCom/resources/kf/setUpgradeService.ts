@@ -1,9 +1,6 @@
 import type { INodeProperties } from 'n8n-workflow';
 
-const showOnlyForSetUpgradeService = {
-	resource: ['kf'],
-	operation: ['setUpgradeService'],
-};
+const showOnly = { resource: ['kf'], operation: ['setUpgradeService'] };
 
 export const setUpgradeServiceDescription: INodeProperties[] = [
 	{
@@ -14,26 +11,74 @@ export const setUpgradeServiceDescription: INodeProperties[] = [
 			loadOptionsMethod: 'getKfAccounts',
 		},
 		required: true,
-		displayOptions: {
-			show: showOnlyForSetUpgradeService,
-		},
+		displayOptions: { show: showOnly },
 		default: '',
-		description: '客服账号的唯一标识ID，格式为wkxxxx开头的字符串。<a href="https://developer.work.weixin.qq.com/document/path/94674" target="_blank">官方文档</a>.',
-		hint: '客服账号',
+		description: '客服账号的唯一标识ID',
 		placeholder: 'wkxxxxxxxxxxxxxxxxxx',
 	},
 	{
-		displayName: '升级服务配置',
-		name: 'upgrade_config',
-		type: 'json',
+		displayName: '升级类型',
+		name: 'upgradeType',
+		type: 'options',
 		required: true,
-		displayOptions: {
-			show: showOnlyForSetUpgradeService,
-		},
-		default: '{}',
-		hint: '升级服务配置，包括专员UserID、群聊ID等信息',
-		description: '升级服务配置的JSON对象，用于配置客服会话升级到专员或客户群的规则。<a href="https://developer.work.weixin.qq.com/document/path/94674" target="_blank">官方文档</a>',
-		placeholder: '{"member_range":{"userid_list":["zhangsan","lisi"]}}',
+		displayOptions: { show: showOnly },
+		options: [
+			{ name: '升级到专员', value: 'member', description: '将会话升级到指定专员' },
+			{ name: '升级到客户群', value: 'groupchat', description: '将会话升级到客户群' },
+		],
+		default: 'member',
+		description: '选择升级服务的类型',
+	},
+	{
+		displayName: '专员列表',
+		name: 'memberCollection',
+		type: 'fixedCollection',
+		displayOptions: { show: { ...showOnly, upgradeType: ['member'] } },
+		default: {},
+		placeholder: '添加专员',
+		typeOptions: { multipleValues: true },
+		description: '可升级到的专员UserID列表',
+		options: [
+			{
+				displayName: '专员',
+				name: 'members',
+				values: [
+					{
+						displayName: '专员UserID',
+						name: 'userid',
+						type: 'string',
+						default: '',
+						required: true,
+						description: '专员的企业微信UserID',
+					},
+				],
+			},
+		],
+	},
+	{
+		displayName: '客户群列表',
+		name: 'groupchatCollection',
+		type: 'fixedCollection',
+		displayOptions: { show: { ...showOnly, upgradeType: ['groupchat'] } },
+		default: {},
+		placeholder: '添加客户群',
+		typeOptions: { multipleValues: true },
+		description: '可升级到的客户群ID列表',
+		options: [
+			{
+				displayName: '客户群',
+				name: 'groups',
+				values: [
+					{
+						displayName: '群聊ID',
+						name: 'chat_id',
+						type: 'string',
+						default: '',
+						required: true,
+						description: '客户群的chat_id',
+					},
+				],
+			},
+		],
 	},
 ];
-

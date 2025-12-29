@@ -1,9 +1,6 @@
 import type { INodeProperties } from 'n8n-workflow';
 
-const showOnlyForManageBooking = {
-	resource: ['meetingroom'],
-	operation: ['manageBooking'],
-};
+const showOnly = { resource: ['meetingroom'], operation: ['manageBooking'] };
 
 export const manageBookingDescription: INodeProperties[] = [
 	{
@@ -11,28 +8,96 @@ export const manageBookingDescription: INodeProperties[] = [
 		name: 'action',
 		type: 'options',
 		required: true,
-		displayOptions: {
-			show: showOnlyForManageBooking,
-		},
+		displayOptions: { show: showOnly },
 		options: [
+			{ name: '查询预定列表', value: 'list' },
+			{ name: '查询预定', value: 'get' },
 			{ name: '预定会议室', value: 'book' },
 			{ name: '取消预定', value: 'cancel' },
-			{ name: '查询预定', value: 'get' },
-			{ name: '查询预定列表', value: 'list' },
 		],
-		default: 'book',
-		description: '选择对会议室预定进行的操作。<a href="https://developer.work.weixin.qq.com/document/path/93618" target="_blank">更多信息</a>',
+		default: 'list',
+		description: '选择对会议室预定进行的操作',
+	},
+	// 查询预定列表参数
+	{
+		displayName: '会议室ID',
+		name: 'meetingroom_id',
+		type: 'string',
+		required: true,
+		displayOptions: { show: { ...showOnly, action: ['list'] } },
+		default: '',
+		description: '要查询预定列表的会议室ID',
+		hint: '会议室ID',
 	},
 	{
-		displayName: '预定数据',
-		name: 'bookingData',
-		type: 'json',
-		displayOptions: {
-			show: showOnlyForManageBooking,
-		},
-		default: '{}',
-		description: '会议室预定相关数据，JSON格式。根据操作类型不同，需要提供的字段也不同。<a href="https://developer.work.weixin.qq.com/document/path/93618" target="_blank">更多信息</a>',
-		hint: '示例：{"meetingroom_id": "room001", "start_time": 1609459200, "end_time": 1609462800, "subject": "团队会议"}',
+		displayName: '开始时间',
+		name: 'start_time',
+		type: 'number',
+		required: true,
+		displayOptions: { show: { ...showOnly, action: ['list', 'book'] } },
+		default: 0,
+		description: '查询或预定的开始时间（Unix时间戳秒）',
+		hint: '开始时间',
+	},
+	{
+		displayName: '结束时间',
+		name: 'end_time',
+		type: 'number',
+		required: true,
+		displayOptions: { show: { ...showOnly, action: ['list', 'book'] } },
+		default: 0,
+		description: '查询或预定的结束时间（Unix时间戳秒）',
+		hint: '结束时间',
+	},
+	// 查询单个预定参数
+	{
+		displayName: '预定ID',
+		name: 'booking_id',
+		type: 'string',
+		required: true,
+		displayOptions: { show: { ...showOnly, action: ['get', 'cancel'] } },
+		default: '',
+		description: '会议室预定的唯一标识ID',
+		hint: '预定ID',
+	},
+	// 预定会议室参数
+	{
+		displayName: '会议室ID',
+		name: 'meetingroom_id_book',
+		type: 'string',
+		required: true,
+		displayOptions: { show: { ...showOnly, action: ['book'] } },
+		default: '',
+		description: '要预定的会议室ID',
+		hint: '会议室ID',
+	},
+	{
+		displayName: '会议主题',
+		name: 'subject',
+		type: 'string',
+		required: true,
+		displayOptions: { show: { ...showOnly, action: ['book'] } },
+		default: '',
+		description: '会议的主题',
+		hint: '会议主题',
+	},
+	{
+		displayName: '预定人UserID',
+		name: 'booker',
+		type: 'string',
+		required: true,
+		displayOptions: { show: { ...showOnly, action: ['book'] } },
+		default: '',
+		description: '预定人的企业微信UserID',
+		hint: '预定人UserID',
+	},
+	{
+		displayName: '参会人员',
+		name: 'attendees',
+		type: 'string',
+		displayOptions: { show: { ...showOnly, action: ['book'] } },
+		default: '',
+		description: '参会人员UserID列表，多个用逗号分隔',
+		hint: '参会人员UserID（可选）',
 	},
 ];
-

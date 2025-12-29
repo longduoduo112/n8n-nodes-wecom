@@ -1,17 +1,16 @@
 import type { INodeProperties } from 'n8n-workflow';
 
+const showOnly = { resource: ['wefile'], operation: ['deleteSpace'] };
+
 export const deleteSpaceDescription: INodeProperties[] = [
 	{
-		displayName: '参数',
-		name: 'params',
+		displayName: '空间ID',
+		name: 'spaceId',
 		type: 'string',
+		required: true,
+		displayOptions: { show: showOnly },
 		default: '',
-		description: 'DeleteSpace操作的参数',
-		displayOptions: {
-			show: {
-				resource: ['wefile'],
-				operation: ['deleteSpace'],
-			},
-		},
+		description: '要删除的微盘空间ID',
+		hint: '空间ID',
 	},
 ];

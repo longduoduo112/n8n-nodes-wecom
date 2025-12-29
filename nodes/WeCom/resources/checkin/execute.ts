@@ -1,4 +1,4 @@
-import type { IExecuteFunctions, INodeExecutionData } from 'n8n-workflow';
+import type { IExecuteFunctions, INodeExecutionData, IDataObject } from 'n8n-workflow';
 import { weComApiRequest } from '../../shared/transport';
 
 export async function executeCheckin(
@@ -79,12 +79,23 @@ export async function executeCheckin(
 			} else if (operation === 'setScheduleList') {
 				// 为打卡人员排班
 				// https://developer.work.weixin.qq.com/document/path/93385
-				const items = this.getNodeParameter('items', i) as string;
 				const yearmonth = this.getNodeParameter('yearmonth', i) as number;
+				const scheduleCollection = this.getNodeParameter('scheduleCollection', i, {}) as { schedules?: Array<{ userid: string; day: number; schedule_id: number }> };
+
+				const items: Array<{ userid: string; day: number; schedule_id: number }> = [];
+				if (scheduleCollection.schedules) {
+					scheduleCollection.schedules.forEach((s) => {
+						items.push({
+							userid: s.userid,
+							day: s.day,
+							schedule_id: s.schedule_id,
+						});
+					});
+				}
 
 				responseData = await weComApiRequest.call(this, 'POST', '/cgi-bin/checkin/setcheckinschedulist', {
 					groupid: 0,
-					items: JSON.parse(items),
+					items,
 					yearmonth,
 				});
 			} else if (operation === 'addCheckin') {
@@ -102,11 +113,25 @@ export async function executeCheckin(
 			} else if (operation === 'addCheckinRecord') {
 				// 添加打卡记录
 				// https://developer.work.weixin.qq.com/document/path/99647
-				const record = this.getNodeParameter('record', i) as string;
+				const userid = this.getNodeParameter('userid', i) as string;
+				const checkin_time = this.getNodeParameter('checkin_time', i) as number;
+				const checkin_type = this.getNodeParameter('checkin_type', i) as number;
+				const location_title = this.getNodeParameter('location_title', i, '') as string;
+				const lng = this.getNodeParameter('lng', i, 0) as number;
+				const lat = this.getNodeParameter('lat', i, 0) as number;
+				const remark = this.getNodeParameter('remark', i, '') as string;
 
-				responseData = await weComApiRequest.call(this, 'POST', '/cgi-bin/checkin/addcheckin', {
-					...JSON.parse(record),
-				});
+				const body: { userid: string; checkin_time: number; checkin_type: number; location_title?: string; lng?: number; lat?: number; remark?: string } = {
+					userid,
+					checkin_time,
+					checkin_type,
+				};
+				if (location_title) body.location_title = location_title;
+				if (lng) body.lng = lng;
+				if (lat) body.lat = lat;
+				if (remark) body.remark = remark;
+
+				responseData = await weComApiRequest.call(this, 'POST', '/cgi-bin/checkin/addcheckin', body);
 			} else if (operation === 'addFaceInfo') {
 				// 录入打卡人员人脸信息
 				// https://developer.work.weixin.qq.com/document/path/93378
@@ -138,7 +163,6 @@ export async function executeCheckin(
 				// 管理打卡规则
 				// https://developer.work.weixin.qq.com/document/path/98041
 				const action = this.getNodeParameter('action', i) as string;
-				const ruleInfo = this.getNodeParameter('ruleInfo', i) as string;
 
 				const endpoint =
 					action === 'create'
@@ -147,7 +171,46 @@ export async function executeCheckin(
 							? '/cgi-bin/checkin/update_checkin_option'
 							: '/cgi-bin/checkin/del_checkin_option';
 
-				responseData = await weComApiRequest.call(this, 'POST', endpoint, JSON.parse(ruleInfo));
+				let body: IDataObject = {};
+
+				if (action === 'delete') {
+					const groupid = this.getNodeParameter('groupid', i) as number;
+					body = { groupid };
+				} else {
+					const groupname = this.getNodeParameter('groupname', i, '') as string;
+					const useAdvancedConfig = this.getNodeParameter('useAdvancedConfig', i, false) as boolean;
+
+					if (action === 'update') {
+						const groupid = this.getNodeParameter('groupid', i) as number;
+						body.groupid = groupid;
+					}
+					if (action === 'create') {
+						const grouptype = this.getNodeParameter('grouptype', i, 1) as number;
+						body.grouptype = grouptype;
+					}
+					if (groupname) body.groupname = groupname;
+
+					// 构建成员列表
+					const memberCollection = this.getNodeParameter('memberCollection', i, {}) as { members?: Array<{ userid: string }> };
+					if (memberCollection.members && memberCollection.members.length > 0) {
+						body.range = {
+							userid: memberCollection.members.map((m) => m.userid),
+						};
+					}
+
+					// 高级配置
+					if (useAdvancedConfig) {
+						const advancedConfig = this.getNodeParameter('advancedConfig', i, '{}') as string;
+						try {
+							const config = JSON.parse(advancedConfig) as IDataObject;
+							body = { ...body, ...config };
+					} catch {
+						// 忽略JSON解析错误
+					}
+					}
+				}
+
+				responseData = await weComApiRequest.call(this, 'POST', endpoint, body);
 			}
 
 			returnData.push({

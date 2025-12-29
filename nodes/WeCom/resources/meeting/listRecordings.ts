@@ -1,9 +1,6 @@
 import type { INodeProperties } from 'n8n-workflow';
 
-const showOnlyForList = {
-	resource: ['meeting'],
-	operation: ['listRecordings'],
-};
+const showOnly = { resource: ['meeting'], operation: ['listRecordings'] };
 
 export const listRecordingsDescription: INodeProperties[] = [
 	{
@@ -11,12 +8,27 @@ export const listRecordingsDescription: INodeProperties[] = [
 		name: 'meetingid',
 		type: 'string',
 		required: true,
-		displayOptions: {
-			show: showOnlyForList,
-		},
+		displayOptions: { show: showOnly },
 		default: '',
-		description: '要查询录制文件的会议ID',
+		description: '会议唯一标识ID',
 		hint: '会议ID',
 	},
+	{
+		displayName: '分页游标',
+		name: 'cursor',
+		type: 'string',
+		displayOptions: { show: showOnly },
+		default: '',
+		description: '分页游标，首次请求留空，后续请求使用返回的cursor',
+		hint: '分页游标（可选）',
+	},
+	{
+		displayName: '每页数量',
+		name: 'size',
+		type: 'number',
+		displayOptions: { show: showOnly },
+		default: 100,
+		description: '每页返回的录制数量',
+		typeOptions: { minValue: 1, maxValue: 500 },
+	},
 ];
-

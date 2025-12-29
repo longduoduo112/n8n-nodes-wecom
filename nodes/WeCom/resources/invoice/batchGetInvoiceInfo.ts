@@ -1,22 +1,43 @@
 import type { INodeProperties } from 'n8n-workflow';
 
-const showOnly = {
-	resource: ['invoice'],
-	operation: ['batchGetInvoiceInfo'],
-};
+const showOnly = { resource: ['invoice'], operation: ['batchGetInvoiceInfo'] };
 
 export const batchGetInvoiceInfoDescription: INodeProperties[] = [
 	{
-		displayName: '发票项列表',
-		name: 'item_list',
-		type: 'json',
+		displayName: '发票列表',
+		name: 'itemCollection',
+		type: 'fixedCollection',
 		required: true,
-		default: '[{"card_id": "pXXXXXXXXXXXXXXXX", "encrypt_code": "encrypt_code_example"}]',
-		displayOptions: {
-			show: showOnly,
-		},
-		description: '发票项列表，JSON数组格式，每项包含card_id（发票卡券ID）和encrypt_code（加密code）。最多支持100张发票。<a href="https://developer.work.weixin.qq.com/document/path/90285" target="_blank">官方文档</a>',
-		hint: 'JSON数组，包含card_id和encrypt_code',
+		displayOptions: { show: showOnly },
+		default: {},
+		placeholder: '添加发票',
+		typeOptions: { multipleValues: true },
+		description: '发票项列表，最多支持100张发票',
+		options: [
+			{
+				displayName: '发票',
+				name: 'items',
+				values: [
+					{
+						displayName: '发票卡券ID',
+						name: 'card_id',
+						type: 'string',
+						default: '',
+						required: true,
+						description: '发票卡券的card_id',
+						placeholder: 'pXXXXXXXXXXXXXXXX',
+					},
+					{
+						displayName: '加密Code',
+						name: 'encrypt_code',
+						type: 'string',
+						default: '',
+						required: true,
+						description: '加密的发票code',
+						placeholder: 'encrypt_code_example',
+					},
+				],
+			},
+		],
 	},
 ];
-

@@ -1,35 +1,24 @@
 import type { INodeProperties } from 'n8n-workflow';
 
-const showOnlyForGet = {
-	resource: ['meeting'],
-	operation: ['getMeetingAdvancedAccountList'],
-};
+const showOnly = { resource: ['meeting'], operation: ['getMeetingAdvancedAccountList'] };
 
 export const getMeetingAdvancedAccountListDescription: INodeProperties[] = [
 	{
-		displayName: '限制数量',
-		name: 'limit',
-		type: 'number',
-		typeOptions: {
-			minValue: 1,
-		},
-		displayOptions: {
-			show: showOnlyForGet,
-		},
-		default: 50,
-		description: 'Max number of results to return',
-		hint: '返回的账号数量',
-	},
-	{
-		displayName: '游标',
+		displayName: '分页游标',
 		name: 'cursor',
 		type: 'string',
-		displayOptions: {
-			show: showOnlyForGet,
-		},
+		displayOptions: { show: showOnly },
 		default: '',
-		description: 'Pagination cursor',
-		hint: '分页游标',
+		description: '分页游标，首次请求留空，后续请求使用返回的cursor',
+		hint: '分页游标（可选）',
+	},
+	{
+		displayName: '每页数量',
+		name: 'limit',
+		type: 'number',
+		displayOptions: { show: showOnly },
+		default: 50,
+		description: '每页返回的数量',
+		typeOptions: { minValue: 1, maxValue: 1000 },
 	},
 ];
-

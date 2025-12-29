@@ -1,9 +1,6 @@
 import type { INodeProperties } from 'n8n-workflow';
 
-const showOnlyForAddRule = {
-	resource: ['linkedcorp'],
-	operation: ['addChainRule'],
-};
+const showOnly = { resource: ['linkedcorp'], operation: ['addChainRule'] };
 
 export const addChainRuleDescription: INodeProperties[] = [
 	{
@@ -11,11 +8,9 @@ export const addChainRuleDescription: INodeProperties[] = [
 		name: 'chain_id',
 		type: 'string',
 		required: true,
-		displayOptions: {
-			show: showOnlyForAddRule,
-		},
+		displayOptions: { show: showOnly },
 		default: '',
-		description: '上下游的唯一ID。<a href="https://developer.work.weixin.qq.com/document/path/93360" target="_blank">官方文档</a>',
+		description: '上下游的唯一ID',
 		placeholder: 'chain_id_example',
 	},
 	{
@@ -23,24 +18,68 @@ export const addChainRuleDescription: INodeProperties[] = [
 		name: 'rule_name',
 		type: 'string',
 		required: true,
-		displayOptions: {
-			show: showOnlyForAddRule,
-		},
+		displayOptions: { show: showOnly },
 		default: '',
-		description: '对接规则名称。<a href="https://developer.work.weixin.qq.com/document/path/93360" target="_blank">官方文档</a>',
+		description: '对接规则名称',
 		placeholder: '销售部门对接规则',
 	},
 	{
-		displayName: '规则配置',
-		name: 'rule_config',
-		type: 'json',
+		displayName: '匹配类型',
+		name: 'match_type',
+		type: 'options',
 		required: true,
-		displayOptions: {
-			show: showOnlyForAddRule,
-		},
-		default: '{"match_type": 1, "range": [{"type": 1, "userid": "zhangsan"}]}',
-		description: '对接规则配置，JSON格式。包含match_type（匹配类型：1-按人员，2-按部门）、range（匹配范围）等。<a href="https://developer.work.weixin.qq.com/document/path/93360" target="_blank">官方文档</a>',
-		hint: '规则配置JSON',
+		displayOptions: { show: showOnly },
+		options: [
+			{ name: '按人员', value: 1, description: '按具体人员匹配' },
+			{ name: '按部门', value: 2, description: '按部门匹配' },
+		],
+		default: 1,
+		description: '规则的匹配类型',
+	},
+	{
+		displayName: '匹配范围',
+		name: 'rangeCollection',
+		type: 'fixedCollection',
+		required: true,
+		displayOptions: { show: showOnly },
+		default: {},
+		placeholder: '添加匹配范围',
+		typeOptions: { multipleValues: true },
+		description: '匹配范围列表',
+		options: [
+			{
+				displayName: '范围',
+				name: 'ranges',
+				values: [
+					{
+						displayName: '类型',
+						name: 'type',
+						type: 'options',
+						default: 1,
+						options: [
+							{ name: '成员', value: 1 },
+							{ name: '部门', value: 2 },
+						],
+						description: '范围类型',
+					},
+					{
+						displayName: '成员UserID',
+						name: 'userid',
+						type: 'string',
+						default: '',
+						displayOptions: { show: { type: [1] } },
+						description: '成员的UserID',
+					},
+					{
+						displayName: '部门ID',
+						name: 'partyid',
+						type: 'number',
+						default: 0,
+						displayOptions: { show: { type: [2] } },
+
+					},
+				],
+			},
+		],
 	},
 ];
-

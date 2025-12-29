@@ -1,4 +1,4 @@
-import type { IExecuteFunctions, INodeExecutionData } from 'n8n-workflow';
+import type { IExecuteFunctions, INodeExecutionData, IDataObject } from 'n8n-workflow';
 import { weComApiRequest } from '../../shared/transport';
 
 export async function executeHr(
@@ -10,29 +10,49 @@ export async function executeHr(
 
 	for (let i = 0; i < items.length; i++) {
 		try {
-			let responseData;
+			let responseData: IDataObject;
 
 			if (operation === 'getFieldList') {
 				// 获取员工字段配置
-				// https://developer.work.weixin.qq.com/document/path/99131
 				responseData = await weComApiRequest.call(this, 'GET', '/cgi-bin/hr/get_fields', {});
 			} else if (operation === 'getStaffInfo') {
 				// 获取员工花名册信息
-				// https://developer.work.weixin.qq.com/document/path/99132
 				const userid = this.getNodeParameter('userid', i) as string;
 				responseData = await weComApiRequest.call(this, 'POST', '/cgi-bin/hr/get_staff_info', {
 					userid,
 				});
 			} else if (operation === 'updateStaffInfo') {
 				// 更新员工花名册信息
-				// https://developer.work.weixin.qq.com/document/path/99133
 				const userid = this.getNodeParameter('userid', i) as string;
-				const staffData = this.getNodeParameter('staffData', i) as string;
+				const fieldsCollection = this.getNodeParameter('fieldsCollection', i, {}) as IDataObject;
+
+				// 构建更新字段
+				const update_attrs: IDataObject[] = [];
+				if (fieldsCollection.fields) {
+					const fieldsList = fieldsCollection.fields as IDataObject[];
+					fieldsList.forEach((field) => {
+						const attr: IDataObject = { fieldid: field.fieldid };
+
+						// 根据值类型设置不同的值字段
+						const valueType = field.value_type as string;
+						if (valueType === 'text') {
+							attr.value_string = field.value_text;
+						} else if (valueType === 'date') {
+							attr.value_uint32 = field.value_date;
+						} else if (valueType === 'number') {
+							attr.value_uint32 = field.value_number;
+						}
+
+						update_attrs.push(attr);
+					});
+				}
 
 				responseData = await weComApiRequest.call(this, 'POST', '/cgi-bin/hr/update_staff_info', {
 					userid,
-					...JSON.parse(staffData),
+					update_attrs,
 				});
+			} else {
+				responseData = {};
 			}
 
 			returnData.push({
@@ -53,4 +73,3 @@ export async function executeHr(
 
 	return returnData;
 }
-

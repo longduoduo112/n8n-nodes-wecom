@@ -36,15 +36,23 @@ export async function executeApproval(
 				const endtime = this.getNodeParameter('endtime', i) as number;
 				const cursor = this.getNodeParameter('cursor', i, 0) as number;
 				const size = this.getNodeParameter('size', i, 100) as number;
-				const filters = this.getNodeParameter('filters', i, '[]') as string;
+				const enableFilters = this.getNodeParameter('enableFilters', i, false) as boolean;
 
-				responseData = await weComApiRequest.call(this, 'POST', '/cgi-bin/oa/getapprovalinfo', {
+				const body: { starttime: number; endtime: number; cursor: number; size: number; filters?: Array<{ key: string; value: string }> } = {
 					starttime,
 					endtime,
 					cursor,
 					size,
-					filters: JSON.parse(filters),
-				});
+				};
+
+				if (enableFilters) {
+					const filtersCollection = this.getNodeParameter('filtersCollection', i, {}) as { filters?: Array<{ key: string; value: string }> };
+					if (filtersCollection.filters && filtersCollection.filters.length > 0) {
+						body.filters = filtersCollection.filters.map((f) => ({ key: f.key, value: f.value }));
+					}
+				}
+
+				responseData = await weComApiRequest.call(this, 'POST', '/cgi-bin/oa/getapprovalinfo', body);
 			} else if (operation === 'getApprovalDetail') {
 				// 获取审批申请详情
 				// https://developer.work.weixin.qq.com/document/path/91983

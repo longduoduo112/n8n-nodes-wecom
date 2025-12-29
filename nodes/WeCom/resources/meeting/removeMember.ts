@@ -1,9 +1,6 @@
 import type { INodeProperties } from 'n8n-workflow';
 
-const showOnlyForRemove = {
-	resource: ['meeting'],
-	operation: ['removeMember'],
-};
+const showOnly = { resource: ['meeting'], operation: ['removeMember'] };
 
 export const removeMemberDescription: INodeProperties[] = [
 	{
@@ -11,24 +8,36 @@ export const removeMemberDescription: INodeProperties[] = [
 		name: 'meetingid',
 		type: 'string',
 		required: true,
-		displayOptions: {
-			show: showOnlyForRemove,
-		},
+		displayOptions: { show: showOnly },
 		default: '',
-		description: '要移出成员的会议唯一标识ID',
+		description: '会议唯一标识ID',
 		hint: '会议ID',
 	},
 	{
-		displayName: '用户ID列表',
-		name: 'userids',
-		type: 'string',
+		displayName: '移除成员',
+		name: 'membersCollection',
+		type: 'fixedCollection',
 		required: true,
-		displayOptions: {
-			show: showOnlyForRemove,
-		},
-		default: '',
-		description: '要从会议中移出的用户ID列表，多个用户ID用逗号分隔',
-		hint: '要移出的用户ID列表，用逗号分隔',
+		displayOptions: { show: showOnly },
+		default: {},
+		placeholder: '添加要移除的成员',
+		typeOptions: { multipleValues: true },
+		description: '要从会议中移除的成员列表',
+		options: [
+			{
+				displayName: '成员',
+				name: 'members',
+				values: [
+					{
+						displayName: '用户ID',
+						name: 'userid',
+						type: 'string',
+						default: '',
+						required: true,
+						description: '要移除的成员UserID',
+					},
+				],
+			},
+		],
 	},
 ];
-

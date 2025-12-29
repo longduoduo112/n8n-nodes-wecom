@@ -1,17 +1,16 @@
 import type { INodeProperties } from 'n8n-workflow';
 
+const showOnly = { resource: ['wefile'], operation: ['downloadFile'] };
+
 export const downloadFileDescription: INodeProperties[] = [
 	{
-		displayName: '参数',
-		name: 'params',
+		displayName: '文件ID',
+		name: 'fileId',
 		type: 'string',
+		required: true,
+		displayOptions: { show: showOnly },
 		default: '',
-		description: 'DownloadFile操作的参数',
-		displayOptions: {
-			show: {
-				resource: ['wefile'],
-				operation: ['downloadFile'],
-			},
-		},
+		description: '要下载的文件ID',
+		hint: '文件ID',
 	},
 ];

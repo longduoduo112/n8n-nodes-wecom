@@ -1,17 +1,26 @@
 import type { INodeProperties } from 'n8n-workflow';
 
+const showOnly = { resource: ['wefile'], operation: ['renameSpace'] };
+
 export const renameSpaceDescription: INodeProperties[] = [
 	{
-		displayName: '参数',
-		name: 'params',
+		displayName: '空间ID',
+		name: 'spaceId',
 		type: 'string',
+		required: true,
+		displayOptions: { show: showOnly },
 		default: '',
-		description: 'RenameSpace操作的参数',
-		displayOptions: {
-			show: {
-				resource: ['wefile'],
-				operation: ['renameSpace'],
-			},
-		},
+		description: '微盘空间的ID',
+		hint: '空间ID',
+	},
+	{
+		displayName: '新空间名称',
+		name: 'spaceName',
+		type: 'string',
+		required: true,
+		displayOptions: { show: showOnly },
+		default: '',
+		description: '新的空间名称',
+		hint: '新名称',
 	},
 ];

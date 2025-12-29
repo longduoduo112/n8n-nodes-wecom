@@ -1,9 +1,6 @@
 import type { INodeProperties } from 'n8n-workflow';
 
-const showOnlyForUpdateUserMailAttribute = {
-	resource: ['mail'],
-	operation: ['updateUserMailAttribute'],
-};
+const showOnly = { resource: ['mail'], operation: ['updateUserMailAttribute'] };
 
 export const updateUserMailAttributeDescription: INodeProperties[] = [
 	{
@@ -11,24 +8,104 @@ export const updateUserMailAttributeDescription: INodeProperties[] = [
 		name: 'mailbox',
 		type: 'string',
 		required: true,
-		displayOptions: {
-			show: showOnlyForUpdateUserMailAttribute,
-		},
+		displayOptions: { show: showOnly },
 		default: '',
 		placeholder: 'user@example.com',
-		description: '要更新功能属性的用户邮箱地址。<a href="https://developer.work.weixin.qq.com/document/path/95486" target="_blank">更多信息</a>',
+		description: '要更新功能属性的用户邮箱地址',
 	},
 	{
-		displayName: '功能属性',
-		name: 'attribute',
-		type: 'json',
-		required: true,
-		displayOptions: {
-			show: showOnlyForUpdateUserMailAttribute,
-		},
-		default: '{}',
-		description: '邮箱功能属性设置，包括自动转发、自动回复等配置。<a href="https://developer.work.weixin.qq.com/document/path/95486" target="_blank">更多信息</a>',
-		hint: '示例：{"auto_reply": {"enabled": true, "text": "自动回复内容"}}',
+		displayName: '自动回复设置',
+		name: 'autoReplySettings',
+		type: 'collection',
+		displayOptions: { show: showOnly },
+		default: {},
+		placeholder: '配置自动回复',
+		description: '自动回复功能设置',
+		options: [
+			{
+				displayName: '启用自动回复',
+				name: 'enabled',
+				type: 'boolean',
+				default: false,
+				description: '是否启用自动回复功能',
+			},
+			{
+				displayName: '回复内容',
+				name: 'text',
+				type: 'string',
+				default: '',
+				typeOptions: { rows: 3 },
+				description: '自动回复的文本内容',
+				displayOptions: { show: { enabled: [true] } },
+			},
+			{
+				displayName: '仅回复联系人',
+				name: 'only_to_contact',
+				type: 'boolean',
+				default: false,
+				description: '是否仅对联系人发送自动回复',
+				displayOptions: { show: { enabled: [true] } },
+			},
+		],
+	},
+	{
+		displayName: '自动转发设置',
+		name: 'autoForwardSettings',
+		type: 'collection',
+		displayOptions: { show: showOnly },
+		default: {},
+		placeholder: '配置自动转发',
+		description: '自动转发功能设置',
+		options: [
+			{
+				displayName: '启用自动转发',
+				name: 'enabled',
+				type: 'boolean',
+				default: false,
+				description: '是否启用自动转发功能',
+			},
+			{
+				displayName: '转发目标邮箱',
+				name: 'to_addr',
+				type: 'string',
+				default: '',
+				placeholder: 'forward@example.com',
+				description: '自动转发的目标邮箱地址',
+				displayOptions: { show: { enabled: [true] } },
+			},
+			{
+				displayName: '保留副本',
+				name: 'keep_copy',
+				type: 'boolean',
+				default: true,
+				description: '转发后是否在原邮箱保留副本',
+				displayOptions: { show: { enabled: [true] } },
+			},
+		],
+	},
+	{
+		displayName: 'IMAP/SMTP设置',
+		name: 'imapSmtpSettings',
+		type: 'collection',
+		displayOptions: { show: showOnly },
+		default: {},
+		placeholder: '配置IMAP/SMTP',
+		description: 'IMAP和SMTP功能设置',
+		options: [
+			{
+				displayName: '启用IMAP',
+				name: 'enable_imap',
+				type: 'boolean',
+				default: false,
+				description: '是否启用IMAP协议',
+			},
+			{
+				displayName: '启用SMTP',
+				name: 'enable_smtp',
+				type: 'boolean',
+				default: false,
+				description: '是否启用SMTP协议',
+			},
+		],
 	},
 ];
-

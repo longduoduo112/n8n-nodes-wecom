@@ -1,5 +1,21 @@
-import type { IExecuteFunctions, INodeExecutionData } from 'n8n-workflow';
+import type { IExecuteFunctions, INodeExecutionData, IDataObject } from 'n8n-workflow';
 import { weComApiRequest } from '../../shared/transport';
+
+// 辅助函数：构建成员信息
+function buildAuthInfo(members: IDataObject[]): IDataObject[] {
+	return members.map((member) => {
+		const info: IDataObject = { type: member.type };
+		if (member.type === 1) {
+			info.userid = member.userid;
+		} else if (member.type === 2) {
+			info.departmentid = member.departmentid;
+		}
+		if (member.auth !== undefined) {
+			info.auth = member.auth;
+		}
+		return info;
+	});
+}
 
 export async function executeWefile(
 	this: IExecuteFunctions,
@@ -15,12 +31,25 @@ export async function executeWefile(
 			// 空间管理操作
 			if (operation === 'createSpace') {
 				const spaceName = this.getNodeParameter('spaceName', i) as string;
-				const authInfo = this.getNodeParameter('authInfo', i) as object;
+				const authInfo = this.getNodeParameter('authInfo', i, {}) as IDataObject;
 
-				const body = {
-					space_name: spaceName,
-					auth_info: authInfo,
-				};
+				const body: IDataObject = { space_name: spaceName };
+
+				// 处理权限信息
+				if (authInfo.auth) {
+					const auth = authInfo.auth as IDataObject;
+					const authData: IDataObject = {};
+					if (auth.userid) {
+						authData.userid = (auth.userid as string).split(',').map((id) => id.trim()).filter((id) => id);
+					}
+					if (auth.departmentid) {
+						authData.departmentid = (auth.departmentid as string).split(',').map((id) => parseInt(id.trim(), 10)).filter((id) => !isNaN(id));
+					}
+					if (auth.auth !== undefined) {
+						authData.auth = auth.auth;
+					}
+					body.auth_info = authData;
+				}
 
 				responseData = await weComApiRequest.call(
 					this,
@@ -32,53 +61,41 @@ export async function executeWefile(
 				const spaceId = this.getNodeParameter('spaceId', i) as string;
 				const spaceName = this.getNodeParameter('spaceName', i) as string;
 
-				const body = {
-					spaceid: spaceId,
-					space_name: spaceName,
-				};
-
 				responseData = await weComApiRequest.call(
 					this,
 					'POST',
 					'/cgi-bin/wedrive/space_rename',
-					body,
+					{ spaceid: spaceId, space_name: spaceName },
 				);
 			} else if (operation === 'deleteSpace') {
 				const spaceId = this.getNodeParameter('spaceId', i) as string;
-
-				const body = {
-					spaceid: spaceId,
-				};
 
 				responseData = await weComApiRequest.call(
 					this,
 					'POST',
 					'/cgi-bin/wedrive/space_dismiss',
-					body,
+					{ spaceid: spaceId },
 				);
 			} else if (operation === 'getSpaceInfo') {
 				const spaceId = this.getNodeParameter('spaceId', i) as string;
-
-				const body = {
-					spaceid: spaceId,
-				};
 
 				responseData = await weComApiRequest.call(
 					this,
 					'POST',
 					'/cgi-bin/wedrive/space_info',
-					body,
+					{ spaceid: spaceId },
 				);
 			}
 			// 空间权限管理
 			else if (operation === 'addSpaceMembers') {
 				const spaceId = this.getNodeParameter('spaceId', i) as string;
-				const authInfo = this.getNodeParameter('authInfo', i) as object;
+				const authInfoCollection = this.getNodeParameter('authInfoCollection', i, {}) as IDataObject;
 
-				const body = {
-					spaceid: spaceId,
-					auth_info: authInfo,
-				};
+				const body: IDataObject = { spaceid: spaceId };
+
+				if (authInfoCollection.members && Array.isArray(authInfoCollection.members)) {
+					body.auth_info = buildAuthInfo(authInfoCollection.members as IDataObject[]);
+				}
 
 				responseData = await weComApiRequest.call(
 					this,
@@ -88,12 +105,13 @@ export async function executeWefile(
 				);
 			} else if (operation === 'removeSpaceMembers') {
 				const spaceId = this.getNodeParameter('spaceId', i) as string;
-				const authInfo = this.getNodeParameter('authInfo', i) as object;
+				const authInfoCollection = this.getNodeParameter('authInfoCollection', i, {}) as IDataObject;
 
-				const body = {
-					spaceid: spaceId,
-					auth_info: authInfo,
-				};
+				const body: IDataObject = { spaceid: spaceId };
+
+				if (authInfoCollection.members && Array.isArray(authInfoCollection.members)) {
+					body.auth_info = buildAuthInfo(authInfoCollection.members as IDataObject[]);
+				}
 
 				responseData = await weComApiRequest.call(
 					this,
@@ -103,37 +121,31 @@ export async function executeWefile(
 				);
 			} else if (operation === 'spaceSecuritySettings') {
 				const spaceId = this.getNodeParameter('spaceId', i) as string;
-				const enableWatermark = this.getNodeParameter('enableWatermark', i) as boolean;
-				const addMemberOnlyAdmin = this.getNodeParameter('addMemberOnlyAdmin', i) as boolean;
-				const enableShareUrl = this.getNodeParameter('enableShareUrl', i) as boolean;
-				const shareUrlNoApprove = this.getNodeParameter('shareUrlNoApprove', i) as boolean;
-
-				const body = {
-					spaceid: spaceId,
-					enable_watermark: enableWatermark,
-					add_member_only_admin: addMemberOnlyAdmin,
-					enable_share_url: enableShareUrl,
-					share_url_no_approve: shareUrlNoApprove,
-				};
+				const enableWatermark = this.getNodeParameter('enableWatermark', i, false) as boolean;
+				const addMemberOnlyAdmin = this.getNodeParameter('addMemberOnlyAdmin', i, false) as boolean;
+				const enableShareUrl = this.getNodeParameter('enableShareUrl', i, true) as boolean;
+				const shareUrlNoApprove = this.getNodeParameter('shareUrlNoApprove', i, false) as boolean;
 
 				responseData = await weComApiRequest.call(
 					this,
 					'POST',
 					'/cgi-bin/wedrive/space_setting',
-					body,
+					{
+						spaceid: spaceId,
+						enable_watermark: enableWatermark,
+						add_member_only_admin: addMemberOnlyAdmin,
+						enable_share_url: enableShareUrl,
+						share_url_no_approve: shareUrlNoApprove,
+					},
 				);
 			} else if (operation === 'getSpaceInviteLink') {
 				const spaceId = this.getNodeParameter('spaceId', i) as string;
-
-				const body = {
-					spaceid: spaceId,
-				};
 
 				responseData = await weComApiRequest.call(
 					this,
 					'POST',
 					'/cgi-bin/wedrive/space_share',
-					body,
+					{ spaceid: spaceId },
 				);
 			}
 			// 文件管理操作
@@ -142,19 +154,13 @@ export async function executeWefile(
 				const fatherId = this.getNodeParameter('fatherId', i, '') as string;
 				const sortType = this.getNodeParameter('sortType', i, 0) as number;
 				const start = this.getNodeParameter('start', i, 0) as number;
-				const limit = this.getNodeParameter('limit', i, 100) as number;
+				const limit = this.getNodeParameter('limit', i, 50) as number;
 
-				const body: {
-					spaceid: string;
-					sort_type: number;
-					start: number;
-					limit: number;
-					fatherid?: string;
-				} = {
+				const body: IDataObject = {
 					spaceid: spaceId,
 					sort_type: sortType,
-					start: start,
-					limit: limit,
+					start,
+					limit,
 				};
 
 				if (fatherId) {
@@ -199,29 +205,18 @@ export async function executeWefile(
 			} else if (operation === 'downloadFile') {
 				const fileId = this.getNodeParameter('fileId', i) as string;
 
-				const body = {
-					fileid: fileId,
-				};
-
 				responseData = await weComApiRequest.call(
 					this,
 					'POST',
 					'/cgi-bin/wedrive/file_download',
-					body,
+					{ fileid: fileId },
 				);
-
-				// Return download URL info
-				// The actual file download can be handled by HTTP Request node using the download_url
 			} else if (operation === 'createFolder') {
 				const spaceId = this.getNodeParameter('spaceId', i) as string;
-				const fatherId = this.getNodeParameter('fatherId', i, '') as string;
 				const folderName = this.getNodeParameter('folderName', i) as string;
+				const fatherId = this.getNodeParameter('fatherId', i, '') as string;
 
-				const body: {
-					spaceid: string;
-					file_name: string;
-					fatherid?: string;
-				} = {
+				const body: IDataObject = {
 					spaceid: spaceId,
 					file_name: folderName,
 				};
@@ -240,70 +235,56 @@ export async function executeWefile(
 				const fileId = this.getNodeParameter('fileId', i) as string;
 				const newName = this.getNodeParameter('newName', i) as string;
 
-				const body = {
-					fileid: fileId,
-					new_name: newName,
-				};
-
 				responseData = await weComApiRequest.call(
 					this,
 					'POST',
 					'/cgi-bin/wedrive/file_rename',
-					body,
+					{ fileid: fileId, new_name: newName },
 				);
 			} else if (operation === 'moveFile') {
-				const fileIds = this.getNodeParameter('fileIds', i) as string[];
+				const fileIdsStr = this.getNodeParameter('fileIds', i) as string;
 				const fatherId = this.getNodeParameter('fatherId', i) as string;
 				const replace = this.getNodeParameter('replace', i, false) as boolean;
 
-				const body = {
-					fileid: fileIds,
-					fatherid: fatherId,
-					replace: replace,
-				};
+				const fileIds = fileIdsStr.split(',').map((id) => id.trim()).filter((id) => id);
 
 				responseData = await weComApiRequest.call(
 					this,
 					'POST',
 					'/cgi-bin/wedrive/file_move',
-					body,
+					{ fileid: fileIds, fatherid: fatherId, replace },
 				);
 			} else if (operation === 'deleteFile') {
-				const fileIds = this.getNodeParameter('fileIds', i) as string[];
+				const fileIdsStr = this.getNodeParameter('fileIds', i) as string;
 
-				const body = {
-					fileid: fileIds,
-				};
+				const fileIds = fileIdsStr.split(',').map((id) => id.trim()).filter((id) => id);
 
 				responseData = await weComApiRequest.call(
 					this,
 					'POST',
 					'/cgi-bin/wedrive/file_delete',
-					body,
+					{ fileid: fileIds },
 				);
 			} else if (operation === 'getFileInfo') {
 				const fileId = this.getNodeParameter('fileId', i) as string;
-
-				const body = {
-					fileid: fileId,
-				};
 
 				responseData = await weComApiRequest.call(
 					this,
 					'POST',
 					'/cgi-bin/wedrive/file_info',
-					body,
+					{ fileid: fileId },
 				);
 			}
 			// 文件权限管理
 			else if (operation === 'addFileMembers') {
 				const fileId = this.getNodeParameter('fileId', i) as string;
-				const authInfo = this.getNodeParameter('authInfo', i) as object;
+				const authInfoCollection = this.getNodeParameter('authInfoCollection', i, {}) as IDataObject;
 
-				const body = {
-					fileid: fileId,
-					auth_info: authInfo,
-				};
+				const body: IDataObject = { fileid: fileId };
+
+				if (authInfoCollection.members && Array.isArray(authInfoCollection.members)) {
+					body.auth_info = buildAuthInfo(authInfoCollection.members as IDataObject[]);
+				}
 
 				responseData = await weComApiRequest.call(
 					this,
@@ -313,12 +294,13 @@ export async function executeWefile(
 				);
 			} else if (operation === 'removeFileMembers') {
 				const fileId = this.getNodeParameter('fileId', i) as string;
-				const authInfo = this.getNodeParameter('authInfo', i) as object;
+				const authInfoCollection = this.getNodeParameter('authInfoCollection', i, {}) as IDataObject;
 
-				const body = {
-					fileid: fileId,
-					auth_info: authInfo,
-				};
+				const body: IDataObject = { fileid: fileId };
+
+				if (authInfoCollection.members && Array.isArray(authInfoCollection.members)) {
+					body.auth_info = buildAuthInfo(authInfoCollection.members as IDataObject[]);
+				}
 
 				responseData = await weComApiRequest.call(
 					this,
@@ -331,64 +313,48 @@ export async function executeWefile(
 				const shareScope = this.getNodeParameter('shareScope', i) as number;
 				const authScope = this.getNodeParameter('authScope', i) as number;
 
-				const body = {
-					fileid: fileId,
-					share_scope: shareScope,
-					auth_scope: authScope,
-				};
-
 				responseData = await weComApiRequest.call(
 					this,
 					'POST',
 					'/cgi-bin/wedrive/file_setting',
-					body,
+					{ fileid: fileId, share_scope: shareScope, auth_scope: authScope },
 				);
 			} else if (operation === 'getFileShareLink') {
 				const fileId = this.getNodeParameter('fileId', i) as string;
-
-				const body = {
-					fileid: fileId,
-				};
 
 				responseData = await weComApiRequest.call(
 					this,
 					'POST',
 					'/cgi-bin/wedrive/file_share',
-					body,
+					{ fileid: fileId },
 				);
 			} else if (operation === 'getFilePermissions') {
 				const fileId = this.getNodeParameter('fileId', i) as string;
-
-				const body = {
-					fileid: fileId,
-				};
 
 				responseData = await weComApiRequest.call(
 					this,
 					'POST',
 					'/cgi-bin/wedrive/file_acl_list',
-					body,
+					{ fileid: fileId },
 				);
 			} else if (operation === 'fileSecuritySettings') {
 				const fileId = this.getNodeParameter('fileId', i) as string;
-				const enableWatermark = this.getNodeParameter('enableWatermark', i) as boolean;
-				const addMemberOnlyAdmin = this.getNodeParameter('addMemberOnlyAdmin', i) as boolean;
-				const enableShareUrl = this.getNodeParameter('enableShareUrl', i) as boolean;
-				const shareUrlNoApprove = this.getNodeParameter('shareUrlNoApprove', i) as boolean;
-
-				const body = {
-					fileid: fileId,
-					enable_watermark: enableWatermark,
-					add_member_only_admin: addMemberOnlyAdmin,
-					enable_share_url: enableShareUrl,
-					share_url_no_approve: shareUrlNoApprove,
-				};
+				const enableWatermark = this.getNodeParameter('enableWatermark', i, false) as boolean;
+				const addMemberOnlyAdmin = this.getNodeParameter('addMemberOnlyAdmin', i, false) as boolean;
+				const enableShareUrl = this.getNodeParameter('enableShareUrl', i, true) as boolean;
+				const shareUrlNoApprove = this.getNodeParameter('shareUrlNoApprove', i, false) as boolean;
 
 				responseData = await weComApiRequest.call(
 					this,
 					'POST',
 					'/cgi-bin/wedrive/file_secure_setting',
-					body,
+					{
+						fileid: fileId,
+						enable_watermark: enableWatermark,
+						add_member_only_admin: addMemberOnlyAdmin,
+						enable_share_url: enableShareUrl,
+						share_url_no_approve: shareUrlNoApprove,
+					},
 				);
 			}
 

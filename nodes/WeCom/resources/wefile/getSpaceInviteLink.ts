@@ -1,17 +1,16 @@
 import type { INodeProperties } from 'n8n-workflow';
 
+const showOnly = { resource: ['wefile'], operation: ['getSpaceInviteLink'] };
+
 export const getSpaceInviteLinkDescription: INodeProperties[] = [
 	{
-		displayName: '参数',
-		name: 'params',
+		displayName: '空间ID',
+		name: 'spaceId',
 		type: 'string',
+		required: true,
+		displayOptions: { show: showOnly },
 		default: '',
-		description: 'GetSpaceInviteLink操作的参数',
-		displayOptions: {
-			show: {
-				resource: ['wefile'],
-				operation: ['getSpaceInviteLink'],
-			},
-		},
+		description: '微盘空间的ID',
+		hint: '空间ID',
 	},
 ];

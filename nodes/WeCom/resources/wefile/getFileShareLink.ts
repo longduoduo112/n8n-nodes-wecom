@@ -1,17 +1,16 @@
 import type { INodeProperties } from 'n8n-workflow';
 
+const showOnly = { resource: ['wefile'], operation: ['getFileShareLink'] };
+
 export const getFileShareLinkDescription: INodeProperties[] = [
 	{
-		displayName: '参数',
-		name: 'params',
+		displayName: '文件ID',
+		name: 'fileId',
 		type: 'string',
+		required: true,
+		displayOptions: { show: showOnly },
 		default: '',
-		description: 'GetFileShareLink操作的参数',
-		displayOptions: {
-			show: {
-				resource: ['wefile'],
-				operation: ['getFileShareLink'],
-			},
-		},
+		description: '文件的ID',
+		hint: '文件ID',
 	},
 ];

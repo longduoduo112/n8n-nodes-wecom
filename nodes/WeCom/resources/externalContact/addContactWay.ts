@@ -1,9 +1,6 @@
 import type { INodeProperties } from 'n8n-workflow';
 
-const showOnly = {
-	resource: ['externalContact'],
-	operation: ['addContactWay'],
-};
+const showOnly = { resource: ['externalContact'], operation: ['addContactWay'] };
 
 export const addContactWayDescription: INodeProperties[] = [
 	{
@@ -11,55 +8,34 @@ export const addContactWayDescription: INodeProperties[] = [
 		name: 'type',
 		type: 'options',
 		options: [
-			{
-				name: '单人',
-				value: 1,
-			},
-			{
-				name: '多人',
-				value: 2,
-			},
+			{ name: '单人', value: 1 },
+			{ name: '多人', value: 2 },
 		],
 		required: true,
 		default: 1,
-		displayOptions: {
-			show: showOnly,
-		},
-		hint: '联系方式类型，1-单人 2-多人',
-		description: '联系方式类型。1-单人，客户添加时自动成为该成员的客户；2-多人，客户可选择其中一位成员进行添加。<a href="https://developer.work.weixin.qq.com/document/path/92228" target="_blank">官方文档</a>',
+		displayOptions: { show: showOnly },
+		description: '联系方式类型。1-单人，客户添加时自动成为该成员的客户；2-多人，客户可选择其中一位成员进行添加',
 	},
 	{
 		displayName: '场景',
 		name: 'scene',
 		type: 'options',
 		options: [
-			{
-				name: '在小程序中联系',
-				value: 1,
-			},
-			{
-				name: '通过二维码联系',
-				value: 2,
-			},
+			{ name: '在小程序中联系', value: 1 },
+			{ name: '通过二维码联系', value: 2 },
 		],
 		required: true,
 		default: 2,
-		displayOptions: {
-			show: showOnly,
-		},
-		hint: '场景，1-在小程序中联系 2-通过二维码联系',
-		description: '场景。1-在小程序中联系；2-通过二维码联系。<a href="https://developer.work.weixin.qq.com/document/path/92228" target="_blank">官方文档</a>',
+		displayOptions: { show: showOnly },
+		description: '场景。1-在小程序中联系；2-通过二维码联系',
 	},
 	{
 		displayName: '配置的成员列表',
 		name: 'user',
 		type: 'string',
 		default: '',
-		displayOptions: {
-			show: showOnly,
-		},
-		hint: '可选。成员的userid列表，多个用逗号分隔',
-		description: '使用该联系方式的企业成员UserID列表，多个用英文逗号分隔。<a href="https://developer.work.weixin.qq.com/document/path/92228" target="_blank">官方文档</a>',
+		displayOptions: { show: showOnly },
+		description: '使用该联系方式的企业成员UserID列表，多个用英文逗号分隔',
 		placeholder: 'zhangsan,lisi',
 	},
 	{
@@ -67,11 +43,8 @@ export const addContactWayDescription: INodeProperties[] = [
 		name: 'remark',
 		type: 'string',
 		default: '',
-		displayOptions: {
-			show: showOnly,
-		},
-		hint: '可选。联系方式的备注信息',
-		description: '联系方式的备注信息，用于管理员自己识别，不展示给客户。<a href="https://developer.work.weixin.qq.com/document/path/92228" target="_blank">官方文档</a>',
+		displayOptions: { show: showOnly },
+		description: '联系方式的备注信息，用于管理员自己识别',
 		placeholder: '官网二维码',
 	},
 	{
@@ -79,23 +52,110 @@ export const addContactWayDescription: INodeProperties[] = [
 		name: 'skip_verify',
 		type: 'boolean',
 		default: true,
-		displayOptions: {
-			show: showOnly,
-		},
-		hint: '可选。外部客户添加时是否无需验证',
-		description: '外部客户添加时是否无需验证，默认为true（自动通过）。<a href="https://developer.work.weixin.qq.com/document/path/92228" target="_blank">官方文档</a>',
+		displayOptions: { show: showOnly },
+		description: '外部客户添加时是否无需验证，默认为true（自动通过）',
 	},
 	{
-		displayName: '结束语',
-		name: 'conclusions',
-		type: 'json',
-		default: '{}',
-		displayOptions: {
-			show: showOnly,
-		},
-		hint: '可选。结束语，会话结束时自动发送给客户',
-		description: '结束语，可以设置文本、图片、链接等，会话结束时自动发送给客户。格式参考官方文档。<a href="https://developer.work.weixin.qq.com/document/path/92228" target="_blank">官方文档</a>',
-		placeholder: '{"text":{"content":"感谢您的咨询"}}',
+		displayName: '设置结束语',
+		name: 'enableConclusions',
+		type: 'boolean',
+		default: false,
+		displayOptions: { show: showOnly },
+		description: '是否设置结束语',
+	},
+	{
+		displayName: '结束语类型',
+		name: 'conclusionType',
+		type: 'options',
+		displayOptions: { show: { ...showOnly, enableConclusions: [true] } },
+		options: [
+			{ name: '文本', value: 'text' },
+			{ name: '图片', value: 'image' },
+			{ name: '链接', value: 'link' },
+			{ name: '小程序', value: 'miniprogram' },
+		],
+		default: 'text',
+		description: '结束语消息类型',
+	},
+	{
+		displayName: '文本内容',
+		name: 'conclusion_text',
+		type: 'string',
+		displayOptions: { show: { ...showOnly, enableConclusions: [true], conclusionType: ['text'] } },
+		default: '',
+		description: '结束语文本内容',
+		placeholder: '感谢您的咨询',
+	},
+	{
+		displayName: '图片Media ID',
+		name: 'conclusion_image_media_id',
+		type: 'string',
+		displayOptions: { show: { ...showOnly, enableConclusions: [true], conclusionType: ['image'] } },
+		default: '',
+		description: '结束语图片的media_id',
+	},
+	{
+		displayName: '链接标题',
+		name: 'conclusion_link_title',
+		type: 'string',
+		displayOptions: { show: { ...showOnly, enableConclusions: [true], conclusionType: ['link'] } },
+		default: '',
+
+	},
+	{
+		displayName: '链接封面URL',
+		name: 'conclusion_link_picurl',
+		type: 'string',
+		displayOptions: { show: { ...showOnly, enableConclusions: [true], conclusionType: ['link'] } },
+		default: '',
+		description: '链接封面图URL',
+	},
+	{
+		displayName: '链接描述',
+		name: 'conclusion_link_desc',
+		type: 'string',
+		displayOptions: { show: { ...showOnly, enableConclusions: [true], conclusionType: ['link'] } },
+		default: '',
+
+	},
+	{
+		displayName: '链接URL',
+		name: 'conclusion_link_url',
+		type: 'string',
+		displayOptions: { show: { ...showOnly, enableConclusions: [true], conclusionType: ['link'] } },
+		default: '',
+		description: '链接跳转URL',
+	},
+	{
+		displayName: '小程序标题',
+		name: 'conclusion_miniprogram_title',
+		type: 'string',
+		displayOptions: { show: { ...showOnly, enableConclusions: [true], conclusionType: ['miniprogram'] } },
+		default: '',
+
+	},
+	{
+		displayName: '小程序AppID',
+		name: 'conclusion_miniprogram_appid',
+		type: 'string',
+		displayOptions: { show: { ...showOnly, enableConclusions: [true], conclusionType: ['miniprogram'] } },
+		default: '',
+		description: '小程序的AppID',
+	},
+	{
+		displayName: '小程序页面路径',
+		name: 'conclusion_miniprogram_pagepath',
+		type: 'string',
+		displayOptions: { show: { ...showOnly, enableConclusions: [true], conclusionType: ['miniprogram'] } },
+		default: '',
+
+	},
+	{
+		displayName: '小程序封面Media ID',
+		name: 'conclusion_miniprogram_pic_media_id',
+		type: 'string',
+		displayOptions: { show: { ...showOnly, enableConclusions: [true], conclusionType: ['miniprogram'] } },
+		default: '',
+		description: '小程序封面图的media_id',
 	},
 ];
-

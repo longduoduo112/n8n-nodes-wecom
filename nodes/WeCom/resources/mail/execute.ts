@@ -15,58 +15,193 @@ export async function executeMail(
 			// 发送邮件
 			if (operation === 'sendMail') {
 				const sender = this.getNodeParameter('sender', i) as string;
-				const receiver = this.getNodeParameter('receiver', i) as string;
 				const subject = this.getNodeParameter('subject', i) as string;
-				const doc_content = this.getNodeParameter('doc_content', i) as string;
-				const attachment_list = this.getNodeParameter('attachment_list', i, '[]') as string;
+				const toListCollection = this.getNodeParameter('toListCollection', i, {}) as IDataObject;
+				const ccListCollection = this.getNodeParameter('ccListCollection', i, {}) as IDataObject;
+				const bccListCollection = this.getNodeParameter('bccListCollection', i, {}) as IDataObject;
+				const contentType = this.getNodeParameter('contentType', i) as number;
+				const content = this.getNodeParameter('content', i) as string;
+				const attachmentCollection = this.getNodeParameter('attachmentCollection', i, {}) as IDataObject;
+
+				// 构建收件人
+				const to_list: string[] = [];
+				const cc_list: string[] = [];
+				const bcc_list: string[] = [];
+
+				if (toListCollection.recipients) {
+					const toRecipients = toListCollection.recipients as IDataObject[];
+					toRecipients.forEach((r) => {
+						if (r.email) to_list.push(r.email as string);
+					});
+				}
+
+				if (ccListCollection.recipients) {
+					const ccRecipients = ccListCollection.recipients as IDataObject[];
+					ccRecipients.forEach((r) => {
+						if (r.email) cc_list.push(r.email as string);
+					});
+				}
+
+				if (bccListCollection.recipients) {
+					const bccRecipients = bccListCollection.recipients as IDataObject[];
+					bccRecipients.forEach((r) => {
+						if (r.email) bcc_list.push(r.email as string);
+					});
+				}
 
 				const body: IDataObject = {
 					sender,
-					receiver: JSON.parse(receiver),
+					receiver: { to_list, cc_list, bcc_list },
 					subject,
-					doc_content: JSON.parse(doc_content),
+					doc_content: {
+						content_type: contentType,
+						content,
+					},
 				};
 
-				if (attachment_list && attachment_list !== '[]') {
-					body.attachment_list = JSON.parse(attachment_list);
+				// 处理附件
+				if (attachmentCollection.attachments) {
+					const attachments = attachmentCollection.attachments as IDataObject[];
+					if (attachments.length > 0) {
+						body.attachment_list = attachments.map((a) => ({
+							type: a.type,
+							media_id: a.media_id,
+						}));
+					}
 				}
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/exmail/app/compose_send', body);
 			} else if (operation === 'sendScheduleMail') {
 				const sender = this.getNodeParameter('sender', i) as string;
-				const receiver = this.getNodeParameter('receiver', i) as string;
 				const subject = this.getNodeParameter('subject', i) as string;
-				const cal_content = this.getNodeParameter('cal_content', i) as string;
-				const attachment_list = this.getNodeParameter('attachment_list', i, '[]') as string;
+				const toListCollection = this.getNodeParameter('toListCollection', i, {}) as IDataObject;
+				const ccListCollection = this.getNodeParameter('ccListCollection', i, {}) as IDataObject;
+				const bccListCollection = this.getNodeParameter('bccListCollection', i, {}) as IDataObject;
+				const calTitle = this.getNodeParameter('calTitle', i) as string;
+				const calStartTime = this.getNodeParameter('calStartTime', i) as number;
+				const calEndTime = this.getNodeParameter('calEndTime', i) as number;
+				const calLocation = this.getNodeParameter('calLocation', i, '') as string;
+				const calDescription = this.getNodeParameter('calDescription', i, '') as string;
+				const attachmentCollection = this.getNodeParameter('attachmentCollection', i, {}) as IDataObject;
+
+				// 构建收件人
+				const to_list: string[] = [];
+				const cc_list: string[] = [];
+				const bcc_list: string[] = [];
+
+				if (toListCollection.recipients) {
+					const toRecipients = toListCollection.recipients as IDataObject[];
+					toRecipients.forEach((r) => {
+						if (r.email) to_list.push(r.email as string);
+					});
+				}
+
+				if (ccListCollection.recipients) {
+					const ccRecipients = ccListCollection.recipients as IDataObject[];
+					ccRecipients.forEach((r) => {
+						if (r.email) cc_list.push(r.email as string);
+					});
+				}
+
+				if (bccListCollection.recipients) {
+					const bccRecipients = bccListCollection.recipients as IDataObject[];
+					bccRecipients.forEach((r) => {
+						if (r.email) bcc_list.push(r.email as string);
+					});
+				}
+
+				// 构建日程内容
+				const cal_content: IDataObject = {
+					title: calTitle,
+					start_time: calStartTime,
+					end_time: calEndTime,
+				};
+				if (calLocation) cal_content.location = calLocation;
+				if (calDescription) cal_content.description = calDescription;
 
 				const body: IDataObject = {
 					sender,
-					receiver: JSON.parse(receiver),
+					receiver: { to_list, cc_list, bcc_list },
 					subject,
-					cal_content: JSON.parse(cal_content),
+					cal_content,
 				};
 
-				if (attachment_list && attachment_list !== '[]') {
-					body.attachment_list = JSON.parse(attachment_list);
+				// 处理附件
+				if (attachmentCollection.attachments) {
+					const attachments = attachmentCollection.attachments as IDataObject[];
+					if (attachments.length > 0) {
+						body.attachment_list = attachments.map((a) => ({
+							type: a.type,
+							media_id: a.media_id,
+						}));
+					}
 				}
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/exmail/app/compose_send', body);
 			} else if (operation === 'sendMeetingMail') {
 				const sender = this.getNodeParameter('sender', i) as string;
-				const receiver = this.getNodeParameter('receiver', i) as string;
 				const subject = this.getNodeParameter('subject', i) as string;
-				const meeting_content = this.getNodeParameter('meeting_content', i) as string;
-				const attachment_list = this.getNodeParameter('attachment_list', i, '[]') as string;
+				const toListCollection = this.getNodeParameter('toListCollection', i, {}) as IDataObject;
+				const ccListCollection = this.getNodeParameter('ccListCollection', i, {}) as IDataObject;
+				const bccListCollection = this.getNodeParameter('bccListCollection', i, {}) as IDataObject;
+				const meetingTitle = this.getNodeParameter('meetingTitle', i) as string;
+				const meetingStartTime = this.getNodeParameter('meetingStartTime', i) as number;
+				const meetingEndTime = this.getNodeParameter('meetingEndTime', i) as number;
+				const meetingLocation = this.getNodeParameter('meetingLocation', i, '') as string;
+				const meetingDescription = this.getNodeParameter('meetingDescription', i, '') as string;
+				const attachmentCollection = this.getNodeParameter('attachmentCollection', i, {}) as IDataObject;
+
+				// 构建收件人
+				const to_list: string[] = [];
+				const cc_list: string[] = [];
+				const bcc_list: string[] = [];
+
+				if (toListCollection.recipients) {
+					const toRecipients = toListCollection.recipients as IDataObject[];
+					toRecipients.forEach((r) => {
+						if (r.email) to_list.push(r.email as string);
+					});
+				}
+
+				if (ccListCollection.recipients) {
+					const ccRecipients = ccListCollection.recipients as IDataObject[];
+					ccRecipients.forEach((r) => {
+						if (r.email) cc_list.push(r.email as string);
+					});
+				}
+
+				if (bccListCollection.recipients) {
+					const bccRecipients = bccListCollection.recipients as IDataObject[];
+					bccRecipients.forEach((r) => {
+						if (r.email) bcc_list.push(r.email as string);
+					});
+				}
+
+				// 构建会议内容
+				const meeting_content: IDataObject = {
+					title: meetingTitle,
+					start_time: meetingStartTime,
+					end_time: meetingEndTime,
+				};
+				if (meetingLocation) meeting_content.location = meetingLocation;
+				if (meetingDescription) meeting_content.description = meetingDescription;
 
 				const body: IDataObject = {
 					sender,
-					receiver: JSON.parse(receiver),
+					receiver: { to_list, cc_list, bcc_list },
 					subject,
-					meeting_content: JSON.parse(meeting_content),
+					meeting_content,
 				};
 
-				if (attachment_list && attachment_list !== '[]') {
-					body.attachment_list = JSON.parse(attachment_list);
+				// 处理附件
+				if (attachmentCollection.attachments) {
+					const attachments = attachmentCollection.attachments as IDataObject[];
+					if (attachments.length > 0) {
+						body.attachment_list = attachments.map((a) => ({
+							type: a.type,
+							media_id: a.media_id,
+						}));
+					}
 				}
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/exmail/app/compose_send', body);
@@ -281,12 +416,51 @@ export async function executeMail(
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/exmail/user/get', { mailbox });
 			} else if (operation === 'updateUserMailAttribute') {
 				const mailbox = this.getNodeParameter('mailbox', i) as string;
-				const attribute = this.getNodeParameter('attribute', i) as string;
+				const autoReplySettings = this.getNodeParameter('autoReplySettings', i, {}) as IDataObject;
+				const autoForwardSettings = this.getNodeParameter('autoForwardSettings', i, {}) as IDataObject;
+				const imapSmtpSettings = this.getNodeParameter('imapSmtpSettings', i, {}) as IDataObject;
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/exmail/user/update', {
-					mailbox,
-					...JSON.parse(attribute),
-				});
+				const body: IDataObject = { mailbox };
+
+				// 处理自动回复设置
+				if (autoReplySettings.enabled !== undefined) {
+					body.auto_reply = {
+						enabled: autoReplySettings.enabled,
+					};
+					if (autoReplySettings.enabled) {
+						if (autoReplySettings.text) {
+							(body.auto_reply as IDataObject).text = autoReplySettings.text;
+						}
+						if (autoReplySettings.only_to_contact !== undefined) {
+							(body.auto_reply as IDataObject).only_to_contact = autoReplySettings.only_to_contact;
+						}
+					}
+				}
+
+				// 处理自动转发设置
+				if (autoForwardSettings.enabled !== undefined) {
+					body.auto_forward = {
+						enabled: autoForwardSettings.enabled,
+					};
+					if (autoForwardSettings.enabled) {
+						if (autoForwardSettings.to_addr) {
+							(body.auto_forward as IDataObject).to_addr = autoForwardSettings.to_addr;
+						}
+						if (autoForwardSettings.keep_copy !== undefined) {
+							(body.auto_forward as IDataObject).keep_copy = autoForwardSettings.keep_copy;
+						}
+					}
+				}
+
+				// 处理IMAP/SMTP设置
+				if (imapSmtpSettings.enable_imap !== undefined) {
+					body.enable_imap = imapSmtpSettings.enable_imap;
+				}
+				if (imapSmtpSettings.enable_smtp !== undefined) {
+					body.enable_smtp = imapSmtpSettings.enable_smtp;
+				}
+
+				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/exmail/user/update', body);
 			} else if (operation === 'getMailUnreadCount') {
 				const mailbox = this.getNodeParameter('mailbox', i) as string;
 
@@ -315,4 +489,3 @@ export async function executeMail(
 
 	return returnData;
 }
-

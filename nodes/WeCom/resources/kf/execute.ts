@@ -72,17 +72,17 @@ export async function executeKf(
 					open_kfid,
 					userid_list: userid_list.split(',').map((id) => id.trim()),
 				});
-		} else if (operation === 'listServicer') {
-			const open_kfid = this.getNodeParameter('open_kfid', i) as string;
+			} else if (operation === 'listServicer') {
+				const open_kfid = this.getNodeParameter('open_kfid', i) as string;
 
-			response = await weComApiRequest.call(
-				this,
-				'GET',
-				'/cgi-bin/kf/servicer/list',
-				{},
-				{ open_kfid },
-			);
-		}
+				response = await weComApiRequest.call(
+					this,
+					'GET',
+					'/cgi-bin/kf/servicer/list',
+					{},
+					{ open_kfid },
+				);
+			}
 			// 会话分配与消息收发
 			else if (operation === 'transServiceState') {
 				const open_kfid = this.getNodeParameter('open_kfid', i) as string;
@@ -234,18 +234,39 @@ export async function executeKf(
 				});
 			} else if (operation === 'setUpgradeService') {
 				const open_kfid = this.getNodeParameter('open_kfid', i) as string;
-				const upgrade_config = this.getNodeParameter('upgrade_config', i) as string;
+				const upgradeType = this.getNodeParameter('upgradeType', i) as string;
 
-				let parsedConfig;
-				try {
-					parsedConfig = JSON.parse(upgrade_config);
-				} catch (error) {
-					throw new NodeOperationError(this.getNode(), `upgrade_config 必须是有效的 JSON: ${error.message}`, { itemIndex: i });
+				const upgrade_config: IDataObject = {};
+
+				if (upgradeType === 'member') {
+					const memberCollection = this.getNodeParameter('memberCollection', i, {}) as IDataObject;
+					const userid_list: string[] = [];
+
+					if (memberCollection.members) {
+						const membersList = memberCollection.members as IDataObject[];
+						membersList.forEach((m) => {
+							if (m.userid) userid_list.push(m.userid as string);
+						});
+					}
+
+					upgrade_config.member_range = { userid_list };
+				} else if (upgradeType === 'groupchat') {
+					const groupchatCollection = this.getNodeParameter('groupchatCollection', i, {}) as IDataObject;
+					const chatid_list: string[] = [];
+
+					if (groupchatCollection.groups) {
+						const groupsList = groupchatCollection.groups as IDataObject[];
+						groupsList.forEach((g) => {
+							if (g.chat_id) chatid_list.push(g.chat_id as string);
+						});
+					}
+
+					upgrade_config.groupchat_range = { chatid_list };
 				}
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/kf/customer/upgrade_service_config', {
 					open_kfid,
-					upgrade_config: parsedConfig,
+					upgrade_config,
 				});
 			} else if (operation === 'syncMsg') {
 				const open_kfid = this.getNodeParameter('open_kfid', i) as string;
@@ -351,52 +372,100 @@ export async function executeKf(
 			// 机器人管理
 			else if (operation === 'manageKnowledgeGroup') {
 				const action_type = this.getNodeParameter('action_type', i) as string;
-				const params = this.getNodeParameter('params', i, '{}') as string;
 
-				let parsedParams;
-				try {
-					parsedParams = JSON.parse(params);
-				} catch (error) {
-					throw new NodeOperationError(this.getNode(), `params 必须是有效的 JSON: ${error.message}`, { itemIndex: i });
-				}
-
-				// 根据操作类型调用不同的API
 				let endpoint = '';
+				const body: IDataObject = {};
+
 				if (action_type === 'add') {
 					endpoint = '/cgi-bin/kf/knowledge/add_group';
+					const group_name = this.getNodeParameter('group_name', i) as string;
+					body.name = group_name;
 				} else if (action_type === 'del') {
 					endpoint = '/cgi-bin/kf/knowledge/del_group';
+					const group_id = this.getNodeParameter('group_id', i) as string;
+					body.group_id = group_id;
 				} else if (action_type === 'mod') {
 					endpoint = '/cgi-bin/kf/knowledge/mod_group';
+					const group_id = this.getNodeParameter('group_id', i) as string;
+					const new_group_name = this.getNodeParameter('new_group_name', i) as string;
+					body.group_id = group_id;
+					body.name = new_group_name;
 				} else if (action_type === 'list') {
 					endpoint = '/cgi-bin/kf/knowledge/list_group';
+					const cursor = this.getNodeParameter('cursor', i, '') as string;
+					const limit = this.getNodeParameter('limit', i, 100) as number;
+					if (cursor) body.cursor = cursor;
+					body.limit = limit;
 				}
 
-				response = await weComApiRequest.call(this, 'POST', endpoint, parsedParams);
+				response = await weComApiRequest.call(this, 'POST', endpoint, body);
 			} else if (operation === 'manageKnowledgeIntent') {
 				const action_type = this.getNodeParameter('action_type', i) as string;
-				const params = this.getNodeParameter('params', i, '{}') as string;
 
-				let parsedParams;
-				try {
-					parsedParams = JSON.parse(params);
-				} catch (error) {
-					throw new NodeOperationError(this.getNode(), `params 必须是有效的 JSON: ${error.message}`, { itemIndex: i });
-				}
-
-				// 根据操作类型调用不同的API
 				let endpoint = '';
+				const body: IDataObject = {};
+
 				if (action_type === 'add') {
 					endpoint = '/cgi-bin/kf/knowledge/add_intent';
+					const group_id = this.getNodeParameter('group_id', i) as string;
+					const question_text = this.getNodeParameter('question_text', i) as string;
+					const answer_type = this.getNodeParameter('answer_type', i) as string;
+					const answer_text = this.getNodeParameter('answer_text', i) as string;
+					const similarQuestionsCollection = this.getNodeParameter('similarQuestionsCollection', i, {}) as IDataObject;
+
+					// 构建问题
+					const question: IDataObject = { text: question_text };
+					if (similarQuestionsCollection.questions) {
+						const similarList = similarQuestionsCollection.questions as IDataObject[];
+						if (similarList.length > 0) {
+							question.similar_questions = similarList.map((q) => ({ text: q.text }));
+						}
+					}
+
+					// 构建回答
+					const answer: IDataObject[] = [{ msgtype: answer_type, [answer_type]: { content: answer_text } }];
+
+					body.group_id = group_id;
+					body.question = question;
+					body.answer = answer;
 				} else if (action_type === 'del') {
 					endpoint = '/cgi-bin/kf/knowledge/del_intent';
+					const intent_id = this.getNodeParameter('intent_id', i) as string;
+					body.intent_id = intent_id;
 				} else if (action_type === 'mod') {
 					endpoint = '/cgi-bin/kf/knowledge/mod_intent';
+					const intent_id = this.getNodeParameter('intent_id', i) as string;
+					const question_text = this.getNodeParameter('question_text', i) as string;
+					const answer_type = this.getNodeParameter('answer_type', i) as string;
+					const answer_text = this.getNodeParameter('answer_text', i) as string;
+					const similarQuestionsCollection = this.getNodeParameter('similarQuestionsCollection', i, {}) as IDataObject;
+
+					// 构建问题
+					const question: IDataObject = { text: question_text };
+					if (similarQuestionsCollection.questions) {
+						const similarList = similarQuestionsCollection.questions as IDataObject[];
+						if (similarList.length > 0) {
+							question.similar_questions = similarList.map((q) => ({ text: q.text }));
+						}
+					}
+
+					// 构建回答
+					const answer: IDataObject[] = [{ msgtype: answer_type, [answer_type]: { content: answer_text } }];
+
+					body.intent_id = intent_id;
+					body.question = question;
+					body.answer = answer;
 				} else if (action_type === 'list') {
 					endpoint = '/cgi-bin/kf/knowledge/list_intent';
+					const group_id = this.getNodeParameter('group_id', i) as string;
+					const cursor = this.getNodeParameter('cursor', i, '') as string;
+					const limit = this.getNodeParameter('limit', i, 100) as number;
+					body.group_id = group_id;
+					if (cursor) body.cursor = cursor;
+					body.limit = limit;
 				}
 
-				response = await weComApiRequest.call(this, 'POST', endpoint, parsedParams);
+				response = await weComApiRequest.call(this, 'POST', endpoint, body);
 			} else {
 				response = {};
 			}
@@ -421,4 +490,3 @@ export async function executeKf(
 
 	return returnData;
 }
-

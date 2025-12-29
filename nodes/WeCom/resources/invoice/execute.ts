@@ -38,7 +38,19 @@ export async function executeInvoice(
 			} else if (operation === 'batchUpdateInvoiceStatus') {
 				const openid = this.getNodeParameter('openid', i) as string;
 				const reimburse_status = this.getNodeParameter('reimburse_status', i) as string;
-				const invoice_list = this.getNodeParameter('invoice_list', i) as string;
+				const invoiceCollection = this.getNodeParameter('invoiceCollection', i, {}) as IDataObject;
+
+				// 构建发票列表
+				const invoice_list: IDataObject[] = [];
+				if (invoiceCollection.invoices) {
+					const invoicesList = invoiceCollection.invoices as IDataObject[];
+					invoicesList.forEach((inv) => {
+						invoice_list.push({
+							card_id: inv.card_id,
+							encrypt_code: inv.encrypt_code,
+						});
+					});
+				}
 
 				response = await weComApiRequest.call(
 					this,
@@ -47,18 +59,30 @@ export async function executeInvoice(
 					{
 						openid,
 						reimburse_status,
-						invoice_list: JSON.parse(invoice_list),
+						invoice_list,
 					},
 				);
 			} else if (operation === 'batchGetInvoiceInfo') {
-				const item_list = this.getNodeParameter('item_list', i) as string;
+				const itemCollection = this.getNodeParameter('itemCollection', i, {}) as IDataObject;
+
+				// 构建发票项列表
+				const item_list: IDataObject[] = [];
+				if (itemCollection.items) {
+					const itemsList = itemCollection.items as IDataObject[];
+					itemsList.forEach((item) => {
+						item_list.push({
+							card_id: item.card_id,
+							encrypt_code: item.encrypt_code,
+						});
+					});
+				}
 
 				response = await weComApiRequest.call(
 					this,
 					'POST',
 					'/cgi-bin/card/invoice/reimburse/getinvoiceinfobatch',
 					{
-						item_list: JSON.parse(item_list),
+						item_list,
 					},
 				);
 			} else {
@@ -85,4 +109,3 @@ export async function executeInvoice(
 
 	return returnData;
 }
-
