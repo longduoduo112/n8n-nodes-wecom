@@ -18,12 +18,32 @@ export async function executePushMessage(
 			if (operation === 'sendText') {
 				// 发送文本消息
 				const content = this.getNodeParameter('content', i) as string;
+				const mentionedList = this.getNodeParameter('mentionedList', i, '') as string;
+				const mentionedMobileList = this.getNodeParameter('mentionedMobileList', i, '') as string;
+
+				const textBody: IDataObject = {
+					content,
+				};
+
+				// 处理 mentioned_list
+				if (mentionedList.trim()) {
+					const mentioned = mentionedList.split(',').map(item => item.trim()).filter(item => item);
+					if (mentioned.length > 0) {
+						textBody.mentioned_list = mentioned;
+					}
+				}
+
+				// 处理 mentioned_mobile_list
+				if (mentionedMobileList.trim()) {
+					const mentionedMobile = mentionedMobileList.split(',').map(item => item.trim()).filter(item => item);
+					if (mentionedMobile.length > 0) {
+						textBody.mentioned_mobile_list = mentionedMobile;
+					}
+				}
 
 				body = {
 					msgtype: 'text',
-					text: {
-						content,
-					},
+					text: textBody,
 				};
 
 			} else if (operation === 'sendMarkdown') {
