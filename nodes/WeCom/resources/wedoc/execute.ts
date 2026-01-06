@@ -706,51 +706,83 @@ export async function executeWedoc(
 			}
 			// 收集表
 			else if (operation === 'createForm') {
-				const docid = this.getNodeParameter('docid', i) as string;
+				const spaceid = this.getNodeParameter('spaceid', i, '') as string;
+				const fatherid = this.getNodeParameter('fatherid', i, '') as string;
 				const form_title = this.getNodeParameter('form_title', i) as string;
 				const form_description = this.getNodeParameter('form_description', i, '') as string;
 				const questionList = this.getNodeParameter('questionList', i, {}) as IDataObject;
 				const formSetting = this.getNodeParameter('formSetting', i, {}) as IDataObject;
 
+				const body: IDataObject = {};
+
+				// 添加 spaceid 和 fatherid（如果提供）
+				if (spaceid) {
+					body.spaceid = spaceid;
+				}
+				if (fatherid) {
+					body.fatherid = fatherid;
+				}
+
 				const form_info: IDataObject = {
-					title: form_title,
+					form_title: form_title,
 				};
 
 				if (form_description) {
-					form_info.description = form_description;
+					form_info.form_desc = form_description;
 				}
 
 				// 构建问题列表
 				if (questionList.questions && Array.isArray(questionList.questions)) {
-					form_info.question_list = (questionList.questions as IDataObject[]).map((q, idx) => {
+					const items = (questionList.questions as IDataObject[]).map((q, idx) => {
 						const question: IDataObject = {
 							question_id: idx + 1,
 							title: q.question_title,
-							type: q.question_type,
-							is_required: q.is_required || false,
+							pos: idx + 1,
+							status: 1,
+							reply_type: q.question_type,
+							must_reply: q.is_required || false,
 						};
 
-						// 处理选项
-						if ([3, 4, 5].includes(q.question_type as number) && q.options) {
-							question.options = (q.options as string).split(',').map((opt, optIdx) => ({
-								option_id: optIdx + 1,
-								text: opt.trim(),
+						// 处理选项（单选/多选/下拉列表）
+						if ([2, 3, 15].includes(q.question_type as number) && q.options) {
+							question.option_item = (q.options as string).split(',').map((opt, optIdx) => ({
+								key: optIdx + 1,
+								value: opt.trim(),
+								status: 1,
 							}));
 						}
 
 						return question;
 					});
+
+					form_info.form_question = { items };
 				}
 
 				// 构建设置
 				if (Object.keys(formSetting).length > 0) {
-					form_info.setting = formSetting;
+					// 处理 timed_finish：将日期时间转换为时间戳并验证
+					if (formSetting.timed_finish) {
+						const timedFinish = formSetting.timed_finish as string;
+						if (timedFinish) {
+							const finishTime = new Date(timedFinish).getTime();
+							const currentTime = Date.now();
+
+							// 验证：时间不能早于当前时间
+							if (finishTime < currentTime) {
+								throw new Error('定时关闭时间不能早于当前时间');
+							}
+
+							// 转换为秒级时间戳
+							formSetting.timed_finish = Math.floor(finishTime / 1000);
+						}
+					}
+
+					form_info.form_setting = formSetting;
 				}
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/create_form', {
-					docid,
-					form_info,
-				});
+				body.form_info = form_info;
+
+				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/create_form', body);
 			} else if (operation === 'modForm') {
 				const formid = this.getNodeParameter('formid', i) as string;
 				const form_title = this.getNodeParameter('form_title', i, '') as string;
