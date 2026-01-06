@@ -194,6 +194,7 @@ export const wedocDescription: INodeProperties[] = [
 				name: '获取文档基础信息',
 				value: 'getDocInfo',
 				action: '获取文档信息',
+				description: '获取文档基础信息',
 			},
 			{
 				name: '获取文档权限信息',
