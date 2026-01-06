@@ -79,10 +79,19 @@ export async function executeWedoc(
 				const docid = this.getNodeParameter('docid', i) as string;
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/doc_get_info', { docid });
-			} else if (operation === 'shareDoc') {
-				const docid = this.getNodeParameter('docid', i) as string;
+			}
+			// 分享文档
+			else if (operation === 'shareDoc') {
+				const docType = this.getNodeParameter('docType', i, 'docid') as string;
+				const request: IDataObject = {};
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/doc_share', { docid });
+				if (docType === 'formid') {
+					request.formid = this.getNodeParameter('formid', i) as string;
+				} else {
+					request.docid = this.getNodeParameter('docid', i) as string;
+				}
+
+				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/doc_share', request);
 			}
 			// 编辑文档
 			else if (operation === 'modDocContent') {
