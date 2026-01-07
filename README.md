@@ -768,6 +768,22 @@ npm install n8n-nodes-wecom
 - [n8n 社区节点开发文档](https://docs.n8n.io/integrations/creating-nodes/overview/)
 - [n8n 社区节点开发示例](https://docs.n8n.io/integrations/creating-nodes/build/declarative-style-node/)
 
+## 交流与支持
+
+如果你在使用过程中遇到问题，或者想要与其他用户交流使用经验，欢迎加入我们的交流群。
+
+### 加入交流群
+
+你可以通过以下方式加入：
+
+**1. 扫描群二维码直接加入**
+
+<img src="./wechat_group_qrcode.jpg" width="200" alt="微信群二维码" />
+
+**2. 如果群二维码过期，可以添加我的微信号，备注「n8n-wecom」后拉你入群**
+
+<img src="./wechat_qrcode.jpg" width="200" alt="微信号二维码" />
+
 ## 许可证
 
 [MIT](LICENSE.md)
