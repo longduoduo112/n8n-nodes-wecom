@@ -811,10 +811,45 @@ export async function executeWedoc(
 				const formid = this.getNodeParameter('formid', i) as string;
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/get_form_info', { formid });
-			} else if (operation === 'getFormStatistic') {
-				const formid = this.getNodeParameter('formid', i) as string;
+			}
+			// 收集表的统计信息查询
+			else if (operation === 'getFormStatistic') {
+				const repeated_id = this.getNodeParameter('repeated_id', i) as string;
+				const req_type = this.getNodeParameter('req_type', i) as number;
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/get_form_statistic', { formid });
+				const body: IDataObject = {
+					repeated_id,
+					req_type,
+				};
+
+				// 如果是获取已提交列表（req_type=2），需要时间范围
+				if (req_type === 2) {
+					const start_time = this.getNodeParameter('start_time', i) as string;
+					const end_time = this.getNodeParameter('end_time', i) as string;
+
+					// 将日期时间转换为秒级时间戳
+					body.start_time = Math.floor(new Date(start_time).getTime() / 1000);
+					body.end_time = Math.floor(new Date(end_time).getTime() / 1000);
+
+					// 添加分页参数
+					const limit = this.getNodeParameter('limit', i, 20) as number;
+					const cursor = this.getNodeParameter('cursor', i, 0) as number;
+					body.limit = limit;
+					if (cursor > 0) {
+						body.cursor = cursor;
+					}
+				}
+				// 如果是获取未提交列表（req_type=3），需要分页参数
+				else if (req_type === 3) {
+					const limit = this.getNodeParameter('limit', i, 20) as number;
+					const cursor = this.getNodeParameter('cursor', i, 0) as number;
+					body.limit = limit;
+					if (cursor > 0) {
+						body.cursor = cursor;
+					}
+				}
+
+				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/get_form_statistic', body);
 			} else if (operation === 'getFormAnswer') {
 				const formid = this.getNodeParameter('formid', i) as string;
 				const limit = this.getNodeParameter('limit', i, 100) as number;
