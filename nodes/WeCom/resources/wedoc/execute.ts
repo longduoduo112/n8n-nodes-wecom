@@ -827,10 +827,10 @@ export async function executeWedoc(
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/spreadsheet/get_sheet_properties', { docid });
 			} else if (operation === 'getSheetData') {
 				const docid = this.getNodeParameter('docid', i) as string;
-				const range = this.getNodeParameter('range', i, '') as string;
+				const sheet_id = this.getNodeParameter('sheet_id', i) as string;
+				const range = this.getNodeParameter('range', i) as string;
 
-				const body: IDataObject = { docid };
-				if (range) body.range = range;
+				const body: IDataObject = { docid, sheet_id, range };
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/spreadsheet/get_sheet_range_data', body);
 			}
