@@ -117,6 +117,7 @@ export const createFormDescription: INodeProperties[] = [
 		default: {},
 		placeholder: '添加设置',
 		description: '收集表的高级设置',
+		// eslint-disable-next-line n8n-nodes-base/node-param-collection-type-unsorted-items
 		options: [
 			{
 				displayName: '定时关闭',
