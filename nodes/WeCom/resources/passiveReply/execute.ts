@@ -264,19 +264,11 @@ export async function executePassiveReply(
 			this.getNode(),
 		);
 
-		// 发送响应（被动回复必须在 5 秒内返回）
-		this.sendResponse({
-			body: encryptedResponseXML,
-			headers: {
-				'Content-Type': 'text/xml; charset=utf-8',
-			},
-			statusCode: 200,
-		});
-
 		returnData.push({
 			json: {
 				success: true,
 				repliedAt: new Date().toISOString(),
+				responseXML: encryptedResponseXML,
 			} as IDataObject,
 			pairedItem: { item: i },
 		});
