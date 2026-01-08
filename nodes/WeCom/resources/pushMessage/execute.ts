@@ -40,32 +40,34 @@ export async function executePushMessage(
 
 				const binaryData = this.helpers.assertBinaryData(i, binaryPropertyName);
 				const dataBuffer = await this.helpers.getBinaryDataBuffer(i, binaryPropertyName);
-				const fileName = binaryData.fileName || 'file';
+				// 文件名避免中文字符，可能导致解析问题
+				const fileName = (binaryData.fileName || 'file').replace(/[^\w.-]/g, '_');
 				const contentType = binaryData.mimeType || 'application/octet-stream';
 				const fileLength = dataBuffer.length;
 
-				const uploadOptions = {
-					method: 'POST' as const,
-					url: 'https://qyapi.weixin.qq.com/cgi-bin/webhook/upload_media',
-					qs: {
-						key: webhookKey,
-						type: mediaType,
-					},
-					formData: {
-						media: {
-							value: dataBuffer,
-							options: {
-								filename: fileName,
-								contentType,
-								knownLength: fileLength,
-								header: `Content-Disposition: form-data; name="media"; filename="${fileName}"; filelength=${fileLength}\r\nContent-Type: ${contentType}\r\n`,
-							},
-						},
-					},
-					json: true,
-				};
+				// 手动构建 multipart/form-data 请求体
+				const boundary = '----WebKitFormBoundary' + Math.random().toString(36).substring(2);
+				const CRLF = '\r\n';
 
-				const response = (await this.helpers.httpRequest(uploadOptions)) as IDataObject;
+				// 构建 multipart body
+				const header = `--${boundary}${CRLF}Content-Disposition: form-data; name="media"; filename="${fileName}"; filelength=${fileLength}${CRLF}Content-Type: ${contentType}${CRLF}${CRLF}`;
+				const footer = `${CRLF}--${boundary}--${CRLF}`;
+
+				const headerBuffer = Buffer.from(header, 'utf-8');
+				const footerBuffer = Buffer.from(footer, 'utf-8');
+				const bodyBuffer = Buffer.concat([headerBuffer, dataBuffer, footerBuffer]);
+
+				const uploadUrl = `https://qyapi.weixin.qq.com/cgi-bin/webhook/upload_media?key=${webhookKey}&type=${mediaType}`;
+
+				const response = (await this.helpers.httpRequest({
+					method: 'POST',
+					url: uploadUrl,
+					body: bodyBuffer,
+					headers: {
+						'Content-Type': `multipart/form-data; boundary=${boundary}`,
+						'Content-Length': bodyBuffer.length.toString(),
+					},
+				})) as IDataObject;
 
 				if (response.errcode !== undefined && response.errcode !== 0) {
 					throw new NodeOperationError(
