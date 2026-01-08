@@ -13,8 +13,12 @@ export async function executePushMessage(
 			const credentials = await this.getCredentials('weComWebhookApi');
 			const webhookUrl = credentials.webhookUrl as string;
 
-			// 上传媒体文件操作使用 webhook 凭证中的 key
+			let body: IDataObject = {};
+			let isUploadMedia = false;
+
 			if (operation === 'uploadMedia') {
+				// 上传媒体文件操作使用 webhook 凭证中的 key
+				isUploadMedia = true;
 				let webhookKey: string | null = null;
 				try {
 					const webhookUrlObject = new URL(webhookUrl);
@@ -50,7 +54,7 @@ export async function executePushMessage(
 				const CRLF = '\r\n';
 
 				// 构建 multipart body
-				const header = `--${boundary}${CRLF}Content-Disposition: form-data; name="media"; filename="${fileName}"; filelength=${fileLength}${CRLF}Content-Type: ${contentType}${CRLF}${CRLF}`;
+				const header = `--${boundary}${CRLF}Content-Disposition: form-data; name="media";filename="${fileName}"; filelength=${fileLength}${CRLF}Content-Type: ${contentType}${CRLF}${CRLF}`;
 				const footer = `${CRLF}--${boundary}--${CRLF}`;
 
 				const headerBuffer = Buffer.from(header, 'utf-8');
@@ -81,12 +85,8 @@ export async function executePushMessage(
 					json: response,
 					pairedItem: { item: i },
 				});
-				continue;
-			}
 
-			let body: IDataObject = {};
-
-			if (operation === 'sendText') {
+			} else if (operation === 'sendText') {
 				// 发送文本消息
 				const content = this.getNodeParameter('content', i) as string;
 				const mentionedList = this.getNodeParameter('mentionedList', i, '') as string;
@@ -266,7 +266,7 @@ export async function executePushMessage(
 					template_card: templateCard,
 				};
 
-			} else {
+			} else if (!isUploadMedia) {
 				throw new NodeOperationError(
 					this.getNode(),
 					`不支持的操作: ${operation}`,
@@ -274,18 +274,19 @@ export async function executePushMessage(
 				);
 			}
 
-			// 发送消息到 webhook
-			const response = await this.helpers.httpRequest({
-				method: 'POST',
-				url: webhookUrl,
-				body,
-				json: true,
-			});
+			if (!isUploadMedia) {
+				const response = await this.helpers.httpRequest({
+					method: 'POST',
+					url: webhookUrl,
+					body,
+					json: true,
+				});
 
-			returnData.push({
-				json: response as IDataObject,
-				pairedItem: { item: i },
-			});
+				returnData.push({
+					json: response as IDataObject,
+					pairedItem: { item: i },
+				});
+			}
 
 		} catch (error) {
 			if (this.continueOnFail()) {

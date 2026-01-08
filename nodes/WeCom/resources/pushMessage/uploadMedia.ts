@@ -42,13 +42,4 @@ export const uploadMediaDescription: INodeProperties[] = [
 		description: '包含要上传文件的二进制属性名称',
 		hint: '通常使用 "data"，这是 n8n 中默认的二进制数据属性名',
 	},
-	{
-		displayName: '上传成功后将返回 media_id，该 media_id 仅3天内有效，可用于发送文件或语音消息。文件大小限制：普通文件 ≤ 20M，语音文件 ≤ 2M 且播放时长 ≤ 60s。所有文件必须大于5个字节。',
-		name: 'notice',
-		type: 'notice',
-		displayOptions: {
-			show: showOnlyForUploadMedia,
-		},
-		default: '',
-	},
 ];
