@@ -16,6 +16,7 @@ import { pushMessageDescription } from '../WeCom/resources/pushMessage';
 import { systemDescription } from '../WeCom/resources/system';
 import { invoiceDescription } from '../WeCom/resources/invoice';
 import { passiveReplyDescription } from '../WeCom/resources/passiveReply';
+import { agentDescription } from '../WeCom/resources/agent';
 import { executeMessage } from '../WeCom/resources/message/execute';
 import { executeContact } from '../WeCom/resources/contact/execute';
 import { executeMaterial } from '../WeCom/resources/material/execute';
@@ -25,6 +26,7 @@ import { executePushMessage } from '../WeCom/resources/pushMessage/execute';
 import { executeSystem } from '../WeCom/resources/system/execute';
 import { executeInvoice } from '../WeCom/resources/invoice/execute';
 import { executePassiveReply } from '../WeCom/resources/passiveReply/execute';
+import { executeAgent } from '../WeCom/resources/agent/execute';
 import { weComApiRequest } from '../WeCom/shared/transport';
 
 export class WeComBase implements INodeType {
@@ -56,6 +58,7 @@ export class WeComBase implements INodeType {
 							'linkedcorp',
 							'system',
 							'invoice',
+							'agent',
 						],
 					},
 				},
@@ -140,6 +143,11 @@ export class WeComBase implements INodeType {
 						value: 'invoice',
 						description: '电子发票管理（查询、更新发票状态）',
 					},
+					{
+						name: '应用管理',
+						value: 'agent',
+						description: '管理企业应用（获取、设置应用信息）',
+					},
 				],
 				default: 'pushMessage',
 			},
@@ -152,6 +160,7 @@ export class WeComBase implements INodeType {
 		...materialDescription,
 		...systemDescription,
 		...invoiceDescription,
+		...agentDescription,
 	],
 	usableAsTool: true,
 };
@@ -301,6 +310,8 @@ export class WeComBase implements INodeType {
 				returnData = await executeMaterial.call(this, operation, items);
 			} else if (resource === 'invoice') {
 				returnData = await executeInvoice.call(this, operation, items);
+			} else if (resource === 'agent') {
+				returnData = await executeAgent.call(this, operation, items);
 			}
 		}
 
