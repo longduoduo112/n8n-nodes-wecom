@@ -61,6 +61,7 @@
 
 - **日程管理** - 日历和日程管理
 - **会议管理** - 会议预约、会议控制、录制管理
+- **直播管理** - 直播创建、观看、统计管理
 - **邮件管理** - 企业邮箱、邮件群组、公共邮箱
 - **文档管理** - 在线文档、表格、智能表格
 - **微盘管理** - 微盘空间和文件管理
@@ -653,6 +654,20 @@ npm install n8n-nodes-wecom
 - ✅ [分配高级功能账号](https://developer.work.weixin.qq.com/document/path/99508)
 - ✅ [取消高级功能账号](https://developer.work.weixin.qq.com/document/path/99509)
 - ✅ [获取高级功能账号列表](https://developer.work.weixin.qq.com/document/path/99510)
+
+### 直播管理
+
+> [官方文档：直播](https://developer.work.weixin.qq.com/document/path/93633)
+
+- ✅ [创建预约直播](https://developer.work.weixin.qq.com/document/path/93637)
+- ✅ [修改预约直播](https://developer.work.weixin.qq.com/document/path/93640)
+- ✅ [取消预约直播](https://developer.work.weixin.qq.com/document/path/93638)
+- ✅ [删除直播回放](https://developer.work.weixin.qq.com/document/path/93874)
+- ✅ [在微信中观看直播或回放](https://developer.work.weixin.qq.com/document/path/93641)
+- ✅ [获取成员直播ID列表](https://developer.work.weixin.qq.com/document/path/93634)
+- ✅ [获取直播详情](https://developer.work.weixin.qq.com/document/path/93635)
+- ✅ [获取直播观看明细](https://developer.work.weixin.qq.com/document/path/93636)
+- ✅ [获取跳转小程序商城的直播观众信息](https://developer.work.weixin.qq.com/document/path/94442)
 
 ### 微盘管理
 

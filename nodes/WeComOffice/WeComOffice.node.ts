@@ -10,6 +10,7 @@ import { wefileDescription } from '../WeCom/resources/wefile';
 import { mailDescription } from '../WeCom/resources/mail';
 import { calendarDescription } from '../WeCom/resources/calendar';
 import { meetingDescription } from '../WeCom/resources/meeting';
+import { liveDescription } from '../WeCom/resources/live';
 import { checkinDescription } from '../WeCom/resources/checkin';
 import { approvalDescription } from '../WeCom/resources/approval';
 import { journalDescription } from '../WeCom/resources/journal';
@@ -21,6 +22,7 @@ import { executeWefile } from '../WeCom/resources/wefile/execute';
 import { executeMail } from '../WeCom/resources/mail/execute';
 import { executeCalendar } from '../WeCom/resources/calendar/execute';
 import { executeMeeting } from '../WeCom/resources/meeting/execute';
+import { executeLive } from '../WeCom/resources/live/execute';
 import { executeCheckin } from '../WeCom/resources/checkin/execute';
 import { executeApproval } from '../WeCom/resources/approval/execute';
 import { executeJournal } from '../WeCom/resources/journal/execute';
@@ -37,7 +39,7 @@ export class WeComOffice implements INodeType {
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
-		description: '企业微信办公功能 - 文档、微盘、邮件、日程、会议、打卡、审批、汇报、人事、会议室、紧急通知',
+		description: '企业微信办公功能 - 文档、微盘、邮件、日程、会议、直播、打卡、审批、汇报、人事、会议室、紧急通知',
 		defaults: {
 			name: '企业微信-办公',
 		},
@@ -85,6 +87,11 @@ export class WeComOffice implements INodeType {
 						description: '管理企业微信会议（预约会议、会议控制、录制管理等）',
 					},
 					{
+						name: '直播',
+						value: 'live',
+						description: '管理企业微信直播（创建、修改、观看、统计等）',
+					},
+					{
 						name: '日程',
 						value: 'calendar',
 						description: '管理日历和日程（创建日历、创建日程、管理参与者等）',
@@ -124,6 +131,7 @@ export class WeComOffice implements INodeType {
 			},
 			...calendarDescription,
 			...meetingDescription,
+			...liveDescription,
 			...wedocDescription,
 			...wefileDescription,
 			...mailDescription,
@@ -154,6 +162,8 @@ export class WeComOffice implements INodeType {
 			returnData = await executeCalendar.call(this, operation as string, items);
 		} else if (resource === 'meeting') {
 			returnData = await executeMeeting.call(this, operation as string, items);
+		} else if (resource === 'live') {
+			returnData = await executeLive.call(this, operation as string, items);
 		} else if (resource === 'checkin') {
 			returnData = await executeCheckin.call(this, operation as string, items);
 		} else if (resource === 'approval') {
@@ -171,4 +181,3 @@ export class WeComOffice implements INodeType {
 		return [returnData];
 	}
 }
-
