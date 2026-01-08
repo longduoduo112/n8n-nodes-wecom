@@ -13,6 +13,8 @@ import { executeKf } from '../WeCom/resources/kf/execute';
 import { executeExternalContact } from '../WeCom/resources/externalContact/execute';
 import { executeSchool } from '../WeCom/resources/school/execute';
 import { schoolDescription } from '../WeCom/resources/school';
+import { executeLiving } from '../WeCom/resources/living/execute';
+import { livingDescription } from '../WeCom/resources/living';
 import { weComApiRequest } from '../WeCom/shared/transport';
 
 export class WeComWechat implements INodeType {
@@ -24,7 +26,7 @@ export class WeComWechat implements INodeType {
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
-		description: '企业微信连接微信功能 - 微信客服、客户联系、家校应用',
+		description: '企业微信连接微信功能 - 微信客服、客户联系、家校应用、政民沟通',
 		defaults: {
 			name: '企业微信-连接微信',
 		},
@@ -65,12 +67,18 @@ export class WeComWechat implements INodeType {
 						value: 'school',
 						description: '家校应用（健康上报、上课直播、班级收款）',
 					},
+					{
+						name: '政民沟通',
+						value: 'living',
+						description: '网格配置、事件类别、巡查上报、居民上报',
+					},
 				],
 				default: 'externalContact',
 			},
 			...externalContactDescription,
 			...kfDescription,
 			...schoolDescription,
+			...livingDescription,
 		],
 		usableAsTool: true,
 	};
@@ -166,6 +174,8 @@ export class WeComWechat implements INodeType {
 			returnData = await executeKf.call(this, operation as string, items);
 		} else if (resource === 'school') {
 			returnData = await executeSchool.call(this, operation as string, items);
+		} else if (resource === 'living') {
+			returnData = await executeLiving.call(this, operation as string, items);
 		}
 
 		return [returnData];

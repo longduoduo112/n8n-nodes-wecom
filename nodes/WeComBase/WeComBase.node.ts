@@ -16,7 +16,6 @@ import { pushMessageDescription } from '../WeCom/resources/pushMessage';
 import { systemDescription } from '../WeCom/resources/system';
 import { invoiceDescription } from '../WeCom/resources/invoice';
 import { passiveReplyDescription } from '../WeCom/resources/passiveReply';
-import { livingDescription } from '../WeCom/resources/living';
 import { executeMessage } from '../WeCom/resources/message/execute';
 import { executeContact } from '../WeCom/resources/contact/execute';
 import { executeMaterial } from '../WeCom/resources/material/execute';
@@ -26,7 +25,6 @@ import { executePushMessage } from '../WeCom/resources/pushMessage/execute';
 import { executeSystem } from '../WeCom/resources/system/execute';
 import { executeInvoice } from '../WeCom/resources/invoice/execute';
 import { executePassiveReply } from '../WeCom/resources/passiveReply/execute';
-import { executeLiving } from '../WeCom/resources/living/execute';
 import { weComApiRequest } from '../WeCom/shared/transport';
 
 export class WeComBase implements INodeType {
@@ -38,7 +36,7 @@ export class WeComBase implements INodeType {
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{$parameter["resource"] === "passiveReply" ? "reply: " + $parameter["resource"] : ($parameter["resource"] === "system" ? $parameter["resource"] : $parameter["operation"] + ": " + $parameter["resource"])}}',
-		description: '企业微信基础功能 - 通讯录、应用消息、群聊、消息推送、企业互联、素材、系统、电子发票、政民沟通',
+		description: '企业微信基础功能 - 通讯录、应用消息、群聊、消息推送、企业互联、素材、系统、电子发票',
 		defaults: {
 			name: '企业微信-基础',
 		},
@@ -58,7 +56,6 @@ export class WeComBase implements INodeType {
 							'linkedcorp',
 							'system',
 							'invoice',
-							'living',
 						],
 					},
 				},
@@ -143,11 +140,6 @@ export class WeComBase implements INodeType {
 						value: 'invoice',
 						description: '电子发票管理（查询、更新发票状态）',
 					},
-					{
-						name: '政民沟通',
-						value: 'living',
-						description: '网格配置、事件类别、巡查上报、居民上报',
-					},
 				],
 				default: 'pushMessage',
 			},
@@ -160,7 +152,6 @@ export class WeComBase implements INodeType {
 		...materialDescription,
 		...systemDescription,
 		...invoiceDescription,
-		...livingDescription,
 	],
 	usableAsTool: true,
 };
@@ -310,8 +301,6 @@ export class WeComBase implements INodeType {
 				returnData = await executeMaterial.call(this, operation, items);
 			} else if (resource === 'invoice') {
 				returnData = await executeInvoice.call(this, operation, items);
-			} else if (resource === 'living') {
-				returnData = await executeLiving.call(this, operation, items);
 			}
 		}
 
