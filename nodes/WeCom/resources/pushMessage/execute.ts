@@ -10,14 +10,39 @@ export async function executePushMessage(
 
 	for (let i = 0; i < items.length; i++) {
 		try {
-			// 上传媒体文件操作不需要获取 webhook 凭证
+			const credentials = await this.getCredentials('weComWebhookApi');
+			const webhookUrl = credentials.webhookUrl as string;
+
+			// 上传媒体文件操作使用 webhook 凭证中的 key
 			if (operation === 'uploadMedia') {
-				const webhookKey = this.getNodeParameter('webhookKey', i) as string;
+				let webhookKey: string | null = null;
+				try {
+					const webhookUrlObject = new URL(webhookUrl);
+					webhookKey = webhookUrlObject.searchParams.get('key');
+				} catch {
+					throw new NodeOperationError(
+						this.getNode(),
+						'Webhook URL 无效，无法解析 key 参数',
+						{ itemIndex: i },
+					);
+				}
+
+				if (!webhookKey) {
+					throw new NodeOperationError(
+						this.getNode(),
+						'Webhook URL 缺少 key 参数',
+						{ itemIndex: i },
+					);
+				}
+
 				const mediaType = this.getNodeParameter('mediaType', i) as string;
 				const binaryPropertyName = this.getNodeParameter('binaryProperty', i) as string;
 
 				const binaryData = this.helpers.assertBinaryData(i, binaryPropertyName);
 				const dataBuffer = await this.helpers.getBinaryDataBuffer(i, binaryPropertyName);
+				const fileName = binaryData.fileName || 'file';
+				const contentType = binaryData.mimeType || 'application/octet-stream';
+				const fileLength = dataBuffer.length;
 
 				const uploadOptions = {
 					method: 'POST' as const,
@@ -30,9 +55,10 @@ export async function executePushMessage(
 						media: {
 							value: dataBuffer,
 							options: {
-								filename: binaryData.fileName || 'file',
-								contentType: binaryData.mimeType || 'application/octet-stream',
-								knownLength: dataBuffer.length,
+								filename: fileName,
+								contentType,
+								knownLength: fileLength,
+								header: `Content-Disposition: form-data; name="media"; filename="${fileName}"; filelength=${fileLength}\r\nContent-Type: ${contentType}\r\n`,
 							},
 						},
 					},
@@ -55,9 +81,6 @@ export async function executePushMessage(
 				});
 				continue;
 			}
-
-			const credentials = await this.getCredentials('weComWebhookApi');
-			const webhookUrl = credentials.webhookUrl as string;
 
 			let body: IDataObject = {};
 

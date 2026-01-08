@@ -7,19 +7,6 @@ const showOnlyForUploadMedia = {
 
 export const uploadMediaDescription: INodeProperties[] = [
 	{
-		displayName: 'Webhook Key',
-		name: 'webhookKey',
-		type: 'string',
-		displayOptions: {
-			show: showOnlyForUploadMedia,
-		},
-		default: '',
-		required: true,
-		placeholder: '693a91f6-7xxx-4bc4-97a0-0ec2sifa5aaa',
-		description: '群机器人的 webhook key',
-		hint: '从 webhook URL 中提取的 key 参数',
-	},
-	{
 		displayName: '文件类型',
 		name: 'mediaType',
 		type: 'options',
