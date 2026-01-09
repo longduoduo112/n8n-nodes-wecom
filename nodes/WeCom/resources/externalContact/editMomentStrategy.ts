@@ -1,0 +1,157 @@
+import type { INodeProperties } from 'n8n-workflow';
+
+const showOnly = {
+	resource: ['externalContact'],
+	operation: ['editMomentStrategy'],
+};
+
+export const editMomentStrategyDescription: INodeProperties[] = [
+	{
+		displayName: '规则组ID',
+		name: 'strategy_id',
+		type: 'number',
+		required: true,
+		default: 0,
+		displayOptions: { show: showOnly },
+	},
+	{
+		displayName: '规则组名称',
+		name: 'strategy_name',
+		type: 'string',
+		default: '',
+		displayOptions: { show: showOnly },
+	},
+	{
+		displayName: '更新管理员列表',
+		name: 'updateAdminList',
+		type: 'boolean',
+		default: false,
+		displayOptions: { show: showOnly },
+		description: '是否更新管理员列表（覆盖旧的负责人列表）',
+	},
+	{
+		displayName: '管理员列表',
+		name: 'admin_list',
+		type: 'string',
+		default: '',
+		displayOptions: { show: { ...showOnly, updateAdminList: [true] } },
+		description: '管理员userid列表，多个用逗号分隔，将覆盖旧的负责人列表',
+		placeholder: 'zhangsan,lisi',
+	},
+	{
+		displayName: '更新权限配置',
+		name: 'updatePrivilege',
+		type: 'boolean',
+		default: false,
+		displayOptions: { show: showOnly },
+		description: '是否更新权限配置（覆盖旧的权限配置）',
+	},
+	{
+		displayName: '允许查看成员的全部客户朋友圈发表',
+		name: 'privilege_view_moment_list',
+		type: 'boolean',
+		default: true,
+		displayOptions: { show: { ...showOnly, updatePrivilege: [true] } },
+	},
+	{
+		displayName: '允许成员发表客户朋友圈',
+		name: 'privilege_send_moment',
+		type: 'boolean',
+		default: true,
+		displayOptions: { show: { ...showOnly, updatePrivilege: [true] } },
+	},
+	{
+		displayName: '允许配置封面和签名',
+		name: 'privilege_manage_moment_cover_and_sign',
+		type: 'boolean',
+		default: true,
+		displayOptions: { show: { ...showOnly, updatePrivilege: [true] } },
+		description: '配置封面和签名',
+	},
+	{
+		displayName: '添加管理范围',
+		name: 'rangeAddCollection',
+		type: 'fixedCollection',
+		displayOptions: { show: showOnly },
+		default: {},
+		placeholder: '添加管理范围节点',
+		typeOptions: { multipleValues: true },
+		description: '向管理范围添加的节点',
+		options: [
+			{
+				displayName: '范围节点',
+				name: 'ranges',
+				values: [
+					{
+						displayName: '节点类型',
+						name: 'type',
+						type: 'options',
+						options: [
+							{ name: '成员', value: 1 },
+							{ name: '部门', value: 2 },
+						],
+						default: 1,
+						description: '节点类型，1-成员 2-部门',
+					},
+					{
+						displayName: '成员UserID',
+						name: 'userid',
+						type: 'string',
+						default: '',
+						description: '成员userid（type为1时填写）',
+					},
+					{
+						displayName: '部门ID',
+						name: 'partyid',
+						type: 'number',
+						default: 0,
+						description: '部门partyid（type为2时填写）',
+					},
+				],
+			},
+		],
+	},
+	{
+		displayName: '删除管理范围',
+		name: 'rangeDelCollection',
+		type: 'fixedCollection',
+		displayOptions: { show: showOnly },
+		default: {},
+		placeholder: '删除管理范围节点',
+		typeOptions: { multipleValues: true },
+		description: '从管理范围删除的节点',
+		options: [
+			{
+				displayName: '范围节点',
+				name: 'ranges',
+				values: [
+					{
+						displayName: '节点类型',
+						name: 'type',
+						type: 'options',
+						options: [
+							{ name: '成员', value: 1 },
+							{ name: '部门', value: 2 },
+						],
+						default: 1,
+						description: '节点类型，1-成员 2-部门',
+					},
+					{
+						displayName: '成员UserID',
+						name: 'userid',
+						type: 'string',
+						default: '',
+						description: '成员userid（type为1时填写）',
+					},
+					{
+						displayName: '部门ID',
+						name: 'partyid',
+						type: 'number',
+						default: 0,
+						description: '部门partyid（type为2时填写）',
+					},
+				],
+			},
+		],
+	},
+];

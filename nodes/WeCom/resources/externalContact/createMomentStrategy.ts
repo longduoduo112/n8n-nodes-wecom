@@ -1,0 +1,102 @@
+import type { INodeProperties } from 'n8n-workflow';
+
+const showOnly = {
+	resource: ['externalContact'],
+	operation: ['createMomentStrategy'],
+};
+
+export const createMomentStrategyDescription: INodeProperties[] = [
+	{
+		displayName: '规则组名称',
+		name: 'strategy_name',
+		type: 'string',
+		required: true,
+		default: '',
+		displayOptions: { show: showOnly },
+	},
+	{
+		displayName: '父规则组ID',
+		name: 'parent_id',
+		type: 'number',
+		default: 0,
+		displayOptions: { show: showOnly },
+		description: '父规则组ID，如果不指定父规则组则为0',
+	},
+	{
+		displayName: '管理员列表',
+		name: 'admin_list',
+		type: 'string',
+		required: true,
+		default: '',
+		displayOptions: { show: showOnly },
+		description: '规则组管理员userid列表，多个用逗号分隔，不可配置超级管理员，每个规则组最多可配置20个负责人',
+		placeholder: 'zhangsan,lisi',
+	},
+	{
+		displayName: '允许查看成员的全部客户朋友圈发表',
+		name: 'privilege_view_moment_list',
+		type: 'boolean',
+		default: true,
+		displayOptions: { show: showOnly },
+	},
+	{
+		displayName: '允许成员发表客户朋友圈',
+		name: 'privilege_send_moment',
+		type: 'boolean',
+		default: true,
+		displayOptions: { show: showOnly },
+		description: '允许成员发表客户朋友圈，默认为true',
+	},
+	{
+		displayName: '允许配置封面和签名',
+		name: 'privilege_manage_moment_cover_and_sign',
+		type: 'boolean',
+		default: true,
+		displayOptions: { show: showOnly },
+		description: '配置封面和签名，默认为true',
+	},
+	{
+		displayName: '管理范围',
+		name: 'rangeCollection',
+		type: 'fixedCollection',
+		required: true,
+		displayOptions: { show: showOnly },
+		default: {},
+		placeholder: '添加管理范围节点',
+		typeOptions: { multipleValues: true },
+		description: '规则组管理范围，每个管理组的管理范围内最多支持3000个节点',
+		options: [
+			{
+				displayName: '范围节点',
+				name: 'ranges',
+				values: [
+					{
+						displayName: '节点类型',
+						name: 'type',
+						type: 'options',
+						options: [
+							{ name: '成员', value: 1 },
+							{ name: '部门', value: 2 },
+						],
+						default: 1,
+						description: '规则组管理范围节点类型，1-成员 2-部门',
+					},
+					{
+						displayName: '成员UserID',
+						name: 'userid',
+						type: 'string',
+						default: '',
+						description: '规则组的管理成员ID（type为1时填写）',
+					},
+					{
+						displayName: '部门ID',
+						name: 'partyid',
+						type: 'number',
+						default: 0,
+						description: '规则组的管理部门ID（type为2时填写）',
+					},
+				],
+			},
+		],
+	},
+];

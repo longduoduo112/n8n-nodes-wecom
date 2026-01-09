@@ -1,0 +1,26 @@
+import type { INodeProperties } from 'n8n-workflow';
+
+const showOnly = {
+	resource: ['externalContact'],
+	operation: ['getMomentComments'],
+};
+
+export const getMomentCommentsDescription: INodeProperties[] = [
+	{
+		displayName: '朋友圈ID',
+		name: 'moment_id',
+		type: 'string',
+		required: true,
+		default: '',
+		displayOptions: { show: showOnly },
+	},
+	{
+		displayName: '发表成员UserID',
+		name: 'userid',
+		type: 'string',
+		required: true,
+		default: '',
+		displayOptions: { show: showOnly },
+		description: '企业发表成员userid。如果是企业创建的朋友圈，可以通过获取客户朋友圈企业发表的列表获取已发表成员userid，如果是个人创建的朋友圈，创建人userid就是企业发表成员userid',
+	},
+];

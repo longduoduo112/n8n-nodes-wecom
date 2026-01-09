@@ -310,13 +310,124 @@ export async function executeExternalContact(
 				const user = this.getNodeParameter('user', i, '') as string;
 				const remark = this.getNodeParameter('remark', i, '') as string;
 				const skip_verify = this.getNodeParameter('skip_verify', i, true) as boolean;
-				const enableConclusions = this.getNodeParameter('enableConclusions', i, false) as boolean;
+				const state = this.getNodeParameter('state', i, '') as string;
+				const is_temp = this.getNodeParameter('is_temp', i, false) as boolean;
+				const is_exclusive = this.getNodeParameter('is_exclusive', i, false) as boolean;
+				const mark_source = this.getNodeParameter('mark_source', i, true) as boolean;
 
 				const body: IDataObject = { type, scene, skip_verify };
 				if (user) body.user = user.split(',').map((id) => id.trim());
 				if (remark) body.remark = remark;
+				if (state) body.state = state;
+				if (is_exclusive) body.is_exclusive = is_exclusive;
+				body.mark_source = mark_source;
 
-				// 构建结束语
+				// 多人类型时可设置部门
+				if (type === 2) {
+					const party = this.getNodeParameter('party', i, '') as string;
+					if (party) body.party = party.split(',').map((id) => parseInt(id.trim(), 10));
+				}
+
+				// 小程序联系时可设置样式
+				if (scene === 1) {
+					const style = this.getNodeParameter('style', i, 1) as number;
+					if (style) body.style = style;
+				}
+
+				// 临时会话模式
+				if (is_temp) {
+					body.is_temp = true;
+					const expires_in = this.getNodeParameter('expires_in', i, 604800) as number;
+					const chat_expires_in = this.getNodeParameter('chat_expires_in', i, 86400) as number;
+					const unionid = this.getNodeParameter('unionid', i, '') as string;
+					body.expires_in = expires_in;
+					body.chat_expires_in = chat_expires_in;
+					if (unionid) body.unionid = unionid;
+
+					// 构建结束语（仅临时会话模式下有效）
+					const enableConclusions = this.getNodeParameter('enableConclusions', i, false) as boolean;
+					if (enableConclusions) {
+						const conclusionType = this.getNodeParameter('conclusionType', i, 'text') as string;
+						const conclusions: IDataObject = {};
+
+						if (conclusionType === 'text') {
+							const content = this.getNodeParameter('conclusion_text', i, '') as string;
+							if (content) conclusions.text = { content };
+						} else if (conclusionType === 'image') {
+							const media_id = this.getNodeParameter('conclusion_image_media_id', i, '') as string;
+							if (media_id) conclusions.image = { media_id };
+						} else if (conclusionType === 'link') {
+							const link: IDataObject = {};
+							const title = this.getNodeParameter('conclusion_link_title', i, '') as string;
+							const picurl = this.getNodeParameter('conclusion_link_picurl', i, '') as string;
+							const desc = this.getNodeParameter('conclusion_link_desc', i, '') as string;
+							const url = this.getNodeParameter('conclusion_link_url', i, '') as string;
+							if (title) link.title = title;
+							if (picurl) link.picurl = picurl;
+							if (desc) link.desc = desc;
+							if (url) link.url = url;
+							if (Object.keys(link).length > 0) conclusions.link = link;
+						} else if (conclusionType === 'miniprogram') {
+							const miniprogram: IDataObject = {};
+							const title = this.getNodeParameter('conclusion_miniprogram_title', i, '') as string;
+							const appid = this.getNodeParameter('conclusion_miniprogram_appid', i, '') as string;
+							const page = this.getNodeParameter('conclusion_miniprogram_page', i, '') as string;
+							const pic_media_id = this.getNodeParameter('conclusion_miniprogram_pic_media_id', i, '') as string;
+							if (title) miniprogram.title = title;
+							if (appid) miniprogram.appid = appid;
+							if (page) miniprogram.page = page;
+							if (pic_media_id) miniprogram.pic_media_id = pic_media_id;
+							if (Object.keys(miniprogram).length > 0) conclusions.miniprogram = miniprogram;
+						}
+
+						if (Object.keys(conclusions).length > 0) {
+							body.conclusions = conclusions;
+						}
+					}
+				}
+
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/externalcontact/add_contact_way',
+					body,
+				);
+			} else if (operation === 'getContactWay') {
+				const config_id = this.getNodeParameter('config_id', i) as string;
+
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/externalcontact/get_contact_way',
+					{ config_id },
+				);
+			} else if (operation === 'updateContactWay') {
+				const config_id = this.getNodeParameter('config_id', i) as string;
+				const user = this.getNodeParameter('user', i, '') as string;
+				const party = this.getNodeParameter('party', i, '') as string;
+				const remark = this.getNodeParameter('remark', i, '') as string;
+				const skip_verify = this.getNodeParameter('skip_verify', i, true) as boolean;
+				const style = this.getNodeParameter('style', i, 0) as number;
+				const state = this.getNodeParameter('state', i, '') as string;
+				const expires_in = this.getNodeParameter('expires_in', i, 0) as number;
+				const chat_expires_in = this.getNodeParameter('chat_expires_in', i, 0) as number;
+				const unionid = this.getNodeParameter('unionid', i, '') as string;
+				const mark_source = this.getNodeParameter('mark_source', i, true) as boolean;
+				const enableConclusions = this.getNodeParameter('enableConclusions', i, false) as boolean;
+
+				const body: IDataObject = { config_id };
+				if (user) body.user = user.split(',').map((id) => id.trim());
+				if (party) body.party = party.split(',').map((id) => parseInt(id.trim(), 10));
+				if (remark) body.remark = remark;
+				body.skip_verify = skip_verify;
+				if (style > 0) body.style = style;
+				if (state) body.state = state;
+				if (expires_in > 0) body.expires_in = expires_in;
+				if (chat_expires_in > 0) body.chat_expires_in = chat_expires_in;
+				if (unionid) body.unionid = unionid;
+				body.mark_source = mark_source;
+
+				// 构建结束语（仅临时会话模式下有效）
 				if (enableConclusions) {
 					const conclusionType = this.getNodeParameter('conclusionType', i, 'text') as string;
 					const conclusions: IDataObject = {};
@@ -342,11 +453,11 @@ export async function executeExternalContact(
 						const miniprogram: IDataObject = {};
 						const title = this.getNodeParameter('conclusion_miniprogram_title', i, '') as string;
 						const appid = this.getNodeParameter('conclusion_miniprogram_appid', i, '') as string;
-						const pagepath = this.getNodeParameter('conclusion_miniprogram_pagepath', i, '') as string;
+						const page = this.getNodeParameter('conclusion_miniprogram_page', i, '') as string;
 						const pic_media_id = this.getNodeParameter('conclusion_miniprogram_pic_media_id', i, '') as string;
 						if (title) miniprogram.title = title;
 						if (appid) miniprogram.appid = appid;
-						if (pagepath) miniprogram.pagepath = pagepath;
+						if (page) miniprogram.page = page;
 						if (pic_media_id) miniprogram.pic_media_id = pic_media_id;
 						if (Object.keys(miniprogram).length > 0) conclusions.miniprogram = miniprogram;
 					}
@@ -355,31 +466,6 @@ export async function executeExternalContact(
 						body.conclusions = conclusions;
 					}
 				}
-
-				response = await weComApiRequest.call(
-					this,
-					'POST',
-					'/cgi-bin/externalcontact/add_contact_way',
-					body,
-				);
-			} else if (operation === 'getContactWay') {
-				const config_id = this.getNodeParameter('config_id', i) as string;
-
-				response = await weComApiRequest.call(
-					this,
-					'POST',
-					'/cgi-bin/externalcontact/get_contact_way',
-					{ config_id },
-				);
-			} else if (operation === 'updateContactWay') {
-				const config_id = this.getNodeParameter('config_id', i) as string;
-				const user = this.getNodeParameter('user', i, '') as string;
-				const remark = this.getNodeParameter('remark', i, '') as string;
-				const skip_verify = this.getNodeParameter('skip_verify', i, true) as boolean;
-
-				const body: IDataObject = { config_id, skip_verify };
-				if (user) body.user = user.split(',').map((id) => id.trim());
-				if (remark) body.remark = remark;
 
 				response = await weComApiRequest.call(
 					this,
@@ -396,21 +482,57 @@ export async function executeExternalContact(
 					'/cgi-bin/externalcontact/del_contact_way',
 					{ config_id },
 				);
+			} else if (operation === 'listContactWay') {
+				const start_time = this.getNodeParameter('start_time', i, 0) as number;
+				const end_time = this.getNodeParameter('end_time', i, 0) as number;
+				const cursor = this.getNodeParameter('cursor', i, '') as string;
+				const limit = this.getNodeParameter('limit', i, 100) as number;
+
+				const body: IDataObject = { limit };
+				if (start_time > 0) body.start_time = start_time;
+				if (end_time > 0) body.end_time = end_time;
+				if (cursor) body.cursor = cursor;
+
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/externalcontact/list_contact_way',
+					body,
+				);
+			} else if (operation === 'closeTempChat') {
+				const userid = this.getNodeParameter('userid', i) as string;
+				const external_userid = this.getNodeParameter('external_userid', i) as string;
+
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/externalcontact/close_temp_chat',
+					{ userid, external_userid },
+				);
 			} else if (operation === 'addJoinWay') {
 				const scene = this.getNodeParameter('scene', i) as number;
 				const chat_id_list = this.getNodeParameter('chat_id_list', i) as string;
-				const auto_create_room = this.getNodeParameter('auto_create_room', i, false) as boolean;
-				const room_base_name = this.getNodeParameter('room_base_name', i, '') as string;
-				const room_base_id = this.getNodeParameter('room_base_id', i, 1) as number;
+				const remark = this.getNodeParameter('remark', i, '') as string;
+				const auto_create_room = this.getNodeParameter('auto_create_room', i, true) as boolean;
+				const state = this.getNodeParameter('state', i, '') as string;
+				const mark_source = this.getNodeParameter('mark_source', i, true) as boolean;
 
 				const body: IDataObject = {
 					scene,
 					chat_id_list: chat_id_list.split(',').map((id) => id.trim()),
 				};
+				if (remark) body.remark = remark;
+				if (state) body.state = state;
+				body.mark_source = mark_source;
+
 				if (auto_create_room) {
 					body.auto_create_room = 1;
-					body.room_base_name = room_base_name;
-					body.room_base_id = room_base_id;
+					const room_base_name = this.getNodeParameter('room_base_name', i, '') as string;
+					const room_base_id = this.getNodeParameter('room_base_id', i, 1) as number;
+					if (room_base_name) body.room_base_name = room_base_name;
+					if (room_base_id) body.room_base_id = room_base_id;
+				} else {
+					body.auto_create_room = 0;
 				}
 
 				response = await weComApiRequest.call(
@@ -430,14 +552,31 @@ export async function executeExternalContact(
 				);
 			} else if (operation === 'updateJoinWay') {
 				const config_id = this.getNodeParameter('config_id', i) as string;
-				const chat_id_list = this.getNodeParameter('chat_id_list', i, '') as string;
-				const auto_create_room = this.getNodeParameter('auto_create_room', i, false) as boolean;
+				const scene = this.getNodeParameter('scene', i) as number;
+				const chat_id_list = this.getNodeParameter('chat_id_list', i) as string;
+				const remark = this.getNodeParameter('remark', i, '') as string;
+				const auto_create_room = this.getNodeParameter('auto_create_room', i, true) as boolean;
+				const state = this.getNodeParameter('state', i, '') as string;
+				const mark_source = this.getNodeParameter('mark_source', i, true) as boolean;
 
-				const body: IDataObject = { config_id };
-				if (chat_id_list) {
-					body.chat_id_list = chat_id_list.split(',').map((id) => id.trim());
+				const body: IDataObject = {
+					config_id,
+					scene,
+					chat_id_list: chat_id_list.split(',').map((id) => id.trim()),
+				};
+				if (remark) body.remark = remark;
+				if (state) body.state = state;
+				body.mark_source = mark_source;
+
+				if (auto_create_room) {
+					body.auto_create_room = 1;
+					const room_base_name = this.getNodeParameter('room_base_name', i, '') as string;
+					const room_base_id = this.getNodeParameter('room_base_id', i, 1) as number;
+					if (room_base_name) body.room_base_name = room_base_name;
+					if (room_base_id) body.room_base_id = room_base_id;
+				} else {
+					body.auto_create_room = 0;
 				}
-				if (auto_create_room) body.auto_create_room = 1;
 
 				response = await weComApiRequest.call(
 					this,
@@ -457,24 +596,51 @@ export async function executeExternalContact(
 			}
 			// 客户朋友圈
 			else if (operation === 'addMomentTask') {
-				const senderCollection = this.getNodeParameter('senderCollection', i, {}) as IDataObject;
+				const enableVisibleRange = this.getNodeParameter('enableVisibleRange', i, true) as boolean;
 				const contentType = this.getNodeParameter('contentType', i) as string;
 
+				const body: IDataObject = {};
+
 				// 构建可见范围
-				const visible_range: IDataObject = {};
-				if (senderCollection.senders) {
-					const sendersList = senderCollection.senders as IDataObject[];
-					visible_range.sender_list = { user_list: sendersList.map((s) => s.userid) };
+				if (enableVisibleRange) {
+					const visible_range: IDataObject = {};
+					const sender_user_list = this.getNodeParameter('sender_user_list', i, '') as string;
+					const sender_department_list = this.getNodeParameter('sender_department_list', i, '') as string;
+
+					if (sender_user_list || sender_department_list) {
+						const sender_list: IDataObject = {};
+						if (sender_user_list) {
+							sender_list.user_list = sender_user_list.split(',').map((id) => id.trim());
+						}
+						if (sender_department_list) {
+							sender_list.department_list = sender_department_list.split(',').map((id) => parseInt(id.trim(), 10));
+						}
+						visible_range.sender_list = sender_list;
+					}
+
+					// 可见客户标签列表
+					const enableExternalContactList = this.getNodeParameter('enableExternalContactList', i, false) as boolean;
+					if (enableExternalContactList) {
+						const external_contact_tag_list = this.getNodeParameter('external_contact_tag_list', i, '') as string;
+						if (external_contact_tag_list) {
+							visible_range.external_contact_list = {
+								tag_list: external_contact_tag_list.split(',').map((id) => id.trim()),
+							};
+						}
+					}
+
+					if (Object.keys(visible_range).length > 0) {
+						body.visible_range = visible_range;
+					}
 				}
 
-				// 构建内容
-				const body: IDataObject = { visible_range };
-
+				// 文本内容
 				const text_content = this.getNodeParameter('text_content', i, '') as string;
 				if (text_content) {
 					body.text = { content: text_content };
 				}
 
+				// 附件内容
 				if (contentType === 'image') {
 					const imageCollection = this.getNodeParameter('imageCollection', i, {}) as IDataObject;
 					if (imageCollection.images) {
@@ -484,15 +650,26 @@ export async function executeExternalContact(
 							image: { media_id: img.media_id },
 						}));
 					}
+				} else if (contentType === 'video') {
+					const video_media_id = this.getNodeParameter('video_media_id', i, '') as string;
+					if (video_media_id) {
+						body.attachments = [{
+							msgtype: 'video',
+							video: { media_id: video_media_id },
+						}];
+					}
 				} else if (contentType === 'link') {
-					const link: IDataObject = { msgtype: 'link', link: {} };
 					const title = this.getNodeParameter('link_title', i, '') as string;
-					const url = this.getNodeParameter('link_url', i, '') as string;
-					const media_id = this.getNodeParameter('link_media_id', i, '') as string;
-					if (title) (link.link as IDataObject).title = title;
-					if (url) (link.link as IDataObject).url = url;
-					if (media_id) (link.link as IDataObject).media_id = media_id;
-					body.attachments = [link];
+					const url = this.getNodeParameter('link_url', i) as string;
+					const media_id = this.getNodeParameter('link_media_id', i) as string;
+					const link: IDataObject = {};
+					if (title) link.title = title;
+					link.url = url;
+					link.media_id = media_id;
+					body.attachments = [{
+						msgtype: 'link',
+						link,
+					}];
 				}
 
 				response = await weComApiRequest.call(
@@ -510,21 +687,33 @@ export async function executeExternalContact(
 					'/cgi-bin/externalcontact/cancel_moment_task',
 					{ moment_id },
 				);
+			} else if (operation === 'getMomentTaskResult') {
+				const jobid = this.getNodeParameter('jobid', i) as string;
+
+				response = await weComApiRequest.call(
+					this,
+					'GET',
+					'/cgi-bin/externalcontact/get_moment_task_result',
+					{},
+					{ jobid },
+				);
 			} else if (operation === 'getMomentTaskList') {
 				const start_time = this.getNodeParameter('start_time', i) as number;
 				const end_time = this.getNodeParameter('end_time', i) as number;
 				const creator = this.getNodeParameter('creator', i, '') as string;
+				const filter_type = this.getNodeParameter('filter_type', i, 2) as number;
 				const cursor = this.getNodeParameter('cursor', i, '') as string;
-				const limit = this.getNodeParameter('limit', i, 100) as number;
+				const limit = this.getNodeParameter('limit', i, 20) as number;
 
 				const body: IDataObject = { start_time, end_time, limit };
 				if (creator) body.creator = creator;
+				if (filter_type !== 2) body.filter_type = filter_type;
 				if (cursor) body.cursor = cursor;
 
 				response = await weComApiRequest.call(
 					this,
 					'POST',
-					'/cgi-bin/externalcontact/get_moment_task_list',
+					'/cgi-bin/externalcontact/get_moment_list',
 					body,
 				);
 			} else if (operation === 'getMomentTask') {
@@ -540,6 +729,189 @@ export async function executeExternalContact(
 					'POST',
 					'/cgi-bin/externalcontact/get_moment_task',
 					body,
+				);
+			} else if (operation === 'getMomentCustomerList') {
+				const moment_id = this.getNodeParameter('moment_id', i) as string;
+				const userid = this.getNodeParameter('userid', i) as string;
+				const cursor = this.getNodeParameter('cursor', i, '') as string;
+				const limit = this.getNodeParameter('limit', i, 500) as number;
+
+				const body: IDataObject = { moment_id, userid, limit };
+				if (cursor) body.cursor = cursor;
+
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/externalcontact/get_moment_customer_list',
+					body,
+				);
+			} else if (operation === 'getMomentSendResult') {
+				const moment_id = this.getNodeParameter('moment_id', i) as string;
+				const userid = this.getNodeParameter('userid', i) as string;
+				const cursor = this.getNodeParameter('cursor', i, '') as string;
+				const limit = this.getNodeParameter('limit', i, 3000) as number;
+
+				const body: IDataObject = { moment_id, userid, limit };
+				if (cursor) body.cursor = cursor;
+
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/externalcontact/get_moment_send_result',
+					body,
+				);
+			} else if (operation === 'getMomentComments') {
+				const moment_id = this.getNodeParameter('moment_id', i) as string;
+				const userid = this.getNodeParameter('userid', i) as string;
+
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/externalcontact/get_moment_comments',
+					{ moment_id, userid },
+				);
+			}
+			// 朋友圈规则组管理
+			else if (operation === 'listMomentStrategy') {
+				const cursor = this.getNodeParameter('cursor', i, '') as string;
+				const limit = this.getNodeParameter('limit', i, 1000) as number;
+
+				const body: IDataObject = { limit };
+				if (cursor) body.cursor = cursor;
+
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/externalcontact/moment_strategy/list',
+					body,
+				);
+			} else if (operation === 'getMomentStrategy') {
+				const strategy_id = this.getNodeParameter('strategy_id', i) as number;
+
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/externalcontact/moment_strategy/get',
+					{ strategy_id },
+				);
+			} else if (operation === 'getMomentStrategyRange') {
+				const strategy_id = this.getNodeParameter('strategy_id', i) as number;
+				const cursor = this.getNodeParameter('cursor', i, '') as string;
+				const limit = this.getNodeParameter('limit', i, 1000) as number;
+
+				const body: IDataObject = { strategy_id, limit };
+				if (cursor) body.cursor = cursor;
+
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/externalcontact/moment_strategy/get_range',
+					body,
+				);
+			} else if (operation === 'createMomentStrategy') {
+				const strategy_name = this.getNodeParameter('strategy_name', i) as string;
+				const parent_id = this.getNodeParameter('parent_id', i, 0) as number;
+				const admin_list = this.getNodeParameter('admin_list', i) as string;
+				const privilege_view_moment_list = this.getNodeParameter('privilege_view_moment_list', i, true) as boolean;
+				const privilege_send_moment = this.getNodeParameter('privilege_send_moment', i, true) as boolean;
+				const privilege_manage_moment_cover_and_sign = this.getNodeParameter('privilege_manage_moment_cover_and_sign', i, true) as boolean;
+				const rangeCollection = this.getNodeParameter('rangeCollection', i, {}) as IDataObject;
+
+				const body: IDataObject = {
+					strategy_name,
+					admin_list: admin_list.split(',').map((id) => id.trim()),
+					privilege: {
+						view_moment_list: privilege_view_moment_list,
+						send_moment: privilege_send_moment,
+						manage_moment_cover_and_sign: privilege_manage_moment_cover_and_sign,
+					},
+				};
+				if (parent_id > 0) body.parent_id = parent_id;
+
+				// 构建管理范围
+				if (rangeCollection.ranges) {
+					const rangesList = rangeCollection.ranges as IDataObject[];
+					body.range = rangesList.map((r) => {
+						const rangeItem: IDataObject = { type: r.type };
+						if (r.type === 1 && r.userid) rangeItem.userid = r.userid;
+						if (r.type === 2 && r.partyid) rangeItem.partyid = r.partyid;
+						return rangeItem;
+					});
+				}
+
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/externalcontact/moment_strategy/create',
+					body,
+				);
+			} else if (operation === 'editMomentStrategy') {
+				const strategy_id = this.getNodeParameter('strategy_id', i) as number;
+				const strategy_name = this.getNodeParameter('strategy_name', i, '') as string;
+				const updateAdminList = this.getNodeParameter('updateAdminList', i, false) as boolean;
+				const updatePrivilege = this.getNodeParameter('updatePrivilege', i, false) as boolean;
+				const rangeAddCollection = this.getNodeParameter('rangeAddCollection', i, {}) as IDataObject;
+				const rangeDelCollection = this.getNodeParameter('rangeDelCollection', i, {}) as IDataObject;
+
+				const body: IDataObject = { strategy_id };
+				if (strategy_name) body.strategy_name = strategy_name;
+
+				// 更新管理员列表
+				if (updateAdminList) {
+					const admin_list = this.getNodeParameter('admin_list', i, '') as string;
+					if (admin_list) {
+						body.admin_list = admin_list.split(',').map((id) => id.trim());
+					}
+				}
+
+				// 更新权限配置
+				if (updatePrivilege) {
+					const privilege_view_moment_list = this.getNodeParameter('privilege_view_moment_list', i, true) as boolean;
+					const privilege_send_moment = this.getNodeParameter('privilege_send_moment', i, true) as boolean;
+					const privilege_manage_moment_cover_and_sign = this.getNodeParameter('privilege_manage_moment_cover_and_sign', i, true) as boolean;
+					body.privilege = {
+						view_moment_list: privilege_view_moment_list,
+						send_moment: privilege_send_moment,
+						manage_moment_cover_and_sign: privilege_manage_moment_cover_and_sign,
+					};
+				}
+
+				// 添加管理范围
+				if (rangeAddCollection.ranges) {
+					const rangesList = rangeAddCollection.ranges as IDataObject[];
+					body.range_add = rangesList.map((r) => {
+						const rangeItem: IDataObject = { type: r.type };
+						if (r.type === 1 && r.userid) rangeItem.userid = r.userid;
+						if (r.type === 2 && r.partyid) rangeItem.partyid = r.partyid;
+						return rangeItem;
+					});
+				}
+
+				// 删除管理范围
+				if (rangeDelCollection.ranges) {
+					const rangesList = rangeDelCollection.ranges as IDataObject[];
+					body.range_del = rangesList.map((r) => {
+						const rangeItem: IDataObject = { type: r.type };
+						if (r.type === 1 && r.userid) rangeItem.userid = r.userid;
+						if (r.type === 2 && r.partyid) rangeItem.partyid = r.partyid;
+						return rangeItem;
+					});
+				}
+
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/externalcontact/moment_strategy/edit',
+					body,
+				);
+			} else if (operation === 'deleteMomentStrategy') {
+				const strategy_id = this.getNodeParameter('strategy_id', i) as number;
+
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/externalcontact/moment_strategy/del',
+					{ strategy_id },
 				);
 			}
 			// 消息推送
@@ -1319,6 +1691,17 @@ export async function executeExternalContact(
 					'/cgi-bin/externalcontact/customer_acquisition_quota',
 					{},
 				);
+			} else if (operation === 'getCustomerAcquisitionStatistic') {
+				const link_id = this.getNodeParameter('link_id', i) as string;
+				const start_time = this.getNodeParameter('start_time', i) as number;
+				const end_time = this.getNodeParameter('end_time', i) as number;
+
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/externalcontact/customer_acquisition/statistic',
+					{ link_id, start_time, end_time },
+				);
 			} else if (operation === 'listCustomerAcquisitionLink') {
 				const cursor = this.getNodeParameter('cursor', i, '') as string;
 				const limit = this.getNodeParameter('limit', i, 100) as number;
@@ -1332,39 +1715,66 @@ export async function executeExternalContact(
 					'/cgi-bin/externalcontact/customer_acquisition/list_link',
 					body,
 				);
+			} else if (operation === 'getCustomerAcquisitionLink') {
+				const link_id = this.getNodeParameter('link_id', i) as string;
+
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/externalcontact/customer_acquisition/get',
+					{ link_id },
+				);
 			} else if (operation === 'createCustomerAcquisitionLink') {
 				const link_name = this.getNodeParameter('link_name', i) as string;
 				const rangeType = this.getNodeParameter('rangeType', i) as string;
 				const skip_verify = this.getNodeParameter('skip_verify', i, true) as boolean;
+				const mark_source = this.getNodeParameter('mark_source', i, true) as boolean;
+				const enablePriorityOption = this.getNodeParameter('enablePriorityOption', i, false) as boolean;
 
 				const range: IDataObject = {};
 
 				if (rangeType === 'user') {
-					const userCollection = this.getNodeParameter('userCollection', i, {}) as IDataObject;
-					if (userCollection.users) {
-						const usersList = userCollection.users as IDataObject[];
-						range.user_list = usersList.map((u) => u.userid);
+					const user_list = this.getNodeParameter('user_list', i, '') as string;
+					if (user_list) {
+						range.user_list = user_list.split(',').map((id) => id.trim());
 					}
 				} else if (rangeType === 'department') {
-					const departmentCollection = this.getNodeParameter('departmentCollection', i, {}) as IDataObject;
-					if (departmentCollection.departments) {
-						const deptsList = departmentCollection.departments as IDataObject[];
-						range.department_list = deptsList.map((d) => d.department_id);
+					const department_list = this.getNodeParameter('department_list', i, '') as string;
+					if (department_list) {
+						range.department_list = department_list.split(',').map((id) => parseInt(id.trim(), 10));
 					}
+				}
+
+				const body: IDataObject = { link_name, range, skip_verify, mark_source };
+
+				// 优先分配配置
+				if (enablePriorityOption) {
+					const priority_type = this.getNodeParameter('priority_type', i, 1) as number;
+					const priority_option: IDataObject = { priority_type };
+					if (priority_type === 2) {
+						const priority_userid_list = this.getNodeParameter('priority_userid_list', i, '') as string;
+						if (priority_userid_list) {
+							priority_option.priority_userid_list = priority_userid_list.split(',').map((id) => id.trim());
+						}
+					}
+					body.priority_option = priority_option;
 				}
 
 				response = await weComApiRequest.call(
 					this,
 					'POST',
 					'/cgi-bin/externalcontact/customer_acquisition/create_link',
-					{ link_name, range, skip_verify },
+					body,
 				);
 			} else if (operation === 'updateCustomerAcquisitionLink') {
 				const link_id = this.getNodeParameter('link_id', i) as string;
 				const link_name = this.getNodeParameter('link_name', i, '') as string;
 				const updateRange = this.getNodeParameter('updateRange', i, false) as boolean;
+				const skip_verify = this.getNodeParameter('skip_verify', i, true) as boolean;
+				const mark_source = this.getNodeParameter('mark_source', i, true) as boolean;
+				const updatePriorityOption = this.getNodeParameter('updatePriorityOption', i, false) as boolean;
 
-				const body: IDataObject = { link_id };
+				const body: IDataObject = { link_id, skip_verify, mark_source };
 				if (link_name) body.link_name = link_name;
 
 				if (updateRange) {
@@ -1372,20 +1782,31 @@ export async function executeExternalContact(
 					const range: IDataObject = {};
 
 					if (rangeType === 'user') {
-						const userCollection = this.getNodeParameter('userCollection', i, {}) as IDataObject;
-						if (userCollection.users) {
-							const usersList = userCollection.users as IDataObject[];
-							range.user_list = usersList.map((u) => u.userid);
+						const user_list = this.getNodeParameter('user_list', i, '') as string;
+						if (user_list) {
+							range.user_list = user_list.split(',').map((id) => id.trim());
 						}
 					} else if (rangeType === 'department') {
-						const departmentCollection = this.getNodeParameter('departmentCollection', i, {}) as IDataObject;
-						if (departmentCollection.departments) {
-							const deptsList = departmentCollection.departments as IDataObject[];
-							range.department_list = deptsList.map((d) => d.department_id);
+						const department_list = this.getNodeParameter('department_list', i, '') as string;
+						if (department_list) {
+							range.department_list = department_list.split(',').map((id) => parseInt(id.trim(), 10));
 						}
 					}
 
 					if (Object.keys(range).length > 0) body.range = range;
+				}
+
+				// 优先分配配置
+				if (updatePriorityOption) {
+					const priority_type = this.getNodeParameter('priority_type', i, 1) as number;
+					const priority_option: IDataObject = { priority_type };
+					if (priority_type === 2) {
+						const priority_userid_list = this.getNodeParameter('priority_userid_list', i, '') as string;
+						if (priority_userid_list) {
+							priority_option.priority_userid_list = priority_userid_list.split(',').map((id) => id.trim());
+						}
+					}
+					body.priority_option = priority_option;
 				}
 
 				response = await weComApiRequest.call(
@@ -1416,6 +1837,15 @@ export async function executeExternalContact(
 					'POST',
 					'/cgi-bin/externalcontact/customer_acquisition/customer',
 					body,
+				);
+			} else if (operation === 'getCustomerAcquisitionChatInfo') {
+				const chat_key = this.getNodeParameter('chat_key', i) as string;
+
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/externalcontact/customer_acquisition/get_chat_info',
+					{ chat_key },
 				);
 			} else if (operation === 'getServedExternalContact') {
 				const limit = this.getNodeParameter('limit', i, 1000) as number;

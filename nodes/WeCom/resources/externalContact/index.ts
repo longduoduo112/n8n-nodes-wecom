@@ -21,16 +21,28 @@ import { getGroupChatDescription } from './getGroupChat';
 import { opengidToChatidDescription } from './opengidToChatid';
 import { addContactWayDescription } from './addContactWay';
 import { getContactWayDescription } from './getContactWay';
+import { listContactWayDescription } from './listContactWay';
 import { updateContactWayDescription } from './updateContactWay';
 import { delContactWayDescription } from './delContactWay';
+import { closeTempChatDescription } from './closeTempChat';
 import { addJoinWayDescription } from './addJoinWay';
 import { getJoinWayDescription } from './getJoinWay';
 import { updateJoinWayDescription } from './updateJoinWay';
 import { delJoinWayDescription } from './delJoinWay';
 import { addMomentTaskDescription } from './addMomentTask';
+import { getMomentTaskResultDescription } from './getMomentTaskResult';
 import { cancelMomentTaskDescription } from './cancelMomentTask';
 import { getMomentTaskListDescription } from './getMomentTaskList';
 import { getMomentTaskDescription } from './getMomentTask';
+import { getMomentCustomerListDescription } from './getMomentCustomerList';
+import { getMomentSendResultDescription } from './getMomentSendResult';
+import { getMomentCommentsDescription } from './getMomentComments';
+import { listMomentStrategyDescription } from './listMomentStrategy';
+import { getMomentStrategyDescription } from './getMomentStrategy';
+import { getMomentStrategyRangeDescription } from './getMomentStrategyRange';
+import { createMomentStrategyDescription } from './createMomentStrategy';
+import { editMomentStrategyDescription } from './editMomentStrategy';
+import { deleteMomentStrategyDescription } from './deleteMomentStrategy';
 import { addMsgTemplateDescription } from './addMsgTemplate';
 import { remindGroupMsgSendDescription } from './remindGroupMsgSend';
 import { cancelGroupMsgSendDescription } from './cancelGroupMsgSend';
@@ -56,11 +68,14 @@ import { updateInterceptRuleDescription } from './updateInterceptRule';
 import { deleteInterceptRuleDescription } from './deleteInterceptRule';
 import { uploadAttachmentDescription } from './uploadAttachment';
 import { getCustomerAcquisitionQuotaDescription } from './getCustomerAcquisitionQuota';
+import { getCustomerAcquisitionStatisticDescription } from './getCustomerAcquisitionStatistic';
 import { listCustomerAcquisitionLinkDescription } from './listCustomerAcquisitionLink';
+import { getCustomerAcquisitionLinkDescription } from './getCustomerAcquisitionLink';
 import { createCustomerAcquisitionLinkDescription } from './createCustomerAcquisitionLink';
 import { updateCustomerAcquisitionLinkDescription } from './updateCustomerAcquisitionLink';
 import { deleteCustomerAcquisitionLinkDescription } from './deleteCustomerAcquisitionLink';
 import { getCustomerAcquisitionCustomerDescription } from './getCustomerAcquisitionCustomer';
+import { getCustomerAcquisitionChatInfoDescription } from './getCustomerAcquisitionChatInfo';
 import { getServedExternalContactDescription } from './getServedExternalContact';
 
 const showOnlyForExternalContact = {
@@ -217,6 +232,12 @@ export const externalContactDescription: INodeProperties[] = [
 				description: '获取企业已配置的「联系我」方式',
 			},
 			{
+				name: '获取企业已配置的「联系我」列表',
+				value: 'listContactWay',
+				action: '获取企业已配置的「联系我」列表',
+				description: '获取企业配置的「联系我」二维码和「联系我」小程序列表，不包含临时会话',
+			},
+			{
 				name: '更新企业已配置的「联系我」方式',
 				value: 'updateContactWay',
 				action: '更新企业已配置的「联系我」方式',
@@ -227,6 +248,12 @@ export const externalContactDescription: INodeProperties[] = [
 				value: 'delContactWay',
 				action: '删除企业已配置的「联系我」方式',
 				description: '删除「联系我」配置',
+			},
+			{
+				name: '结束临时会话',
+				value: 'closeTempChat',
+				action: '结束临时会话',
+				description: '将指定的企业成员和客户之前的临时会话断开，断开前会自动下发已配置的结束语',
 			},
 			{
 				name: '配置客户群进群方式',
@@ -260,10 +287,16 @@ export const externalContactDescription: INodeProperties[] = [
 				description: '企业和第三方应用可调用此接口创建客户朋友圈发表任务',
 			},
 			{
+				name: '获取任务创建结果',
+				value: 'getMomentTaskResult',
+				action: '获取任务创建结果',
+				description: '由于发表任务的创建是异步执行的，应用需要调用该接口以获取创建的结果',
+			},
+			{
 				name: '停止发表企业朋友圈',
 				value: 'cancelMomentTask',
 				action: '停止发表企业朋友圈',
-				description: '停止发表企业客户朋友圈',
+				description: '停止尚未发送的企业朋友圈发送任务',
 			},
 			{
 				name: '获取企业全部的发表列表',
@@ -276,6 +309,61 @@ export const externalContactDescription: INodeProperties[] = [
 				value: 'getMomentTask',
 				action: '获取客户朋友圈发表时刻的成员发送情况',
 				description: '获取客户朋友圈企业发表的列表',
+			},
+			{
+				name: '获取客户朋友圈发表时选择的可见范围',
+				value: 'getMomentCustomerList',
+				action: '获取客户朋友圈发表时选择的可见范围',
+				description: '获取客户朋友圈创建时选择的客户可见范围',
+			},
+			{
+				name: '获取客户朋友圈发表后的可见客户列表',
+				value: 'getMomentSendResult',
+				action: '获取客户朋友圈发表后的可见客户列表',
+				description: '获取客户朋友圈发表后可在微信朋友圈中查看的客户列表',
+			},
+			{
+				name: '获取客户朋友圈的互动数据',
+				value: 'getMomentComments',
+				action: '获取客户朋友圈的互动数据',
+				description: '获取客户朋友圈的评论和点赞列表',
+			},
+			// 朋友圈规则组管理
+			{
+				name: '获取朋友圈规则组列表',
+				value: 'listMomentStrategy',
+				action: '获取朋友圈规则组列表',
+				description: '获取企业配置的所有客户朋友圈规则组ID列表',
+			},
+			{
+				name: '获取朋友圈规则组详情',
+				value: 'getMomentStrategy',
+				action: '获取朋友圈规则组详情',
+				description: '获取某个客户朋友圈规则组的详细信息',
+			},
+			{
+				name: '获取朋友圈规则组管理范围',
+				value: 'getMomentStrategyRange',
+				action: '获取朋友圈规则组管理范围',
+				description: '获取某个朋友圈规则组管理的成员和部门列表',
+			},
+			{
+				name: '创建朋友圈规则组',
+				value: 'createMomentStrategy',
+				action: '创建朋友圈规则组',
+				description: '创建一个新的客户朋友圈规则组',
+			},
+			{
+				name: '编辑朋友圈规则组',
+				value: 'editMomentStrategy',
+				action: '编辑朋友圈规则组',
+				description: '编辑规则组的基本信息和修改客户朋友圈规则组管理范围',
+			},
+			{
+				name: '删除朋友圈规则组',
+				value: 'deleteMomentStrategy',
+				action: '删除朋友圈规则组',
+				description: '删除某个客户朋友圈规则组',
 			},
 			// 消息推送
 			{
@@ -425,22 +513,34 @@ export const externalContactDescription: INodeProperties[] = [
 				description: '上传临时附件素材',
 			},
 			{
-				name: '获取获客链接使用详情',
+				name: '查询获客助手剩余使用量',
 				value: 'getCustomerAcquisitionQuota',
-				action: '获取获客链接使用详情',
-				description: '获取获客链接的使用配额详情',
+				action: '查询获客助手剩余使用量',
+				description: '查询当前剩余的使用量，包括历史累计使用量、剩余使用量及即将过期的额度',
+			},
+			{
+				name: '查询获客链接使用详情',
+				value: 'getCustomerAcquisitionStatistic',
+				action: '查询获客链接使用详情',
+				description: '查询指定获客链接在指定时间范围内的访问情况，包括点击链接客户数和新增客户数',
 			},
 			{
 				name: '获取获客链接列表',
 				value: 'listCustomerAcquisitionLink',
 				action: '获取获客链接列表',
-				description: '获取获客链接列表',
+				description: '获取当前仍然有效且是当前应用创建的获客链接',
+			},
+			{
+				name: '获取获客链接详情',
+				value: 'getCustomerAcquisitionLink',
+				action: '获取获客链接详情',
+				description: '根据获客链接ID获取链接配置详情',
 			},
 			{
 				name: '创建获客链接',
 				value: 'createCustomerAcquisitionLink',
 				action: '创建获客链接',
-				description: '创建获客链接',
+				description: '创建新的获客链接',
 			},
 			{
 				name: '编辑获客链接',
@@ -459,6 +559,12 @@ export const externalContactDescription: INodeProperties[] = [
 				value: 'getCustomerAcquisitionCustomer',
 				action: '获取由获客链接添加的客户信息',
 				description: '获取通过获客链接添加的客户列表',
+			},
+			{
+				name: '获取成员多次收消息详情',
+				value: 'getCustomerAcquisitionChatInfo',
+				action: '获取成员多次收消息详情',
+				description: '获取成员多次收消息情况，如次数、客户ID等信息',
 			},
 			{
 				name: '获取已服务的外部联系人',
@@ -491,16 +597,28 @@ export const externalContactDescription: INodeProperties[] = [
 	...opengidToChatidDescription,
 	...addContactWayDescription,
 	...getContactWayDescription,
+	...listContactWayDescription,
 	...updateContactWayDescription,
 	...delContactWayDescription,
+	...closeTempChatDescription,
 	...addJoinWayDescription,
 	...getJoinWayDescription,
 	...updateJoinWayDescription,
 	...delJoinWayDescription,
 	...addMomentTaskDescription,
+	...getMomentTaskResultDescription,
 	...cancelMomentTaskDescription,
 	...getMomentTaskListDescription,
 	...getMomentTaskDescription,
+	...getMomentCustomerListDescription,
+	...getMomentSendResultDescription,
+	...getMomentCommentsDescription,
+	...listMomentStrategyDescription,
+	...getMomentStrategyDescription,
+	...getMomentStrategyRangeDescription,
+	...createMomentStrategyDescription,
+	...editMomentStrategyDescription,
+	...deleteMomentStrategyDescription,
 	...addMsgTemplateDescription,
 	...remindGroupMsgSendDescription,
 	...cancelGroupMsgSendDescription,
@@ -526,11 +644,14 @@ export const externalContactDescription: INodeProperties[] = [
 	...deleteInterceptRuleDescription,
 	...uploadAttachmentDescription,
 	...getCustomerAcquisitionQuotaDescription,
+	...getCustomerAcquisitionStatisticDescription,
 	...listCustomerAcquisitionLinkDescription,
+	...getCustomerAcquisitionLinkDescription,
 	...createCustomerAcquisitionLinkDescription,
 	...updateCustomerAcquisitionLinkDescription,
 	...deleteCustomerAcquisitionLinkDescription,
 	...getCustomerAcquisitionCustomerDescription,
+	...getCustomerAcquisitionChatInfoDescription,
 	...getServedExternalContactDescription,
 ];
 
