@@ -7,6 +7,44 @@ const showOnlyForSendImage = {
 
 export const sendImageDescription: INodeProperties[] = [
 	{
+		displayName: '图片来源',
+		name: 'imageSource',
+		type: 'options',
+		options: [
+			{
+				name: '二进制数据',
+				value: 'binary',
+				description: '从二进制数据属性读取图片并自动计算 Base64 与 MD5',
+			},
+			{
+				name: 'Base64 字符串',
+				value: 'base64',
+				description: '手动输入 Base64 与 MD5',
+			},
+		],
+		default: 'binary',
+		required: true,
+		displayOptions: {
+			show: showOnlyForSendImage,
+		},
+		description: '选择图片数据来源方式',
+	},
+	{
+		displayName: '二进制数据属性',
+		name: 'binaryProperty',
+		type: 'string',
+		default: 'data',
+		required: true,
+		displayOptions: {
+			show: {
+				...showOnlyForSendImage,
+				imageSource: ['binary'],
+			},
+		},
+		description: '要读取的图片文件二进制属性名称',
+		placeholder: 'data',
+	},
+	{
 		displayName: 'Base64 图片',
 		name: 'base64',
 		type: 'string',
@@ -14,7 +52,10 @@ export const sendImageDescription: INodeProperties[] = [
 			rows: 4,
 		},
 		displayOptions: {
-			show: showOnlyForSendImage,
+			show: {
+				...showOnlyForSendImage,
+				imageSource: ['base64'],
+			},
 		},
 		default: '',
 		required: true,
@@ -27,7 +68,10 @@ export const sendImageDescription: INodeProperties[] = [
 		name: 'md5',
 		type: 'string',
 		displayOptions: {
-			show: showOnlyForSendImage,
+			show: {
+				...showOnlyForSendImage,
+				imageSource: ['base64'],
+			},
 		},
 		default: '',
 		required: true,
@@ -36,4 +80,3 @@ export const sendImageDescription: INodeProperties[] = [
 		hint: '32位小写字符串，用于校验图片完整性',
 	},
 ];
-

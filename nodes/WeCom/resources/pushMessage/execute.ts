@@ -1,3 +1,4 @@
+import { createHash } from 'crypto';
 import type { IExecuteFunctions, INodeExecutionData, IDataObject } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
 
@@ -129,8 +130,20 @@ export async function executePushMessage(
 
 			} else if (operation === 'sendImage') {
 				// 发送图片消息
-				const base64 = this.getNodeParameter('base64', i) as string;
-				const md5 = this.getNodeParameter('md5', i) as string;
+				const imageSource = this.getNodeParameter('imageSource', i) as string;
+				let base64: string;
+				let md5: string;
+
+				if (imageSource === 'binary') {
+					const binaryPropertyName = this.getNodeParameter('binaryProperty', i) as string;
+					this.helpers.assertBinaryData(i, binaryPropertyName);
+					const dataBuffer = await this.helpers.getBinaryDataBuffer(i, binaryPropertyName);
+					base64 = dataBuffer.toString('base64');
+					md5 = createHash('md5').update(dataBuffer).digest('hex');
+				} else {
+					base64 = this.getNodeParameter('base64', i) as string;
+					md5 = this.getNodeParameter('md5', i) as string;
+				}
 
 				body = {
 					msgtype: 'image',
