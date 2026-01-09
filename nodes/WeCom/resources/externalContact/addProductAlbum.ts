@@ -4,24 +4,24 @@ const showOnly = { resource: ['externalContact'], operation: ['addProductAlbum']
 
 export const addProductAlbumDescription: INodeProperties[] = [
 	{
-		displayName: '商品描述',
+		displayName: '商品描述（必填）',
 		name: 'description',
 		type: 'string',
 		required: true,
 		default: '',
 		displayOptions: { show: showOnly },
 		typeOptions: { rows: 3 },
-		description: '商品的描述信息',
-		placeholder: '这是一款优质商品...',
+		description: '商品的名称、特色等，不超过300个字',
+		placeholder: '世界上最好的商品',
 	},
 	{
-		displayName: '商品价格（分）',
+		displayName: '商品价格（分）（必填）',
 		name: 'price',
 		type: 'number',
 		required: true,
 		default: 0,
 		displayOptions: { show: showOnly },
-		description: '商品价格，单位为分',
+		description: '商品的价格，单位为分；最大不超过5万元（500000分）',
 	},
 	{
 		displayName: '商品编码',
@@ -29,23 +29,11 @@ export const addProductAlbumDescription: INodeProperties[] = [
 		type: 'string',
 		default: '',
 		displayOptions: { show: showOnly },
-
+		description: '商品编码；不超过128个字节；只能输入数字和字母',
 		placeholder: 'SKU001',
 	},
 	{
-		displayName: '商品附件类型',
-		name: 'attachType',
-		type: 'options',
-		required: true,
-		displayOptions: { show: showOnly },
-		options: [
-			{ name: '图片', value: 'image' },
-		],
-		default: 'image',
-
-	},
-	{
-		displayName: '商品图片',
+		displayName: '商品图片（必填）',
 		name: 'attachmentCollection',
 		type: 'fixedCollection',
 		required: true,
@@ -53,7 +41,7 @@ export const addProductAlbumDescription: INodeProperties[] = [
 		default: {},
 		placeholder: '添加图片',
 		typeOptions: { multipleValues: true },
-		description: '商品图片列表',
+		description: '商品图片列表，最多不超过9个附件，仅支持通过上传附件资源接口获得的资源',
 		options: [
 			{
 				displayName: '图片',
@@ -65,7 +53,7 @@ export const addProductAlbumDescription: INodeProperties[] = [
 						type: 'string',
 						default: '',
 						required: true,
-						description: '图片的media_id',
+						description: '图片的media_id，仅支持通过上传附件资源接口获得的资源',
 					},
 				],
 			},

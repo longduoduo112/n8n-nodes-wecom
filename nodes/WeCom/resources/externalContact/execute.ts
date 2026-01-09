@@ -999,12 +999,19 @@ export async function executeExternalContact(
 			}
 			// 统计管理
 			else if (operation === 'getUserBehaviorData') {
-				const userid = this.getNodeParameter('userid', i, '') as string;
+				const filterType = this.getNodeParameter('filterType', i, 'user') as string;
 				const start_time = this.getNodeParameter('start_time', i) as number;
 				const end_time = this.getNodeParameter('end_time', i) as number;
 
 				const body: IDataObject = { start_time, end_time };
-				if (userid) body.userid = userid.split(',').map((id) => id.trim());
+
+				if (filterType === 'user') {
+					const userid = this.getNodeParameter('userid', i, '') as string;
+					if (userid) body.userid = userid.split(',').map((id) => id.trim());
+				} else if (filterType === 'party') {
+					const partyid = this.getNodeParameter('partyid', i, '') as string;
+					if (partyid) body.partyid = partyid.split(',').map((id) => parseInt(id.trim(), 10));
+				}
 
 				response = await weComApiRequest.call(
 					this,
@@ -1012,39 +1019,49 @@ export async function executeExternalContact(
 					'/cgi-bin/externalcontact/get_user_behavior_data',
 					body,
 				);
-			} 			else if (operation === 'getGroupChatStatistic') {
+			} else if (operation === 'getGroupChatStatistic') {
+				const statistic_type = this.getNodeParameter('statistic_type', i, 'by_owner') as string;
 				const day_begin_time = this.getNodeParameter('day_begin_time', i) as number;
 				const day_end_time = this.getNodeParameter('day_end_time', i, 0) as number;
-				const filterByOwner = this.getNodeParameter('filterByOwner', i, false) as boolean;
-				const order_by = this.getNodeParameter('order_by', i, 1) as number;
-				const order_asc = this.getNodeParameter('order_asc', i, false) as boolean;
-				const offset = this.getNodeParameter('offset', i, 0) as number;
-				const limit = this.getNodeParameter('limit', i, 500) as number;
+				const owner_userid_list = this.getNodeParameter('owner_userid_list', i, '') as string;
 
-				const body: IDataObject = {
-					day_begin_time,
-					order_by,
-					order_asc: order_asc ? 1 : 0,
-					offset,
-					limit,
-				};
+				const body: IDataObject = { day_begin_time };
 				if (day_end_time) body.day_end_time = day_end_time;
 
 				// 构建群主筛选
-				if (filterByOwner) {
-					const ownerCollection = this.getNodeParameter('ownerCollection', i, {}) as IDataObject;
-					if (ownerCollection.owners) {
-						const ownersList = ownerCollection.owners as IDataObject[];
-						body.owner_filter = { userid_list: ownersList.map((o) => o.userid) };
-					}
+				if (owner_userid_list) {
+					body.owner_filter = {
+						userid_list: owner_userid_list.split(',').map((id) => id.trim()),
+					};
 				}
 
-				response = await weComApiRequest.call(
-					this,
-					'POST',
-					'/cgi-bin/externalcontact/groupchat/statistic',
-					body,
-				);
+				if (statistic_type === 'by_owner') {
+					// 按群主聚合
+					const order_by = this.getNodeParameter('order_by', i, 1) as number;
+					const order_asc = this.getNodeParameter('order_asc', i, false) as boolean;
+					const offset = this.getNodeParameter('offset', i, 0) as number;
+					const limit = this.getNodeParameter('limit', i, 500) as number;
+
+					body.order_by = order_by;
+					body.order_asc = order_asc ? 1 : 0;
+					body.offset = offset;
+					body.limit = limit;
+
+					response = await weComApiRequest.call(
+						this,
+						'POST',
+						'/cgi-bin/externalcontact/groupchat/statistic',
+						body,
+					);
+				} else {
+					// 按自然日聚合
+					response = await weComApiRequest.call(
+						this,
+						'POST',
+						'/cgi-bin/externalcontact/groupchat/statistic_group_by_day',
+						body,
+					);
+				}
 			}
 			// 其他接口
 			else if (operation === 'addProductAlbum') {
@@ -1053,13 +1070,13 @@ export async function executeExternalContact(
 				const product_sn = this.getNodeParameter('product_sn', i, '') as string;
 				const attachmentCollection = this.getNodeParameter('attachmentCollection', i, {}) as IDataObject;
 
-				const product: IDataObject = { description, price };
-				if (product_sn) product.product_sn = product_sn;
+				const body: IDataObject = { description, price };
+				if (product_sn) body.product_sn = product_sn;
 
 				// 构建附件列表
 				if (attachmentCollection.attachments) {
 					const attachmentsList = attachmentCollection.attachments as IDataObject[];
-					product.attachments = attachmentsList.map((att) => ({
+					body.attachments = attachmentsList.map((att) => ({
 						type: 'image',
 						image: { media_id: att.media_id },
 					}));
@@ -1069,7 +1086,7 @@ export async function executeExternalContact(
 					this,
 					'POST',
 					'/cgi-bin/externalcontact/add_product_album',
-					{ product },
+					body,
 				);
 			} else if (operation === 'getProductAlbumList') {
 				const limit = this.getNodeParameter('limit', i, 50) as number;
@@ -1100,17 +1117,17 @@ export async function executeExternalContact(
 				const product_sn = this.getNodeParameter('product_sn', i, '') as string;
 				const updateAttachments = this.getNodeParameter('updateAttachments', i, false) as boolean;
 
-				const product: IDataObject = {};
-				if (description) product.description = description;
-				if (price) product.price = price;
-				if (product_sn) product.product_sn = product_sn;
+				const body: IDataObject = { product_id };
+				if (description) body.description = description;
+				if (price) body.price = price;
+				if (product_sn) body.product_sn = product_sn;
 
 				// 构建附件列表
 				if (updateAttachments) {
 					const attachmentCollection = this.getNodeParameter('attachmentCollection', i, {}) as IDataObject;
 					if (attachmentCollection.attachments) {
 						const attachmentsList = attachmentCollection.attachments as IDataObject[];
-						product.attachments = attachmentsList.map((att) => ({
+						body.attachments = attachmentsList.map((att) => ({
 							type: 'image',
 							image: { media_id: att.media_id },
 						}));
@@ -1121,7 +1138,7 @@ export async function executeExternalContact(
 					this,
 					'POST',
 					'/cgi-bin/externalcontact/update_product_album',
-					{ product_id, product },
+					body,
 				);
 			} else if (operation === 'deleteProductAlbum') {
 				const product_id = this.getNodeParameter('product_id', i) as string;
@@ -1135,19 +1152,38 @@ export async function executeExternalContact(
 			} else if (operation === 'addInterceptRule') {
 				const rule_name = this.getNodeParameter('rule_name', i) as string;
 				const word_list = this.getNodeParameter('word_list', i) as string;
-				const semanticsCollection = this.getNodeParameter('semanticsCollection', i, {}) as IDataObject;
+				const intercept_type = this.getNodeParameter('intercept_type', i) as number;
+				const applicableRangeType = this.getNodeParameter('applicableRangeType', i) as string;
+				const enableSemantics = this.getNodeParameter('enableSemantics', i, false) as boolean;
 
 				const body: IDataObject = {
 					rule_name,
 					word_list: word_list.split(',').map((w) => w.trim()),
+					intercept_type,
 				};
 
-				// 构建语义范围
-				if (semanticsCollection.semantics) {
-					const semanticsList = semanticsCollection.semantics as IDataObject[];
-					body.semantics_list = semanticsList.map((s) => s.type);
-				} else {
-					body.semantics_list = [];
+				// 构建适用范围
+				const applicable_range: IDataObject = {};
+				if (applicableRangeType === 'user' || applicableRangeType === 'both') {
+					const userList = this.getNodeParameter('applicable_user_list', i, '') as string;
+					if (userList) {
+						applicable_range.user_list = userList.split(',').map((u) => u.trim());
+					}
+				}
+				if (applicableRangeType === 'department' || applicableRangeType === 'both') {
+					const deptList = this.getNodeParameter('applicable_department_list', i, '') as string;
+					if (deptList) {
+						applicable_range.department_list = deptList.split(',').map((d) => parseInt(d.trim(), 10));
+					}
+				}
+				body.applicable_range = applicable_range;
+
+				// 构建语义规则
+				if (enableSemantics) {
+					const semantics_list = this.getNodeParameter('semantics_list', i, []) as number[];
+					if (semantics_list.length > 0) {
+						body.semantics_list = semantics_list;
+					}
 				}
 
 				response = await weComApiRequest.call(
@@ -1176,10 +1212,58 @@ export async function executeExternalContact(
 				const rule_id = this.getNodeParameter('rule_id', i) as string;
 				const rule_name = this.getNodeParameter('rule_name', i, '') as string;
 				const word_list = this.getNodeParameter('word_list', i, '') as string;
+				const updateInterceptType = this.getNodeParameter('updateInterceptType', i, false) as boolean;
+				const updateSemantics = this.getNodeParameter('updateSemantics', i, false) as boolean;
+				const enableAddRange = this.getNodeParameter('enableAddRange', i, false) as boolean;
+				const enableRemoveRange = this.getNodeParameter('enableRemoveRange', i, false) as boolean;
 
 				const body: IDataObject = { rule_id };
 				if (rule_name) body.rule_name = rule_name;
 				if (word_list) body.word_list = word_list.split(',').map((w) => w.trim());
+
+				// 更新拦截方式
+				if (updateInterceptType) {
+					const intercept_type = this.getNodeParameter('intercept_type', i) as number;
+					body.intercept_type = intercept_type;
+				}
+
+				// 更新语义规则
+				if (updateSemantics) {
+					const semantics_list = this.getNodeParameter('semantics_list', i, []) as number[];
+					body.extra_rule = { semantics_list };
+				}
+
+				// 新增适用范围
+				if (enableAddRange) {
+					const add_applicable_range: IDataObject = {};
+					const addUserList = this.getNodeParameter('add_user_list', i, '') as string;
+					const addDeptList = this.getNodeParameter('add_department_list', i, '') as string;
+					if (addUserList) {
+						add_applicable_range.user_list = addUserList.split(',').map((u) => u.trim());
+					}
+					if (addDeptList) {
+						add_applicable_range.department_list = addDeptList.split(',').map((d) => parseInt(d.trim(), 10));
+					}
+					if (Object.keys(add_applicable_range).length > 0) {
+						body.add_applicable_range = add_applicable_range;
+					}
+				}
+
+				// 删除适用范围
+				if (enableRemoveRange) {
+					const remove_applicable_range: IDataObject = {};
+					const removeUserList = this.getNodeParameter('remove_user_list', i, '') as string;
+					const removeDeptList = this.getNodeParameter('remove_department_list', i, '') as string;
+					if (removeUserList) {
+						remove_applicable_range.user_list = removeUserList.split(',').map((u) => u.trim());
+					}
+					if (removeDeptList) {
+						remove_applicable_range.department_list = removeDeptList.split(',').map((d) => parseInt(d.trim(), 10));
+					}
+					if (Object.keys(remove_applicable_range).length > 0) {
+						body.remove_applicable_range = remove_applicable_range;
+					}
+				}
 
 				response = await weComApiRequest.call(
 					this,
@@ -1199,21 +1283,34 @@ export async function executeExternalContact(
 			} else if (operation === 'uploadAttachment') {
 				const media_type = this.getNodeParameter('media_type', i) as string;
 				const attachment_type = this.getNodeParameter('attachment_type', i) as number;
-				const attachmentSource = this.getNodeParameter('attachmentSource', i, 'mediaId') as string;
+				const binaryPropertyName = this.getNodeParameter('binaryPropertyName', i, 'data') as string;
 
-				const body: IDataObject = { media_type, attachment_type };
+				// 获取二进制数据
+				const binaryData = this.helpers.assertBinaryData(i, binaryPropertyName);
+				const buffer = await this.helpers.getBinaryDataBuffer(i, binaryPropertyName);
 
-				if (attachmentSource === 'mediaId') {
-					const media_id = this.getNodeParameter('media_id', i, '') as string;
-					body.attachment = { [media_type]: { media_id } };
-				}
-				// 注意：二进制上传需要特殊处理，这里简化处理
-
+				// 使用 weComApiRequest 上传文件
 				response = await weComApiRequest.call(
 					this,
 					'POST',
-					'/cgi-bin/externalcontact/upload_attachment',
-					body,
+					'/cgi-bin/media/upload_attachment',
+					{},
+					{
+						media_type,
+						attachment_type,
+					},
+					{},
+					{
+						body: {
+							media: {
+								value: buffer,
+								options: {
+									filename: binaryData.fileName || 'file',
+									contentType: binaryData.mimeType || 'application/octet-stream',
+								},
+							},
+						},
+					},
 				);
 			} else if (operation === 'getCustomerAcquisitionQuota') {
 				response = await weComApiRequest.call(
@@ -1321,8 +1418,8 @@ export async function executeExternalContact(
 					body,
 				);
 			} else if (operation === 'getServedExternalContact') {
-				const cursor = this.getNodeParameter('cursor', i, '') as string;
 				const limit = this.getNodeParameter('limit', i, 1000) as number;
+				const cursor = this.getNodeParameter('cursor', i, '') as string;
 
 				const body: IDataObject = { limit };
 				if (cursor) body.cursor = cursor;
@@ -1330,7 +1427,7 @@ export async function executeExternalContact(
 				response = await weComApiRequest.call(
 					this,
 					'POST',
-					'/cgi-bin/externalcontact/get_served_external_contact',
+					'/cgi-bin/externalcontact/contact_list',
 					body,
 				);
 			} else {

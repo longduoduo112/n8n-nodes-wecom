@@ -12,24 +12,23 @@ export const getProductAlbumListDescription: INodeProperties[] = [
 		type: 'number',
 		typeOptions: {
 			minValue: 1,
+			maxValue: 100,
 		},
 		default: 50,
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '返回的最大记录数，整型，最大值50',
-		description: 'Max number of results to return',
+		description: '返回的最大记录数，整型，最大值100，默认值50',
 	},
 	{
-		displayName: 'Cursor',
+		displayName: '分页游标',
 		name: 'cursor',
 		type: 'string',
 		default: '',
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '用于分页查询的游标',
-		description: '用于分页查询的游标，字符串类型，由上一次调用返回',
+		description: '用于分页查询的游标，由上一次调用返回，首次调用可不填',
 	},
 ];
 

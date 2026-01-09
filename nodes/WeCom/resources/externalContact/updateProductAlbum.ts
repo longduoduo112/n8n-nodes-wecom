@@ -4,7 +4,7 @@ const showOnly = { resource: ['externalContact'], operation: ['updateProductAlbu
 
 export const updateProductAlbumDescription: INodeProperties[] = [
 	{
-		displayName: '商品ID',
+		displayName: '商品ID（必填）',
 		name: 'product_id',
 		type: 'string',
 		required: true,
@@ -19,8 +19,8 @@ export const updateProductAlbumDescription: INodeProperties[] = [
 		default: '',
 		displayOptions: { show: showOnly },
 		typeOptions: { rows: 3 },
-		description: '商品的描述信息',
-		placeholder: '这是一款优质商品...',
+		description: '商品的名称、特色等，不超过300个字。不需更新的字段可不填',
+		placeholder: '世界上最好的商品',
 	},
 	{
 		displayName: '商品价格（分）',
@@ -28,7 +28,7 @@ export const updateProductAlbumDescription: INodeProperties[] = [
 		type: 'number',
 		default: 0,
 		displayOptions: { show: showOnly },
-		description: '商品价格，单位为分',
+		description: '商品的价格，单位为分；最大不超过5万元。不需更新的字段可不填',
 	},
 	{
 		displayName: '商品编码',
@@ -36,7 +36,7 @@ export const updateProductAlbumDescription: INodeProperties[] = [
 		type: 'string',
 		default: '',
 		displayOptions: { show: showOnly },
-
+		description: '商品编码；不超过128个字节；只能输入数字和字母。不需更新的字段可不填',
 		placeholder: 'SKU001',
 	},
 	{
@@ -55,7 +55,7 @@ export const updateProductAlbumDescription: INodeProperties[] = [
 		default: {},
 		placeholder: '添加图片',
 		typeOptions: { multipleValues: true },
-		description: '商品图片列表',
+		description: '商品图片列表，最多不超过9个附件',
 		options: [
 			{
 				displayName: '图片',
@@ -67,7 +67,7 @@ export const updateProductAlbumDescription: INodeProperties[] = [
 						type: 'string',
 						default: '',
 						required: true,
-						description: '图片的media_id',
+						description: '图片的media_id，仅支持通过上传附件资源接口的资源',
 					},
 				],
 			},

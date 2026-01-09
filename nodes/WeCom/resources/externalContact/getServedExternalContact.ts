@@ -7,29 +7,28 @@ const showOnly = {
 
 export const getServedExternalContactDescription: INodeProperties[] = [
 	{
-		displayName: 'Cursor',
+		displayName: '每页数量',
+		name: 'limit',
+		type: 'number',
+		typeOptions: {
+			minValue: 1,
+			maxValue: 1000,
+		},
+		default: 1000,
+		displayOptions: {
+			show: showOnly,
+		},
+		description: '返回的最大记录数，整型，默认为1000',
+	},
+	{
+		displayName: '分页游标',
 		name: 'cursor',
 		type: 'string',
 		default: '',
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '用于分页查询的游标',
-		description: '用于分页查询的游标，字符串类型，由上一次调用返回',
-	},
-	{
-		displayName: '每页数量',
-		name: 'limit',
-		type: 'number',
-		typeOptions: {
-			minValue: 1,
-		},
-		default: 50,
-		displayOptions: {
-			show: showOnly,
-		},
-		hint: '返回的最大记录数，整型，最大值1000',
-		description: 'Max number of results to return',
+		description: '用于分页查询的游标，由上一次调用返回，首次调用可不填。注意：cursor具有有效期（4小时），请勿缓存后使用',
 	},
 ];
 
