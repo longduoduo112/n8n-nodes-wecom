@@ -15,8 +15,8 @@ export const addTagUsersDescription: INodeProperties[] = [
 			show: showOnlyForAddTagUsers,
 		},
 		default: '',
-		placeholder: '100',
-		description: '标签 ID。<a href="https://developer.work.weixin.qq.com/document/path/90214" target="_blank">官方文档</a>',
+		placeholder: '12',
+		description: '标签ID。调用的应用必须是指定标签的创建者；成员属于应用的可见范围。注意，每个标签下部门数和人员数总和不能超过3万个。<a href="https://developer.work.weixin.qq.com/document/path/90214" target="_blank">官方文档</a>',
 		hint: '要添加成员的标签 ID',
 	},
 	{
@@ -27,9 +27,9 @@ export const addTagUsersDescription: INodeProperties[] = [
 			show: showOnlyForAddTagUsers,
 		},
 		default: '',
-		placeholder: 'zhangsan,lisi,wangwu',
-		description: '可选。企业成员 ID 列表，多个成员 ID 用逗号分隔。注意：userlist、partylist 不能同时为空。<a href="https://developer.work.weixin.qq.com/document/path/90214" target="_blank">官方文档</a>',
-		hint: '要添加到标签的成员列表',
+		placeholder: 'user1,user2',
+		description: '可选。企业成员ID列表，注意：userlist、partylist不能同时为空，单次请求个数不超过1000。多个成员ID用逗号分隔。<a href="https://developer.work.weixin.qq.com/document/path/90214" target="_blank">官方文档</a>',
+		hint: '成员ID列表，用逗号分隔，最多1000个',
 	},
 	{
 		displayName: '部门ID列表',
@@ -39,9 +39,9 @@ export const addTagUsersDescription: INodeProperties[] = [
 			show: showOnlyForAddTagUsers,
 		},
 		default: '',
-		placeholder: '1,2,3',
-		description: '可选。企业部门 ID 列表，多个部门 ID 用逗号分隔。注意：userlist、partylist 不能同时为空。<a href="https://developer.work.weixin.qq.com/document/path/90214" target="_blank">官方文档</a>',
-		hint: '要添加到标签的部门列表',
+		placeholder: '4',
+		description: '可选。企业部门ID列表，注意：userlist、partylist不能同时为空，单次请求个数不超过100。多个部门ID用逗号分隔。<a href="https://developer.work.weixin.qq.com/document/path/90214" target="_blank">官方文档</a>',
+		hint: '部门ID列表，用逗号分隔，最多100个',
 	},
 ];
 

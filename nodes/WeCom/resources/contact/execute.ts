@@ -88,6 +88,9 @@ export async function executeContact(
 					'/cgi-bin/externalcontact/get_by_tmp_external_userid',
 					{ tmp_external_userid },
 				);
+			} else if (operation === 'authSucc') {
+				const userid = this.getNodeParameter('userid', i) as string;
+				response = await weComApiRequest.call(this, 'GET', '/cgi-bin/user/authsucc', {}, { userid });
 			} else if (operation === 'getTagList') {
 				const tag_type = this.getNodeParameter('tag_type', i, '') as string;
 				const qs: IDataObject = {};
@@ -137,6 +140,30 @@ export async function executeContact(
 				}
 				const to_invite = this.getNodeParameter('to_invite', i, true) as boolean;
 				body.to_invite = to_invite;
+				const order = this.getNodeParameter('order', i, '') as string;
+				if (order) {
+					body.order = order.split(',').map((val) => parseInt(val.trim(), 10));
+				}
+				const is_leader_in_dept = this.getNodeParameter('is_leader_in_dept', i, '') as string;
+				if (is_leader_in_dept) {
+					body.is_leader_in_dept = is_leader_in_dept.split(',').map((val) => parseInt(val.trim(), 10));
+				}
+				const direct_leader = this.getNodeParameter('direct_leader', i, '') as string;
+				if (direct_leader) {
+					body.direct_leader = direct_leader.split(',').map((id) => id.trim());
+				}
+				const main_department = this.getNodeParameter('main_department', i, 0) as number;
+				if (main_department) {
+					body.main_department = main_department;
+				}
+				const extattr = this.getNodeParameter('extattr', i, '{}') as string;
+				if (extattr && extattr !== '{}') {
+					body.extattr = JSON.parse(extattr);
+				}
+				const external_position = this.getNodeParameter('external_position', i, '') as string;
+				if (external_position) {
+					body.external_position = external_position;
+				}
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/user/create', body);
 			} else if (operation === 'updateUser') {
@@ -173,6 +200,38 @@ export async function executeContact(
 				if (external_profile && external_profile !== '{}') {
 					body.external_profile = JSON.parse(external_profile);
 				}
+				const order = this.getNodeParameter('order', i, '') as string;
+				if (order) {
+					body.order = order.split(',').map((val) => parseInt(val.trim(), 10));
+				}
+				const is_leader_in_dept = this.getNodeParameter('is_leader_in_dept', i, '') as string;
+				if (is_leader_in_dept) {
+					body.is_leader_in_dept = is_leader_in_dept.split(',').map((val) => parseInt(val.trim(), 10));
+				}
+				const direct_leader = this.getNodeParameter('direct_leader', i, '') as string;
+				if (direct_leader) {
+					body.direct_leader = direct_leader.split(',').map((id) => id.trim());
+				}
+				const main_department = this.getNodeParameter('main_department', i, 0) as number;
+				if (main_department) {
+					body.main_department = main_department;
+				}
+				const extattr = this.getNodeParameter('extattr', i, '{}') as string;
+				if (extattr && extattr !== '{}') {
+					body.extattr = JSON.parse(extattr);
+				}
+				const external_position = this.getNodeParameter('external_position', i, '') as string;
+				if (external_position) {
+					body.external_position = external_position;
+				}
+				const biz_mail_alias = this.getNodeParameter('biz_mail_alias', i, '{}') as string;
+				if (biz_mail_alias && biz_mail_alias !== '{}') {
+					body.biz_mail_alias = JSON.parse(biz_mail_alias);
+				}
+				const new_userid = this.getNodeParameter('new_userid', i, '') as string;
+				if (new_userid) {
+					body.new_userid = new_userid;
+				}
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/user/update', body);
 			} else if (operation === 'deleteUser') {
@@ -203,6 +262,11 @@ export async function executeContact(
 				if (user) body.user = user.split(',').map((id) => id.trim());
 				if (party) body.party = party.split(',').map((id) => parseInt(id.trim(), 10));
 				if (tag) body.tag = tag.split(',').map((id) => parseInt(id.trim(), 10));
+
+				// user、party、tag三者不能同时为空
+				if (!user && !party && !tag) {
+					throw new Error('user、party、tag三者不能同时为空');
+				}
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/batch/invite', body);
 			} else if (operation === 'getJoinQrCode') {
@@ -279,6 +343,11 @@ export async function executeContact(
 				const userlist = this.getNodeParameter('userlist', i, '') as string;
 				const partylist = this.getNodeParameter('partylist', i, '') as string;
 
+				// userlist、partylist不能同时为空
+				if (!userlist && !partylist) {
+					throw new Error('userlist、partylist不能同时为空');
+				}
+
 				const body: IDataObject = { tagid: parseInt(tagid, 10) };
 				if (userlist) body.userlist = userlist.split(',').map((id) => id.trim());
 				if (partylist) body.partylist = partylist.split(',').map((id) => parseInt(id.trim(), 10));
@@ -289,6 +358,11 @@ export async function executeContact(
 				const userlist = this.getNodeParameter('userlist', i, '') as string;
 				const partylist = this.getNodeParameter('partylist', i, '') as string;
 
+				// userlist、partylist不能同时为空
+				if (!userlist && !partylist) {
+					throw new Error('userlist、partylist不能同时为空');
+				}
+
 				const body: IDataObject = { tagid: parseInt(tagid, 10) };
 				if (userlist) body.userlist = userlist.split(',').map((id) => id.trim());
 				if (partylist) body.partylist = partylist.split(',').map((id) => parseInt(id.trim(), 10));
@@ -296,8 +370,9 @@ export async function executeContact(
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/tag/deltagusers', body);
 			} else if (operation === 'batchSyncUser') {
 				const media_ID = this.getNodeParameter('media_ID', i) as string;
+				const to_invite = this.getNodeParameter('to_invite', i, true) as boolean;
 				const enableCallback = this.getNodeParameter('enableCallback', i, false) as boolean;
-				const body: IDataObject = { media_ID };
+				const body: IDataObject = { media_id: media_ID, to_invite };
 
 				if (enableCallback) {
 					const callback: IDataObject = {};
@@ -313,8 +388,9 @@ export async function executeContact(
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/batch/syncuser', body);
 			} else if (operation === 'batchReplaceUser') {
 				const media_ID = this.getNodeParameter('media_ID', i) as string;
+				const to_invite = this.getNodeParameter('to_invite', i, true) as boolean;
 				const enableCallback = this.getNodeParameter('enableCallback', i, false) as boolean;
-				const body: IDataObject = { media_ID };
+				const body: IDataObject = { media_id: media_ID, to_invite };
 
 				if (enableCallback) {
 					const callback: IDataObject = {};
@@ -331,7 +407,7 @@ export async function executeContact(
 			} else if (operation === 'batchReplaceDepartment') {
 				const media_ID = this.getNodeParameter('media_ID', i) as string;
 				const enableCallback = this.getNodeParameter('enableCallback', i, false) as boolean;
-				const body: IDataObject = { media_ID };
+				const body: IDataObject = { media_id: media_ID };
 
 				if (enableCallback) {
 					const callback: IDataObject = {};
@@ -349,39 +425,31 @@ export async function executeContact(
 				const jobid = this.getNodeParameter('jobid', i) as string;
 				response = await weComApiRequest.call(this, 'GET', '/cgi-bin/batch/getresult', {}, { jobid });
 			} else if (operation === 'exportSimpleUser') {
-				const body: IDataObject = {};
-
-				const encoding_aeskey = this.getNodeParameter('encoding_aeskey', i, '') as string;
-				if (encoding_aeskey) body.encoding_aeskey = encoding_aeskey;
-				const block_size = this.getNodeParameter('block_size', i, 100000) as number;
+				const encoding_aeskey = this.getNodeParameter('encoding_aeskey', i) as string;
+				const block_size = this.getNodeParameter('block_size', i, 106) as number;
+				const body: IDataObject = { encoding_aeskey };
 				if (block_size) body.block_size = block_size;
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/export/simple_user', body);
 			} else if (operation === 'exportUser') {
-				const body: IDataObject = {};
-
-				const encoding_aeskey = this.getNodeParameter('encoding_aeskey', i, '') as string;
-				if (encoding_aeskey) body.encoding_aeskey = encoding_aeskey;
-				const block_size = this.getNodeParameter('block_size', i, 100000) as number;
+				const encoding_aeskey = this.getNodeParameter('encoding_aeskey', i) as string;
+				const block_size = this.getNodeParameter('block_size', i, 106) as number;
+				const body: IDataObject = { encoding_aeskey };
 				if (block_size) body.block_size = block_size;
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/export/user', body);
 			} else if (operation === 'exportDepartment') {
-				const body: IDataObject = {};
-
-				const encoding_aeskey = this.getNodeParameter('encoding_aeskey', i, '') as string;
-				if (encoding_aeskey) body.encoding_aeskey = encoding_aeskey;
-				const block_size = this.getNodeParameter('block_size', i, 100000) as number;
+				const encoding_aeskey = this.getNodeParameter('encoding_aeskey', i) as string;
+				const block_size = this.getNodeParameter('block_size', i, 106) as number;
+				const body: IDataObject = { encoding_aeskey };
 				if (block_size) body.block_size = block_size;
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/export/department', body);
 			} else if (operation === 'exportTagUser') {
 				const tagid = this.getNodeParameter('tagid', i) as string;
-				const body: IDataObject = { tagid: parseInt(tagid, 10) };
-
-				const encoding_aeskey = this.getNodeParameter('encoding_aeskey', i, '') as string;
-				if (encoding_aeskey) body.encoding_aeskey = encoding_aeskey;
-				const block_size = this.getNodeParameter('block_size', i, 100000) as number;
+				const encoding_aeskey = this.getNodeParameter('encoding_aeskey', i) as string;
+				const block_size = this.getNodeParameter('block_size', i, 106) as number;
+				const body: IDataObject = { tagid: parseInt(tagid, 10), encoding_aeskey };
 				if (block_size) body.block_size = block_size;
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/export/taguser', body);

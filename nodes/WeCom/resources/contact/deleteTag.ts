@@ -15,9 +15,9 @@ export const deleteTagDescription: INodeProperties[] = [
 			show: showOnlyForDeleteTag,
 		},
 		default: '',
-		placeholder: '100',
-		description: '标签 ID。<a href="https://developer.work.weixin.qq.com/document/path/90212" target="_blank">官方文档</a>',
-		hint: '要删除的标签 ID',
+		placeholder: '12',
+		description: '标签ID。调用的应用必须是指定标签的创建者。<a href="https://developer.work.weixin.qq.com/document/path/90212" target="_blank">官方文档</a>',
+		hint: '要删除的标签 ID，删除后不可恢复',
 	},
 ];
 

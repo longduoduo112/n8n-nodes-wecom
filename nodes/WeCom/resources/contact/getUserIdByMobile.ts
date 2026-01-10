@@ -15,8 +15,9 @@ export const getUserIdByMobileDescription: INodeProperties[] = [
 			show: showOnlyForGetByMobile,
 		},
 		default: '',
-		description: '手机号码。长度为5~32个字节。',
-		hint: '手机号码',
+		placeholder: '13430388888',
+		description: '用户在企业微信通讯录中的手机号码。长度为5~32个字节。请确保手机号的正确性，若出错的次数超出企业人数上限的20%，会导致1天不可调用。注意：第三方应用获取的值是密文的userid。<a href="https://developer.work.weixin.qq.com/document/path/95402" target="_blank">官方文档</a>',
+		hint: '企业微信通讯录中的手机号码，长度为5~32个字节',
 	},
 ];
 

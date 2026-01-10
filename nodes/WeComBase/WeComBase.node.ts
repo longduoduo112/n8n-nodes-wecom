@@ -150,7 +150,7 @@ export class WeComBase implements INodeType {
 				 
 				options: [
 					{
-						name: '通讯录',
+						name: '通讯录管理',
 						value: 'contact',
 						description: '管理企业通讯录（成员、部门、标签）',
 					},

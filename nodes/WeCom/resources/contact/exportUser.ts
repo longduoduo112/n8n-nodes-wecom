@@ -7,26 +7,32 @@ const showOnlyForExport = {
 
 export const exportUserDescription: INodeProperties[] = [
 	{
-		displayName: '编码类型',
+		displayName: '加密密钥',
 		name: 'encoding_aeskey',
 		type: 'string',
+		required: true,
 		displayOptions: {
 			show: showOnlyForExport,
 		},
 		default: '',
-		description: 'Base64encode的加密密钥，长度固定为43字节，使用加密需要填写此字段。',
-		hint: '加密密钥',
+		placeholder: 'IJUiXNpvGbODwKEBSEsAeOAPAhkqHqNCF6g19t9wfg2',
+		description: 'Base64编码后的加密密钥。长度固定为43，从a-z, A-Z, 0-9共62个字符中选取，是AESKey的Base64编码。解码后即为32字节长的AESKey。加密方式采用AES-256-CBC方式，数据采用PKCS#7填充至32字节的倍数；IV初始向量大小为16字节，取AESKey前16字节。从2022年8月15日10点开始，"企业管理后台 - 管理工具 - 通讯录同步"的新增IP将不能再调用此接口，企业可通过「获取成员ID列表」和「获取部门ID列表」接口获取userid和部门ID列表。<a href="https://developer.work.weixin.qq.com/document/path/94851" target="_blank">官方文档</a>',
+		hint: 'Base64编码的AES密钥，长度固定为43',
 	},
 	{
-		displayName: '每块数据人员数',
+		displayName: '每块数据的人员数',
 		name: 'block_size',
 		type: 'number',
 		displayOptions: {
 			show: showOnlyForExport,
 		},
-		default: 100000,
-		description: '每块数据的人员数，支持范围[104,106]，默认值为100000。',
-		hint: '每块数据人员数',
+		default: 106,
+		typeOptions: {
+			minValue: 104,
+			maxValue: 106,
+		},
+		description: '可选。每块数据的人员数，支持范围[104,106]，默认值为106。<a href="https://developer.work.weixin.qq.com/document/path/94851" target="_blank">官方文档</a>',
+		hint: '每块数据人员数，范围104-106，默认106',
 	},
 ];
 

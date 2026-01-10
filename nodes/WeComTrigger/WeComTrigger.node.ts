@@ -111,11 +111,21 @@ export class WeComTrigger implements INodeType {
 						value: 'unlicensed_notify',
 						description: '接收接口许可失效通知事件（当许可账号失效的企业成员访问应用时触发）',
 					},
+					{
+						name: '异步任务完成通知',
+						value: 'batch_job_result',
+						description: '接收异步任务完成通知事件，包括导出任务（导出成员、导出成员详情、导出部门、导出标签成员）和批量操作任务（增量更新成员、全量覆盖成员、邀请成员关注、全量覆盖部门）。当异步任务执行完毕时会触发此事件',
+					},
+					{
+						name: '通讯录变更通知',
+						value: 'change_contact',
+						description: '接收通讯录变更通知事件，包括成员变更（新增成员、更新成员、删除成员）、部门变更（新增部门、更新部门、删除部门）和标签变更（标签成员变更）。该事件会回调给通讯录同步助手、代开发自建应用以及上游企业共享的应用。对于2022年8月15号后通讯录助手新配置或修改的回调URL，成员属性只回调UserID/Department等有限字段，部门属性只回调ID/ParentId等有限字段。标签成员变更事件与成员变更事件的时序不保证先后',
+					},
 				],
 				default: ['*'],
 				required: true,
 				description: '选择要接收的消息和事件类型',
-				hint: '可以选择多个类型，如果选择"所有事件"则接收所有消息。接口许可失效通知事件类型为 unlicensed_notify',
+				hint: '可以选择多个类型，如果选择"所有事件"则接收所有消息。接口许可失效通知事件类型为 unlicensed_notify，异步任务完成通知事件类型为 batch_job_result（包含导出任务和批量操作任务），通讯录变更通知事件类型为 change_contact（包含成员变更：新增/更新/删除成员，部门变更：新增/更新/删除部门，标签变更：标签成员变更）',
 			},
 			{
 				displayName: '返回原始数据',
