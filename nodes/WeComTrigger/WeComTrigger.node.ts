@@ -125,15 +125,15 @@ export class WeComTrigger implements INodeType {
 				default: ['*'],
 				required: true,
 				description: '选择要接收的消息和事件类型',
-				hint: '可以选择多个类型，如果选择"所有事件"则接收所有消息。接口许可失效通知事件类型为 unlicensed_notify，异步任务完成通知事件类型为 batch_job_result（包含导出任务和批量操作任务），通讯录变更通知事件类型为 change_contact（包含成员变更：新增/更新/删除成员，部门变更：新增/更新/删除部门，标签变更：标签成员变更）',
+				hint: '可以选择多个类型，如果选择"所有事件"则接收所有消息。\n\n消息格式说明：\n- 文本消息：Content（文本内容）\n- 图片消息：PicUrl（图片链接）、MediaId（媒体文件ID）\n- 语音消息：MediaId（媒体文件ID）、Format（语音格式）\n- 视频消息：MediaId（视频媒体ID）、ThumbMediaId（缩略图媒体ID）\n- 位置消息：Location_X（纬度）、Location_Y（经度）、Scale（缩放）、Label（位置信息）、AppType（app类型）\n- 链接消息：Title（标题）、Description（描述）、Url（链接）、PicUrl（封面图）\n\n所有消息都包含：ToUserName（企业微信CorpID）、FromUserName（成员UserID）、CreateTime（创建时间）、MsgType（消息类型）、MsgId（消息ID）、AgentID（应用ID）\n\n事件格式说明（MsgType=event）：\n- 成员关注/取消关注：Event=subscribe/unsubscribe\n- 进入应用：Event=enter_agent\n- 上报地理位置：Event=LOCATION，包含Latitude（纬度）、Longitude（经度）、Precision（精度）、AppType（app类型）\n- 异步任务完成：Event=batch_job_result，包含JobId（任务ID）、JobType（操作类型）、ErrCode（返回码）、ErrMsg（错误信息）\n- 通讯录变更：Event=change_contact，ChangeType包含create_user/update_user/delete_user（成员变更）、create_party/update_party/delete_party（部门变更）、update_tag（标签变更）\n- 菜单点击：Event=click/view/view_miniprogram，包含EventKey（事件KEY值）\n- 扫码推事件：Event=scancode_push/scancode_waitmsg，包含EventKey、ScanCodeInfo（扫描信息）\n- 发图事件：Event=pic_sysphoto/pic_photo_or_album/pic_weixin，包含EventKey、SendPicsInfo（图片信息）\n- 地理位置选择：Event=location_select，包含EventKey、SendLocationInfo（位置信息）\n- 审批状态通知：Event=open_approval_change，包含ApprovalInfo（审批信息）\n- 企业互联共享应用：Event=share_agent_change\n- 上下游共享应用：Event=share_chain_change\n- 模板卡片事件：Event=template_card_event/template_card_menu_event，包含EventKey、TaskId、CardType、ResponseCode、SelectedItems（选中项）\n- 长期未使用应用事件：Event=inactive_alert/close_inactive_agent/reopen_inactive_agent，可能包含EffectTime（生效时间）\n- 应用低活跃事件：Event=low_active_alert/low_active/active_restored，可能包含EffectTime（生效时间）\n\n所有事件都包含：ToUserName（企业微信CorpID）、FromUserName（成员UserID或sys）、CreateTime（创建时间）、MsgType（固定为event）、Event（事件类型）、AgentID（应用ID）\n\n接口许可失效通知事件类型为 unlicensed_notify，异步任务完成通知事件类型为 batch_job_result（包含导出任务和批量操作任务），通讯录变更通知事件类型为 change_contact（包含成员变更：新增/更新/删除成员，部门变更：新增/更新/删除部门，标签变更：标签成员变更）',
 			},
 			{
 				displayName: '返回原始数据',
 				name: 'returnRawData',
 				type: 'boolean',
 				default: false,
-				description: 'Whether to return unparsed raw XML data',
-				hint: '开启后会在输出中包含原始的 XML 字符串',
+				description: '是否返回未解析的原始XML数据',
+				hint: '开启后会在输出中包含原始的 XML 字符串（解密后的XML）',
 			},
 		],
 	};

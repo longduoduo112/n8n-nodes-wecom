@@ -18,7 +18,7 @@ export const sendNewsDescription: INodeProperties[] = [
 		required: true,
 		description:
 			'群聊的唯一标识。<a href="https://developer.work.weixin.qq.com/document/path/90248" target="_blank">官方文档</a>',
-		hint: '群聊会话的 chatid',
+		hint: '必填。群聊的唯一标识，必须是该应用所创建的群',
 	},
 	{
 		displayName: '图文列表',
@@ -48,7 +48,7 @@ export const sendNewsDescription: INodeProperties[] = [
 						required: true,
 						description:
 							'图文消息的标题。<a href="https://developer.work.weixin.qq.com/document/path/90248" target="_blank">官方文档</a>',
-						hint: '不超过128个字节',
+						hint: '必填。标题，不超过128个字节，超过会自动截断',
 					},
 					{
 						displayName: '描述',
@@ -61,7 +61,7 @@ export const sendNewsDescription: INodeProperties[] = [
 						placeholder: '图文描述',
 						description:
 							'可选。图文消息的描述。<a href="https://developer.work.weixin.qq.com/document/path/90248" target="_blank">官方文档</a>',
-						hint: '不超过512个字节',
+						hint: '可选。描述，不超过512个字节，超过会自动截断',
 					},
 					{
 						displayName: '跳转链接',
@@ -72,7 +72,7 @@ export const sendNewsDescription: INodeProperties[] = [
 						required: true,
 						description:
 							'点击后跳转的链接。<a href="https://developer.work.weixin.qq.com/document/path/90248" target="_blank">官方文档</a>',
-						hint: '必须是http或https开头',
+						hint: '必填。点击后跳转的链接',
 					},
 					{
 						displayName: '图片链接',
@@ -82,7 +82,7 @@ export const sendNewsDescription: INodeProperties[] = [
 						placeholder: 'https://example.com/image.jpg',
 						description:
 							'可选。图文消息的图片链接。<a href="https://developer.work.weixin.qq.com/document/path/90248" target="_blank">官方文档</a>',
-						hint: '支持JPG、PNG格式，较好的效果为大图1068*455，小图150*150',
+						hint: '可选。图文消息的图片链接，支持JPG、PNG格式，较好的效果为大图1068*455，小图150*150',
 					},
 				],
 			},
@@ -97,6 +97,7 @@ export const sendNewsDescription: INodeProperties[] = [
 		},
 		default: false,
 		description:
-			'表示是否是保密消息，0表示否，1表示是，默认0。<a href="https://developer.work.weixin.qq.com/document/path/90248" target="_blank">官方文档</a>',
+			'可选。表示是否是保密消息，0表示否，1表示是，默认0。<a href="https://developer.work.weixin.qq.com/document/path/90248" target="_blank">官方文档</a>',
+		hint: '可选。表示是否是保密消息，0表示否，1表示是，默认0',
 	},
 ];

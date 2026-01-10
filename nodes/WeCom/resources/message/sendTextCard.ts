@@ -18,8 +18,9 @@ export const sendTextCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnlySendTextCard,
 		},
+		hint: '不超过128个字符，超过会自动截断（支持ID转译）',
 		description:
-			'标题，不超过128个字节，超过会自动截断。<a href="https://developer.work.weixin.qq.com/document/path/90236#文本卡片消息" target="_blank">官方文档</a>',
+			'标题，不超过128个字符，超过会自动截断（支持ID转译）。<a href="https://developer.work.weixin.qq.com/document/path/90236#文本卡片消息" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '卡片描述',
@@ -34,8 +35,9 @@ export const sendTextCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnlySendTextCard,
 		},
+		hint: '不超过512个字符，支持br标签或空格换行，支持div标签设置字体颜色（gray/highlight/normal）',
 		description:
-			'描述，不超过512个字节，超过会自动截断。<a href="https://developer.work.weixin.qq.com/document/path/90236#文本卡片消息" target="_blank">官方文档</a>',
+			'描述，不超过512个字符，超过会自动截断（支持ID转译）。支持使用br标签或者空格来进行换行处理，也支持使用div标签来使用不同的字体颜色。<a href="https://developer.work.weixin.qq.com/document/path/90236#文本卡片消息" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '跳转链接',
@@ -47,6 +49,7 @@ export const sendTextCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnlySendTextCard,
 		},
+		hint: '最长2048字节，请确保包含了协议头(http/https)',
 		description:
 			'点击后跳转的链接。最长2048字节，请确保包含了协议头(http/https)。<a href="https://developer.work.weixin.qq.com/document/path/90236#文本卡片消息" target="_blank">官方文档</a>',
 	},
@@ -59,6 +62,7 @@ export const sendTextCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnlySendTextCard,
 		},
+		hint: '默认为"详情"，不超过4个文字',
 		description:
 			'可选。按钮文字。默认为"详情"，不超过4个文字，超过自动截断。<a href="https://developer.work.weixin.qq.com/document/path/90236#文本卡片消息" target="_blank">官方文档</a>',
 	},
@@ -85,7 +89,7 @@ export const sendTextCardDescription: INodeProperties[] = [
 		description: '可选。表示是否开启重复消息检查，0表示否，1表示是，默认0。开启后相同内容的消息在时间间隔内不会重复发送。<a href="https://developer.work.weixin.qq.com/document/path/90236#文本卡片消息" target="_blank">官方文档</a>',
 	},
 	{
-		displayName: '重复消息检查时间',
+		displayName: '重复消息检查时间间隔',
 		name: 'duplicate_check_interval',
 		type: 'number',
 		default: 1800,
@@ -95,8 +99,13 @@ export const sendTextCardDescription: INodeProperties[] = [
 				enable_duplicate_check: [true],
 			},
 		},
+		typeOptions: {
+			minValue: 0,
+			maxValue: 14400,
+		},
+		hint: '默认1800秒，最大不超过4小时（14400秒）',
 		description:
-			'可选。表示是否重复消息检查的时间间隔，默认1800s，最大不超过4小时。<a href="https://developer.work.weixin.qq.com/document/path/90236#文本卡片消息" target="_blank">官方文档</a>',
+			'可选。表示是否重复消息检查的时间间隔，默认1800秒，最大不超过4小时。<a href="https://developer.work.weixin.qq.com/document/path/90236#文本卡片消息" target="_blank">官方文档</a>',
 	},
 ];
 

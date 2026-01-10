@@ -18,6 +18,6 @@ export const getAppChatDescription: INodeProperties[] = [
 		required: true,
 		description:
 			'群聊的唯一标识。<a href="https://developer.work.weixin.qq.com/document/path/90227" target="_blank">官方文档</a>',
-		hint: '群聊会话的 chatid',
+		hint: '必填。群聊的唯一标识，必须是该应用所创建的群',
 	},
 ];

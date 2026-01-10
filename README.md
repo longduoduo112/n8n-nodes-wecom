@@ -188,12 +188,12 @@ npm install n8n-nodes-wecom
 **接收消息功能：**
 
 - ✅ [接收企业微信应用消息回调](https://developer.work.weixin.qq.com/document/path/90238)
-- ✅ [接收文本消息](https://developer.work.weixin.qq.com/document/path/90239)
-- ✅ [接收图片消息](https://developer.work.weixin.qq.com/document/path/90239)
-- ✅ [接收语音消息](https://developer.work.weixin.qq.com/document/path/90239)
-- ✅ [接收视频消息](https://developer.work.weixin.qq.com/document/path/90239)
-- ✅ [接收位置消息](https://developer.work.weixin.qq.com/document/path/90239)
-- ✅ [接收链接消息](https://developer.work.weixin.qq.com/document/path/90239)
+- ✅ [接收文本消息](https://developer.work.weixin.qq.com/document/path/90239)（包含 Content 字段）
+- ✅ [接收图片消息](https://developer.work.weixin.qq.com/document/path/90239)（包含 PicUrl、MediaId 字段）
+- ✅ [接收语音消息](https://developer.work.weixin.qq.com/document/path/90239)（包含 MediaId、Format 字段）
+- ✅ [接收视频消息](https://developer.work.weixin.qq.com/document/path/90239)（包含 MediaId、ThumbMediaId 字段）
+- ✅ [接收位置消息](https://developer.work.weixin.qq.com/document/path/90239)（包含 Location_X、Location_Y、Scale、Label、AppType 字段）
+- ✅ [接收链接消息](https://developer.work.weixin.qq.com/document/path/90239)（包含 Title、Description、Url、PicUrl 字段）
 - ✅ [接收事件推送](https://developer.work.weixin.qq.com/document/path/90240)（成员变更、部门变更等）
 - ✅ [接口许可失效通知](https://developer.work.weixin.qq.com/document/path/90600)（当许可账号失效的企业成员访问应用时触发）
 - ✅ URL 验证
@@ -211,6 +211,7 @@ npm install n8n-nodes-wecom
 - ✅ [被动回复语音消息](https://developer.work.weixin.qq.com/document/path/90241)
 - ✅ [被动回复视频消息](https://developer.work.weixin.qq.com/document/path/90241)
 - ✅ [被动回复图文消息](https://developer.work.weixin.qq.com/document/path/90241)
+- ✅ [被动回复模板卡片更新消息](https://developer.work.weixin.qq.com/document/path/90241)
 - ✅ 自动加密和签名
 - ✅ 支持从工作流输出中读取回复内容
 

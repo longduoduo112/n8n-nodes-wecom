@@ -116,15 +116,15 @@ export class WeComPassiveTrigger implements INodeType {
 				default: ['*'],
 				required: true,
 				description: '选择要接收的消息类型',
-				hint: '支持被动回复的事件：成员关注、进入应用、上报地理位置、菜单点击、扫码推事件、模板卡片菜单事件',
+				hint: '支持被动回复的事件：成员关注、进入应用、上报地理位置、菜单点击、扫码推事件、模板卡片菜单事件\n\n消息格式说明：\n- 文本消息：Content（文本内容）\n- 图片消息：PicUrl（图片链接）、MediaId（媒体文件ID）\n- 语音消息：MediaId（媒体文件ID）、Format（语音格式）\n- 视频消息：MediaId（视频媒体ID）、ThumbMediaId（缩略图媒体ID）\n- 位置消息：Location_X（纬度）、Location_Y（经度）、Scale（缩放）、Label（位置信息）、AppType（app类型）\n- 链接消息：Title（标题）、Description（描述）、Url（链接）、PicUrl（封面图）\n\n所有消息都包含：ToUserName（企业微信CorpID）、FromUserName（成员UserID）、CreateTime（创建时间）、MsgType（消息类型）、MsgId（消息ID）、AgentID（应用ID）\n\n事件格式说明（MsgType=event，支持被动回复）：\n- 成员关注/取消关注：Event=subscribe/unsubscribe\n- 进入应用：Event=enter_agent\n- 上报地理位置：Event=LOCATION，包含Latitude（纬度）、Longitude（经度）、Precision（精度）、AppType（app类型）\n- 菜单点击：Event=click/view/view_miniprogram，包含EventKey（事件KEY值）\n- 扫码推事件：Event=scancode_push/scancode_waitmsg，包含EventKey、ScanCodeInfo（扫描信息）\n- 发图事件：Event=pic_sysphoto/pic_photo_or_album/pic_weixin，包含EventKey、SendPicsInfo（图片信息）\n- 地理位置选择：Event=location_select，包含EventKey、SendLocationInfo（位置信息）\n- 模板卡片事件：Event=template_card_event/template_card_menu_event，包含EventKey、TaskId、CardType、ResponseCode、SelectedItems（选中项）\n\n所有事件都包含：ToUserName（企业微信CorpID）、FromUserName（成员UserID）、CreateTime（创建时间）、MsgType（固定为event）、Event（事件类型）、AgentID（应用ID）',
 			},
 			{
 				displayName: '返回原始数据',
 				name: 'returnRawData',
 				type: 'boolean',
 				default: false,
-				description: 'Whether to return unparsed raw XML data',
-				hint: '开启后会在输出中包含原始的 XML 字符串',
+				description: '是否返回未解析的原始XML数据',
+				hint: '开启后会在输出中包含原始的 XML 字符串（解密后的XML）',
 			},
 		],
 	};

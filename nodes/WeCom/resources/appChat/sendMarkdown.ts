@@ -18,7 +18,7 @@ export const sendMarkdownDescription: INodeProperties[] = [
 		required: true,
 		description:
 			'群聊的唯一标识。<a href="https://developer.work.weixin.qq.com/document/path/90248" target="_blank">官方文档</a>',
-		hint: '群聊会话的 chatid',
+		hint: '必填。群聊的唯一标识，必须是该应用所创建的群',
 	},
 	{
 		displayName: '消息内容',
@@ -35,6 +35,6 @@ export const sendMarkdownDescription: INodeProperties[] = [
 		required: true,
 		description:
 			'Markdown 格式的消息内容。<a href="https://developer.work.weixin.qq.com/document/path/90248" target="_blank">官方文档</a>',
-		hint: '支持 markdown 语法，最长不超过2048个字节',
+		hint: '必填。markdown内容，最长不超过2048个字节，必须是utf8编码。目前仅支持markdown语法的子集',
 	},
 ];

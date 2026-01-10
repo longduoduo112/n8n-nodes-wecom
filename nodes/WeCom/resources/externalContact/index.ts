@@ -77,6 +77,15 @@ import { deleteCustomerAcquisitionLinkDescription } from './deleteCustomerAcquis
 import { getCustomerAcquisitionCustomerDescription } from './getCustomerAcquisitionCustomer';
 import { getCustomerAcquisitionChatInfoDescription } from './getCustomerAcquisitionChatInfo';
 import { getServedExternalContactDescription } from './getServedExternalContact';
+import { sendSchoolMessageCommonDescription } from './sendSchoolMessageCommon';
+import { sendSchoolMessageTextDescription } from './sendSchoolMessageText';
+import { sendSchoolMessageImageDescription } from './sendSchoolMessageImage';
+import { sendSchoolMessageVoiceDescription } from './sendSchoolMessageVoice';
+import { sendSchoolMessageVideoDescription } from './sendSchoolMessageVideo';
+import { sendSchoolMessageFileDescription } from './sendSchoolMessageFile';
+import { sendSchoolMessageNewsDescription } from './sendSchoolMessageNews';
+import { sendSchoolMessageMpNewsDescription } from './sendSchoolMessageMpNews';
+import { sendSchoolMessageMiniprogramDescription } from './sendSchoolMessageMiniprogram';
 
 const showOnlyForExternalContact = {
 	resource: ['externalContact'],
@@ -409,6 +418,12 @@ export const externalContactDescription: INodeProperties[] = [
 				description: '发送新客户欢迎语消息',
 			},
 			{
+				name: '发送学校通知',
+				value: 'sendSchoolMessage',
+				action: '发送学校通知',
+				description: '发送学校通知给家长或学生（家校应用）',
+			},
+			{
 				name: '添加入群欢迎语素材',
 				value: 'addGroupWelcomeTemplate',
 				action: '添加入群欢迎语素材',
@@ -653,5 +668,14 @@ export const externalContactDescription: INodeProperties[] = [
 	...getCustomerAcquisitionCustomerDescription,
 	...getCustomerAcquisitionChatInfoDescription,
 	...getServedExternalContactDescription,
+	...sendSchoolMessageCommonDescription,
+	...sendSchoolMessageTextDescription,
+	...sendSchoolMessageImageDescription,
+	...sendSchoolMessageVoiceDescription,
+	...sendSchoolMessageVideoDescription,
+	...sendSchoolMessageFileDescription,
+	...sendSchoolMessageNewsDescription,
+	...sendSchoolMessageMpNewsDescription,
+	...sendSchoolMessageMiniprogramDescription,
 ];
 

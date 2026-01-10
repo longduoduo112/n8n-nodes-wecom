@@ -75,7 +75,33 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 						type: 'string',
 						default: '',
 						placeholder: '企业微信',
-						description: '来源的描述文字',
+						hint: '建议不超过20个字（支持ID转译）',
+						description: '来源的描述文字，建议不超过20个字（支持ID转译）',
+					},
+					{
+						displayName: '来源文字颜色',
+						name: 'desc_color',
+						type: 'options',
+						options: [
+							{
+								name: '灰色（默认）',
+								value: 0,
+							},
+							{
+								name: '黑色',
+								value: 1,
+							},
+							{
+								name: '红色',
+								value: 2,
+							},
+							{
+								name: '绿色',
+								value: 3,
+							},
+						],
+						default: 0,
+						description: '来源文字的颜色',
 					},
 				],
 			},
@@ -172,24 +198,62 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 						type: 'options',
 						options: [
 							{
-								name: '边框类型',
+								name: '无点击事件',
+								value: 0,
+							},
+							{
+								name: '跳转URL',
 								value: 1,
 							},
 							{
-								name: '卡片类型',
+								name: '跳转小程序',
 								value: 2,
 							},
 						],
-						default: 1,
-						description: '引用文献的样式类型',
+						default: 0,
+						hint: '0或不填代表没有点击事件，1代表跳转url，2代表跳转小程序',
+						description: '引用文献样式区域点击事件，0或不填代表没有点击事件，1代表跳转URL，2代表跳转小程序',
 					},
 					{
-						displayName: '引用链接',
+						displayName: '小程序Appid',
+						name: 'appid',
+						type: 'string',
+						default: '',
+						placeholder: 'wx1234567890abcdef',
+						displayOptions: {
+							show: {
+								type: [2],
+							},
+						},
+						hint: '必须是与当前应用关联的小程序',
+						description: '点击跳转的小程序的appid，必须是与当前应用关联的小程序，quote_area.type是2时必填',
+					},
+					{
+						displayName: '小程序Page路径',
+						name: 'pagepath',
+						type: 'string',
+						default: '',
+						placeholder: 'pages/index',
+						displayOptions: {
+							show: {
+								type: [2],
+							},
+						},
+						description: '点击跳转的小程序的pagepath，quote_area.type是2时选填',
+					},
+					{
+						displayName: '跳转链接',
 						name: 'url',
 						type: 'string',
 						default: '',
 						placeholder: 'https://example.com',
-						description: '点击引用后跳转的链接',
+						displayOptions: {
+							show: {
+								type: [1],
+							},
+						},
+						hint: 'quote_area.type是1时必填',
+						description: '点击跳转的URL，quote_area.type是1时必填',
 					},
 					{
 						displayName: '引用标题',
@@ -251,7 +315,9 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 						type: 'string',
 						default: '',
 						placeholder: '姓名',
-						description: '列表项的标题',
+						required: true,
+						hint: '建议不超过5个字',
+						description: '二级标题，建议不超过5个字',
 					},
 					{
 						displayName: '内容',
@@ -259,24 +325,34 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 						type: 'string',
 						default: '',
 						placeholder: '张三',
-						description: '列表项的内容',
+						hint: '如果type是2，该字段代表文件名称（要包含文件类型），建议不超过30个字（支持ID转译）',
+						description: '二级文本，如果horizontal_content_list.type是2，该字段代表文件名称（要包含文件类型），建议不超过30个字（支持ID转译）',
 					},
 					{
-						displayName: '内容类型',
+						displayName: '链接类型',
 						name: 'type',
 						type: 'options',
 						options: [
 							{
-								name: '普通文本',
+								name: '不是链接',
 								value: 0,
 							},
 							{
-								name: '带跳转链接',
+								name: '跳转URL',
 								value: 1,
+							},
+							{
+								name: '下载附件',
+								value: 2,
+							},
+							{
+								name: '点击跳转成员详情',
+								value: 3,
 							},
 						],
 						default: 0,
-						description: '内容的类型',
+						hint: '0或不填代表不是链接，1代表跳转url，2代表下载附件，3代表点击跳转成员详情（仅企业微信3.1.18及以上版本支持）',
+						description: '链接类型，0或不填代表不是链接，1代表跳转URL，2代表下载附件，3代表点击跳转成员详情',
 					},
 					{
 						displayName: '跳转链接',
@@ -284,10 +360,39 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 						type: 'string',
 						default: '',
 						placeholder: 'https://example.com',
-						description: '点击内容后跳转的链接（仅当类型为带跳转链接时有效）',
+						hint: 'horizontal_content_list.type是1时必填',
+						description: '链接跳转的URL，horizontal_content_list.type是1时必填',
 						displayOptions: {
 							show: {
 								type: [1],
+							},
+						},
+					},
+					{
+						displayName: '附件Media ID',
+						name: 'media_id',
+						type: 'string',
+						default: '',
+						placeholder: 'MEDIA_ID',
+						hint: 'horizontal_content_list.type是2时必填',
+						description: '附件的media_id，horizontal_content_list.type是2时必填',
+						displayOptions: {
+							show: {
+								type: [2],
+							},
+						},
+					},
+					{
+						displayName: '成员Userid',
+						name: 'userid',
+						type: 'string',
+						default: '',
+						placeholder: 'zhangsan',
+						hint: 'horizontal_content_list.type是3时必填',
+						description: '成员详情的userid，horizontal_content_list.type是3时必填',
+						displayOptions: {
+							show: {
+								type: [3],
 							},
 						},
 					},
@@ -314,10 +419,14 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 				displayName: '跳转指引',
 				values: [
 					{
-						displayName: '跳转类型',
+						displayName: '跳转链接类型',
 						name: 'type',
 						type: 'options',
 						options: [
+							{
+								name: '不是链接',
+								value: 0,
+							},
 							{
 								name: '跳转URL',
 								value: 1,
@@ -327,16 +436,19 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 								value: 2,
 							},
 						],
-						default: 1,
-						description: '跳转目标的类型',
+						default: 0,
+						hint: '0或不填代表不是链接，1代表跳转url，2代表跳转小程序',
+						description: '跳转链接类型，0或不填代表不是链接，1代表跳转URL，2代表跳转小程序',
 					},
 					{
 						displayName: '标题',
 						name: 'title',
 						type: 'string',
+						required: true,
 						default: '',
 						placeholder: '查看详情',
-						description: '跳转指引的标题',
+						hint: '建议不超过18个字',
+						description: '跳转链接样式的文案内容，建议不超过18个字',
 					},
 					{
 						displayName: '跳转链接',
@@ -344,7 +456,41 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 						type: 'string',
 						default: '',
 						placeholder: 'https://example.com',
-						description: '跳转的URL地址',
+						hint: 'jump_list.type是1时必填',
+						description: '跳转链接的URL，jump_list.type是1时必填',
+						displayOptions: {
+							show: {
+								type: [1],
+							},
+						},
+					},
+					{
+						displayName: '小程序Appid',
+						name: 'appid',
+						type: 'string',
+						default: '',
+						placeholder: 'wx1234567890abcdef',
+						hint: '必须是与当前应用关联的小程序，jump_list.type是2时必填',
+						description: '跳转链接的小程序的appid，必须是与当前应用关联的小程序，jump_list.type是2时必填',
+						displayOptions: {
+							show: {
+								type: [2],
+							},
+						},
+					},
+					{
+						displayName: '小程序Page路径',
+						name: 'pagepath',
+						type: 'string',
+						default: '',
+						placeholder: 'pages/index',
+						hint: 'jump_list.type是2时选填',
+						description: '跳转链接的小程序的pagepath，jump_list.type是2时选填',
+						displayOptions: {
+							show: {
+								type: [2],
+							},
+						},
 					},
 				],
 			},
@@ -366,21 +512,26 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 				displayName: '跳转设置',
 				values: [
 					{
-						displayName: '跳转类型',
+						displayName: '跳转事件类型',
 						name: 'type',
 						type: 'options',
 						options: [
+							{
+								name: '不是链接',
+								value: 0,
+							},
 							{
 								name: '跳转URL',
 								value: 1,
 							},
 							{
-								name: '跳转小程序',
+								name: '打开小程序',
 								value: 2,
 							},
 						],
 						default: 1,
-						description: '点击卡片后的跳转类型',
+						hint: 'text_notice必填本字段，取值范围为[1,2]；news_notice必填本字段，取值范围为[1,2]；button_interaction可选，取值范围为[0,1,2]',
+						description: '跳转事件类型，1代表跳转URL，2代表打开小程序。text_notice必填本字段，取值范围为[1,2]；news_notice必填本字段，取值范围为[1,2]；button_interaction可选，取值范围为[0,1,2]',
 					},
 					{
 						displayName: '跳转链接',
@@ -388,7 +539,41 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 						type: 'string',
 						default: '',
 						placeholder: 'https://example.com',
-						description: '跳转的URL地址',
+						hint: 'card_action.type是1时必填',
+						description: '跳转事件的URL，card_action.type是1时必填',
+						displayOptions: {
+							show: {
+								type: [1],
+							},
+						},
+					},
+					{
+						displayName: '小程序Appid',
+						name: 'appid',
+						type: 'string',
+						default: '',
+						placeholder: 'wx1234567890abcdef',
+						hint: '必须是与当前应用关联的小程序，card_action.type是2时必填',
+						description: '跳转事件的小程序的appid，必须是与当前应用关联的小程序，card_action.type是2时必填',
+						displayOptions: {
+							show: {
+								type: [2],
+							},
+						},
+					},
+					{
+						displayName: '小程序Page路径',
+						name: 'pagepath',
+						type: 'string',
+						default: '',
+						placeholder: 'pages/index',
+						hint: 'card_action.type是2时选填',
+						description: '跳转事件的小程序的pagepath，card_action.type是2时选填',
+						displayOptions: {
+							show: {
+								type: [2],
+							},
+						},
 					},
 				],
 			},
@@ -408,6 +593,96 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 			'可选。任务 ID，同一个应用任务 ID 不能重复，只能由数字、字母和"_-@"组成，最长128字节。<a href="https://developer.work.weixin.qq.com/document/path/90236#模板卡片消息" target="_blank">官方文档</a>',
 	},
 	{
+		displayName: '下拉式选择器',
+		name: 'button_selection',
+		type: 'fixedCollection',
+		default: {},
+		placeholder: '添加选择器',
+		displayOptions: {
+			show: {
+				...showOnlySendTemplateCard,
+				card_type: ['button_interaction'],
+			},
+		},
+		description: '可选。下拉式的选择器',
+		options: [
+			{
+				name: 'selectionInfo',
+				displayName: '选择器信息',
+				values: [
+					{
+						displayName: '选择器Key',
+						name: 'question_key',
+						type: 'string',
+						required: true,
+						default: '',
+						placeholder: 'btn_question_key1',
+						hint: '最长支持1024字节',
+						description: '下拉式的选择器的key，用户提交选项后，会产生回调事件，回调事件会带上该key值表示该题，最长支持1024字节',
+					},
+					{
+						displayName: '选择器标题',
+						name: 'title',
+						type: 'string',
+						default: '',
+						placeholder: '企业微信评分',
+						description: '下拉式的选择器左边的标题',
+					},
+					{
+						displayName: '默认选定ID',
+						name: 'selected_id',
+						type: 'string',
+						default: '',
+						placeholder: 'btn_selection_id1',
+						hint: '不填或错填默认第一个',
+						description: '默认选定的ID，不填或错填默认第一个',
+					},
+					{
+						displayName: '选项列表',
+						name: 'option_list',
+						type: 'fixedCollection',
+						typeOptions: {
+							multipleValues: true,
+						},
+						default: {},
+						placeholder: '添加选项',
+						required: true,
+						hint: '下拉选项不超过10个，最少1个',
+						description: '选项列表，下拉选项不超过10个，最少1个',
+						options: [
+							{
+								name: 'options',
+								displayName: '选项',
+								values: [
+									{
+										displayName: '选项ID',
+										name: 'id',
+										type: 'string',
+										required: true,
+										default: '',
+										placeholder: 'btn_selection_id1',
+										hint: '最长支持128字节，不可重复',
+										description: '下拉式的选择器选项的ID，用户提交选项后，会产生回调事件，回调事件会带上该ID值表示该选项，最长支持128字节，不可重复',
+									},
+									{
+										displayName: '选项文案',
+										name: 'text',
+										type: 'string',
+										required: true,
+										default: '',
+										placeholder: '100分',
+										hint: '建议不超过16个字',
+										description: '下拉式的选择器选项的文案，建议不超过16个字',
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+		],
+	},
+	{
 		displayName: '按钮列表',
 		name: 'button_list',
 		type: 'fixedCollection',
@@ -422,19 +697,40 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 				card_type: ['button_interaction'],
 			},
 		},
-		description: '按钮交互型卡片的按钮列表，列表长度不超过6',
+		hint: '列表长度不超过6',
+		description: '按钮列表，列表长度不超过6',
 		options: [
 			{
 				name: 'buttons',
 				displayName: '按钮',
 				values: [
 					{
-						displayName: '按钮文本',
+						displayName: '按钮点击事件类型',
+						name: 'type',
+						type: 'options',
+						options: [
+							{
+								name: '回调点击事件',
+								value: 0,
+							},
+							{
+								name: '跳转URL',
+								value: 1,
+							},
+						],
+						default: 0,
+						hint: '0或不填代表回调点击事件，1代表跳转url',
+						description: '按钮点击事件类型，0或不填代表回调点击事件，1代表跳转URL',
+					},
+					{
+						displayName: '按钮文案',
 						name: 'text',
 						type: 'string',
+						required: true,
 						default: '',
 						placeholder: '同意',
-						description: '按钮上显示的文字',
+						hint: '建议不超过10个字',
+						description: '按钮文案，建议不超过10个字',
 					},
 					{
 						displayName: '按钮样式',
@@ -442,16 +738,25 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 						type: 'options',
 						options: [
 							{
-								name: '蓝色样式',
+								name: '样式1',
 								value: 1,
 							},
 							{
-								name: '灰色样式',
+								name: '样式2',
 								value: 2,
+							},
+							{
+								name: '样式3',
+								value: 3,
+							},
+							{
+								name: '样式4',
+								value: 4,
 							},
 						],
 						default: 1,
-						description: '按钮的样式类型',
+						hint: '目前可填1~4，不填或错填默认1',
+						description: '按钮样式，目前可填1~4，不填或错填默认1',
 					},
 					{
 						displayName: '按钮Key',
@@ -459,7 +764,121 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 						type: 'string',
 						default: '',
 						placeholder: 'btn_agree',
-						description: '按钮的唯一标识，用于回调事件',
+						hint: '最长支持1024字节，不可重复，button_list.type是0时必填',
+						description: '按钮key值，用户点击后，会产生回调事件将本参数作为EventKey返回，回调事件会带上该key值，最长支持1024字节，不可重复，button_list.type是0时必填',
+						displayOptions: {
+							show: {
+								type: [0],
+							},
+						},
+					},
+					{
+						displayName: '跳转链接',
+						name: 'url',
+						type: 'string',
+						default: '',
+						placeholder: 'https://example.com',
+						hint: 'button_list.type是1时必填',
+						description: '跳转事件的URL，button_list.type是1时必填',
+						displayOptions: {
+							show: {
+								type: [1],
+							},
+						},
+					},
+				],
+			},
+		],
+	},
+	{
+		displayName: '下拉式选择器列表',
+		name: 'select_list',
+		type: 'fixedCollection',
+		typeOptions: {
+			multipleValues: true,
+		},
+		default: {},
+		placeholder: '添加选择器',
+		displayOptions: {
+			show: {
+				...showOnlySendTemplateCard,
+				card_type: ['multiple_interaction'],
+			},
+		},
+		hint: 'multiple_interaction类型的卡片该字段不可为空，一个消息最多支持3个选择器',
+		description: '下拉式的选择器列表，multiple_interaction类型的卡片该字段不可为空，一个消息最多支持3个选择器',
+		options: [
+			{
+				name: 'selectors',
+				displayName: '选择器',
+				values: [
+					{
+						displayName: '题目Key',
+						name: 'question_key',
+						type: 'string',
+						required: true,
+						default: '',
+						placeholder: 'question_key1',
+						hint: '最长支持1024字节，不可重复',
+						description: '下拉式的选择器题目的key，用户提交选项后，会产生回调事件，回调事件会带上该key值表示该题，最长支持1024字节，不可重复',
+					},
+					{
+						displayName: '选择器标题',
+						name: 'title',
+						type: 'string',
+						default: '',
+						placeholder: '选择器标签',
+						description: '下拉式的选择器上面的title',
+					},
+					{
+						displayName: '默认选定ID',
+						name: 'selected_id',
+						type: 'string',
+						default: '',
+						placeholder: 'selection_id1',
+						hint: '不填或错填默认第一个',
+						description: '默认选定的ID，不填或错填默认第一个',
+					},
+					{
+						displayName: '选项列表',
+						name: 'option_list',
+						type: 'fixedCollection',
+						typeOptions: {
+							multipleValues: true,
+						},
+						default: {},
+						placeholder: '添加选项',
+						required: true,
+						hint: '下拉选项不超过10个，最少1个',
+						description: '选项列表，下拉选项不超过10个，最少1个',
+						options: [
+							{
+								name: 'options',
+								displayName: '选项',
+								values: [
+									{
+										displayName: '选项ID',
+										name: 'id',
+										type: 'string',
+										required: true,
+										default: '',
+										placeholder: 'selection_id1',
+										hint: '最长支持128字节，不可重复',
+										description: '下拉式的选择器选项的ID，用户提交选项后，会产生回调事件，回调事件会带上该ID值表示该选项，最长支持128字节，不可重复',
+									},
+									{
+										displayName: '选项文案',
+										name: 'text',
+										type: 'string',
+										required: true,
+										default: '',
+										placeholder: '选择器选项1',
+										hint: '建议不超过16个字',
+										description: '下拉式的选择器选项的文案，建议不超过16个字',
+									},
+								],
+							},
+						],
 					},
 				],
 			},
@@ -474,12 +893,12 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				...showOnlySendTemplateCard,
-				card_type: ['vote_interaction', 'multiple_interaction'],
+				card_type: ['vote_interaction'],
 			},
 		},
 		hint: '最长支持1024字节',
 		description:
-			'可选。选择题key值，用户提交选项后，会产生回调事件，回调事件会将本参数作为EventKey返回。<a href="https://developer.work.weixin.qq.com/document/path/90236#模板卡片消息" target="_blank">官方文档</a>',
+			'选择题key值，用户提交选项后，会产生回调事件，回调事件会带上该key值表示该题，最长支持1024字节。<a href="https://developer.work.weixin.qq.com/document/path/90236#模板卡片消息" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '选择题模式',
@@ -488,22 +907,23 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 		options: [
 			{
 				name: '单选',
-				value: 'single',
+				value: 0,
 			},
 			{
 				name: '多选',
-				value: 'multiple',
+				value: 1,
 			},
 		],
-		default: 'single',
+		default: 0,
 		displayOptions: {
 			show: {
 				...showOnlySendTemplateCard,
-				card_type: ['vote_interaction', 'multiple_interaction'],
+				card_type: ['vote_interaction'],
 			},
 		},
+		hint: '单选：0，多选：1，不填默认0',
 		description:
-			'可选。选择题模式，单选为single，多选为multiple，不填默认单选。<a href="https://developer.work.weixin.qq.com/document/path/90236#模板卡片消息" target="_blank">官方文档</a>',
+			'可选。选择题模式，单选：0，多选：1，不填默认0。<a href="https://developer.work.weixin.qq.com/document/path/90236#模板卡片消息" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '选项列表',
@@ -530,17 +950,34 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 						displayName: '选项ID',
 						name: 'id',
 						type: 'string',
+						required: true,
 						default: '',
 						placeholder: 'option1',
-						description: '选项的唯一标识',
+						hint: '最长支持128字节，不可重复',
+						description: '选项ID，用户提交选项后，会产生回调事件，回调事件会带上该ID值表示该选项，最长支持128字节，不可重复',
 					},
 					{
 						displayName: '选项文本',
 						name: 'text',
 						type: 'string',
+						required: true,
 						default: '',
 						placeholder: '选项一',
-						description: '选项显示的文本',
+						hint: '建议不超过17个字（投票选择型）或16个字（多项选择型）',
+						description: '选项文案描述，建议不超过17个字（投票选择型）或16个字（多项选择型）',
+					},
+					{
+						displayName: '是否默认选中',
+						name: 'is_checked',
+						type: 'boolean',
+						default: false,
+						displayOptions: {
+							show: {
+								'../card_type': ['vote_interaction'],
+							},
+						},
+						hint: '仅投票选择型支持',
+						description: '该选项是否要默认选中（仅投票选择型支持）',
 					},
 				],
 			},
@@ -580,6 +1017,50 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 	},
 	{
 		displayName: '图片样式',
+		name: 'card_image',
+		type: 'fixedCollection',
+		default: {},
+		placeholder: '添加图片',
+		displayOptions: {
+			show: {
+				...showOnlySendTemplateCard,
+				card_type: ['news_notice'],
+			},
+		},
+		hint: 'news_notice类型的卡片，card_image和image_text_area两者必填一个字段，不可都不填',
+		description: '可选。图片样式，news_notice类型的卡片，card_image和image_text_area两者必填一个字段，不可都不填',
+		options: [
+			{
+				name: 'imageInfo',
+				displayName: '图片信息',
+				values: [
+					{
+						displayName: '图片URL',
+						name: 'url',
+						type: 'string',
+						required: true,
+						default: '',
+						placeholder: 'https://example.com/image.jpg',
+						description: '图片的URL',
+					},
+					{
+						displayName: '图片宽高比',
+						name: 'aspect_ratio',
+						type: 'number',
+						default: 1.3,
+						typeOptions: {
+							minValue: 1.3,
+							maxValue: 2.25,
+						},
+						hint: '宽高比要小于2.25，大于1.3，不填该参数默认1.3',
+						description: '图片的宽高比，宽高比要小于2.25，大于1.3，不填该参数默认1.3',
+					},
+				],
+			},
+		],
+	},
+	{
+		displayName: '左图右文样式',
 		name: 'image_text_area',
 		type: 'fixedCollection',
 		default: {},
@@ -590,36 +1071,43 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 				card_type: ['news_notice'],
 			},
 		},
-		description: '可选。左图右文样式',
+		hint: 'news_notice类型的卡片，card_image和image_text_area两者必填一个字段，不可都不填',
+		description: '可选。左图右文样式，news_notice类型的卡片，card_image和image_text_area两者必填一个字段，不可都不填',
 		options: [
 			{
 				name: 'imageTextInfo',
 				displayName: '图片内容',
 				values: [
 					{
-						displayName: '图片类型',
+						displayName: '左图右文样式区域点击事件',
 						name: 'type',
 						type: 'options',
 						options: [
 							{
-								name: '普通图片',
+								name: '无点击事件',
 								value: 0,
 							},
 							{
-								name: '可点击图片',
+								name: '跳转URL',
 								value: 1,
+							},
+							{
+								name: '跳转小程序',
+								value: 2,
 							},
 						],
 						default: 0,
-						description: '图片的类型',
+						hint: '0或不填代表没有点击事件，1代表跳转url，2代表跳转小程序',
+						description: '左图右文样式区域点击事件，0或不填代表没有点击事件，1代表跳转URL，2代表跳转小程序',
 					},
 					{
 						displayName: '图片链接',
 						name: 'image_url',
 						type: 'string',
+						required: true,
 						default: '',
 						placeholder: 'https://example.com/image.png',
-						description: '图片的URL地址',
+						description: '左图右文样式的图片URL',
 					},
 					{
 						displayName: '跳转链接',
@@ -627,10 +1115,39 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 						type: 'string',
 						default: '',
 						placeholder: 'https://example.com',
-						description: '点击图片后跳转的链接（仅当类型为可点击图片时有效）',
+						hint: 'image_text_area.type是1时必填',
+						description: '点击跳转的URL，image_text_area.type是1时必填',
 						displayOptions: {
 							show: {
 								type: [1],
+							},
+						},
+					},
+					{
+						displayName: '小程序Appid',
+						name: 'appid',
+						type: 'string',
+						default: '',
+						placeholder: 'wx1234567890abcdef',
+						hint: '必须是与当前应用关联的小程序，image_text_area.type是2时必填',
+						description: '点击跳转的小程序的appid，必须是与当前应用关联的小程序，image_text_area.type是2时必填',
+						displayOptions: {
+							show: {
+								type: [2],
+							},
+						},
+					},
+					{
+						displayName: '小程序Page路径',
+						name: 'pagepath',
+						type: 'string',
+						default: '',
+						placeholder: 'pages/index',
+						hint: 'image_text_area.type是2时选填',
+						description: '点击跳转的小程序的pagepath，image_text_area.type是2时选填',
+						displayOptions: {
+							show: {
+								type: [2],
 							},
 						},
 					},
@@ -652,6 +1169,51 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 						default: '',
 						placeholder: '图片描述',
 						description: '图片的描述文字',
+					},
+				],
+			},
+		],
+	},
+	{
+		displayName: '卡片二级垂直内容',
+		name: 'vertical_content_list',
+		type: 'fixedCollection',
+		typeOptions: {
+			multipleValues: true,
+		},
+		default: {},
+		placeholder: '添加垂直内容',
+		displayOptions: {
+			show: {
+				...showOnlySendTemplateCard,
+				card_type: ['news_notice'],
+			},
+		},
+		hint: '列表长度不超过4',
+		description: '可选。卡片二级垂直内容，该字段可为空数组，但有数据的话需确认对应字段是否必填，列表长度不超过4',
+		options: [
+			{
+				name: 'items',
+				displayName: '垂直内容',
+				values: [
+					{
+						displayName: '标题',
+						name: 'title',
+						type: 'string',
+						required: true,
+						default: '',
+						placeholder: '标题',
+						hint: '建议不超过38个字',
+						description: '卡片二级标题，建议不超过38个字',
+					},
+					{
+						displayName: '描述',
+						name: 'desc',
+						type: 'string',
+						default: '',
+						placeholder: '描述',
+						hint: '建议不超过160个字',
+						description: '二级普通文本，建议不超过160个字',
 					},
 				],
 			},

@@ -67,6 +67,7 @@ export const passiveReplyDescription: INodeProperties[] = [
 		],
 		default: 'text',
 		description: '被动回复的消息类型',
+		hint: '支持被动回复的消息类型：文本、图片、语音、视频、图文、模板卡片更新。\n\n被动回复消息格式说明：\n- 文本消息：Content（文本内容，最长2048字节）\n- 图片消息：MediaId（图片媒体文件ID）\n- 语音消息：MediaId（语音文件ID）\n- 视频消息：MediaId（视频文件ID）、Title（标题，最长128字节）、Description（描述，最长512字节）\n- 图文消息：ArticleCount（图文数量）、Articles（图文列表，包含Title、Description、Url、PicUrl）\n- 模板卡片更新：支持更新按钮文案（Button.ReplaceName）或更新整张卡片（TemplateCard）\n\n所有回复消息都包含：ToUserName（成员UserID）、FromUserName（企业微信CorpID）、CreateTime（创建时间）、MsgType（消息类型）',
 	},
 	{
 		displayName: '文本内容',

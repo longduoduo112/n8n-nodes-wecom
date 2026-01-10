@@ -18,7 +18,7 @@ export const sendImageDescription: INodeProperties[] = [
 		required: true,
 		description:
 			'群聊的唯一标识。<a href="https://developer.work.weixin.qq.com/document/path/90248" target="_blank">官方文档</a>',
-		hint: '群聊会话的 chatid',
+		hint: '必填。群聊的唯一标识，必须是该应用所创建的群',
 	},
 	{
 		displayName: 'Media ID',
@@ -32,7 +32,7 @@ export const sendImageDescription: INodeProperties[] = [
 		required: true,
 		description:
 			'图片媒体文件ID，可以调用上传临时素材接口获取。<a href="https://developer.work.weixin.qq.com/document/path/90248" target="_blank">官方文档</a>',
-		hint: '通过素材管理接口上传图片获得',
+		hint: '必填。图片媒体文件id，可以调用上传临时素材接口获取',
 	},
 	{
 		displayName: '保密消息',
@@ -43,6 +43,7 @@ export const sendImageDescription: INodeProperties[] = [
 		},
 		default: false,
 		description:
-			'表示是否是保密消息，0表示否，1表示是，默认0。<a href="https://developer.work.weixin.qq.com/document/path/90248" target="_blank">官方文档</a>',
+			'可选。表示是否是保密消息，0表示否，1表示是，默认0。<a href="https://developer.work.weixin.qq.com/document/path/90248" target="_blank">官方文档</a>',
+		hint: '可选。表示是否是保密消息，0表示否，1表示是，默认0',
 	},
 ];

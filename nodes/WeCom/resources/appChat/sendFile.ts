@@ -18,7 +18,7 @@ export const sendFileDescription: INodeProperties[] = [
 		required: true,
 		description:
 			'群聊的唯一标识。<a href="https://developer.work.weixin.qq.com/document/path/90248" target="_blank">官方文档</a>',
-		hint: '群聊会话的 chatid',
+		hint: '必填。群聊的唯一标识，必须是该应用所创建的群',
 	},
 	{
 		displayName: 'Media ID',
@@ -32,7 +32,7 @@ export const sendFileDescription: INodeProperties[] = [
 		required: true,
 		description:
 			'文件的 media_ID。<a href="https://developer.work.weixin.qq.com/document/path/90248" target="_blank">官方文档</a>',
-		hint: '通过素材管理接口上传文件获得',
+		hint: '必填。文件id，可以调用上传临时素材接口获取',
 	},
 	{
 		displayName: '保密消息',
@@ -43,7 +43,7 @@ export const sendFileDescription: INodeProperties[] = [
 		},
 		default: false,
 		description:
-			'可选。表示是否是保密消息。<a href="https://developer.work.weixin.qq.com/document/path/90248" target="_blank">官方文档</a>',
-		hint: '保密消息会话中的消息在发送后不会显示在聊天记录中',
+			'可选。表示是否是保密消息，0表示否，1表示是，默认0。保密消息支持以下格式文件：txt、pdf、doc、docx、ppt、pptx、xls、xlsx、xml、jpg、jpeg、png、bmp、gif。<a href="https://developer.work.weixin.qq.com/document/path/90248" target="_blank">官方文档</a>',
+		hint: '可选。表示是否是保密消息，0表示否，1表示是，默认0。保密消息支持以下格式文件：txt、pdf、doc、docx、ppt、pptx、xls、xlsx、xml、jpg、jpeg、png、bmp、gif',
 	},
 ];

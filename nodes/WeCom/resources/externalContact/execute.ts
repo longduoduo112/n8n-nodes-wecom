@@ -1860,6 +1860,101 @@ export async function executeExternalContact(
 					'/cgi-bin/externalcontact/contact_list',
 					body,
 				);
+			} else if (operation === 'sendSchoolMessage') {
+				// 发送学校通知
+				const msgtype = this.getNodeParameter('msgtype', i) as string;
+				const agentid = this.getNodeParameter('agentid', i) as number;
+				const recv_scope = this.getNodeParameter('recv_scope', i, 0) as number;
+				const to_parent_userid = this.getNodeParameter('to_parent_userid', i, '') as string;
+				const to_student_userid = this.getNodeParameter('to_student_userid', i, '') as string;
+				const to_party = this.getNodeParameter('to_party', i, '') as string;
+				const toall = this.getNodeParameter('toall', i, false) as boolean;
+				const enable_duplicate_check = this.getNodeParameter('enable_duplicate_check', i, false) as boolean;
+				const duplicate_check_interval = this.getNodeParameter('duplicate_check_interval', i, 1800) as number;
+
+				const body: IDataObject = {
+					msgtype,
+					agentid,
+					recv_scope,
+					toall: toall ? 1 : 0,
+				};
+
+				if (to_parent_userid) {
+					body.to_parent_userid = to_parent_userid.split(',').map((id) => id.trim());
+				}
+
+				if (to_student_userid) {
+					body.to_student_userid = to_student_userid.split(',').map((id) => id.trim());
+				}
+
+				if (to_party) {
+					body.to_party = to_party.split(',').map((id) => id.trim());
+				}
+
+				if (enable_duplicate_check) {
+					body.enable_duplicate_check = 1;
+					body.duplicate_check_interval = duplicate_check_interval;
+				} else {
+					body.enable_duplicate_check = 0;
+				}
+
+				// 根据消息类型构建消息体
+				if (msgtype === 'text') {
+					const content = this.getNodeParameter('content', i) as string;
+					const enable_id_trans = this.getNodeParameter('enable_id_trans', i, false) as boolean;
+					body.text = { content };
+					body.enable_id_trans = enable_id_trans ? 1 : 0;
+				} else if (msgtype === 'image') {
+					const media_id = this.getNodeParameter('media_id', i) as string;
+					body.image = { media_id };
+				} else if (msgtype === 'voice') {
+					const media_id = this.getNodeParameter('media_id', i) as string;
+					body.voice = { media_id };
+				} else if (msgtype === 'video') {
+					const media_id = this.getNodeParameter('media_id', i) as string;
+					const title = this.getNodeParameter('title', i, '') as string;
+					const description = this.getNodeParameter('description', i, '') as string;
+					const videoData: IDataObject = { media_id };
+					if (title) videoData.title = title;
+					if (description) videoData.description = description;
+					body.video = videoData;
+				} else if (msgtype === 'file') {
+					const media_id = this.getNodeParameter('media_id', i) as string;
+					body.file = { media_id };
+				} else if (msgtype === 'news') {
+					const articles = this.getNodeParameter('articles', i, {}) as IDataObject;
+					const articleList = (articles.article as IDataObject[]) || [];
+					const enable_id_trans = this.getNodeParameter('enable_id_trans', i, false) as boolean;
+					body.news = { articles: articleList };
+					body.enable_id_trans = enable_id_trans ? 1 : 0;
+				} else if (msgtype === 'mpnews') {
+					const articles = this.getNodeParameter('articles', i, {}) as IDataObject;
+					const articleList = (articles.article as IDataObject[]) || [];
+					const enable_id_trans = this.getNodeParameter('enable_id_trans', i, false) as boolean;
+					body.mpnews = { articles: articleList };
+					body.enable_id_trans = enable_id_trans ? 1 : 0;
+				} else if (msgtype === 'miniprogram') {
+					const appid = this.getNodeParameter('appid', i) as string;
+					const title = this.getNodeParameter('title', i, '') as string;
+					const thumb_media_id = this.getNodeParameter('thumb_media_id', i) as string;
+					const pagepath = this.getNodeParameter('pagepath', i) as string;
+					const enable_id_trans = this.getNodeParameter('enable_id_trans', i, false) as boolean;
+					const miniprogramData: IDataObject = {
+						appid,
+						thumb_media_id,
+						pagepath,
+					};
+					if (title) miniprogramData.title = title;
+					body.miniprogram = miniprogramData;
+					body.enable_id_trans = enable_id_trans ? 1 : 0;
+				}
+
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/externalcontact/message/send',
+					body,
+				);
 			} else {
 				response = {};
 			}

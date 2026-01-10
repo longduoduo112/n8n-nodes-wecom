@@ -21,6 +21,7 @@ export const sendTextDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnlySendText,
 		},
+		hint: '最长不超过2048个字节，支持换行（\\n）和A标签链接',
 		description:
 			'消息内容，最长不超过2048个字节，超过将截断（支持换行、以及A标签，即可打开自定义的网页）。<a href="https://developer.work.weixin.qq.com/document/path/90236#文本消息" target="_blank">官方文档</a>',
 	},

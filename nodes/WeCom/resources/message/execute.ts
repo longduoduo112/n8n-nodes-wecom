@@ -98,6 +98,11 @@ export async function executeMessage(
 				}
 			} else if (operation === 'sendMarkdown') {
 				const content = this.getNodeParameter('content', i) as string;
+				const enable_duplicate_check = this.getNodeParameter(
+					'enable_duplicate_check',
+					i,
+					false,
+				) as boolean;
 
 				body = {
 					...body,
@@ -105,7 +110,17 @@ export async function executeMessage(
 					markdown: {
 						content,
 					},
+					enable_duplicate_check: enable_duplicate_check ? 1 : 0,
 				};
+
+				if (enable_duplicate_check) {
+					const duplicate_check_interval = this.getNodeParameter(
+						'duplicate_check_interval',
+						i,
+						1800,
+					) as number;
+					body.duplicate_check_interval = duplicate_check_interval;
+				}
 			} else if (operation === 'sendImage') {
 				const mediaId = this.getNodeParameter('media_ID', i) as string;
 				const safe = this.getNodeParameter('safe', i, false) as boolean;
@@ -266,7 +281,23 @@ export async function executeMessage(
 					false,
 				) as boolean;
 
-				const articleList = (articles.article as IDataObject[]) || [];
+				const articleList = ((articles.article as IDataObject[]) || []).map((article) => {
+					const processedArticle: IDataObject = {
+						title: article.title,
+						description: article.description,
+						picurl: article.picurl,
+					};
+
+					// 处理跳转类型：小程序或URL
+					if (article.jump_type === 'miniprogram' && article.appid && article.pagepath) {
+						processedArticle.appid = article.appid;
+						processedArticle.pagepath = article.pagepath;
+					} else if (article.url) {
+						processedArticle.url = article.url;
+					}
+
+					return processedArticle;
+				});
 
 				body = {
 					...body,
@@ -288,7 +319,7 @@ export async function executeMessage(
 				}
 			} else if (operation === 'sendMpNews') {
 				const articles = this.getNodeParameter('articles', i, {}) as IDataObject;
-				const safe = this.getNodeParameter('safe', i, false) as boolean;
+				const safe = this.getNodeParameter('safe', i, 0) as number;
 				const enable_id_trans = this.getNodeParameter('enable_id_trans', i, false) as boolean;
 				const enable_duplicate_check = this.getNodeParameter(
 					'enable_duplicate_check',
@@ -304,7 +335,7 @@ export async function executeMessage(
 					mpnews: {
 						articles: articleList,
 					},
-					safe: safe ? 1 : 0,
+					safe,
 					enable_id_trans: enable_id_trans ? 1 : 0,
 					enable_duplicate_check: enable_duplicate_check ? 1 : 0,
 				};
@@ -479,20 +510,24 @@ export async function executeMessage(
 					if (buttonListData.buttons && Array.isArray(buttonListData.buttons)) {
 						template_card.button_list = buttonListData.buttons;
 					}
-				} else if (
-					card_type === 'vote_interaction' ||
-					card_type === 'multiple_interaction'
-				) {
+
+					const buttonSelectionData = this.getNodeParameter('button_selection', i, {}) as IDataObject;
+					if (buttonSelectionData.selectionInfo) {
+						const selectionInfo = buttonSelectionData.selectionInfo as IDataObject;
+						template_card.button_selection = {
+							question_key: selectionInfo.question_key,
+							title: selectionInfo.title,
+							selected_id: selectionInfo.selected_id,
+							option_list: (selectionInfo.option_list as IDataObject)?.options || [],
+						};
+					}
+				} else if (card_type === 'vote_interaction') {
 					const checkbox_question_key = this.getNodeParameter(
 						'checkbox_question_key',
 						i,
 						'',
 					) as string;
-					const checkbox_mode = this.getNodeParameter(
-						'checkbox_mode',
-						i,
-						'single',
-					) as string;
+					const checkbox_mode = this.getNodeParameter('checkbox_mode', i, 0) as number;
 					const optionListData = this.getNodeParameter('option_list', i, {}) as IDataObject;
 					const submit_button_text = this.getNodeParameter(
 						'submit_button_text',
@@ -502,11 +537,50 @@ export async function executeMessage(
 					const submit_button_key = this.getNodeParameter('submit_button_key', i, '') as string;
 
 					if (checkbox_question_key) {
+						const options = Array.isArray(optionListData.options)
+							? (optionListData.options as IDataObject[])
+							: [];
 						template_card.checkbox = {
 							question_key: checkbox_question_key,
 							mode: checkbox_mode,
-							option_list: optionListData.options || [],
+							option_list: options.map((opt: IDataObject) => ({
+								id: opt.id,
+								text: opt.text,
+								is_checked: opt.is_checked || false,
+							})),
 						};
+					}
+
+					if (submit_button_key) {
+						template_card.submit_button = {
+							text: submit_button_text,
+							key: submit_button_key,
+						};
+					}
+				} else if (card_type === 'multiple_interaction') {
+					const selectListData = this.getNodeParameter('select_list', i, {}) as IDataObject;
+					const submit_button_text = this.getNodeParameter(
+						'submit_button_text',
+						i,
+						'提交',
+					) as string;
+					const submit_button_key = this.getNodeParameter('submit_button_key', i, '') as string;
+
+					if (selectListData.selectors && Array.isArray(selectListData.selectors)) {
+						template_card.select_list = (selectListData.selectors as IDataObject[]).map(
+							(selector: IDataObject) => {
+								const optionList = selector.option_list as IDataObject | undefined;
+								const options = optionList && Array.isArray(optionList.options)
+									? (optionList.options as IDataObject[])
+									: [];
+								return {
+									question_key: selector.question_key,
+									title: selector.title,
+									selected_id: selector.selected_id,
+									option_list: options,
+								};
+							},
+						);
 					}
 
 					if (submit_button_key) {
@@ -519,6 +593,16 @@ export async function executeMessage(
 					const imageTextAreaData = this.getNodeParameter('image_text_area', i, {}) as IDataObject;
 					if (imageTextAreaData.imageTextInfo) {
 						template_card.image_text_area = imageTextAreaData.imageTextInfo;
+					}
+
+					const cardImageData = this.getNodeParameter('card_image', i, {}) as IDataObject;
+					if (cardImageData.imageInfo) {
+						template_card.card_image = cardImageData.imageInfo;
+					}
+
+					const verticalContentListData = this.getNodeParameter('vertical_content_list', i, {}) as IDataObject;
+					if (verticalContentListData.items && Array.isArray(verticalContentListData.items)) {
+						template_card.vertical_content_list = verticalContentListData.items;
 					}
 				}
 
@@ -560,6 +644,28 @@ export async function executeMessage(
 				const response_code = this.getNodeParameter('response_code', i) as string;
 				const card_type = this.getNodeParameter('card_type', i) as string;
 				const button_key = this.getNodeParameter('button_key', i, '') as string;
+				const enable_id_trans = this.getNodeParameter('enable_id_trans', i, false) as boolean;
+				const replace_text = this.getNodeParameter('replace_text', i, '') as string;
+
+				// 获取接收人信息
+				const recipientType = this.getNodeParameter('recipientType', i) as string;
+				const touser = this.getNodeParameter('touser', i, []) as string[];
+				const toparty = this.getNodeParameter('toparty', i, []) as string[];
+				const totag = this.getNodeParameter('totag', i, []) as string[];
+				const touser_manual = this.getNodeParameter('touser_manual', i, '') as string;
+				const toparty_manual = this.getNodeParameter('toparty_manual', i, '') as string;
+				const totag_manual = this.getNodeParameter('totag_manual', i, '') as string;
+				const atall = this.getNodeParameter('recipientType', i) === 'all' ? 1 : 0;
+
+				const recipients = extractRecipients(
+					recipientType,
+					touser,
+					toparty,
+					totag,
+					touser_manual,
+					toparty_manual,
+					totag_manual,
+				);
 
 				// 获取fixedCollection字段
 				const sourceData = this.getNodeParameter('source', i, {}) as IDataObject;
@@ -628,20 +734,29 @@ export async function executeMessage(
 					if (buttonListData.buttons && Array.isArray(buttonListData.buttons)) {
 						template_card.button_list = buttonListData.buttons;
 					}
-				} else if (
-					card_type === 'vote_interaction' ||
-					card_type === 'multiple_interaction'
-				) {
+
+					const buttonSelectionData = this.getNodeParameter('button_selection', i, {}) as IDataObject;
+					if (buttonSelectionData.selectionInfo) {
+						const selectionInfo = buttonSelectionData.selectionInfo as IDataObject;
+						template_card.button_selection = {
+							question_key: selectionInfo.question_key,
+							title: selectionInfo.title,
+							selected_id: selectionInfo.selected_id,
+							option_list: (selectionInfo.option_list as IDataObject)?.options || [],
+						};
+					}
+
+					if (replace_text) {
+						template_card.replace_text = replace_text;
+					}
+				} else if (card_type === 'vote_interaction') {
 					const checkbox_question_key = this.getNodeParameter(
 						'checkbox_question_key',
 						i,
 						'',
 					) as string;
-					const checkbox_mode = this.getNodeParameter(
-						'checkbox_mode',
-						i,
-						'single',
-					) as string;
+					const checkbox_mode = this.getNodeParameter('checkbox_mode', i, 0) as number;
+					const checkbox_disable = this.getNodeParameter('checkbox_disable', i, false) as boolean;
 					const optionListData = this.getNodeParameter('option_list', i, {}) as IDataObject;
 					const submit_button_text = this.getNodeParameter(
 						'submit_button_text',
@@ -651,10 +766,18 @@ export async function executeMessage(
 					const submit_button_key = this.getNodeParameter('submit_button_key', i, '') as string;
 
 					if (checkbox_question_key) {
+						const options = Array.isArray(optionListData.options)
+							? (optionListData.options as IDataObject[])
+							: [];
 						template_card.checkbox = {
 							question_key: checkbox_question_key,
 							mode: checkbox_mode,
-							option_list: optionListData.options || [],
+							disable: checkbox_disable,
+							option_list: options.map((opt: IDataObject) => ({
+								id: opt.id,
+								text: opt.text,
+								is_checked: opt.is_checked || false,
+							})),
 						};
 					}
 
@@ -664,10 +787,61 @@ export async function executeMessage(
 							key: submit_button_key,
 						};
 					}
+
+					if (replace_text) {
+						template_card.replace_text = replace_text;
+					}
+				} else if (card_type === 'multiple_interaction') {
+					const selectListData = this.getNodeParameter('select_list', i, {}) as IDataObject;
+					const submit_button_text = this.getNodeParameter(
+						'submit_button_text',
+						i,
+						'提交',
+					) as string;
+					const submit_button_key = this.getNodeParameter('submit_button_key', i, '') as string;
+
+					if (selectListData.selectors && Array.isArray(selectListData.selectors)) {
+						template_card.select_list = (selectListData.selectors as IDataObject[]).map(
+							(selector: IDataObject) => {
+								const optionList = selector.option_list as IDataObject | undefined;
+								const options = optionList && Array.isArray(optionList.options)
+									? (optionList.options as IDataObject[])
+									: [];
+								return {
+									question_key: selector.question_key,
+									title: selector.title,
+									selected_id: selector.selected_id,
+									disable: selector.disable || false,
+									option_list: options,
+								};
+							},
+						);
+					}
+
+					if (submit_button_key) {
+						template_card.submit_button = {
+							text: submit_button_text,
+							key: submit_button_key,
+						};
+					}
+
+					if (replace_text) {
+						template_card.replace_text = replace_text;
+					}
 				} else if (card_type === 'news_notice') {
 					const imageTextAreaData = this.getNodeParameter('image_text_area', i, {}) as IDataObject;
 					if (imageTextAreaData.imageTextInfo) {
 						template_card.image_text_area = imageTextAreaData.imageTextInfo;
+					}
+
+					const cardImageData = this.getNodeParameter('card_image', i, {}) as IDataObject;
+					if (cardImageData.imageInfo) {
+						template_card.card_image = cardImageData.imageInfo;
+					}
+
+					const verticalContentListData = this.getNodeParameter('vertical_content_list', i, {}) as IDataObject;
+					if (verticalContentListData.items && Array.isArray(verticalContentListData.items)) {
+						template_card.vertical_content_list = verticalContentListData.items;
 					}
 				}
 
@@ -693,12 +867,33 @@ export async function executeMessage(
 				body = {
 					...body,
 					response_code,
-					template_card,
+					agentid: agentId,
+					enable_id_trans: enable_id_trans ? 1 : 0,
 				};
 
-				// 添加button_key（如果有）
+				// 添加接收人信息
+				if (atall === 1) {
+					body.atall = 1;
+				} else {
+					if (recipients.touser && recipients.touser !== '@all') {
+						body.userids = recipients.touser.split('|');
+					}
+					if (recipients.toparty) {
+						body.partyids = recipients.toparty.split('|').map((id) => parseInt(id, 10));
+					}
+					if (recipients.totag) {
+						body.tagids = recipients.totag.split('|').map((id) => parseInt(id, 10));
+					}
+				}
+
+				// 如果有button_key，使用简单更新模式
 				if (button_key) {
-					body.button_key = button_key;
+					body.button = {
+						replace_name: replace_text || button_key,
+					};
+				} else {
+					// 否则使用完整卡片更新
+					body.template_card = template_card;
 				}
 
 				// 使用更新接口

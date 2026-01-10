@@ -13,17 +13,20 @@ export async function executeAppChat(
 			if (operation === 'createAppChat') {
 				// 创建群聊会话
 				const name = this.getNodeParameter('name', i, '') as string;
-				const owner = this.getNodeParameter('owner', i) as string;
+				const owner = this.getNodeParameter('owner', i, '') as string;
 				const userlist = this.getNodeParameter('userlist', i) as string;
 				const chatid = this.getNodeParameter('chatid', i, '') as string;
 
 				const body: IDataObject = {
-					owner,
 					userlist: userlist.split(',').map((id) => id.trim()),
 				};
 
 				if (name) {
 					body.name = name;
+				}
+
+				if (owner) {
+					body.owner = owner;
 				}
 
 				if (chatid) {
