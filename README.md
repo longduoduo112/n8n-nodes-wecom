@@ -332,10 +332,13 @@ npm install n8n-nodes-wecom
 - ✅ [获取部门成员列表](https://developer.work.weixin.qq.com/document/path/90200)
 - ✅ [获取部门成员详情](https://developer.work.weixin.qq.com/document/path/90201)
 - ✅ [获取成员ID列表](https://developer.work.weixin.qq.com/document/path/96067)
-- ✅ [手机号获取userid](https://developer.work.weixin.qq.com/document/path/95402)
-- ✅ [邮箱获取userid](https://developer.work.weixin.qq.com/document/path/95895)
+- ✅ [userid与openid互换](https://developer.work.weixin.qq.com/document/path/90202)（UserID转OpenID、OpenID转UserID）
+- ✅ [登录二次验证](https://developer.work.weixin.qq.com/document/path/91623)
 - ✅ [邀请成员](https://developer.work.weixin.qq.com/document/path/90975)
 - ✅ [获取加入企业二维码](https://developer.work.weixin.qq.com/document/path/91714)
+- ✅ [手机号获取userid](https://developer.work.weixin.qq.com/document/path/95402)
+- ✅ [邮箱获取userid](https://developer.work.weixin.qq.com/document/path/95895)
+- ✅ [临时外部联系人ID转换](https://developer.work.weixin.qq.com/document/path/98729)
 
 #### 部门管理
 
