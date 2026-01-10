@@ -16,6 +16,7 @@ import { pushMessageDescription } from '../WeCom/resources/pushMessage';
 import { systemDescription } from '../WeCom/resources/system';
 import { invoiceDescription } from '../WeCom/resources/invoice';
 import { passiveReplyDescription } from '../WeCom/resources/passiveReply';
+import { aibotPassiveReplyDescription } from '../WeCom/resources/aibotPassiveReply';
 import { agentDescription } from '../WeCom/resources/agent';
 import { appAuthDescription } from '../WeCom/resources/appAuth';
 import { licenseDescription } from '../WeCom/resources/license';
@@ -31,6 +32,7 @@ import { executePushMessage } from '../WeCom/resources/pushMessage/execute';
 import { executeSystem } from '../WeCom/resources/system/execute';
 import { executeInvoice } from '../WeCom/resources/invoice/execute';
 import { executePassiveReply } from '../WeCom/resources/passiveReply/execute';
+import { executeAIBotPassiveReply } from '../WeCom/resources/aibotPassiveReply/execute';
 import { executeAgent } from '../WeCom/resources/agent/execute';
 import { executeAppAuth } from '../WeCom/resources/appAuth/execute';
 import { executeLicense } from '../WeCom/resources/license/execute';
@@ -90,6 +92,16 @@ export class WeComBase implements INodeType {
 				displayOptions: {
 					show: {
 						resource: ['passiveReply'],
+					},
+				},
+			},
+			{
+				// 智能机器人被动回复不需要凭证，因为使用response_url回复
+				name: 'weComApi',
+				required: false,
+				displayOptions: {
+					show: {
+						resource: ['aibotPassiveReply'],
 					},
 				},
 			},
@@ -175,6 +187,11 @@ export class WeComBase implements INodeType {
 						description: '被动回复企业微信消息（需配合「企业微信消息接收（被动回复）触发器」使用）',
 					},
 					{
+						name: '智能机器人被动回复',
+						value: 'aibotPassiveReply',
+						description: '被动回复智能机器人消息（需配合「企业微信智能机器人消息接收触发器」使用）',
+					},
+					{
 						name: '企业互联',
 						value: 'linkedcorp',
 						description: '企业互联和上下游管理',
@@ -232,6 +249,7 @@ export class WeComBase implements INodeType {
 		...appChatDescription,
 		...pushMessageDescription,
 		...passiveReplyDescription,
+		...aibotPassiveReplyDescription,
 		...linkedcorpDescription,
 		...materialDescription,
 		...systemDescription,
@@ -373,6 +391,10 @@ export class WeComBase implements INodeType {
 		} else if (resource === 'passiveReply') {
 			// passiveReply only has 'reply' operation, use it directly
 			returnData = await executePassiveReply.call(this, 'reply', items);
+		} else if (resource === 'aibotPassiveReply') {
+			// aibotPassiveReply has operation parameter
+			const operation = this.getNodeParameter('operation', 0) as string;
+			returnData = await executeAIBotPassiveReply.call(this, operation, items);
 		} else {
 			// All other resources have an operation parameter
 			const operation = this.getNodeParameter('operation', 0) as string;

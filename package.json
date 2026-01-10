@@ -60,6 +60,7 @@
 			"dist/nodes/WeComPassiveTrigger/WeComPassiveTrigger.node.js",
 			"dist/nodes/WeComTrigger/WeComTrigger.node.js",
 			"dist/nodes/WeComSuiteTrigger/WeComSuiteTrigger.node.js",
+			"dist/nodes/WeComAiBotTrigger/WeComAiBotTrigger.node.js",
 			"dist/nodes/WeComWechat/WeComWechat.node.js"
 		]
 	},
