@@ -19,16 +19,70 @@ export const accountIdDescription: INodeProperties[] = [
 				action: 'userid转换',
 			},
 			{
+				name: 'userid转换（第三方应用）',
+				value: 'useridToOpenuserid',
+				description: '将企业主体下的明文userid转换为服务商主体下的密文userid',
+				action: 'userid转换（第三方应用）',
+			},
+			{
 				name: 'external_userid转换',
 				value: 'fromServiceExternalUserid',
 				description: '将代开发应用或第三方应用获取的externaluserid转换成自建应用的externaluserid',
 				action: 'external_userid转换',
 			},
 			{
+				name: 'external_userid转换（第三方应用）',
+				value: 'getNewExternalUserid',
+				description: '将企业主体下的external_userid转换为服务商主体下的external_userid',
+				action: 'external_userid转换（第三方应用）',
+			},
+			{
+				name: 'external_userid转换（客户群成员）',
+				value: 'getNewExternalUseridGroupchat',
+				description: '将企业主体下的客户群成员external_userid转换为服务商主体下的external_userid',
+				action: 'external_userid转换（客户群成员）',
+			},
+			{
 				name: 'tmp_external_userid转换',
 				value: 'convertTmpExternalUserid',
 				description: '将应用获取的外部用户临时ID转换为external_userid',
 				action: 'tmp_external_userid转换',
+			},
+			{
+				name: 'corpid转换（第三方应用）',
+				value: 'corpidToOpencorpid',
+				description: '将企业主体的明文corpid转换为服务商主体的密文corpid',
+				action: 'corpid转换（第三方应用）',
+			},
+			{
+				name: 'unionid转换（第三方应用）',
+				value: 'unionidToExternalUserid',
+				description: '将微信客户的unionid转为第三方主体的external_userid',
+				action: 'unionid转换（第三方应用）',
+			},
+			{
+				name: 'external_userid查询pending_id（第三方应用）',
+				value: 'externalUseridToPendingId',
+				description: '通过external_userid查询pending_id，用于关联unionid和external_userid',
+				action: 'external_userid查询pending_id（第三方应用）',
+			},
+			{
+				name: '客户标签ID转换（第三方应用）',
+				value: 'externalTagidToOpenExternalTagid',
+				description: '将企业主体下的客户标签ID(含标签组ID)转换成服务商主体下的客户标签ID',
+				action: '客户标签ID转换（第三方应用）',
+			},
+			{
+				name: '微信客服ID转换（第三方应用）',
+				value: 'openKfidToNewOpenKfid',
+				description: '将企业主体下的微信客服ID转换成服务商主体下的微信客服ID',
+				action: '微信客服ID转换（第三方应用）',
+			},
+			{
+				name: 'ID迁移完成状态设置（第三方应用）',
+				value: 'finishOpenidMigration',
+				description: '服务商完成企业下所有第三方应用的新旧ID迁移后，将该企业设置为"迁移完成"',
+				action: 'ID迁移完成状态设置（第三方应用）',
 			},
 		],
 		default: 'openuseridToUserid',
@@ -110,7 +164,7 @@ export const accountIdDescription: INodeProperties[] = [
 			},
 		],
 		default: 1,
-		hint: '1-会议 2-收集表 3-智能表',
+		hint: '1-会议 2-收集表 3-文档',
 	},
 	{
 		displayName: '用户类型',
@@ -166,5 +220,270 @@ export const accountIdDescription: INodeProperties[] = [
 		default: [],
 		description: '外部用户临时ID列表，最多不超过100个',
 		hint: '外部用户临时id，多个值请使用"Add Value"按钮添加',
+	},
+	{
+		displayName: 'Provider Access Token',
+		name: 'providerAccessToken',
+		type: 'string',
+		typeOptions: {
+			password: true,
+		},
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['accountId'],
+				operation: ['corpidToOpencorpid'],
+			},
+		},
+		default: '',
+		description: '应用服务商的provider_access_token',
+		hint: '应用服务商的provider_access_token，获取方法参见服务商的凭证',
+	},
+	{
+		displayName: '企业ID',
+		name: 'corpid',
+		type: 'string',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['accountId'],
+				operation: ['corpidToOpencorpid'],
+			},
+		},
+		default: '',
+		description: '待获取的企业ID',
+		hint: '待获取的企业ID',
+	},
+	{
+		displayName: 'Userid列表',
+		name: 'useridList',
+		type: 'string',
+		typeOptions: {
+			multipleValues: true,
+		},
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['accountId'],
+				operation: ['useridToOpenuserid'],
+			},
+		},
+		default: [],
+		description: '获取到的成员ID列表，最多不超过1000个',
+		hint: '获取到的成员ID列表，最多不超过1000个，多个值请使用"Add Value"按钮添加',
+	},
+	{
+		displayName: 'External Userid列表',
+		name: 'externalUseridList',
+		type: 'string',
+		typeOptions: {
+			multipleValues: true,
+		},
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['accountId'],
+				operation: ['getNewExternalUserid', 'getNewExternalUseridGroupchat'],
+			},
+		},
+		default: [],
+		description: '企业主体下的external_userid列表，建议200个，最多不超过1000个',
+		hint: '企业主体下的external_userid列表，建议200个，最多不超过1000个，多个值请使用"Add Value"按钮添加',
+	},
+	{
+		displayName: '客户群ID',
+		name: 'chatId',
+		type: 'string',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['accountId'],
+				operation: ['getNewExternalUseridGroupchat'],
+			},
+		},
+		default: '',
+		hint: '客户群ID',
+	},
+	{
+		displayName: 'Unionid',
+		name: 'unionid',
+		type: 'string',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['accountId'],
+				operation: ['unionidToExternalUserid'],
+			},
+		},
+		default: '',
+		hint: '微信客户的unionid',
+	},
+	{
+		displayName: 'Openid',
+		name: 'openid',
+		type: 'string',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['accountId'],
+				operation: ['unionidToExternalUserid'],
+			},
+		},
+		default: '',
+		hint: '微信客户的openid',
+	},
+	{
+		displayName: '主体类型',
+		name: 'subjectType',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: ['accountId'],
+				operation: ['unionidToExternalUserid'],
+			},
+		},
+		options: [
+			{
+				name: '企业',
+				value: 0,
+				description: '主体名称是企业的',
+			},
+			{
+				name: '服务商',
+				value: 1,
+				description: '主体名称是服务商的',
+			},
+		],
+		default: 0,
+		hint: '0-企业 1-服务商',
+	},
+	{
+		displayName: 'External Userid列表',
+		name: 'externalUserid',
+		type: 'string',
+		typeOptions: {
+			multipleValues: true,
+		},
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['accountId'],
+				operation: ['externalUseridToPendingId'],
+			},
+		},
+		default: [],
+		description: '该企业的外部联系人ID，最多可同时查询100个外部联系人',
+		hint: '该企业的外部联系人ID，最多可同时查询100个外部联系人，多个值请使用"Add Value"按钮添加',
+	},
+	{
+		displayName: '客户群ID',
+		name: 'chatId',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['accountId'],
+				operation: ['externalUseridToPendingId'],
+			},
+		},
+		default: '',
+		hint: '群id，如果有传入该参数，则只检查群主是否在可见范围',
+	},
+	{
+		displayName: 'External Tagid列表',
+		name: 'externalTagidList',
+		type: 'string',
+		typeOptions: {
+			multipleValues: true,
+		},
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['accountId'],
+				operation: ['externalTagidToOpenExternalTagid'],
+			},
+		},
+		default: [],
+		description: '企业主体下的客户标签ID或标签组ID列表，最多不超过1000个',
+		hint: '企业主体下的客户标签ID或标签组ID列表，最多不超过1000个，多个值请使用"Add Value"按钮添加',
+	},
+	{
+		displayName: 'Open Kfid列表',
+		name: 'openKfidList',
+		type: 'string',
+		typeOptions: {
+			multipleValues: true,
+		},
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['accountId'],
+				operation: ['openKfidToNewOpenKfid'],
+			},
+		},
+		default: [],
+		description: '微信客服ID列表，最多不超过1000个',
+		hint: '微信客服ID列表，最多不超过1000个，多个值请使用"Add Value"按钮添加',
+	},
+	{
+		displayName: 'Provider Access Token',
+		name: 'providerAccessToken',
+		type: 'string',
+		typeOptions: {
+			password: true,
+		},
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['accountId'],
+				operation: ['finishOpenidMigration'],
+			},
+		},
+		default: '',
+		description: '应用提供商的provider_access_token',
+		hint: '应用提供商的provider_access_token，获取方法参见服务商的凭证',
+	},
+	{
+		displayName: '企业ID',
+		name: 'corpid',
+		type: 'string',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['accountId'],
+				operation: ['finishOpenidMigration'],
+			},
+		},
+		default: '',
+		hint: '企业corpid',
+	},
+	{
+		displayName: 'ID类型',
+		name: 'openidType',
+		type: 'options',
+		typeOptions: {
+			multipleValues: true,
+		},
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['accountId'],
+				operation: ['finishOpenidMigration'],
+			},
+		},
+		options: [
+			{
+				name: 'Userid与Corpid',
+				value: 1,
+				description: 'Userid与corpid',
+			},
+			{
+				name: 'External Userid',
+				value: 3,
+				description: 'External_userid',
+			},
+		],
+		default: 1,
+		description: 'ID类型：1-userid与corpid; 3-external_userid',
+		hint: '1-userid与corpid（只能同时设置）; 3-external_userid（可单独设置），多个值请使用"Add Value"按钮添加',
 	},
 ];

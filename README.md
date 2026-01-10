@@ -60,7 +60,7 @@
 - **第三方应用接口调用许可** - 接口调用许可管理（下单购买账号）
 - **第三方应用收银台** - 第三方应用收银台（创建收款订单）
 - **第三方应用推广二维码** - 第三方应用推广二维码（获取注册码）
-- **账号 ID** - 自建应用与第三方应用的对接（userid转换、external_userid转换）
+- **账号 ID** - 自建应用与第三方应用的对接（userid转换、external_userid转换、corpid转换）
 
 ### 2. 企业微信-办公
 
@@ -284,14 +284,6 @@ npm install n8n-nodes-wecom
   - 文本通知模板卡片
   - 图文展示模板卡片
 
-### 账号 ID
-
-> [官方文档：账号 ID](https://developer.work.weixin.qq.com/document/path/98728)
-
-- ✅ [userid转换](https://developer.work.weixin.qq.com/document/path/98728)（将代开发应用或第三方应用获取的密文open_userid转换为明文userid）
-- ✅ [external_userid转换](https://developer.work.weixin.qq.com/document/path/98728)（将代开发应用或第三方应用获取的externaluserid转换成自建应用的externaluserid）
-- ✅ [tmp_external_userid转换](https://developer.work.weixin.qq.com/document/path/98728)（将应用获取的外部用户临时id转换为external_userid，支持会议、收集表、文档等业务类型）
-
 ### 应用消息发送
 
 > [官方文档：发送应用消息](https://developer.work.weixin.qq.com/document/path/90236)
@@ -371,6 +363,15 @@ npm install n8n-nodes-wecom
 - ✅ [用户ID转OpenID](https://developer.work.weixin.qq.com/document/path/90202)
 - ✅ [OpenID转用户ID](https://developer.work.weixin.qq.com/document/path/90202)
 - ✅ [临时外部联系人ID转换](https://developer.work.weixin.qq.com/document/path/98729)
+- ✅ [corpid转换（第三方应用）](https://developer.work.weixin.qq.com/document/path/95890)
+- ✅ [userid转换（第三方应用）](https://developer.work.weixin.qq.com/document/path/95890)
+- ✅ [external_userid转换（第三方应用）](https://developer.work.weixin.qq.com/document/path/95890)
+- ✅ [external_userid转换（客户群成员）](https://developer.work.weixin.qq.com/document/path/95890)
+- ✅ [unionid转换（第三方应用）](https://developer.work.weixin.qq.com/document/path/95890)
+- ✅ [external_userid查询pending_id（第三方应用）](https://developer.work.weixin.qq.com/document/path/95890)
+- ✅ [客户标签ID转换（第三方应用）](https://developer.work.weixin.qq.com/document/path/95890)
+- ✅ [微信客服ID转换（第三方应用）](https://developer.work.weixin.qq.com/document/path/95890)
+- ✅ [ID迁移完成状态设置（第三方应用）](https://developer.work.weixin.qq.com/document/path/95890)
 
 #### 异步导入接口
 
@@ -454,8 +455,6 @@ npm install n8n-nodes-wecom
 - ✅ [批量更新发票状态](https://developer.work.weixin.qq.com/document/path/90286)
 - ✅ [批量查询电子发票](https://developer.work.weixin.qq.com/document/path/90287)
 
----
-
 ### 第三方应用授权
 
 > [官方文档：应用授权](https://developer.work.weixin.qq.com/document/path/90600)
@@ -467,7 +466,7 @@ npm install n8n-nodes-wecom
 - ✅ [获取企业授权信息](https://developer.work.weixin.qq.com/document/path/100779)
 - ✅ [获取企业凭证](https://developer.work.weixin.qq.com/document/path/90605)
 - ✅ [获取应用二维码](https://developer.work.weixin.qq.com/document/path/95430)
-- ✅ [明文corpid转换为加密corpid](https://developer.work.weixin.qq.com/document/path/95604)
+- ✅ [明文corpid转换为加密corpid](https://developer.work.weixin.qq.com/document/path/95890)
 - ✅ [获取应用权限详情](https://developer.work.weixin.qq.com/document/path/99052)
 - ✅ [获取应用管理员列表](https://developer.work.weixin.qq.com/document/path/100073)
 - ✅ [获取订单列表](https://developer.work.weixin.qq.com/document/path/90600)
@@ -526,6 +525,8 @@ npm install n8n-nodes-wecom
 - ✅ [支付成功通知](https://developer.work.weixin.qq.com/document/path/95804)（license_pay_success - 当服务商购买接口调用许可账号并完成付款后推送）
 - ✅ [退款结果通知](https://developer.work.weixin.qq.com/document/path/95805)（license_refund - 当服务商提交退款申请的订单发生状态变更时推送）
 - ✅ [自动激活回调通知](https://developer.work.weixin.qq.com/document/path/95994)（auto_activate - 当企业成员满足自动激活条件并触发自动激活后推送）
+
+---
 
 ## 二、办公功能（企业微信-办公 节点）
 
