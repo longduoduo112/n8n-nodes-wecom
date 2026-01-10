@@ -2,20 +2,23 @@ import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-wo
 import { NodeOperationError } from 'n8n-workflow';
 
 /**
- * 明文corpid转换为加密corpid
- * 官方文档：https://developer.work.weixin.qq.com/document/path/95604
+ * 民生优惠条件查询
+ * 官方文档：https://developer.work.weixin.qq.com/document/path/96515
  *
  * 用途：
- * - 为更好地保护企业与用户的数据，第三方应用获取的corpid不再是明文的corpid，将升级为第三方服务商级别的加密corpid
- * - 第三方可以将已有的明文corpid转换为第三方的加密corpid
+ * - 查询企业是否满足民生行业政策的优惠条件
  *
  * 注意事项：
- * - 需要应用服务商的provider_access_token
- * - 仅限第三方服务商，转换已获授权企业的corpid
+ * - 民生行业接口许可优惠政策于2023年3月31日到期，到期后不再支持查询
+ * - 查询的企业必须安装了服务商的第三方应用或者代开发应用
+ * - 一个企业在30天内最多只能查询一次
+ * - corpid：企业id，支持加密和非加密的corpid
+ * - query_result：查询结果。0表示不符合减免条件；1表示符合减免条件
+ * - unsatisfied_reason：被查询企业不符合减免条件的原因对应的错误码列表
  *
- * @returns 加密后的corpid（open_corpid）
+ * @returns 民生优惠条件查询结果
  */
-export async function corpidToOpencorpid(
+export async function supportPolicyQuery(
 	this: IExecuteFunctions,
 	index: number,
 ): Promise<IDataObject> {
@@ -30,7 +33,7 @@ export async function corpidToOpencorpid(
 		);
 	}
 
-	if (!corpid) {
+	if (!corpid || corpid.trim() === '') {
 		throw new NodeOperationError(
 			this.getNode(),
 			'企业ID不能为空',
@@ -38,26 +41,27 @@ export async function corpidToOpencorpid(
 		);
 	}
 
+	const body: IDataObject = {
+		corpid,
+	};
+
 	const options: IHttpRequestOptions = {
 		method: 'POST',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/service/corpid_to_opencorpid',
+		url: 'https://qyapi.weixin.qq.com/cgi-bin/license/support_policy_query',
 		qs: {
 			provider_access_token: providerAccessToken,
 		},
-		body: {
-			corpid,
-		},
+		body,
 		json: true,
 	};
 
 	try {
 		const response = (await this.helpers.httpRequest(options)) as IDataObject;
 
-		// 检查 API 错误
 		if (response.errcode !== undefined && response.errcode !== 0) {
 			throw new NodeOperationError(
 				this.getNode(),
-				`明文corpid转换为加密corpid失败: ${response.errmsg} (错误码: ${response.errcode})`,
+				`民生优惠条件查询失败: ${response.errmsg} (错误码: ${response.errcode})`,
 				{ itemIndex: index },
 			);
 		}
@@ -67,7 +71,7 @@ export async function corpidToOpencorpid(
 		const err = error as Error;
 		throw new NodeOperationError(
 			this.getNode(),
-			`明文corpid转换为加密corpid失败: ${err.message}`,
+			`民生优惠条件查询失败: ${err.message}`,
 			{ itemIndex: index },
 		);
 	}

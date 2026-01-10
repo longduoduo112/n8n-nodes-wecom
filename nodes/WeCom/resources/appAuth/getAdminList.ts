@@ -3,7 +3,7 @@ import { NodeOperationError } from 'n8n-workflow';
 
 /**
  * 获取应用管理员列表
- * 官方文档：https://developer.work.weixin.qq.com/document/path/95437
+ * 官方文档：https://developer.work.weixin.qq.com/document/path/100073
  *
  * 用途：
  * - 第三方服务商可以用此接口获取授权企业中某个第三方应用或者代开发应用的管理员列表

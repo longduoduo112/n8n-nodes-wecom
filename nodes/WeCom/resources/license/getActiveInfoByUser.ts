@@ -2,25 +2,26 @@ import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-wo
 import { NodeOperationError } from 'n8n-workflow';
 
 /**
- * 明文corpid转换为加密corpid
- * 官方文档：https://developer.work.weixin.qq.com/document/path/95604
+ * 获取成员的激活详情
+ * 官方文档：https://developer.work.weixin.qq.com/document/path/95555
  *
  * 用途：
- * - 为更好地保护企业与用户的数据，第三方应用获取的corpid不再是明文的corpid，将升级为第三方服务商级别的加密corpid
- * - 第三方可以将已有的明文corpid转换为第三方的加密corpid
+ * - 查询某个企业成员的激活情况
  *
  * 注意事项：
- * - 需要应用服务商的provider_access_token
- * - 仅限第三方服务商，转换已获授权企业的corpid
+ * - active_status：0：未激活，1：已激活
+ * - 账号类型：1:基础账号，2:互通账号
+ * - 同一个userid同类账号最多只能有一个
  *
- * @returns 加密后的corpid（open_corpid）
+ * @returns 成员的激活详情信息（包含激活状态和账号列表）
  */
-export async function corpidToOpencorpid(
+export async function getActiveInfoByUser(
 	this: IExecuteFunctions,
 	index: number,
 ): Promise<IDataObject> {
 	const providerAccessToken = this.getNodeParameter('providerAccessToken', index) as string;
 	const corpid = this.getNodeParameter('corpid', index) as string;
+	const userid = this.getNodeParameter('userid', index) as string;
 
 	if (!providerAccessToken) {
 		throw new NodeOperationError(
@@ -30,7 +31,7 @@ export async function corpidToOpencorpid(
 		);
 	}
 
-	if (!corpid) {
+	if (!corpid || corpid.trim() === '') {
 		throw new NodeOperationError(
 			this.getNode(),
 			'企业ID不能为空',
@@ -38,14 +39,23 @@ export async function corpidToOpencorpid(
 		);
 	}
 
+	if (!userid || userid.trim() === '') {
+		throw new NodeOperationError(
+			this.getNode(),
+			'企业成员userid不能为空',
+			{ itemIndex: index },
+		);
+	}
+
 	const options: IHttpRequestOptions = {
 		method: 'POST',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/service/corpid_to_opencorpid',
+		url: 'https://qyapi.weixin.qq.com/cgi-bin/license/get_active_info_by_user',
 		qs: {
 			provider_access_token: providerAccessToken,
 		},
 		body: {
 			corpid,
+			userid,
 		},
 		json: true,
 	};
@@ -53,11 +63,10 @@ export async function corpidToOpencorpid(
 	try {
 		const response = (await this.helpers.httpRequest(options)) as IDataObject;
 
-		// 检查 API 错误
 		if (response.errcode !== undefined && response.errcode !== 0) {
 			throw new NodeOperationError(
 				this.getNode(),
-				`明文corpid转换为加密corpid失败: ${response.errmsg} (错误码: ${response.errcode})`,
+				`获取成员的激活详情失败: ${response.errmsg} (错误码: ${response.errcode})`,
 				{ itemIndex: index },
 			);
 		}
@@ -67,7 +76,7 @@ export async function corpidToOpencorpid(
 		const err = error as Error;
 		throw new NodeOperationError(
 			this.getNode(),
-			`明文corpid转换为加密corpid失败: ${err.message}`,
+			`获取成员的激活详情失败: ${err.message}`,
 			{ itemIndex: index },
 		);
 	}

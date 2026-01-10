@@ -106,11 +106,16 @@ export class WeComTrigger implements INodeType {
 						value: 'link',
 						description: '接收用户发送的链接消息',
 					},
+					{
+						name: '接口许可失效通知',
+						value: 'unlicensed_notify',
+						description: '接收接口许可失效通知事件（当许可账号失效的企业成员访问应用时触发）',
+					},
 				],
 				default: ['*'],
 				required: true,
 				description: '选择要接收的消息和事件类型',
-				hint: '可以选择多个类型，如果选择"所有事件"则接收所有消息',
+				hint: '可以选择多个类型，如果选择"所有事件"则接收所有消息。接口许可失效通知事件类型为 unlicensed_notify',
 			},
 			{
 				displayName: '返回原始数据',
@@ -239,9 +244,18 @@ export class WeComTrigger implements INodeType {
 
 		// 过滤事件类型
 		const events = this.getNodeParameter('events', []) as string[];
-		const msgType = messageData.MsgType || messageData.Event || 'unknown';
+		const msgType = messageData.MsgType || 'unknown';
+		const eventType = messageData.Event || 'unknown';
 
-		if (!events.includes('*') && !events.includes(msgType)) {
+		// 检查是否匹配：支持按消息类型（MsgType）或事件类型（Event）过滤
+		const shouldProcess =
+			events.includes('*') ||
+			events.includes(msgType) ||
+			events.includes(eventType) ||
+			// 如果选择了"事件消息"（event），则接收所有事件类型
+			(msgType === 'event' && events.includes('event'));
+
+		if (!shouldProcess) {
 			// 不处理此类型的消息，返回 success
 			return {
 				webhookResponse: 'success',

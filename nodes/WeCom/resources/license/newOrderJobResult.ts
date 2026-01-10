@@ -2,25 +2,26 @@ import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-wo
 import { NodeOperationError } from 'n8n-workflow';
 
 /**
- * 明文corpid转换为加密corpid
- * 官方文档：https://developer.work.weixin.qq.com/document/path/95604
+ * 获取多企业新购订单提交结果
+ * 官方文档：https://developer.work.weixin.qq.com/document/path/98892
  *
  * 用途：
- * - 为更好地保护企业与用户的数据，第三方应用获取的corpid不再是明文的corpid，将升级为第三方服务商级别的加密corpid
- * - 第三方可以将已有的明文corpid转换为第三方的加密corpid
+ * - 提交多企业新购订单之后，用于获取该订单的创建结果
+ * - 该结果仅在提交多企业新购订单后7天内可获取
  *
  * 注意事项：
- * - 需要应用服务商的provider_access_token
- * - 仅限第三方服务商，转换已获授权企业的corpid
+ * - jobid 必填
+ * - status：1：创建完成，2：创建中，3：创建失败
+ * - 仅在提交多企业新购订单后7天内可获取
  *
- * @returns 加密后的corpid（open_corpid）
+ * @returns 订单创建结果（包含订单号、状态、失败列表等）
  */
-export async function corpidToOpencorpid(
+export async function newOrderJobResult(
 	this: IExecuteFunctions,
 	index: number,
 ): Promise<IDataObject> {
 	const providerAccessToken = this.getNodeParameter('providerAccessToken', index) as string;
-	const corpid = this.getNodeParameter('corpid', index) as string;
+	const jobid = this.getNodeParameter('jobid', index) as string;
 
 	if (!providerAccessToken) {
 		throw new NodeOperationError(
@@ -30,22 +31,22 @@ export async function corpidToOpencorpid(
 		);
 	}
 
-	if (!corpid) {
+	if (!jobid || jobid.trim() === '') {
 		throw new NodeOperationError(
 			this.getNode(),
-			'企业ID不能为空',
+			'多企业新购任务ID不能为空',
 			{ itemIndex: index },
 		);
 	}
 
 	const options: IHttpRequestOptions = {
 		method: 'POST',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/service/corpid_to_opencorpid',
+		url: 'https://qyapi.weixin.qq.com/cgi-bin/license/new_order_job_result',
 		qs: {
 			provider_access_token: providerAccessToken,
 		},
 		body: {
-			corpid,
+			jobid,
 		},
 		json: true,
 	};
@@ -53,11 +54,10 @@ export async function corpidToOpencorpid(
 	try {
 		const response = (await this.helpers.httpRequest(options)) as IDataObject;
 
-		// 检查 API 错误
 		if (response.errcode !== undefined && response.errcode !== 0) {
 			throw new NodeOperationError(
 				this.getNode(),
-				`明文corpid转换为加密corpid失败: ${response.errmsg} (错误码: ${response.errcode})`,
+				`获取多企业新购订单提交结果失败: ${response.errmsg} (错误码: ${response.errcode})`,
 				{ itemIndex: index },
 			);
 		}
@@ -67,7 +67,7 @@ export async function corpidToOpencorpid(
 		const err = error as Error;
 		throw new NodeOperationError(
 			this.getNode(),
-			`明文corpid转换为加密corpid失败: ${err.message}`,
+			`获取多企业新购订单提交结果失败: ${err.message}`,
 			{ itemIndex: index },
 		);
 	}

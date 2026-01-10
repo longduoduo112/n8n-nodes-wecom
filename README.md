@@ -56,7 +56,8 @@
 - **企业互联** - 企业互联和上下游管理
 - **素材管理** - 素材上传和管理
 - **电子发票** - 电子发票查询和状态管理
-- **应用授权** - 获取第三方应用凭证
+- **第三方应用授权** - 获取第三方应用凭证
+- **第三方应用接口调用许可** - 接口调用许可管理（下单购买账号）
 
 ### 2. 企业微信-办公
 
@@ -177,20 +178,52 @@ npm install n8n-nodes-wecom
 
 ## 一、基础功能（企业微信-基础 节点）
 
-### 应用授权
+### 第三方应用授权
 
 > [官方文档：应用授权](https://developer.work.weixin.qq.com/document/path/90600)
 
 - ✅ [获取第三方应用凭证](https://developer.work.weixin.qq.com/document/path/90600)
 - ✅ [获取预授权码](https://developer.work.weixin.qq.com/document/path/90601)
 - ✅ [设置授权配置](https://developer.work.weixin.qq.com/document/path/90602)
-- ✅ [获取企业永久授权码](https://developer.work.weixin.qq.com/document/path/90603)
-- ✅ [获取企业授权信息](https://developer.work.weixin.qq.com/document/path/90604)
+- ✅ [获取企业永久授权码](https://developer.work.weixin.qq.com/document/path/100776)
+- ✅ [获取企业授权信息](https://developer.work.weixin.qq.com/document/path/100779)
 - ✅ [获取企业凭证](https://developer.work.weixin.qq.com/document/path/90605)
 - ✅ [获取应用二维码](https://developer.work.weixin.qq.com/document/path/95430)
-- ✅ [明文corpid转换为加密corpid](https://developer.work.weixin.qq.com/document/path/95435)
-- ✅ [获取应用权限详情](https://developer.work.weixin.qq.com/document/path/95436)
-- ✅ [获取应用管理员列表](https://developer.work.weixin.qq.com/document/path/95437)
+- ✅ [明文corpid转换为加密corpid](https://developer.work.weixin.qq.com/document/path/95604)
+- ✅ [获取应用权限详情](https://developer.work.weixin.qq.com/document/path/99052)
+- ✅ [获取应用管理员列表](https://developer.work.weixin.qq.com/document/path/100073)
+
+### 第三方应用接口调用许可
+
+> [官方文档：接口调用许可](https://developer.work.weixin.qq.com/document/path/95652)
+
+- ✅ [下单购买账号](https://developer.work.weixin.qq.com/document/path/95644)
+- ✅ [下单续期账号](https://developer.work.weixin.qq.com/document/path/95646)（创建续期任务、提交续期订单）
+- ✅ [获取订单列表](https://developer.work.weixin.qq.com/document/path/95647)
+- ✅ [获取订单详情](https://developer.work.weixin.qq.com/document/path/95648)
+- ✅ [获取订单中的账号列表](https://developer.work.weixin.qq.com/document/path/95649)
+- ✅ [取消订单](https://developer.work.weixin.qq.com/document/path/96106)
+- ✅ [下单购买多企业账号](https://developer.work.weixin.qq.com/document/path/98892)（创建多企业新购任务、提交多企业新购订单、获取多企业新购订单提交结果）
+- ✅ [获取多企业订单详情](https://developer.work.weixin.qq.com/document/path/98893)
+- ✅ [使用余额支付订单](https://developer.work.weixin.qq.com/document/path/99415)（提交余额支付订单任务、获取订单支付结果）
+- ✅ [激活账号](https://developer.work.weixin.qq.com/document/path/95553)（激活账号、批量激活账号、指定账号类型激活）
+- ✅ [获取激活码详情](https://developer.work.weixin.qq.com/document/path/95552)（获取激活码详情、批量获取激活码详情）
+- ✅ [获取企业的账号列表](https://developer.work.weixin.qq.com/document/path/95544)
+- ✅ [获取成员的激活详情](https://developer.work.weixin.qq.com/document/path/95555)
+- ✅ [账号继承](https://developer.work.weixin.qq.com/document/path/95673)
+- ✅ [分配激活码给下游/下级企业](https://developer.work.weixin.qq.com/document/path/96059)
+- ✅ [获取应用的接口许可状态](https://developer.work.weixin.qq.com/document/path/95844)
+- ✅ [设置企业的许可自动激活状态](https://developer.work.weixin.qq.com/document/path/95873)
+- ✅ [查询企业的许可自动激活状态](https://developer.work.weixin.qq.com/document/path/95874)
+- ✅ [充值账户余额查询](https://developer.work.weixin.qq.com/document/path/100137)
+- ✅ [民生优惠条件查询](https://developer.work.weixin.qq.com/document/path/96515)（注：民生行业接口许可优惠政策于2023年3月31日到期，到期后不再支持查询）
+
+**接口调用许可事件通知：**
+
+- ✅ [接口许可失效通知](https://developer.work.weixin.qq.com/document/path/95716)（unlicensed_notify - 当许可账号失效的企业成员访问应用时触发）
+- ✅ [支付成功通知](https://developer.work.weixin.qq.com/document/path/95804)（license_pay_success - 当服务商购买接口调用许可账号并完成付款后推送）
+- ✅ [退款结果通知](https://developer.work.weixin.qq.com/document/path/95805)（license_refund - 当服务商提交退款申请的订单发生状态变更时推送）
+- ✅ [自动激活回调通知](https://developer.work.weixin.qq.com/document/path/95994)（auto_activate - 当企业成员满足自动激活条件并触发自动激活后推送）
 
 ### 消息接收（触发器节点）
 
@@ -206,6 +239,7 @@ npm install n8n-nodes-wecom
 - ✅ [接收位置消息](https://developer.work.weixin.qq.com/document/path/90239)
 - ✅ [接收链接消息](https://developer.work.weixin.qq.com/document/path/90239)
 - ✅ [接收事件推送](https://developer.work.weixin.qq.com/document/path/90240)（成员变更、部门变更等）
+- ✅ [接口许可失效通知](https://developer.work.weixin.qq.com/document/path/90600)（当许可账号失效的企业成员访问应用时触发）
 - ✅ URL 验证
 - ✅ 消息加解密
 - ✅ 签名验证
@@ -257,6 +291,9 @@ npm install n8n-nodes-wecom
 - ✅ [接收应用管理员变更通知](https://developer.work.weixin.qq.com/document/path/91125)（change_app_admin）
 - ✅ [接收授权组织架构权限通知](https://developer.work.weixin.qq.com/document/path/91126)（corp_arch_auth）
 - ✅ [接收获客助手权限变更通知](https://developer.work.weixin.qq.com/document/path/91127)（approve_special_auth/cancel_special_auth）
+- ✅ [接收支付成功通知](https://developer.work.weixin.qq.com/document/path/90600)（license_pay_success - 接口调用许可支付成功通知）
+- ✅ [接收退款结果通知](https://developer.work.weixin.qq.com/document/path/90600)（license_refund - 接口调用许可退款结果通知）
+- ✅ [接收自动激活回调通知](https://developer.work.weixin.qq.com/document/path/90600)（auto_activate - 接口调用许可自动激活回调通知）
 - ✅ URL 验证
 - ✅ 消息加解密（使用SuiteID作为receiveid）
 - ✅ 签名验证

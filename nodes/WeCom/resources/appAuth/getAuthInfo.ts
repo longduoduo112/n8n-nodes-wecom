@@ -3,7 +3,7 @@ import { NodeOperationError } from 'n8n-workflow';
 
 /**
  * 获取企业授权信息
- * 官方文档：https://developer.work.weixin.qq.com/document/path/90604
+ * 官方文档：https://developer.work.weixin.qq.com/document/path/100779
  *
  * 用途：
  * - 通过永久授权码换取企业微信的授权信息

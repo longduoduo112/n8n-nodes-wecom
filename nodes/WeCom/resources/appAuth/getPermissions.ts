@@ -3,7 +3,7 @@ import { NodeOperationError } from 'n8n-workflow';
 
 /**
  * 获取应用权限详情
- * 官方文档：https://developer.work.weixin.qq.com/document/path/95436
+ * 官方文档：https://developer.work.weixin.qq.com/document/path/99052
  *
  * 用途：
  * - 获取代开发应用或第三方应用用户授权的权限详情

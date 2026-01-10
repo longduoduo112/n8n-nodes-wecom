@@ -2,20 +2,19 @@ import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-wo
 import { NodeOperationError } from 'n8n-workflow';
 
 /**
- * 明文corpid转换为加密corpid
- * 官方文档：https://developer.work.weixin.qq.com/document/path/95604
+ * 查询企业的许可自动激活状态
+ * 官方文档：https://developer.work.weixin.qq.com/document/path/95874
  *
  * 用途：
- * - 为更好地保护企业与用户的数据，第三方应用获取的corpid不再是明文的corpid，将升级为第三方服务商级别的加密corpid
- * - 第三方可以将已有的明文corpid转换为第三方的加密corpid
+ * - 服务商可以调用该接口查询授权企业的许可自动激活状态
  *
  * 注意事项：
- * - 需要应用服务商的provider_access_token
- * - 仅限第三方服务商，转换已获授权企业的corpid
+ * - 查询的企业corpid，要求服务商为企业购买过接口许可才有查询结果
+ * - auto_active_status：0：关闭，1：打开
  *
- * @returns 加密后的corpid（open_corpid）
+ * @returns 企业的许可自动激活状态信息
  */
-export async function corpidToOpencorpid(
+export async function getAutoActiveStatus(
 	this: IExecuteFunctions,
 	index: number,
 ): Promise<IDataObject> {
@@ -30,7 +29,7 @@ export async function corpidToOpencorpid(
 		);
 	}
 
-	if (!corpid) {
+	if (!corpid || corpid.trim() === '') {
 		throw new NodeOperationError(
 			this.getNode(),
 			'企业ID不能为空',
@@ -38,26 +37,27 @@ export async function corpidToOpencorpid(
 		);
 	}
 
+	const body: IDataObject = {
+		corpid,
+	};
+
 	const options: IHttpRequestOptions = {
 		method: 'POST',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/service/corpid_to_opencorpid',
+		url: 'https://qyapi.weixin.qq.com/cgi-bin/license/get_auto_active_status',
 		qs: {
 			provider_access_token: providerAccessToken,
 		},
-		body: {
-			corpid,
-		},
+		body,
 		json: true,
 	};
 
 	try {
 		const response = (await this.helpers.httpRequest(options)) as IDataObject;
 
-		// 检查 API 错误
 		if (response.errcode !== undefined && response.errcode !== 0) {
 			throw new NodeOperationError(
 				this.getNode(),
-				`明文corpid转换为加密corpid失败: ${response.errmsg} (错误码: ${response.errcode})`,
+				`查询企业的许可自动激活状态失败: ${response.errmsg} (错误码: ${response.errcode})`,
 				{ itemIndex: index },
 			);
 		}
@@ -67,7 +67,7 @@ export async function corpidToOpencorpid(
 		const err = error as Error;
 		throw new NodeOperationError(
 			this.getNode(),
-			`明文corpid转换为加密corpid失败: ${err.message}`,
+			`查询企业的许可自动激活状态失败: ${err.message}`,
 			{ itemIndex: index },
 		);
 	}

@@ -172,6 +172,21 @@ export class WeComSuiteTrigger implements INodeType {
 						value: 'cancel_special_auth',
 						description: '获客助手权限取消事件（管理员取消权限授权时触发）',
 					},
+					{
+						name: '支付成功通知',
+						value: 'license_pay_success',
+						description: '接口调用许可支付成功通知（当服务商购买接口调用许可账号并完成付款后推送）',
+					},
+					{
+						name: '退款结果通知',
+						value: 'license_refund',
+						description: '接口调用许可退款结果通知（当服务商提交退款申请的订单发生状态变更时推送）',
+					},
+					{
+						name: '自动激活回调通知',
+						value: 'auto_activate',
+						description: '接口调用许可自动激活回调通知（当企业成员满足自动激活条件并触发自动激活后推送）',
+					},
 				],
 				default: ['*'],
 				required: true,

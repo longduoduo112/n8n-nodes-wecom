@@ -3,7 +3,7 @@ import { NodeOperationError } from 'n8n-workflow';
 
 /**
  * 获取企业永久授权码
- * 官方文档：https://developer.work.weixin.qq.com/document/path/90603
+ * 官方文档：https://developer.work.weixin.qq.com/document/path/100776
  *
  * 用途：
  * - 使用临时授权码换取授权方的永久授权码以及企业信息

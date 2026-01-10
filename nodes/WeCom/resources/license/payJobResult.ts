@@ -2,25 +2,26 @@ import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-wo
 import { NodeOperationError } from 'n8n-workflow';
 
 /**
- * 明文corpid转换为加密corpid
- * 官方文档：https://developer.work.weixin.qq.com/document/path/95604
+ * 获取订单支付结果
+ * 官方文档：https://developer.work.weixin.qq.com/document/path/99415
  *
  * 用途：
- * - 为更好地保护企业与用户的数据，第三方应用获取的corpid不再是明文的corpid，将升级为第三方服务商级别的加密corpid
- * - 第三方可以将已有的明文corpid转换为第三方的加密corpid
+ * - 使用该接口获取余额订单支付任务的执行结果
+ * - 仅在提交了"余额支付订单任务"后的7天内可获取
  *
  * 注意事项：
- * - 需要应用服务商的provider_access_token
- * - 仅限第三方服务商，转换已获授权企业的corpid
+ * - status：1：支付成功，2：支付任务执行中，3：支付失败
+ * - 支付失败时会返回 pay_job_result，包含失败原因和失败企业列表
+ * - 仅在提交了"余额支付订单任务"后的7天内可获取
  *
- * @returns 加密后的corpid（open_corpid）
+ * @returns 订单支付结果（包含支付状态、支付结果信息等）
  */
-export async function corpidToOpencorpid(
+export async function payJobResult(
 	this: IExecuteFunctions,
 	index: number,
 ): Promise<IDataObject> {
 	const providerAccessToken = this.getNodeParameter('providerAccessToken', index) as string;
-	const corpid = this.getNodeParameter('corpid', index) as string;
+	const jobid = this.getNodeParameter('jobid', index) as string;
 
 	if (!providerAccessToken) {
 		throw new NodeOperationError(
@@ -30,22 +31,22 @@ export async function corpidToOpencorpid(
 		);
 	}
 
-	if (!corpid) {
+	if (!jobid || jobid.trim() === '') {
 		throw new NodeOperationError(
 			this.getNode(),
-			'企业ID不能为空',
+			'支付任务ID不能为空',
 			{ itemIndex: index },
 		);
 	}
 
 	const options: IHttpRequestOptions = {
 		method: 'POST',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/service/corpid_to_opencorpid',
+		url: 'https://qyapi.weixin.qq.com/cgi-bin/license/pay_job_result',
 		qs: {
 			provider_access_token: providerAccessToken,
 		},
 		body: {
-			corpid,
+			jobid,
 		},
 		json: true,
 	};
@@ -53,11 +54,10 @@ export async function corpidToOpencorpid(
 	try {
 		const response = (await this.helpers.httpRequest(options)) as IDataObject;
 
-		// 检查 API 错误
 		if (response.errcode !== undefined && response.errcode !== 0) {
 			throw new NodeOperationError(
 				this.getNode(),
-				`明文corpid转换为加密corpid失败: ${response.errmsg} (错误码: ${response.errcode})`,
+				`获取订单支付结果失败: ${response.errmsg} (错误码: ${response.errcode})`,
 				{ itemIndex: index },
 			);
 		}
@@ -67,7 +67,7 @@ export async function corpidToOpencorpid(
 		const err = error as Error;
 		throw new NodeOperationError(
 			this.getNode(),
-			`明文corpid转换为加密corpid失败: ${err.message}`,
+			`获取订单支付结果失败: ${err.message}`,
 			{ itemIndex: index },
 		);
 	}
