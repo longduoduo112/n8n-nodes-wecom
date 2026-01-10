@@ -58,6 +58,8 @@
 - **电子发票** - 电子发票查询和状态管理
 - **第三方应用授权** - 获取第三方应用凭证
 - **第三方应用接口调用许可** - 接口调用许可管理（下单购买账号）
+- **第三方应用收银台** - 第三方应用收银台（创建收款订单）
+- **第三方应用推广二维码** - 第三方应用推广二维码（获取注册码）
 
 ### 2. 企业微信-办公
 
@@ -211,15 +213,25 @@ npm install n8n-nodes-wecom
 
 ### 第三方应用收银台
 
-> [官方文档：第三方应用收银台](https://developer.work.weixin.qq.com/document/path/95430)
+> [官方文档：第三方应用收银台](https://developer.work.weixin.qq.com/document/path/97654)
 
-- ✅ [创建收款订单](https://developer.work.weixin.qq.com/document/path/95430)（支持普通第三方应用、代开发应用、行业解决方案三种业务类型）
-- ✅ [取消收款订单](https://developer.work.weixin.qq.com/document/path/95430)
-- ✅ [获取收款订单列表](https://developer.work.weixin.qq.com/document/path/95430)
-- ✅ [获取收款订单详情](https://developer.work.weixin.qq.com/document/path/95430)
-- ✅ [获取发票列表](https://developer.work.weixin.qq.com/document/path/95430)
-- ✅ [标记开票状态](https://developer.work.weixin.qq.com/document/path/95430)
+- ✅ [创建收款订单](https://developer.work.weixin.qq.com/document/path/98045)（支持普通第三方应用、代开发应用、行业解决方案三种业务类型）
+- ✅ [取消收款订单](https://developer.work.weixin.qq.com/document/path/98046)
+- ✅ [获取收款订单列表](https://developer.work.weixin.qq.com/document/path/98053)
+- ✅ [获取收款订单详情](https://developer.work.weixin.qq.com/document/path/98054)
+- ✅ [获取发票列表](https://developer.work.weixin.qq.com/document/path/99436)
+- ✅ [标记开票状态](https://developer.work.weixin.qq.com/document/path/99437)
+- ✅ [签名算法](https://developer.work.weixin.qq.com/document/path/98768)
 - ✅ [使用余额支付订单](https://developer.work.weixin.qq.com/document/path/99415)（提交余额支付订单任务、获取订单支付结果）
+
+### 第三方应用推广二维码
+
+> [官方文档：第三方应用推广二维码](https://developer.work.weixin.qq.com/document/path/90578)
+
+- ✅ [获取注册码](https://developer.work.weixin.qq.com/document/path/90581)（根据注册推广包生成注册码）
+- ✅ [查询注册状态](https://developer.work.weixin.qq.com/document/path/90582)（查询通过注册定制化新创建的企业注册状态）
+- ✅ [设置授权应用可见范围](https://developer.work.weixin.qq.com/document/path/90583)（设置授权应用的可见范围，包括成员、部门、标签）
+- ✅ [设置通讯录同步完成](https://developer.work.weixin.qq.com/document/path/90584)（设置通讯录同步完成，解除通讯录锁定状态）
 - ✅ [激活账号](https://developer.work.weixin.qq.com/document/path/95553)（激活账号、批量激活账号、指定账号类型激活）
 - ✅ [获取激活码详情](https://developer.work.weixin.qq.com/document/path/95552)（获取激活码详情、批量获取激活码详情）
 - ✅ [获取企业的账号列表](https://developer.work.weixin.qq.com/document/path/95544)
@@ -314,6 +326,8 @@ npm install n8n-nodes-wecom
 - ✅ [接收退款通知](https://developer.work.weixin.qq.com/document/path/90600)（refund - 当某个客户发起有效的退款，经服务商在管理端同意后或过期自动完成退款后推送）
 - ✅ [接收应用版本变更通知](https://developer.work.weixin.qq.com/document/path/90600)（change_editon - 付费版本购买/扩容/续期、退款成功、试用期变更、版本到期等情况下推送）
 - ✅ [接收取消订单通知](https://developer.work.weixin.qq.com/document/path/90600)（cancel_order - 当服务商或客户企业取消订单后推送）
+- ✅ [接收注册完成回调事件](https://developer.work.weixin.qq.com/document/path/90585)（register_corp - 企业通过注册定制化新创建企业注册成功时推送）
+- ✅ [接收扫描推广二维码事件](https://developer.work.weixin.qq.com/document/path/98071)（enter_register_package - 已有授权关系的企业成员扫描推广二维码时触发）
 - ✅ URL 验证
 - ✅ 消息加解密（使用SuiteID作为receiveid）
 - ✅ 签名验证

@@ -3,7 +3,7 @@ import { NodeOperationError } from 'n8n-workflow';
 
 /**
  * 获取发票列表
- * 官方文档：https://developer.work.weixin.qq.com/document/path/95430
+ * 官方文档：https://developer.work.weixin.qq.com/document/path/99436
  *
  * 用途：
  * - 服务商可以使用该接口查询某个客户或某段时间内申请的应用订单发票列表

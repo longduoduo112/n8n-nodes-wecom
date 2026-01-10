@@ -3,7 +3,7 @@ import { NodeOperationError } from 'n8n-workflow';
 
 /**
  * 标记开票状态
- * 官方文档：https://developer.work.weixin.qq.com/document/path/95430
+ * 官方文档：https://developer.work.weixin.qq.com/document/path/99437
  *
  * 用途：
  * - 服务商可以使用该接口标记某个应用订单发票的开票状态

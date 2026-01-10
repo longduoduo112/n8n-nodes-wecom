@@ -41,7 +41,7 @@ function flattenObject(obj: unknown, pairs: string[] = []): void {
 
 /**
  * 生成收银台API签名
- * 官方文档：https://developer.work.weixin.qq.com/document/path/95430
+ * 官方文档：https://developer.work.weixin.qq.com/document/path/98768
  *
  * 签名算法：
  * 1. 将所有非空参数构造成键值对（key=value），按照ASCII码从小到大排序（字典序）
@@ -73,7 +73,7 @@ function generatePaytoolSignature(body: IDataObject, secret: string): string {
 
 /**
  * 获取收款订单列表
- * 官方文档：https://developer.work.weixin.qq.com/document/path/95430
+ * 官方文档：https://developer.work.weixin.qq.com/document/path/98053
  *
  * 用途：
  * - 服务商可以使用该接口查询指定时间段内创建的各种业务的收款订单列表
@@ -82,6 +82,7 @@ function generatePaytoolSignature(body: IDataObject, secret: string): string {
  * - 无特殊权限要求
  * - 需要提供收银台API调用密钥用于签名
  * - 签名算法：将所有非空参数构造成键值对，按字典序排序后拼接，然后进行HMAC-SHA256签名并base64编码
+ * - 签名算法文档：https://developer.work.weixin.qq.com/document/path/98768
  *
  * @returns 订单列表信息
  */

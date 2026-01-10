@@ -217,6 +217,16 @@ export class WeComSuiteTrigger implements INodeType {
 						value: 'cancel_order',
 						description: '取消订单通知（当服务商或客户企业取消订单后推送）',
 					},
+					{
+						name: '注册完成回调',
+						value: 'register_corp',
+						description: '注册完成回调事件（企业通过注册定制化新创建企业注册成功时推送）',
+					},
+					{
+						name: '扫描推广二维码',
+						value: 'enter_register_package',
+						description: '扫描推广二维码事件（已有授权关系的企业成员扫描推广二维码时触发）',
+					},
 				],
 				default: ['*'],
 				required: true,
