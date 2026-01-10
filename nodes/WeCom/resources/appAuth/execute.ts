@@ -9,6 +9,9 @@ import { getAppQrcode } from './getAppQrcode';
 import { corpidToOpencorpid } from './corpidToOpencorpid';
 import { getPermissions } from './getPermissions';
 import { getAdminList } from './getAdminList';
+import { getOrderList } from './getOrderList';
+import { getOrder } from './getOrder';
+import { prolongTry } from './prolongTry';
 
 /**
  * 执行应用授权相关操作
@@ -59,6 +62,15 @@ export async function executeAppAuth(
 					break;
 				case 'getAdminList':
 					responseData = await getAdminList.call(this, i);
+					break;
+				case 'getOrderList':
+					responseData = await getOrderList.call(this, i);
+					break;
+				case 'getOrder':
+					responseData = await getOrder.call(this, i);
+					break;
+				case 'prolongTry':
+					responseData = await prolongTry.call(this, i);
 					break;
 				default:
 					throw new Error(`未知操作: ${operation}`);

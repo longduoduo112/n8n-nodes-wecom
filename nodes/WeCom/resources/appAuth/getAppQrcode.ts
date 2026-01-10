@@ -54,12 +54,10 @@ export async function getAppQrcode(
 		result_type: resultType,
 	};
 
-	// appid 可选，如果不为默认值1则添加
 	if (appid !== 1) {
 		body.appid = appid;
 	}
 
-	// state 可选，如果不为空则添加
 	if (state && state.trim()) {
 		body.state = state.trim();
 	}
@@ -67,7 +65,6 @@ export async function getAppQrcode(
 	let options: IHttpRequestOptions;
 
 	if (resultType === 1) {
-		// 返回二进制数据，需要特殊处理
 		options = {
 			method: 'POST',
 			url: 'https://qyapi.weixin.qq.com/cgi-bin/service/get_app_qrcode',
@@ -79,7 +76,6 @@ export async function getAppQrcode(
 			returnFullResponse: true,
 		};
 	} else {
-		// 返回JSON格式的URL
 		options = {
 			method: 'POST',
 			url: 'https://qyapi.weixin.qq.com/cgi-bin/service/get_app_qrcode',
@@ -93,13 +89,11 @@ export async function getAppQrcode(
 
 	try {
 		if (resultType === 1) {
-			// 返回二进制数据
 			const downloadResponse = (await this.helpers.httpRequest(options)) as {
 				body: Buffer | ArrayBuffer | string | ArrayBufferView;
 				headers: IDataObject;
 			};
 
-			// 处理二进制响应
 			let buffer: Buffer;
 
 			if (downloadResponse.body) {
@@ -122,7 +116,6 @@ export async function getAppQrcode(
 				);
 			}
 
-			// 尝试从响应头获取文件名
 			let filename = 'qrcode.png';
 			if (downloadResponse.headers) {
 				const contentDisposition =
@@ -135,7 +128,7 @@ export async function getAppQrcode(
 						try {
 							filename = decodeURIComponent(filename);
 						} catch {
-							// 解码失败使用原始文件名
+							// Keep original filename if decode fails
 						}
 					}
 				}
@@ -148,12 +141,10 @@ export async function getAppQrcode(
 				binary: {
 					data: binaryData,
 				},
-			} as INodeExecutionData;
+				} as INodeExecutionData;
 		} else {
-			// 返回JSON格式的URL
 			const response = (await this.helpers.httpRequest(options)) as IDataObject;
 
-			// 检查 API 错误
 			if (response.errcode !== undefined && response.errcode !== 0) {
 				throw new NodeOperationError(
 					this.getNode(),

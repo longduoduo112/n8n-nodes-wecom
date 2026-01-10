@@ -56,7 +56,6 @@ export async function getAppLicenseInfo(
 		suite_id: suiteId,
 	};
 
-	// 如果指定了appid，则添加（旧的多应用套件中的应用id）
 	if (appid !== undefined && appid > 0) {
 		body.appid = appid;
 	}

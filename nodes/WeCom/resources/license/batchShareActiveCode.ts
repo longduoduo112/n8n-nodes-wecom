@@ -52,7 +52,6 @@ export async function batchShareActiveCode(
 		);
 	}
 
-	// 构建分配的接口许可列表
 	const shareList: IDataObject[] = [];
 	if (shareListCollection.codes) {
 		const codes = shareListCollection.codes as IDataObject[];
@@ -96,7 +95,6 @@ export async function batchShareActiveCode(
 		share_list: shareList,
 	};
 
-	// 如果指定了分配场景，则添加
 	if (corpLinkType !== undefined && (corpLinkType === 0 || corpLinkType === 1)) {
 		body.corp_link_type = corpLinkType;
 	}

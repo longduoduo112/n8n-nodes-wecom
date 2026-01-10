@@ -41,7 +41,6 @@ export async function cancelOrder(
 		);
 	}
 
-	// 如果不是多企业订单，则企业ID必填
 	if (!isMultiCorpOrder && (!corpid || corpid.trim() === '')) {
 		throw new NodeOperationError(
 			this.getNode(),
@@ -54,7 +53,6 @@ export async function cancelOrder(
 		order_id: orderId,
 	};
 
-	// 如果不是多企业订单，则添加企业ID
 	if (!isMultiCorpOrder && corpid && corpid.trim() !== '') {
 		body.corpid = corpid;
 	}

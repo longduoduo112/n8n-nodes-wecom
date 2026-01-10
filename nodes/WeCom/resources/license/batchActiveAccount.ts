@@ -41,7 +41,6 @@ export async function batchActiveAccount(
 		);
 	}
 
-	// 构建激活账号列表
 	const activeList: IDataObject[] = [];
 	if (activeListCollection.accounts) {
 		const accounts = activeListCollection.accounts as IDataObject[];

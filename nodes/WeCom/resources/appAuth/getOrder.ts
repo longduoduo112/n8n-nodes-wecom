@@ -2,25 +2,25 @@ import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-wo
 import { NodeOperationError } from 'n8n-workflow';
 
 /**
- * 获取预授权码
- * 官方文档：https://developer.work.weixin.qq.com/document/path/90601
+ * 获取订单详情
+ * 官方文档：https://developer.work.weixin.qq.com/document/path/90600
  *
  * 用途：
- * - 获取预授权码
- * - 预授权码用于企业授权时的第三方服务商安全验证
+ * - 服务商可以使用该接口查询指定订单的详情
  *
  * 注意事项：
  * - 需要先通过"获取第三方应用凭证"接口获取suite_access_token
  * - suite_access_token有效期为2小时
- * - 预授权码有效期为1200秒（20分钟）
+ * - orderid为必填参数
  *
- * @returns 预授权码信息
+ * @returns 订单详情信息
  */
-export async function getPreAuthCode(
+export async function getOrder(
 	this: IExecuteFunctions,
 	index: number,
 ): Promise<IDataObject> {
 	const suiteAccessToken = this.getNodeParameter('suiteAccessToken', index) as string;
+	const orderid = this.getNodeParameter('orderid', index) as string;
 
 	if (!suiteAccessToken) {
 		throw new NodeOperationError(
@@ -30,12 +30,25 @@ export async function getPreAuthCode(
 		);
 	}
 
+	if (!orderid) {
+		throw new NodeOperationError(
+			this.getNode(),
+			'订单号不能为空',
+			{ itemIndex: index },
+		);
+	}
+
+	const body: IDataObject = {
+		orderid,
+	};
+
 	const options: IHttpRequestOptions = {
-		method: 'GET',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/service/get_pre_auth_code',
+		method: 'POST',
+		url: 'https://qyapi.weixin.qq.com/cgi-bin/service/get_order',
 		qs: {
 			suite_access_token: suiteAccessToken,
 		},
+		body,
 		json: true,
 	};
 
@@ -45,7 +58,7 @@ export async function getPreAuthCode(
 		if (response.errcode !== undefined && response.errcode !== 0) {
 			throw new NodeOperationError(
 				this.getNode(),
-				`获取预授权码失败: ${response.errmsg} (错误码: ${response.errcode})`,
+				`获取订单详情失败: ${response.errmsg} (错误码: ${response.errcode})`,
 				{ itemIndex: index },
 			);
 		}
@@ -55,7 +68,7 @@ export async function getPreAuthCode(
 		const err = error as Error;
 		throw new NodeOperationError(
 			this.getNode(),
-			`获取预授权码失败: ${err.message}`,
+			`获取订单详情失败: ${err.message}`,
 			{ itemIndex: index },
 		);
 	}

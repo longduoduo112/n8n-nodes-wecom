@@ -19,6 +19,7 @@ import { passiveReplyDescription } from '../WeCom/resources/passiveReply';
 import { agentDescription } from '../WeCom/resources/agent';
 import { appAuthDescription } from '../WeCom/resources/appAuth';
 import { licenseDescription } from '../WeCom/resources/license';
+import { paytoolDescription } from '../WeCom/resources/paytool';
 import { executeMessage } from '../WeCom/resources/message/execute';
 import { executeContact } from '../WeCom/resources/contact/execute';
 import { executeMaterial } from '../WeCom/resources/material/execute';
@@ -31,6 +32,7 @@ import { executePassiveReply } from '../WeCom/resources/passiveReply/execute';
 import { executeAgent } from '../WeCom/resources/agent/execute';
 import { executeAppAuth } from '../WeCom/resources/appAuth/execute';
 import { executeLicense } from '../WeCom/resources/license/execute';
+import { executePaytool } from '../WeCom/resources/paytool/execute';
 import { weComApiRequest } from '../WeCom/shared/transport';
 
 export class WeComBase implements INodeType {
@@ -42,7 +44,7 @@ export class WeComBase implements INodeType {
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{$parameter["resource"] === "passiveReply" ? "reply: " + $parameter["resource"] : ($parameter["resource"] === "system" ? $parameter["resource"] : $parameter["operation"] + ": " + $parameter["resource"])}}',
-		description: '企业微信基础功能 - 通讯录、应用消息、群聊、消息推送、企业互联、素材、系统、电子发票、第三方应用授权、第三方应用接口调用许可',
+		description: '企业微信基础功能 - 通讯录、应用消息、群聊、消息推送、企业互联、素材、系统、电子发票、第三方应用授权、第三方应用接口调用许可、第三方应用收银台',
 		defaults: {
 			name: '企业微信-基础',
 		},
@@ -103,6 +105,16 @@ export class WeComBase implements INodeType {
 				displayOptions: {
 					show: {
 						resource: ['license'],
+					},
+				},
+			},
+			{
+				// 第三方应用收银台不需要 weComApi 凭证，因为使用的是 provider_access_token
+				name: 'weComApi',
+				required: false,
+				displayOptions: {
+					show: {
+						resource: ['paytool'],
 					},
 				},
 			},
@@ -182,6 +194,11 @@ export class WeComBase implements INodeType {
 						value: 'license',
 						description: '接口调用许可管理（下单购买账号）',
 					},
+					{
+						name: '第三方应用收银台',
+						value: 'paytool',
+						description: '第三方应用收银台（创建收款订单）',
+					},
 				],
 				default: 'pushMessage',
 			},
@@ -197,6 +214,7 @@ export class WeComBase implements INodeType {
 		...agentDescription,
 		...appAuthDescription,
 		...licenseDescription,
+		...paytoolDescription,
 	],
 	usableAsTool: true,
 };
@@ -352,6 +370,8 @@ export class WeComBase implements INodeType {
 				returnData = await executeAppAuth.call(this, operation, items);
 			} else if (resource === 'license') {
 				returnData = await executeLicense.call(this, operation, items);
+			} else if (resource === 'paytool') {
+				returnData = await executePaytool.call(this, operation, items);
 			}
 		}
 

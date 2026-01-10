@@ -42,13 +42,11 @@ export async function setSessionInfo(
 		);
 	}
 
-	// 构建请求体
 	const body: IDataObject = {
 		pre_auth_code: preAuthCode,
 		session_info: {} as IDataObject,
 	};
 
-	// 处理 appid 数组
 	if (appidStr && appidStr.trim()) {
 		const appidArray = appidStr
 			.split(',')
@@ -59,7 +57,6 @@ export async function setSessionInfo(
 		}
 	}
 
-	// 设置授权类型
 	(body.session_info as IDataObject).auth_type = authType;
 
 	const options: IHttpRequestOptions = {
@@ -75,7 +72,6 @@ export async function setSessionInfo(
 	try {
 		const response = (await this.helpers.httpRequest(options)) as IDataObject;
 
-		// 检查 API 错误
 		if (response.errcode !== undefined && response.errcode !== 0) {
 			throw new NodeOperationError(
 				this.getNode(),

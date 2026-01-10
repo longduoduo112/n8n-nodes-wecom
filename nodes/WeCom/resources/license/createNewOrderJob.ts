@@ -33,7 +33,6 @@ export async function createNewOrderJob(
 		);
 	}
 
-	// 构建企业新购信息列表
 	const buyList: IDataObject[] = [];
 	if (buyListCollection.buyInfos) {
 		const buyInfos = buyListCollection.buyInfos as IDataObject[];
@@ -63,7 +62,6 @@ export async function createNewOrderJob(
 			const baseCount = buyInfo.baseCount as number | undefined;
 			const externalContactCount = buyInfo.externalContactCount as number | undefined;
 
-			// 基础账号跟互通账号不能同时为0
 			if ((baseCount === undefined || baseCount === 0) && (externalContactCount === undefined || externalContactCount === 0)) {
 				throw new NodeOperationError(
 					this.getNode(),
@@ -75,7 +73,6 @@ export async function createNewOrderJob(
 			const months = buyInfo.months as number | undefined;
 			const days = buyInfo.days as number | undefined;
 
-			// 验证购买时长：最少1个月(31天)，最多60个月(1860天)
 			const totalDays = (months || 0) * 31 + (days || 0);
 			if (totalDays < 31) {
 				throw new NodeOperationError(
@@ -114,7 +111,6 @@ export async function createNewOrderJob(
 				account_duration: accountDuration,
 			};
 
-			// 自动激活状态（可选）
 			if (buyInfo.autoActiveStatus !== undefined) {
 				buyInfoData.auto_active_status = buyInfo.autoActiveStatus;
 			}
@@ -133,7 +129,6 @@ export async function createNewOrderJob(
 		buy_list: buyList,
 	};
 
-	// 如果指定了jobid，则追加到现有任务
 	if (jobid && jobid.trim() !== '') {
 		body.jobid = jobid;
 	}

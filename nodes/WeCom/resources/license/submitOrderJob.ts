@@ -55,7 +55,6 @@ export async function submitOrderJob(
 		);
 	}
 
-	// 构建账号购买时长
 	const accountDuration: IDataObject = {};
 	if (durationType === 'months') {
 		if (months === undefined || months <= 0) {
@@ -81,7 +80,6 @@ export async function submitOrderJob(
 				{ itemIndex: index },
 			);
 		}
-		// 验证时间戳不能是过去的时间（允许今天）
 		const now = Math.floor(Date.now() / 1000);
 		const today = new Date();
 		today.setHours(0, 0, 0, 0);
@@ -93,7 +91,6 @@ export async function submitOrderJob(
 				{ itemIndex: index },
 			);
 		}
-		// 验证时间戳不能超过1860天后
 		const maxTimestamp = now + 1860 * 24 * 60 * 60;
 		if (newExpireTime > maxTimestamp) {
 			throw new NodeOperationError(

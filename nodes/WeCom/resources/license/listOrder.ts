@@ -29,7 +29,6 @@ export async function listOrder(
 	const cursor = this.getNodeParameter('cursor', index) as string | undefined;
 	const limit = this.getNodeParameter('limit', index, 500) as number;
 
-	// 将 0 视为未填写
 	const startTime = startTimeRaw && startTimeRaw > 0 ? startTimeRaw : undefined;
 	const endTime = endTimeRaw && endTimeRaw > 0 ? endTimeRaw : undefined;
 
@@ -41,7 +40,6 @@ export async function listOrder(
 		);
 	}
 
-	// 验证时间参数：start_time 和 end_time 必须同时指定
 	if ((startTime !== undefined && endTime === undefined) || (startTime === undefined && endTime !== undefined)) {
 		throw new NodeOperationError(
 			this.getNode(),
@@ -50,7 +48,6 @@ export async function listOrder(
 		);
 	}
 
-	// 验证时间范围：起始时间跟结束时间不能超过31天
 	if (startTime !== undefined && endTime !== undefined) {
 		if (endTime <= startTime) {
 			throw new NodeOperationError(
@@ -69,7 +66,6 @@ export async function listOrder(
 		}
 	}
 
-	// 验证 limit 范围
 	if (limit < 1 || limit > 1000) {
 		throw new NodeOperationError(
 			this.getNode(),

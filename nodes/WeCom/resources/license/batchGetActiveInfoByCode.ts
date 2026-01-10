@@ -53,7 +53,6 @@ export async function batchGetActiveInfoByCode(
 		);
 	}
 
-	// 解析激活码列表（支持逗号分隔的字符串）
 	const activeCodeList = activeCodeListRaw
 		.split(',')
 		.map((code) => code.trim())

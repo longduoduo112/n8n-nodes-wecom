@@ -192,6 +192,9 @@ npm install n8n-nodes-wecom
 - ✅ [明文corpid转换为加密corpid](https://developer.work.weixin.qq.com/document/path/95604)
 - ✅ [获取应用权限详情](https://developer.work.weixin.qq.com/document/path/99052)
 - ✅ [获取应用管理员列表](https://developer.work.weixin.qq.com/document/path/100073)
+- ✅ [获取订单列表](https://developer.work.weixin.qq.com/document/path/90600)
+- ✅ [获取订单详情](https://developer.work.weixin.qq.com/document/path/90600)
+- ✅ [延长试用期](https://developer.work.weixin.qq.com/document/path/90600)
 
 ### 第三方应用接口调用许可
 
@@ -205,6 +208,17 @@ npm install n8n-nodes-wecom
 - ✅ [取消订单](https://developer.work.weixin.qq.com/document/path/96106)
 - ✅ [下单购买多企业账号](https://developer.work.weixin.qq.com/document/path/98892)（创建多企业新购任务、提交多企业新购订单、获取多企业新购订单提交结果）
 - ✅ [获取多企业订单详情](https://developer.work.weixin.qq.com/document/path/98893)
+
+### 第三方应用收银台
+
+> [官方文档：第三方应用收银台](https://developer.work.weixin.qq.com/document/path/95430)
+
+- ✅ [创建收款订单](https://developer.work.weixin.qq.com/document/path/95430)（支持普通第三方应用、代开发应用、行业解决方案三种业务类型）
+- ✅ [取消收款订单](https://developer.work.weixin.qq.com/document/path/95430)
+- ✅ [获取收款订单列表](https://developer.work.weixin.qq.com/document/path/95430)
+- ✅ [获取收款订单详情](https://developer.work.weixin.qq.com/document/path/95430)
+- ✅ [获取发票列表](https://developer.work.weixin.qq.com/document/path/95430)
+- ✅ [标记开票状态](https://developer.work.weixin.qq.com/document/path/95430)
 - ✅ [使用余额支付订单](https://developer.work.weixin.qq.com/document/path/99415)（提交余额支付订单任务、获取订单支付结果）
 - ✅ [激活账号](https://developer.work.weixin.qq.com/document/path/95553)（激活账号、批量激活账号、指定账号类型激活）
 - ✅ [获取激活码详情](https://developer.work.weixin.qq.com/document/path/95552)（获取激活码详情、批量获取激活码详情）
@@ -294,6 +308,12 @@ npm install n8n-nodes-wecom
 - ✅ [接收支付成功通知](https://developer.work.weixin.qq.com/document/path/90600)（license_pay_success - 接口调用许可支付成功通知）
 - ✅ [接收退款结果通知](https://developer.work.weixin.qq.com/document/path/90600)（license_refund - 接口调用许可退款结果通知）
 - ✅ [接收自动激活回调通知](https://developer.work.weixin.qq.com/document/path/90600)（auto_activate - 接口调用许可自动激活回调通知）
+- ✅ [接收下单成功通知](https://developer.work.weixin.qq.com/document/path/90600)（open_order - 当企业在应用市场购买付费应用完成下单后，或服务商在管理端为企业代下单后推送）
+- ✅ [接收改单通知](https://developer.work.weixin.qq.com/document/path/90600)（change_order - 当服务商管理员修改订单价格后推送，会产生新的订单号）
+- ✅ [接收支付成功通知](https://developer.work.weixin.qq.com/document/path/90600)（pay_for_app_success - 当企业对某一个订单完成付款后推送）
+- ✅ [接收退款通知](https://developer.work.weixin.qq.com/document/path/90600)（refund - 当某个客户发起有效的退款，经服务商在管理端同意后或过期自动完成退款后推送）
+- ✅ [接收应用版本变更通知](https://developer.work.weixin.qq.com/document/path/90600)（change_editon - 付费版本购买/扩容/续期、退款成功、试用期变更、版本到期等情况下推送）
+- ✅ [接收取消订单通知](https://developer.work.weixin.qq.com/document/path/90600)（cancel_order - 当服务商或客户企业取消订单后推送）
 - ✅ URL 验证
 - ✅ 消息加解密（使用SuiteID作为receiveid）
 - ✅ 签名验证

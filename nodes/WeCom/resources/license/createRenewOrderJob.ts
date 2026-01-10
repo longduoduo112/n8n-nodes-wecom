@@ -42,7 +42,6 @@ export async function createRenewOrderJob(
 		);
 	}
 
-	// 构建账号列表
 	const accountList: IDataObject[] = [];
 	if (accountCollection.accounts) {
 		const accounts = accountCollection.accounts as IDataObject[];
@@ -93,7 +92,6 @@ export async function createRenewOrderJob(
 		account_list: accountList,
 	};
 
-	// 如果指定了jobid，则追加到现有任务
 	if (jobid) {
 		body.jobid = jobid;
 	}

@@ -187,6 +187,36 @@ export class WeComSuiteTrigger implements INodeType {
 						value: 'auto_activate',
 						description: '接口调用许可自动激活回调通知（当企业成员满足自动激活条件并触发自动激活后推送）',
 					},
+					{
+						name: '下单成功通知',
+						value: 'open_order',
+						description: '下单成功通知（当企业在应用市场购买付费应用完成下单后，或服务商在管理端为企业代下单后推送）',
+					},
+					{
+						name: '改单通知',
+						value: 'change_order',
+						description: '改单通知（当服务商管理员修改订单价格后推送，会产生新的订单号）',
+					},
+					{
+						name: '支付成功通知',
+						value: 'pay_for_app_success',
+						description: '支付成功通知（当企业对某一个订单完成付款后推送）',
+					},
+					{
+						name: '退款通知',
+						value: 'refund',
+						description: '退款通知（当某个客户发起有效的退款，经服务商在管理端同意后或过期自动完成退款后推送）',
+					},
+					{
+						name: '应用版本变更通知',
+						value: 'change_editon',
+						description: '应用版本变更通知（付费版本购买/扩容/续期、退款成功、试用期变更、版本到期等情况下推送）',
+					},
+					{
+						name: '取消订单通知',
+						value: 'cancel_order',
+						description: '取消订单通知（当服务商或客户企业取消订单后推送）',
+					},
 				],
 				default: ['*'],
 				required: true,

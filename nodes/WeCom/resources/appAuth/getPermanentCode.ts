@@ -14,8 +14,9 @@ import { NodeOperationError } from 'n8n-workflow';
  * - 临时授权码会在授权成功时附加在redirect_uri中跳转回第三方服务商网站，或通过授权成功通知回调推送给服务商
  * - 临时授权码长度为64至512个字节，一次有效
  * - 推荐使用v2接口，该接口耗时更短
+ * - 若应用接入付费策略，接口会额外返回edition_info字段，包含企业当前生效的版本信息（付费状态、用户上限、到期时间等）
  *
- * @returns 永久授权码和企业信息
+ * @returns 永久授权码和企业信息（若应用接入付费策略，会额外包含edition_info字段）
  */
 export async function getPermanentCode(
 	this: IExecuteFunctions,
@@ -55,7 +56,6 @@ export async function getPermanentCode(
 	try {
 		const response = (await this.helpers.httpRequest(options)) as IDataObject;
 
-		// 检查 API 错误
 		if (response.errcode !== undefined && response.errcode !== 0) {
 			throw new NodeOperationError(
 				this.getNode(),

@@ -43,7 +43,6 @@ export async function listActivedAccount(
 		);
 	}
 
-	// 验证 limit 范围
 	if (limit < 1 || limit > 1000) {
 		throw new NodeOperationError(
 			this.getNode(),

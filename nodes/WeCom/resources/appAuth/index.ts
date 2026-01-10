@@ -72,6 +72,24 @@ export const appAuthDescription: INodeProperties[] = [
 				description: '获取授权企业中某个第三方应用或者代开发应用的管理员列表（不包括外部管理员）',
 				action: '获取应用管理员列表',
 			},
+			{
+				name: '获取订单列表',
+				value: 'getOrderList',
+				description: '服务商可以使用该接口查询指定时间段内的订单列表',
+				action: '获取订单列表',
+			},
+			{
+				name: '获取订单详情',
+				value: 'getOrder',
+				description: '服务商可以使用该接口查询指定订单的详情',
+				action: '获取订单详情',
+			},
+			{
+				name: '延长试用期',
+				value: 'prolongTry',
+				description: '服务商可以使用该接口延长应用的试用期',
+				action: '延长试用期',
+			},
 		],
 		default: 'getSuiteToken',
 	},
@@ -535,5 +553,171 @@ export const appAuthDescription: INodeProperties[] = [
 		default: '',
 		description: '应用access_token',
 		hint: '代开发自建应用access_token（获取方法参见获取access_token）或第三方应用access_token（获取方法参见获取企业凭证）',
+	},
+	{
+		displayName: 'Suite Access Token',
+		name: 'suiteAccessToken',
+		type: 'string',
+		typeOptions: {
+			password: true,
+		},
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getOrderList'],
+			},
+		},
+		default: '',
+		description: '第三方应用凭证',
+		hint: '通过"获取第三方应用凭证"接口获取的suite_access_token',
+	},
+	{
+		displayName: '起始时间',
+		name: 'startTime',
+		type: 'number',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getOrderList'],
+			},
+		},
+		default: 0,
+		hint: 'UNIX时间戳',
+	},
+	{
+		displayName: '终止时间',
+		name: 'endTime',
+		type: 'number',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getOrderList'],
+			},
+		},
+		default: 0,
+		hint: 'UNIX时间戳',
+	},
+	{
+		displayName: '测试模式',
+		name: 'testMode',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getOrderList'],
+			},
+		},
+		options: [
+			{
+				name: '正式授权',
+				value: 0,
+				description: '正式授权',
+			},
+			{
+				name: '测试授权',
+				value: 1,
+				description: '测试授权',
+			},
+		],
+		default: 0,
+		description: '指定拉取正式或测试授权的订单',
+		hint: '0-正式授权，1-测试授权。默认值为0',
+	},
+	{
+		displayName: 'Suite Access Token',
+		name: 'suiteAccessToken',
+		type: 'string',
+		typeOptions: {
+			password: true,
+		},
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getOrder'],
+			},
+		},
+		default: '',
+		description: '第三方应用凭证',
+		hint: '通过"获取第三方应用凭证"接口获取的suite_access_token',
+	},
+	{
+		displayName: '订单号',
+		name: 'orderid',
+		type: 'string',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getOrder'],
+			},
+		},
+		default: '',
+		hint: '要查询的订单号',
+	},
+	{
+		displayName: 'Suite Access Token',
+		name: 'suiteAccessToken',
+		type: 'string',
+		typeOptions: {
+			password: true,
+		},
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['prolongTry'],
+			},
+		},
+		default: '',
+		description: '第三方应用凭证',
+		hint: '通过"获取第三方应用凭证"接口获取的suite_access_token',
+	},
+	{
+		displayName: '购买方corpid',
+		name: 'buyerCorpid',
+		type: 'string',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['prolongTry'],
+			},
+		},
+		default: '',
+		hint: '购买方企业ID',
+	},
+	{
+		displayName: '延长天数',
+		name: 'prolongDays',
+		type: 'number',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['prolongTry'],
+			},
+		},
+		default: 7,
+		hint: '一个应用可以多次延长试用，但是试用总天数不能超过60天',
+		typeOptions: {
+			minValue: 1,
+		},
+	},
+	{
+		displayName: '应用ID',
+		name: 'appid',
+		type: 'number',
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['prolongTry'],
+			},
+		},
+		default: 1,
+		hint: '仅旧套件需要填此参数',
 	},
 ];

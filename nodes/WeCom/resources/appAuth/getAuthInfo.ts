@@ -13,8 +13,9 @@ import { NodeOperationError } from 'n8n-workflow';
  * - 需要先通过"获取第三方应用凭证"接口获取suite_access_token
  * - 需要先通过"获取企业永久授权码"接口获取permanent_code和auth_corpid
  * - 推荐使用v2接口，该接口性能更好，不会获取企业微信插件关注二维码
+ * - 若应用接入付费策略，接口会额外返回edition_info字段，包含企业当前生效的版本信息（付费状态、用户上限、到期时间等）
  *
- * @returns 企业授权信息
+ * @returns 企业授权信息（若应用接入付费策略，会额外包含edition_info字段）
  */
 export async function getAuthInfo(
 	this: IExecuteFunctions,
@@ -64,7 +65,6 @@ export async function getAuthInfo(
 	try {
 		const response = (await this.helpers.httpRequest(options)) as IDataObject;
 
-		// 检查 API 错误
 		if (response.errcode !== undefined && response.errcode !== 0) {
 			throw new NodeOperationError(
 				this.getNode(),

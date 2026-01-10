@@ -56,7 +56,6 @@ export async function createNewOrder(
 		);
 	}
 
-	// 基础账号跟互通账号不能同时为0
 	if ((baseCount === undefined || baseCount === 0) && (externalContactCount === undefined || externalContactCount === 0)) {
 		throw new NodeOperationError(
 			this.getNode(),
@@ -65,7 +64,6 @@ export async function createNewOrder(
 		);
 	}
 
-	// 验证购买时长：最少1个月(31天)，最多60个月(1860天)
 	const totalDays = (months || 0) * 31 + (days || 0);
 	if (totalDays < 31) {
 		throw new NodeOperationError(

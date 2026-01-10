@@ -42,7 +42,6 @@ export async function batchTransferLicense(
 		);
 	}
 
-	// 构建继承信息列表
 	const transferList: IDataObject[] = [];
 	if (transferListCollection.transfers) {
 		const transfers = transferListCollection.transfers as IDataObject[];

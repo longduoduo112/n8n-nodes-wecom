@@ -277,7 +277,6 @@ export const licenseDescription: INodeProperties[] = [
 		description: '购买的天数',
 		hint: '总购买时长为(months*31+days)天，最少购买1个月(31天)，最多购买60个月(1860天)。若企业为服务商测试企业，不支持指定天购买',
 	},
-	// 创建续期任务相关参数
 	{
 		displayName: '企业ID',
 		name: 'corpid',
@@ -359,7 +358,6 @@ export const licenseDescription: INodeProperties[] = [
 		default: '',
 		hint: '若不传则默认创建一个新任务。若指定第一次调用后拿到jobid，可以通过该接口将jobid关联多个userid',
 	},
-	// 提交续期订单相关参数
 	{
 		displayName: '任务ID',
 		name: 'jobid',
@@ -446,7 +444,6 @@ export const licenseDescription: INodeProperties[] = [
 		description: '指定的新到期时间戳',
 		hint: '不可为今天和过去的时间，不可为1860天后的时间。须填当天的24时0分0秒，否则系统自动处理为当天的24时0分0秒。若企业为服务商测试企业，不支持指定新的到期时间来续期',
 	},
-	// 获取订单列表相关参数
 	{
 		displayName: '企业ID',
 		name: 'corpid',
@@ -520,7 +517,6 @@ export const licenseDescription: INodeProperties[] = [
 			maxValue: 1000,
 		},
 	},
-	// 获取订单详情相关参数
 	{
 		displayName: '订单ID',
 		name: 'orderId',
@@ -535,7 +531,6 @@ export const licenseDescription: INodeProperties[] = [
 		default: '',
 		hint: '通过"获取订单列表"或"下单购买账号"等接口获取的订单ID。注意：此接口不支持获取多企业订单详情',
 	},
-	// 获取订单中的账号列表相关参数
 	{
 		displayName: '订单ID',
 		name: 'orderId',
@@ -583,7 +578,6 @@ export const licenseDescription: INodeProperties[] = [
 			maxValue: 1000,
 		},
 	},
-	// 取消订单相关参数
 	{
 		displayName: '订单ID',
 		name: 'orderId',
@@ -627,7 +621,6 @@ export const licenseDescription: INodeProperties[] = [
 		default: '',
 		hint: '企业ID。如果是多企业新购订单时不填，否则必填',
 	},
-	// 创建多企业新购任务相关参数
 	{
 		displayName: '企业新购信息列表',
 		name: 'buyListCollection',
@@ -721,7 +714,6 @@ export const licenseDescription: INodeProperties[] = [
 		description: '多企业新购任务ID',
 		hint: '若不传则默认创建一个新任务。若指定第一次调用后拿到jobid，可以通过该接口将jobid关联多个新企业的购买账号信息',
 	},
-	// 提交多企业新购订单相关参数
 	{
 		displayName: '任务ID',
 		name: 'jobid',
@@ -752,7 +744,6 @@ export const licenseDescription: INodeProperties[] = [
 		description: '下单人。服务商企业内成员的明文userid',
 		hint: '该userid必须登录过企业微信，并且企业微信已绑定微信，且必须为服务商企业内具有"购买接口许可"权限的管理员',
 	},
-	// 获取多企业新购订单提交结果相关参数
 	{
 		displayName: '任务ID',
 		name: 'jobid',
@@ -768,7 +759,6 @@ export const licenseDescription: INodeProperties[] = [
 		description: '多企业新购任务ID',
 		hint: '通过"提交多企业新购订单"接口使用的jobid。该结果仅在提交多企业新购订单后7天内可获取',
 	},
-	// 获取多企业订单详情相关参数
 	{
 		displayName: '订单ID',
 		name: 'orderId',
@@ -815,7 +805,6 @@ export const licenseDescription: INodeProperties[] = [
 			maxValue: 1000,
 		},
 	},
-	// 提交余额支付订单任务相关参数
 	{
 		displayName: '支付人',
 		name: 'payerUserid',
@@ -846,7 +835,6 @@ export const licenseDescription: INodeProperties[] = [
 		description: '要使用充值账户余额支付的接口许可订单ID',
 		hint: '可以支付的订单包括单企业购买、单企业续期、多企业购买创建的订单。提交成功后，该订单无法再变更支付方式',
 	},
-	// 获取订单支付结果相关参数
 	{
 		displayName: '支付任务ID',
 		name: 'jobid',
@@ -862,7 +850,6 @@ export const licenseDescription: INodeProperties[] = [
 		description: '支付任务的jobid',
 		hint: '通过"提交余额支付订单任务"接口返回的jobid。该结果仅在提交了"余额支付订单任务"后的7天内可获取',
 	},
-	// 激活账号相关参数
 	{
 		displayName: '账号激活码',
 		name: 'activeCode',
@@ -907,7 +894,6 @@ export const licenseDescription: INodeProperties[] = [
 		description: '待绑定激活的企业成员userid',
 		hint: '一个userid允许激活一个基础账号以及一个互通账号',
 	},
-	// 批量激活账号相关参数
 	{
 		displayName: '企业ID',
 		name: 'corpid',
@@ -965,7 +951,6 @@ export const licenseDescription: INodeProperties[] = [
 			},
 		],
 	},
-	// 指定账号类型激活相关参数
 	{
 		displayName: '账号类型',
 		name: 'type',
@@ -1022,7 +1007,6 @@ export const licenseDescription: INodeProperties[] = [
 		description: '待绑定激活的企业成员userid',
 		hint: '从当前企业中选择一个该指定类型的激活截止时间最早的未激活的激活码进行激活',
 	},
-	// 获取激活码详情相关参数
 	{
 		displayName: '企业ID',
 		name: 'corpid',
@@ -1053,7 +1037,6 @@ export const licenseDescription: INodeProperties[] = [
 		description: '账号激活码',
 		hint: '要查询的账号激活码',
 	},
-	// 批量获取激活码详情相关参数
 	{
 		displayName: '企业ID',
 		name: 'corpid',
@@ -1085,7 +1068,6 @@ export const licenseDescription: INodeProperties[] = [
 		hint: '激活码列表，最多不超过1000个，多个激活码用逗号分隔',
 		placeholder: '例如: code1,code2,code3',
 	},
-	// 获取企业的账号列表相关参数
 	{
 		displayName: '企业ID',
 		name: 'corpid',
@@ -1133,7 +1115,6 @@ export const licenseDescription: INodeProperties[] = [
 			maxValue: 1000,
 		},
 	},
-	// 获取成员的激活详情相关参数
 	{
 		displayName: '企业ID',
 		name: 'corpid',
@@ -1164,7 +1145,6 @@ export const licenseDescription: INodeProperties[] = [
 		description: '待查询员工的userid',
 		hint: '要查询的企业成员userid',
 	},
-	// 账号继承相关参数
 	{
 		displayName: '企业ID',
 		name: 'corpid',
@@ -1222,7 +1202,6 @@ export const licenseDescription: INodeProperties[] = [
 			},
 		],
 	},
-	// 分配激活码给下游/下级企业相关参数
 	{
 		displayName: '上游/上级企业ID',
 		name: 'fromCorpid',
@@ -1312,7 +1291,6 @@ export const licenseDescription: INodeProperties[] = [
 		description: '分配的场景',
 		hint: '不填默认为0（上下游）',
 	},
-	// 获取应用的接口许可状态相关参数
 	{
 		displayName: '企业ID',
 		name: 'corpid',
@@ -1355,7 +1333,6 @@ export const licenseDescription: INodeProperties[] = [
 		description: '旧的多应用套件中的应用ID',
 		hint: '旧的多应用套件中的应用id，新开发者请忽略',
 	},
-	// 设置企业的许可自动激活状态相关参数
 	{
 		displayName: '企业ID',
 		name: 'corpid',
@@ -1396,7 +1373,6 @@ export const licenseDescription: INodeProperties[] = [
 		default: 1,
 		hint: '0：关闭，1：打开。设置为自动激活后，对应授权企业的员工使用服务商应用时，接口许可表现为自动激活',
 	},
-	// 查询企业的许可自动激活状态相关参数
 	{
 		displayName: '企业ID',
 		name: 'corpid',
@@ -1411,7 +1387,6 @@ export const licenseDescription: INodeProperties[] = [
 		default: '',
 		hint: '查询的企业corpid，要求服务商为企业购买过接口许可才有查询结果',
 	},
-	// 民生优惠条件查询相关参数
 	{
 		displayName: '企业ID',
 		name: 'corpid',
