@@ -15,13 +15,16 @@ export const createMenuDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnlyCreateMenu,
 		},
-		hint: '企业应用的id',
-		description: '企业应用的唯一标识',
+		hint: '必填。企业应用的唯一标识ID，整型，可在应用的设置页面查看',
+		description: '企业应用的唯一标识，整型。可在应用的设置页面查看。<a href="https://developer.work.weixin.qq.com/document/path/90231" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '菜单配置（JSON）',
 		name: 'button',
 		type: 'json',
+		typeOptions: {
+			rows: 10,
+		},
 		required: true,
 		default: `[
   {
@@ -48,17 +51,7 @@ export const createMenuDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnlyCreateMenu,
 		},
-		hint: '一级菜单数组，个数应为1~3个',
-		description: `菜单按钮配置数组。支持的按钮类型：
-- click: 点击推事件
-- view: 跳转URL
-- scancode_push: 扫码推事件
-- scancode_waitmsg: 扫码推事件且弹出提示框
-- pic_sysphoto: 弹出系统拍照发图
-- pic_photo_or_album: 弹出拍照或者相册发图
-- pic_weixin: 弹出企业微信相册发图器
-- location_select: 弹出地理位置选择器
-- view_miniprogram: 跳转到小程序。
-<a href="https://developer.work.weixin.qq.com/document/path/90231" target="_blank">官方文档</a>`,
+		hint: '必填。一级菜单数组，个数应为1~3个。每个菜单项包含：type（必填，菜单响应动作类型）、name（必填，主菜单不超过16字节，子菜单不超过40字节）、key（click等点击类型必填，不超过128字节）、url（view类型必填，不超过1024字节）、pagepath和appid（view_miniprogram类型必填）。二级菜单sub_button数组个数应为1~5个',
+		description: '菜单按钮配置数组',
 	},
 ];
