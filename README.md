@@ -56,6 +56,7 @@
 - **企业互联** - 企业互联和上下游管理
 - **素材管理** - 素材上传和管理
 - **电子发票** - 电子发票查询和状态管理
+- **应用授权** - 获取第三方应用凭证
 
 ### 2. 企业微信-办公
 
@@ -86,6 +87,10 @@
 ### 4. 企业微信消息接收触发器
 
 接收企业微信的消息和事件推送（支持普通接收和被动回复两种模式）
+
+### 5. 企业微信第三方应用指令回调触发器
+
+接收企业微信第三方应用的指令回调事件（授权、通讯录变更、ticket变化等）
 
 ## 隐私与安全
 
@@ -147,6 +152,23 @@ npm install n8n-nodes-wecom
 - 多个工作流可以使用同一个凭证（同一应用ID），它们会共享同一个 Webhook URL 接收消息
 - 不同应用请创建不同的凭证，使用不同的应用ID
 
+### 获取企业微信第三方应用指令回调凭证
+
+1. 登录 [企业微信服务商后台](https://open.work.weixin.qq.com/)
+2. 进入"应用管理" > "第三方应用"，选择或创建一个第三方应用
+3. 复制 **第三方应用ID (SuiteID)**（以ww或wx开头）
+4. 在"应用详情" > "开发信息"中，设置**指令回调URL**，配置Token、EncodingAESKey
+5. 在 n8n 中创建"企业微信第三方应用指令回调触发器"节点：
+   - 配置凭证（第三方应用ID、Token、EncodingAESKey）
+   - **Path** 表示 Webhook URL 的路径，建议使用应用相关的唯一标识（例如：`suite/receive`）
+   - 保存节点后，查看生成的 Webhook URL（例如：`https://your-n8n.com/webhook/suite/receive`）
+6. 将 Webhook URL 填入企业微信服务商后台的**指令回调URL**配置中
+
+**重要提示**：
+- 第三方应用的指令回调使用SuiteID作为receiveid（而不是CorpID）
+- 服务商收到推送后必须返回字符串 "success"，否则企业微信会把返回内容当作错误信息
+- 支持的事件类型：授权变更、通讯录变更、Suite Ticket推送、应用变更等
+
 ## 已实现功能
 
 以下功能按照企业微信官方文档分类组织：
@@ -154,6 +176,21 @@ npm install n8n-nodes-wecom
 ---
 
 ## 一、基础功能（企业微信-基础 节点）
+
+### 应用授权
+
+> [官方文档：应用授权](https://developer.work.weixin.qq.com/document/path/90600)
+
+- ✅ [获取第三方应用凭证](https://developer.work.weixin.qq.com/document/path/90600)
+- ✅ [获取预授权码](https://developer.work.weixin.qq.com/document/path/90601)
+- ✅ [设置授权配置](https://developer.work.weixin.qq.com/document/path/90602)
+- ✅ [获取企业永久授权码](https://developer.work.weixin.qq.com/document/path/90603)
+- ✅ [获取企业授权信息](https://developer.work.weixin.qq.com/document/path/90604)
+- ✅ [获取企业凭证](https://developer.work.weixin.qq.com/document/path/90605)
+- ✅ [获取应用二维码](https://developer.work.weixin.qq.com/document/path/95430)
+- ✅ [明文corpid转换为加密corpid](https://developer.work.weixin.qq.com/document/path/95435)
+- ✅ [获取应用权限详情](https://developer.work.weixin.qq.com/document/path/95436)
+- ✅ [获取应用管理员列表](https://developer.work.weixin.qq.com/document/path/95437)
 
 ### 消息接收（触发器节点）
 
@@ -201,6 +238,35 @@ npm install n8n-nodes-wecom
 
 - [回调机制说明](https://developer.work.weixin.qq.com/document/path/92520)
 - [回调机制示例代码](https://developer.work.weixin.qq.com/document/path/92521)
+
+**第三方应用指令回调功能：**
+
+> [官方文档：第三方应用回调事件](https://developer.work.weixin.qq.com/document/path/91116)
+
+使用「企业微信第三方应用指令回调触发器」接收第三方应用的指令回调事件：
+
+- ✅ [接收授权成功通知](https://developer.work.weixin.qq.com/document/path/91118)（create_auth）
+- ✅ [接收变更授权通知](https://developer.work.weixin.qq.com/document/path/91119)（change_auth）
+- ✅ [接收取消授权通知](https://developer.work.weixin.qq.com/document/path/91120)（cancel_auth）
+- ✅ [接收Suite Ticket推送](https://developer.work.weixin.qq.com/document/path/91117)（suite_ticket）
+- ✅ [接收成员通知事件](https://developer.work.weixin.qq.com/document/path/91121)（change_contact - create_user/update_user/delete_user）
+- ✅ [接收部门通知事件](https://developer.work.weixin.qq.com/document/path/91122)（change_contact - create_party/update_party/delete_party）
+- ✅ [接收标签通知事件](https://developer.work.weixin.qq.com/document/path/91123)（change_contact - update_tag）
+- ✅ [接收共享应用事件回调](https://developer.work.weixin.qq.com/document/path/91124)（share_agent_change/share_chain_change）
+- ✅ [接收重置永久授权码通知](https://developer.work.weixin.qq.com/document/path/95437)（reset_permanent_code）
+- ✅ [接收应用管理员变更通知](https://developer.work.weixin.qq.com/document/path/91125)（change_app_admin）
+- ✅ [接收授权组织架构权限通知](https://developer.work.weixin.qq.com/document/path/91126)（corp_arch_auth）
+- ✅ [接收获客助手权限变更通知](https://developer.work.weixin.qq.com/document/path/91127)（approve_special_auth/cancel_special_auth）
+- ✅ URL 验证
+- ✅ 消息加解密（使用SuiteID作为receiveid）
+- ✅ 签名验证
+- ✅ 自动返回 "success" 响应（授权相关事件需在1000ms内响应）
+
+**重要提示**：
+- 第三方应用的指令回调使用SuiteID作为receiveid（而不是CorpID）
+- 服务商收到推送后必须返回字符串 "success"，否则企业微信会把返回内容当作错误信息
+- 授权相关事件（create_auth、change_auth、cancel_auth、reset_permanent_code）的响应必须在1000ms内完成
+- 收到取消授权事件后，应当确保删除该企业所有相关的数据
 
 ### 消息推送（群机器人）
 

@@ -51,13 +51,15 @@
 		"credentials": [
 			"dist/credentials/WeComApi.credentials.js",
 			"dist/credentials/WeComWebhookApi.credentials.js",
-			"dist/credentials/WeComReceiveApi.credentials.js"
+			"dist/credentials/WeComReceiveApi.credentials.js",
+			"dist/credentials/WeComSuiteReceiveApi.credentials.js"
 		],
 		"nodes": [
 			"dist/nodes/WeComBase/WeComBase.node.js",
 			"dist/nodes/WeComOffice/WeComOffice.node.js",
 			"dist/nodes/WeComPassiveTrigger/WeComPassiveTrigger.node.js",
 			"dist/nodes/WeComTrigger/WeComTrigger.node.js",
+			"dist/nodes/WeComSuiteTrigger/WeComSuiteTrigger.node.js",
 			"dist/nodes/WeComWechat/WeComWechat.node.js"
 		]
 	},

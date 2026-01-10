@@ -17,6 +17,7 @@ import { systemDescription } from '../WeCom/resources/system';
 import { invoiceDescription } from '../WeCom/resources/invoice';
 import { passiveReplyDescription } from '../WeCom/resources/passiveReply';
 import { agentDescription } from '../WeCom/resources/agent';
+import { appAuthDescription } from '../WeCom/resources/appAuth';
 import { executeMessage } from '../WeCom/resources/message/execute';
 import { executeContact } from '../WeCom/resources/contact/execute';
 import { executeMaterial } from '../WeCom/resources/material/execute';
@@ -27,6 +28,7 @@ import { executeSystem } from '../WeCom/resources/system/execute';
 import { executeInvoice } from '../WeCom/resources/invoice/execute';
 import { executePassiveReply } from '../WeCom/resources/passiveReply/execute';
 import { executeAgent } from '../WeCom/resources/agent/execute';
+import { executeAppAuth } from '../WeCom/resources/appAuth/execute';
 import { weComApiRequest } from '../WeCom/shared/transport';
 
 export class WeComBase implements INodeType {
@@ -38,7 +40,7 @@ export class WeComBase implements INodeType {
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{$parameter["resource"] === "passiveReply" ? "reply: " + $parameter["resource"] : ($parameter["resource"] === "system" ? $parameter["resource"] : $parameter["operation"] + ": " + $parameter["resource"])}}',
-		description: '企业微信基础功能 - 通讯录、应用消息、群聊、消息推送、企业互联、素材、系统、电子发票',
+		description: '企业微信基础功能 - 通讯录、应用消息、群聊、消息推送、企业互联、素材、系统、电子发票、应用授权',
 		defaults: {
 			name: '企业微信-基础',
 		},
@@ -79,6 +81,16 @@ export class WeComBase implements INodeType {
 				displayOptions: {
 					show: {
 						resource: ['passiveReply'],
+					},
+				},
+			},
+			{
+				// 应用授权不需要 weComApi 凭证，因为使用的是 suite_id/suite_secret
+				name: 'weComApi',
+				required: false,
+				displayOptions: {
+					show: {
+						resource: ['appAuth'],
 					},
 				},
 			},
@@ -148,6 +160,11 @@ export class WeComBase implements INodeType {
 						value: 'agent',
 						description: '管理企业应用（获取、设置应用信息）',
 					},
+					{
+						name: '应用授权',
+						value: 'appAuth',
+						description: '获取第三方应用凭证（suite_access_token）',
+					},
 				],
 				default: 'pushMessage',
 			},
@@ -161,6 +178,7 @@ export class WeComBase implements INodeType {
 		...systemDescription,
 		...invoiceDescription,
 		...agentDescription,
+		...appAuthDescription,
 	],
 	usableAsTool: true,
 };
@@ -312,6 +330,8 @@ export class WeComBase implements INodeType {
 				returnData = await executeInvoice.call(this, operation, items);
 			} else if (resource === 'agent') {
 				returnData = await executeAgent.call(this, operation, items);
+			} else if (resource === 'appAuth') {
+				returnData = await executeAppAuth.call(this, operation, items);
 			}
 		}
 

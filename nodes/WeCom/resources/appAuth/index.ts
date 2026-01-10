@@ -1,0 +1,539 @@
+import type { INodeProperties } from 'n8n-workflow';
+
+export const appAuthDescription: INodeProperties[] = [
+	{
+		displayName: '操作',
+		name: 'operation',
+		type: 'options',
+		noDataExpression: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+			},
+		},
+		options: [
+			{
+				name: '获取第三方应用凭证',
+				value: 'getSuiteToken',
+				description: '获取第三方应用凭证（suite_access_token）',
+				action: '获取第三方应用凭证',
+			},
+			{
+				name: '获取预授权码',
+				value: 'getPreAuthCode',
+				description: '获取预授权码，用于企业授权时的第三方服务商安全验证',
+				action: '获取预授权码',
+			},
+			{
+				name: '设置授权配置',
+				value: 'setSessionInfo',
+				description: '对某次授权进行配置，可支持测试模式（应用未发布时）',
+				action: '设置授权配置',
+			},
+			{
+				name: '获取企业永久授权码',
+				value: 'getPermanentCode',
+				description: '使用临时授权码换取授权方的永久授权码以及企业信息',
+				action: '获取企业永久授权码',
+			},
+			{
+				name: '获取企业授权信息',
+				value: 'getAuthInfo',
+				description: '通过永久授权码换取企业微信的授权信息',
+				action: '获取企业授权信息',
+			},
+			{
+				name: '获取企业凭证',
+				value: 'getCorpToken',
+				description: '第三方服务商在取得企业的永久授权码后，通过此接口可以获取到企业的access_token',
+				action: '获取企业凭证',
+			},
+			{
+				name: '获取应用二维码',
+				value: 'getAppQrcode',
+				description: '用于获取第三方应用二维码',
+				action: '获取应用二维码',
+			},
+			{
+				name: '明文corpid转换为加密corpid',
+				value: 'corpidToOpencorpid',
+				description: '将已有的明文corpid转换为第三方的加密corpid',
+				action: '明文corpid转换为加密corpid',
+			},
+			{
+				name: '获取应用权限详情',
+				value: 'getPermissions',
+				description: '获取代开发应用或第三方应用用户授权的权限详情',
+				action: '获取应用权限详情',
+			},
+			{
+				name: '获取应用管理员列表',
+				value: 'getAdminList',
+				description: '获取授权企业中某个第三方应用或者代开发应用的管理员列表（不包括外部管理员）',
+				action: '获取应用管理员列表',
+			},
+		],
+		default: 'getSuiteToken',
+	},
+	{
+		displayName: '第三方应用ID',
+		name: 'suiteId',
+		type: 'string',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getSuiteToken'],
+			},
+		},
+		default: '',
+		description: '第三方应用ID或者代开发应用模板ID',
+		hint: '第三方应用以ww或wx开头应用id（对应于旧的以tj开头的套件id）；代开发应用以dk开头',
+	},
+	{
+		displayName: '第三方应用Secret',
+		name: 'suiteSecret',
+		type: 'string',
+		typeOptions: {
+			password: true,
+		},
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getSuiteToken'],
+			},
+		},
+		default: '',
+		description: '第三方应用secret 或者代开发应用模板secret',
+		hint: '从企业微信服务商后台获取',
+	},
+	{
+		displayName: 'Suite Ticket',
+		name: 'suiteTicket',
+		type: 'string',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getSuiteToken'],
+			},
+		},
+		default: '',
+		description: '企业微信后台推送的ticket',
+		hint: 'suite_ticket由企业微信后台定时推送给"指令回调URL"，每十分钟更新一次。suite_ticket实际有效期为30分钟，请永远使用最新接收到的suite_ticket',
+	},
+	{
+		displayName: 'Suite Access Token',
+		name: 'suiteAccessToken',
+		type: 'string',
+		typeOptions: {
+			password: true,
+		},
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getPreAuthCode'],
+			},
+		},
+		default: '',
+		description: '第三方应用access_token',
+		hint: '通过"获取第三方应用凭证"接口获取的suite_access_token，有效期为2小时',
+	},
+	{
+		displayName: 'Suite Access Token',
+		name: 'suiteAccessToken',
+		type: 'string',
+		typeOptions: {
+			password: true,
+		},
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['setSessionInfo'],
+			},
+		},
+		default: '',
+		description: '第三方应用access_token',
+		hint: '通过"获取第三方应用凭证"接口获取的suite_access_token，有效期为2小时',
+	},
+	{
+		displayName: '预授权码',
+		name: 'preAuthCode',
+		type: 'string',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['setSessionInfo'],
+			},
+		},
+		default: '',
+		hint: '通过"获取预授权码"接口获取的pre_auth_code',
+	},
+	{
+		displayName: '允许授权的应用ID',
+		name: 'appid',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['setSessionInfo'],
+			},
+		},
+		default: '',
+		description: '允许进行授权的应用ID',
+		hint: '如1、2、3，多个应用ID用逗号分隔。不填或者填空都表示允许授权套件内所有应用（仅旧的多应用套件可传此参数，新开发者可忽略）',
+		placeholder: '例如: 1,2,3',
+	},
+	{
+		displayName: '授权类型',
+		name: 'authType',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['setSessionInfo'],
+			},
+		},
+		options: [
+			{
+				name: '正式授权',
+				value: 0,
+				description: '正式授权',
+			},
+			{
+				name: '测试授权',
+				value: 1,
+				description: '测试授权（应用未发布时）',
+			},
+		],
+		default: 0,
+		hint: '请确保应用在正式发布后的授权类型为"正式授权"',
+	},
+	{
+		displayName: 'Suite Access Token',
+		name: 'suiteAccessToken',
+		type: 'string',
+		typeOptions: {
+			password: true,
+		},
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getPermanentCode'],
+			},
+		},
+		default: '',
+		description: '第三方应用access_token',
+		hint: '通过"获取第三方应用凭证"接口获取的suite_access_token，有效期为2小时',
+	},
+	{
+		displayName: '临时授权码',
+		name: 'authCode',
+		type: 'string',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getPermanentCode'],
+			},
+		},
+		default: '',
+		hint: '临时授权码会在授权成功时附加在redirect_uri中跳转回第三方服务商网站，或通过授权成功通知回调推送给服务商。长度为64至512个字节，临时授权码一次有效',
+	},
+	{
+		displayName: 'Suite Access Token',
+		name: 'suiteAccessToken',
+		type: 'string',
+		typeOptions: {
+			password: true,
+		},
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getAuthInfo'],
+			},
+		},
+		default: '',
+		description: '第三方应用access_token',
+		hint: '通过"获取第三方应用凭证"接口获取的suite_access_token，有效期为2小时',
+	},
+	{
+		displayName: '授权方企业ID',
+		name: 'authCorpid',
+		type: 'string',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getAuthInfo'],
+			},
+		},
+		default: '',
+		description: '授权方corpid',
+		hint: '授权方企业微信id，可通过"获取企业永久授权码"接口返回的auth_corp_info.corpid获取',
+	},
+	{
+		displayName: '永久授权码',
+		name: 'permanentCode',
+		type: 'string',
+		typeOptions: {
+			password: true,
+		},
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getAuthInfo'],
+			},
+		},
+		default: '',
+		hint: '通过"获取企业永久授权码"接口获取的permanent_code',
+	},
+	{
+		displayName: 'Suite Access Token',
+		name: 'suiteAccessToken',
+		type: 'string',
+		typeOptions: {
+			password: true,
+		},
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getCorpToken'],
+			},
+		},
+		default: '',
+		description: '第三方应用access_token',
+		hint: '通过"获取第三方应用凭证"接口获取的suite_access_token，有效期为2小时',
+	},
+	{
+		displayName: '授权方企业ID',
+		name: 'authCorpid',
+		type: 'string',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getCorpToken'],
+			},
+		},
+		default: '',
+		description: '授权方corpid',
+		hint: '授权方企业微信id，可通过"获取企业永久授权码"接口返回的auth_corp_info.corpid获取',
+	},
+	{
+		displayName: '永久授权码',
+		name: 'permanentCode',
+		type: 'string',
+		typeOptions: {
+			password: true,
+		},
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getCorpToken'],
+			},
+		},
+		default: '',
+		hint: '通过"获取企业永久授权码"接口获取的permanent_code',
+	},
+	{
+		displayName: 'Suite Access Token',
+		name: 'suiteAccessToken',
+		type: 'string',
+		typeOptions: {
+			password: true,
+		},
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getAppQrcode'],
+			},
+		},
+		default: '',
+		description: '第三方应用access_token',
+		hint: '通过"获取第三方应用凭证"接口获取的suite_access_token，有效期为2小时',
+	},
+	{
+		displayName: '第三方应用ID',
+		name: 'suiteId',
+		type: 'string',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getAppQrcode'],
+			},
+		},
+		default: '',
+		description: '第三方应用ID（即ww或wx开头的suiteid）',
+		hint: '第三方应用id，单应用不需要该参数，多应用旧套件才需要传该参数',
+	},
+	{
+		displayName: '应用ID',
+		name: 'appid',
+		type: 'number',
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getAppQrcode'],
+			},
+		},
+		default: 1,
+		description: '第三方应用ID',
+		hint: '单应用不需要该参数，多应用旧套件才需要传该参数。若不传默认为1',
+	},
+	{
+		displayName: 'State值',
+		name: 'state',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getAppQrcode'],
+			},
+		},
+		default: '',
+		description: 'State值，用于区分不同的安装渠道',
+		hint: '可以填写a-zA-Z0-9，长度不可超过32个字节，默认为空。扫应用带参二维码授权安装后，获取企业永久授权码接口会返回该state值',
+	},
+	{
+		displayName: '二维码样式',
+		name: 'style',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getAppQrcode'],
+			},
+		},
+		options: [
+			{
+				name: '带说明外框的二维码（适合于实体物料）',
+				value: 0,
+			},
+			{
+				name: '带说明外框的二维码（适合于屏幕类）',
+				value: 1,
+			},
+			{
+				name: '不带说明外框（小尺寸）',
+				value: 2,
+			},
+			{
+				name: '不带说明外框（中尺寸）',
+				value: 3,
+			},
+			{
+				name: '不带说明外框（大尺寸）',
+				value: 4,
+			},
+		],
+		default: 2,
+		description: '二维码样式选项',
+		hint: '默认为不带说明外框小尺寸。具体样式与服务商管理端获取到的应用二维码样式一一对应',
+	},
+	{
+		displayName: '结果返回方式',
+		name: 'resultType',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getAppQrcode'],
+			},
+		},
+		options: [
+			{
+				name: '二维码图片buffer',
+				value: 1,
+				description: '返回二维码图片buffer（二进制数据）',
+			},
+			{
+				name: '二维码图片URL',
+				value: 2,
+				description: '返回二维码图片URL（JSON格式）',
+			},
+		],
+		default: 1,
+		hint: '默认为返回二维码图片buffer',
+	},
+	{
+		displayName: 'Provider Access Token',
+		name: 'providerAccessToken',
+		type: 'string',
+		typeOptions: {
+			password: true,
+		},
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['corpidToOpencorpid'],
+			},
+		},
+		default: '',
+		description: '应用服务商的provider_access_token',
+		hint: '应用服务商的provider_access_token，获取方法参见服务商的凭证',
+	},
+	{
+		displayName: '企业ID',
+		name: 'corpid',
+		type: 'string',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['corpidToOpencorpid'],
+			},
+		},
+		default: '',
+		description: '待转换的企业ID',
+		hint: '待获取的明文corpid，仅限第三方服务商，转换已获授权企业的corpid',
+	},
+	{
+		displayName: 'Access Token',
+		name: 'accessToken',
+		type: 'string',
+		typeOptions: {
+			password: true,
+		},
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getPermissions'],
+			},
+		},
+		default: '',
+		description: '应用access_token',
+		hint: '代开发自建应用access_token（获取方法参见获取access_token）或第三方应用access_token（获取方法参见获取企业凭证）',
+	},
+	{
+		displayName: 'Access Token',
+		name: 'accessToken',
+		type: 'string',
+		typeOptions: {
+			password: true,
+		},
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['appAuth'],
+				operation: ['getAdminList'],
+			},
+		},
+		default: '',
+		description: '应用access_token',
+		hint: '代开发自建应用access_token（获取方法参见获取access_token）或第三方应用access_token（获取方法参见获取企业凭证）',
+	},
+];
