@@ -23,7 +23,8 @@ export const uploadImageDescription: INodeProperties[] = [
 			show: showOnlyForUploadImage,
 		},
 		default: 'data',
-		description: '要上传的图片文件的二进制属性名称。图片大小不超过2MB，支持jpg、png格式。<a href="https://developer.work.weixin.qq.com/document/path/90256" target="_blank">官方文档</a>',
+		hint: '必填。要上传的图片文件的二进制属性名称。图片文件大小应在5B~2MB之间。POST的请求包中，form-data中媒体文件标识，应包含有filename、content-type等信息',
+		description: '要上传的图片文件的二进制属性名称。图片文件大小应在5B~2MB之间。POST的请求包中，form-data中媒体文件标识，应包含有filename、content-type等信息。<a href="https://developer.work.weixin.qq.com/document/path/90256" target="_blank">官方文档</a>',
 		placeholder: 'data',
 	},
 	{
@@ -34,6 +35,7 @@ export const uploadImageDescription: INodeProperties[] = [
 			show: showOnlyForUploadImage,
 		},
 		default: '',
+		hint: '可选。图片文件名称，如不指定将使用二进制数据的原始文件名',
 		description: '可选。图片文件名称。如不指定，将使用二进制数据的原始文件名。<a href="https://developer.work.weixin.qq.com/document/path/90256" target="_blank">官方文档</a>',
 		placeholder: 'image.jpg',
 	},
