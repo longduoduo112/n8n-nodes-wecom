@@ -60,6 +60,14 @@ export async function executeMessage(
 				);
 			}
 
+			if (operation === 'sendMiniprogramNotice' && touser.split('|').includes('@all')) {
+				throw new NodeOperationError(
+					this.getNode(),
+					'小程序通知消息不支持 @all 全员发送',
+					{ itemIndex: i },
+				);
+			}
+
 			let body: IDataObject = {
 				touser,
 				toparty,
@@ -1006,4 +1014,3 @@ export async function executeMessage(
 
 	return returnData;
 }
-

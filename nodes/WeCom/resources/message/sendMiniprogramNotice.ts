@@ -83,14 +83,13 @@ export const sendMiniprogramNoticeDescription: INodeProperties[] = [
 		typeOptions: {
 			multipleValues: true,
 		},
-		required: true,
 		default: {},
 		placeholder: '添加内容项',
 		displayOptions: {
 			show: showOnlySendMiniprogramNotice,
 		},
 		description:
-			'消息内容键值对，最多允许10个item。<a href="https://developer.work.weixin.qq.com/document/path/90236#小程序通知消息" target="_blank">官方文档</a>',
+			'可选。消息内容键值对，最多允许10个item。<a href="https://developer.work.weixin.qq.com/document/path/90236#小程序通知消息" target="_blank">官方文档</a>',
 		options: [
 			{
 				displayName: '内容项',
@@ -166,4 +165,3 @@ export const sendMiniprogramNoticeDescription: INodeProperties[] = [
 			'可选。表示是否重复消息检查的时间间隔，默认1800秒，最大不超过4小时。<a href="https://developer.work.weixin.qq.com/document/path/90236#小程序通知消息" target="_blank">官方文档</a>',
 	},
 ];
-

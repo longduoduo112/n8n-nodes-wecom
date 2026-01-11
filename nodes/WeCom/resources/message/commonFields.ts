@@ -9,45 +9,59 @@ export function getRecipientFields(operation: string): INodeProperties[] {
 		resource: ['message'],
 		operation: [operation],
 	};
+	const allowAll = operation !== 'sendMiniprogramNotice';
+	const recipientTypeOptions = [
+		{
+			name: '手动输入',
+			value: 'manual',
+			description: '手动输入成员ID、部门ID或标签ID',
+		},
+		{
+			name: '组合选择',
+			value: 'mixed',
+			description: '同时选择成员、部门和标签',
+		},
+		{
+			name: '指定标签',
+			value: 'tags',
+			description: '从列表中选择标签',
+		},
+		{
+			name: '指定部门',
+			value: 'departments',
+			description: '从列表中选择部门',
+		},
+		{
+			name: '指定成员',
+			value: 'users',
+			description: '从列表中选择成员',
+		},
+	];
+
+	if (allowAll) {
+		recipientTypeOptions.unshift({
+			name: '全体成员',
+			value: 'all',
+			description: '向应用的全部成员发送消息',
+		});
+	}
+
+	const recipientTypeDescription = allowAll
+		? '选择接收消息的对象类型。touser、toparty、totag不能同时为空，后面不再强调。'
+		: '选择接收消息的对象类型。小程序通知不支持 @all。touser、toparty、totag不能同时为空，后面不再强调。';
 
 	return [
 		{
 			displayName: '接收人类型',
 			name: 'recipientType',
 			type: 'options',
-			options: [
-				{
-					name: '全体成员',
-					value: 'all',
-					description: '向应用的全部成员发送消息',
-				},
-				{
-					name: '手动输入',
-					value: 'manual',
-					description: '手动输入成员ID、部门ID或标签ID',
-				},
-				{
-					name: '指定标签',
-					value: 'tags',
-					description: '从列表中选择标签',
-				},
-				{
-					name: '指定部门',
-					value: 'departments',
-					description: '从列表中选择部门',
-				},
-				{
-					name: '指定成员',
-					value: 'users',
-					description: '从列表中选择成员',
-				},
-			],
+			options: recipientTypeOptions,
 			default: 'users',
 			displayOptions: {
 				show: showCondition,
 			},
 			description:
-				'选择接收消息的对象类型。touser、toparty、totag不能同时为空，后面不再强调。<a href="https://developer.work.weixin.qq.com/document/path/90236" target="_blank">官方文档</a>',
+				`${recipientTypeDescription}<a href="https://developer.work.weixin.qq.com/document/path/90236" target="_blank">官方文档</a>`,
 		},
 		{
 			displayName: '成员 Names or IDs',
@@ -60,7 +74,7 @@ export function getRecipientFields(operation: string): INodeProperties[] {
 			displayOptions: {
 				show: {
 					...showCondition,
-					recipientType: ['users'],
+					recipientType: ['users', 'mixed'],
 				},
 			},
 			hint: '最多支持1000个成员',
@@ -77,7 +91,7 @@ export function getRecipientFields(operation: string): INodeProperties[] {
 			displayOptions: {
 				show: {
 					...showCondition,
-					recipientType: ['departments'],
+					recipientType: ['departments', 'mixed'],
 				},
 			},
 			hint: '最多支持100个部门',
@@ -94,7 +108,7 @@ export function getRecipientFields(operation: string): INodeProperties[] {
 			displayOptions: {
 				show: {
 					...showCondition,
-					recipientType: ['tags'],
+					recipientType: ['tags', 'mixed'],
 				},
 			},
 			hint: '最多支持100个标签',
@@ -181,13 +195,20 @@ export function extractRecipients(
 
 	if (recipientType === 'manual') {
 		return {
-			touser: touser_manual || undefined,
-			toparty: toparty_manual || undefined,
-			totag: totag_manual || undefined,
+			touser: normalizeRecipientValue(touser_manual),
+			toparty: normalizeRecipientValue(toparty_manual),
+			totag: normalizeRecipientValue(totag_manual),
 		};
 	}
 
 	const result: { touser?: string; toparty?: string; totag?: string } = {};
+
+	if (recipientType === 'mixed') {
+		result.touser = normalizeRecipientValue(touser);
+		result.toparty = normalizeRecipientValue(toparty);
+		result.totag = normalizeRecipientValue(totag);
+		return result;
+	}
 
 	if (recipientType === 'users') {
 		result.touser = normalizeRecipientValue(touser);
