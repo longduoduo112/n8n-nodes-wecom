@@ -9,6 +9,39 @@ const showOnlySendMiniprogramNotice = {
 export const sendMiniprogramNoticeDescription: INodeProperties[] = [
 	...getRecipientFields('sendMiniprogramNotice'),
 	{
+		displayName: '输入方式',
+		name: 'miniprogram_notice_input_mode',
+		type: 'options',
+		options: [
+			{ name: '表单输入', value: 'form' },
+			{ name: 'JSON输入', value: 'json' },
+		],
+		default: 'form',
+		displayOptions: {
+			show: showOnlySendMiniprogramNotice,
+		},
+		description: '选择小程序通知的输入方式',
+	},
+	{
+		displayName: '小程序通知内容（JSON）',
+		name: 'miniprogram_notice_json',
+		type: 'json',
+		typeOptions: {
+			rows: 4,
+		},
+		default: '{}',
+		placeholder: '{"appid":"wx1234567890abcdef","page":"pages/index","title":"通知","description":"描述","content_item":[{"key":"姓名","value":"张三"}]}',
+		displayOptions: {
+			show: {
+				...showOnlySendMiniprogramNotice,
+				miniprogram_notice_input_mode: ['json'],
+			},
+		},
+		hint: 'JSON输入模式下仅展示此字段',
+		description:
+			'可选。使用JSON直接输入miniprogram_notice对象。<a href="https://developer.work.weixin.qq.com/document/path/90236#小程序通知消息" target="_blank">官方文档</a>',
+	},
+	{
 		displayName: '小程序Appid',
 		name: 'appid',
 		type: 'string',
@@ -16,7 +49,10 @@ export const sendMiniprogramNoticeDescription: INodeProperties[] = [
 		default: '',
 		placeholder: 'wx1234567890abcdef',
 		displayOptions: {
-			show: showOnlySendMiniprogramNotice,
+			show: {
+				...showOnlySendMiniprogramNotice,
+				miniprogram_notice_input_mode: ['form'],
+			},
 		},
 		description:
 			'小程序appid，必须是与当前应用关联的小程序。<a href="https://developer.work.weixin.qq.com/document/path/90236#小程序通知消息" target="_blank">官方文档</a>',
@@ -28,7 +64,10 @@ export const sendMiniprogramNoticeDescription: INodeProperties[] = [
 		default: '',
 		placeholder: 'pages/index/index',
 		displayOptions: {
-			show: showOnlySendMiniprogramNotice,
+			show: {
+				...showOnlySendMiniprogramNotice,
+				miniprogram_notice_input_mode: ['form'],
+			},
 		},
 		hint: '不填则消息点击后不跳转',
 		description:
@@ -42,7 +81,10 @@ export const sendMiniprogramNoticeDescription: INodeProperties[] = [
 		default: '',
 		placeholder: '请输入消息标题',
 		displayOptions: {
-			show: showOnlySendMiniprogramNotice,
+			show: {
+				...showOnlySendMiniprogramNotice,
+				miniprogram_notice_input_mode: ['form'],
+			},
 		},
 		hint: '长度限制4-12个汉字',
 		description:
@@ -58,7 +100,10 @@ export const sendMiniprogramNoticeDescription: INodeProperties[] = [
 		default: '',
 		placeholder: '请输入消息描述',
 		displayOptions: {
-			show: showOnlySendMiniprogramNotice,
+			show: {
+				...showOnlySendMiniprogramNotice,
+				miniprogram_notice_input_mode: ['form'],
+			},
 		},
 		hint: '长度限制4-12个汉字',
 		description:
@@ -70,7 +115,10 @@ export const sendMiniprogramNoticeDescription: INodeProperties[] = [
 		type: 'boolean',
 		default: false,
 		displayOptions: {
-			show: showOnlySendMiniprogramNotice,
+			show: {
+				...showOnlySendMiniprogramNotice,
+				miniprogram_notice_input_mode: ['form'],
+			},
 		},
 		hint: '放大第一个内容项',
 		description:
@@ -86,7 +134,10 @@ export const sendMiniprogramNoticeDescription: INodeProperties[] = [
 		default: {},
 		placeholder: '添加内容项',
 		displayOptions: {
-			show: showOnlySendMiniprogramNotice,
+			show: {
+				...showOnlySendMiniprogramNotice,
+				miniprogram_notice_input_mode: ['form'],
+			},
 		},
 		description:
 			'可选。消息内容键值对，最多允许10个item。<a href="https://developer.work.weixin.qq.com/document/path/90236#小程序通知消息" target="_blank">官方文档</a>',
@@ -127,7 +178,10 @@ export const sendMiniprogramNoticeDescription: INodeProperties[] = [
 		type: 'boolean',
 		default: false,
 		displayOptions: {
-			show: showOnlySendMiniprogramNotice,
+			show: {
+				...showOnlySendMiniprogramNotice,
+				miniprogram_notice_input_mode: ['form'],
+			},
 		},
 		hint: '开启后会将消息中的userid转为@对应成员',
 		description:
@@ -139,7 +193,10 @@ export const sendMiniprogramNoticeDescription: INodeProperties[] = [
 		type: 'boolean',
 		default: false,
 		displayOptions: {
-			show: showOnlySendMiniprogramNotice,
+			show: {
+				...showOnlySendMiniprogramNotice,
+				miniprogram_notice_input_mode: ['form'],
+			},
 		},
 		hint: '开启后在时间间隔内相同内容的消息不会重复发送',
 		description:
@@ -154,6 +211,7 @@ export const sendMiniprogramNoticeDescription: INodeProperties[] = [
 			show: {
 				...showOnlySendMiniprogramNotice,
 				enable_duplicate_check: [true],
+				miniprogram_notice_input_mode: ['form'],
 			},
 		},
 		typeOptions: {

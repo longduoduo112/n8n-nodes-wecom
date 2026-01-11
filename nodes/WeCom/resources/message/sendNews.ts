@@ -9,6 +9,39 @@ const showOnlySendNews = {
 export const sendNewsDescription: INodeProperties[] = [
 	...getRecipientFields('sendNews'),
 	{
+		displayName: '输入方式',
+		name: 'news_input_mode',
+		type: 'options',
+		options: [
+			{ name: '表单输入', value: 'form' },
+			{ name: 'JSON输入', value: 'json' },
+		],
+		default: 'form',
+		displayOptions: {
+			show: showOnlySendNews,
+		},
+		description: '选择图文消息的输入方式',
+	},
+	{
+		displayName: '图文列表（JSON）',
+		name: 'news_json',
+		type: 'json',
+		typeOptions: {
+			rows: 4,
+		},
+		default: '[]',
+		placeholder: '[{"title":"标题","description":"摘要","url":"https://example.com","picurl":"https://example.com/image.jpg"}]',
+		displayOptions: {
+			show: {
+				...showOnlySendNews,
+				news_input_mode: ['json'],
+			},
+		},
+		hint: 'JSON输入模式下仅展示此字段',
+		description:
+			'可选。使用JSON直接输入图文列表（数组）或完整news对象（包含articles）。<a href="https://developer.work.weixin.qq.com/document/path/90236#图文消息" target="_blank">官方文档</a>',
+	},
+	{
 		displayName: '图文列表',
 		name: 'articles',
 		type: 'fixedCollection',
@@ -19,7 +52,10 @@ export const sendNewsDescription: INodeProperties[] = [
 		default: {},
 		placeholder: '添加图文',
 		displayOptions: {
-			show: showOnlySendNews,
+			show: {
+				...showOnlySendNews,
+				news_input_mode: ['form'],
+			},
 		},
 		description:
 			'图文消息，一个图文消息支持1到8条图文。<a href="https://developer.work.weixin.qq.com/document/path/90236#图文消息" target="_blank">官方文档</a>',
@@ -130,7 +166,10 @@ export const sendNewsDescription: INodeProperties[] = [
 		type: 'boolean',
 		default: false,
 		displayOptions: {
-			show: showOnlySendNews,
+			show: {
+				...showOnlySendNews,
+				news_input_mode: ['form'],
+			},
 		},
 		hint: '开启后会将消息中的userid转为@对应成员',
 		description: '可选。表示是否开启ID转译，0表示否，1表示是，默认0。开启后会将消息中的userid转为@对应成员显示。<a href="https://developer.work.weixin.qq.com/document/path/90236#图文消息" target="_blank">官方文档</a>',
@@ -141,7 +180,10 @@ export const sendNewsDescription: INodeProperties[] = [
 		type: 'boolean',
 		default: false,
 		displayOptions: {
-			show: showOnlySendNews,
+			show: {
+				...showOnlySendNews,
+				news_input_mode: ['form'],
+			},
 		},
 		hint: '开启后在时间间隔内相同内容的消息不会重复发送',
 		description: '可选。表示是否开启重复消息检查，0表示否，1表示是，默认0。开启后相同内容的消息在时间间隔内不会重复发送。<a href="https://developer.work.weixin.qq.com/document/path/90236#图文消息" target="_blank">官方文档</a>',
@@ -155,6 +197,7 @@ export const sendNewsDescription: INodeProperties[] = [
 			show: {
 				...showOnlySendNews,
 				enable_duplicate_check: [true],
+				news_input_mode: ['form'],
 			},
 		},
 		typeOptions: {
@@ -166,4 +209,3 @@ export const sendNewsDescription: INodeProperties[] = [
 			'可选。表示是否重复消息检查的时间间隔，默认1800秒，最大不超过4小时。<a href="https://developer.work.weixin.qq.com/document/path/90236#图文消息" target="_blank">官方文档</a>',
 	},
 ];
-

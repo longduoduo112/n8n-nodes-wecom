@@ -9,6 +9,39 @@ const showOnlySendMpNews = {
 export const sendMpNewsDescription: INodeProperties[] = [
 	...getRecipientFields('sendMpNews'),
 	{
+		displayName: '输入方式',
+		name: 'mpnews_input_mode',
+		type: 'options',
+		options: [
+			{ name: '表单输入', value: 'form' },
+			{ name: 'JSON输入', value: 'json' },
+		],
+		default: 'form',
+		displayOptions: {
+			show: showOnlySendMpNews,
+		},
+		description: '选择图文消息的输入方式',
+	},
+	{
+		displayName: '图文列表（JSON）',
+		name: 'mpnews_json',
+		type: 'json',
+		typeOptions: {
+			rows: 4,
+		},
+		default: '[]',
+		placeholder: '[{"title":"标题","content":"<p>内容</p>","thumb_media_id":"MEDIA_ID"}]',
+		displayOptions: {
+			show: {
+				...showOnlySendMpNews,
+				mpnews_input_mode: ['json'],
+			},
+		},
+		hint: 'JSON输入模式下仅展示此字段',
+		description:
+			'可选。使用JSON直接输入图文列表（数组）或完整mpnews对象（包含articles）。<a href="https://developer.work.weixin.qq.com/document/path/90236#mpnews消息" target="_blank">官方文档</a>',
+	},
+	{
 		displayName: '图文列表',
 		name: 'articles',
 		type: 'fixedCollection',
@@ -19,7 +52,10 @@ export const sendMpNewsDescription: INodeProperties[] = [
 		default: {},
 		placeholder: '添加图文',
 		displayOptions: {
-			show: showOnlySendMpNews,
+			show: {
+				...showOnlySendMpNews,
+				mpnews_input_mode: ['form'],
+			},
 		},
 		description:
 			'Mpnews类型的图文消息，一个图文消息支持1到8条图文。<a href="https://developer.work.weixin.qq.com/document/path/90236#mpnews消息" target="_blank">官方文档</a>',
@@ -109,7 +145,10 @@ export const sendMpNewsDescription: INodeProperties[] = [
 		],
 		default: 0,
 		displayOptions: {
-			show: showOnlySendMpNews,
+			show: {
+				...showOnlySendMpNews,
+				mpnews_input_mode: ['form'],
+			},
 		},
 		hint: '仅mpnews类型的消息支持safe值为2，其他消息类型不支持',
 		description: '可选。表示是否是保密消息，0表示可对外分享，1表示不能分享且内容显示水印，2表示仅限在企业内分享，默认为0。注意仅mpnews类型的消息支持safe值为2，其他消息类型不支持。<a href="https://developer.work.weixin.qq.com/document/path/90236#mpnews消息" target="_blank">官方文档</a>',
@@ -120,7 +159,10 @@ export const sendMpNewsDescription: INodeProperties[] = [
 		type: 'boolean',
 		default: false,
 		displayOptions: {
-			show: showOnlySendMpNews,
+			show: {
+				...showOnlySendMpNews,
+				mpnews_input_mode: ['form'],
+			},
 		},
 		hint: '开启后会将消息中的userid转为@对应成员',
 		description: '可选。表示是否开启ID转译，0表示否，1表示是，默认0。开启后会将消息中的userid转为@对应成员显示。<a href="https://developer.work.weixin.qq.com/document/path/90236#mpnews消息" target="_blank">官方文档</a>',
@@ -131,7 +173,10 @@ export const sendMpNewsDescription: INodeProperties[] = [
 		type: 'boolean',
 		default: false,
 		displayOptions: {
-			show: showOnlySendMpNews,
+			show: {
+				...showOnlySendMpNews,
+				mpnews_input_mode: ['form'],
+			},
 		},
 		hint: '开启后在时间间隔内相同内容的消息不会重复发送',
 		description: '可选。表示是否开启重复消息检查，0表示否，1表示是，默认0。开启后相同内容的消息在时间间隔内不会重复发送。<a href="https://developer.work.weixin.qq.com/document/path/90236#mpnews消息" target="_blank">官方文档</a>',
@@ -145,6 +190,7 @@ export const sendMpNewsDescription: INodeProperties[] = [
 			show: {
 				...showOnlySendMpNews,
 				enable_duplicate_check: [true],
+				mpnews_input_mode: ['form'],
 			},
 		},
 		typeOptions: {
@@ -156,4 +202,3 @@ export const sendMpNewsDescription: INodeProperties[] = [
 			'可选。表示是否重复消息检查的时间间隔，默认1800秒，最大不超过4小时。<a href="https://developer.work.weixin.qq.com/document/path/90236#mpnews消息" target="_blank">官方文档</a>',
 	},
 ];
-

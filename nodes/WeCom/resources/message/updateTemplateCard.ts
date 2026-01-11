@@ -23,6 +23,39 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 			'更新卡片所需要消费的code，可通过发消息接口和回调接口返回值获取，一个code只能调用一次该接口，且只能在72小时内调用。<a href="https://developer.work.weixin.qq.com/document/path/94888" target="_blank">官方文档</a>',
 	},
 	{
+		displayName: '输入方式',
+		name: 'template_card_input_mode',
+		type: 'options',
+		options: [
+			{ name: '表单输入', value: 'form' },
+			{ name: 'JSON输入', value: 'json' },
+		],
+		default: 'form',
+		displayOptions: {
+			show: showOnlyUpdateTemplateCard,
+		},
+		description: '选择模板卡片的输入方式',
+	},
+	{
+		displayName: '模板卡片（JSON）',
+		name: 'template_card_json',
+		type: 'json',
+		typeOptions: {
+			rows: 6,
+		},
+		default: '{}',
+		placeholder: '{"card_type":"text_notice","main_title":{"title":"标题","desc":"说明"},"card_action":{"type":1,"url":"https://example.com"}}',
+		displayOptions: {
+			show: {
+				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['json'],
+			},
+		},
+		hint: 'JSON输入模式下仅展示此字段',
+		description:
+			'可选。使用JSON直接输入template_card对象。<a href="https://developer.work.weixin.qq.com/document/path/94888" target="_blank">官方文档</a>',
+	},
+	{
 		displayName: '模板卡片类型',
 		name: 'card_type',
 		type: 'options',
@@ -55,7 +88,10 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 	],
 		default: 'text_notice',
 		displayOptions: {
-			show: showOnlyUpdateTemplateCard,
+			show: {
+				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
+			},
 		},
 		description:
 			'选择模板卡片的类型。<a href="https://developer.work.weixin.qq.com/document/path/94888" target="_blank">官方文档</a>',
@@ -67,7 +103,10 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		default: {},
 		placeholder: '添加来源信息',
 		displayOptions: {
-			show: showOnlyUpdateTemplateCard,
+			show: {
+				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
+			},
 		},
 		description: '可选。模板卡片来源样式信息',
 		options: [
@@ -128,7 +167,10 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		default: {},
 		placeholder: '添加标题',
 		displayOptions: {
-			show: showOnlyUpdateTemplateCard,
+			show: {
+				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
+			},
 		},
 		description: '模板卡片的主要内容，包含一级标题和标题辅助信息',
 		options: [
@@ -163,7 +205,10 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		default: {},
 		placeholder: '添加关键数据',
 		displayOptions: {
-			show: showOnlyUpdateTemplateCard,
+			show: {
+				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
+			},
 		},
 		description: '可选。关键数据样式',
 		options: [
@@ -198,7 +243,10 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		default: {},
 		placeholder: '添加引用',
 		displayOptions: {
-			show: showOnlyUpdateTemplateCard,
+			show: {
+				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
+			},
 		},
 		description: '可选。引用文献样式，建议不与关键数据共用',
 		options: [
@@ -297,7 +345,10 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		default: '',
 		placeholder: '请输入二级文本内容',
 		displayOptions: {
-			show: showOnlyUpdateTemplateCard,
+			show: {
+				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
+			},
 		},
 		hint: '建议不超过160个字',
 		description:
@@ -313,7 +364,10 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		default: {},
 		placeholder: '添加列表项',
 		displayOptions: {
-			show: showOnlyUpdateTemplateCard,
+			show: {
+				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
+			},
 		},
 		description: '可选。二级标题+文本列表，列表长度不超过6',
 		options: [
@@ -420,7 +474,10 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		default: {},
 		placeholder: '添加跳转指引',
 		displayOptions: {
-			show: showOnlyUpdateTemplateCard,
+			show: {
+				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
+			},
 		},
 		description: '可选。跳转指引样式的列表，列表长度不超过3',
 		options: [
@@ -510,7 +567,10 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		default: {},
 		placeholder: '设置卡片跳转',
 		displayOptions: {
-			show: showOnlyUpdateTemplateCard,
+			show: {
+				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
+			},
 		},
 		description: '整体卡片的点击跳转事件（text_notice必填，news_notice不需要）',
 		options: [
@@ -591,7 +651,10 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		default: '',
 		placeholder: 'task_001',
 		displayOptions: {
-			show: showOnlyUpdateTemplateCard,
+			show: {
+				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
+			},
 		},
 		description:
 			'可选。任务 ID，同一个应用任务 ID 不能重复，只能由数字、字母和"_-@"组成，最长128字节。<a href="https://developer.work.weixin.qq.com/document/path/94888" target="_blank">官方文档</a>',
@@ -602,7 +665,10 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		type: 'boolean',
 		default: false,
 		displayOptions: {
-			show: showOnlyUpdateTemplateCard,
+			show: {
+				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
+			},
 		},
 		hint: '开启后会将消息中的userid转为@对应成员',
 		description:
@@ -617,6 +683,7 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
 				card_type: ['button_interaction', 'vote_interaction', 'multiple_interaction'],
 			},
 		},
@@ -633,6 +700,7 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
 				card_type: ['button_interaction'],
 			},
 		},
@@ -726,6 +794,7 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
 				card_type: ['button_interaction'],
 			},
 		},
@@ -829,6 +898,7 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
 				card_type: ['multiple_interaction'],
 			},
 		},
@@ -928,6 +998,7 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
 				card_type: ['vote_interaction'],
 			},
 		},
@@ -953,6 +1024,7 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
 				card_type: ['vote_interaction'],
 			},
 		},
@@ -968,6 +1040,7 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
 				card_type: ['vote_interaction'],
 			},
 		},
@@ -986,6 +1059,7 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
 				card_type: ['vote_interaction', 'multiple_interaction'],
 			},
 		},
@@ -1042,6 +1116,7 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
 				card_type: ['vote_interaction', 'multiple_interaction'],
 			},
 		},
@@ -1058,6 +1133,7 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
 				card_type: ['vote_interaction', 'multiple_interaction'],
 			},
 		},
@@ -1074,6 +1150,7 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
 				card_type: ['news_notice'],
 			},
 		},
@@ -1118,6 +1195,7 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
 				card_type: ['news_notice'],
 			},
 		},
@@ -1234,6 +1312,7 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
 				card_type: ['news_notice'],
 			},
 		},
@@ -1274,7 +1353,10 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		default: {},
 		placeholder: '添加操作菜单',
 		displayOptions: {
-			show: showOnlyUpdateTemplateCard,
+			show: {
+				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
+			},
 		},
 		description: '可选。卡片右上角更多操作按钮',
 		options: [
@@ -1335,7 +1417,10 @@ export const updateTemplateCardDescription: INodeProperties[] = [
 		default: '',
 		placeholder: 'btn_001',
 		displayOptions: {
-			show: showOnlyUpdateTemplateCard,
+			show: {
+				...showOnlyUpdateTemplateCard,
+				template_card_input_mode: ['form'],
+			},
 		},
 		description:
 			'可选。仅用于任务卡片消息的升级场景，如果需要更新任务卡片消息时需要填写。<a href="https://developer.work.weixin.qq.com/document/path/94888" target="_blank">官方文档</a>',

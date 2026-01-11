@@ -9,6 +9,39 @@ const showOnlySendTaskCard = {
 export const sendTaskCardDescription: INodeProperties[] = [
 	...getRecipientFields('sendTaskCard'),
 	{
+		displayName: '输入方式',
+		name: 'taskcard_input_mode',
+		type: 'options',
+		options: [
+			{ name: '表单输入', value: 'form' },
+			{ name: 'JSON输入', value: 'json' },
+		],
+		default: 'form',
+		displayOptions: {
+			show: showOnlySendTaskCard,
+		},
+		description: '选择任务卡片的输入方式',
+	},
+	{
+		displayName: '任务卡片（JSON）',
+		name: 'taskcard_json',
+		type: 'json',
+		typeOptions: {
+			rows: 4,
+		},
+		default: '{}',
+		placeholder: '{"title":"待处理","description":"请审批","task_id":"task_001","url":"https://example.com","btn":[{"key":"agree","name":"同意"}]}',
+		displayOptions: {
+			show: {
+				...showOnlySendTaskCard,
+				taskcard_input_mode: ['json'],
+			},
+		},
+		hint: 'JSON输入模式下仅展示此字段',
+		description:
+			'可选。使用JSON直接输入taskcard对象。<a href="https://developer.work.weixin.qq.com/document/path/90236#任务卡片消息" target="_blank">官方文档</a>',
+	},
+	{
 		displayName: '标题',
 		name: 'title',
 		type: 'string',
@@ -16,7 +49,10 @@ export const sendTaskCardDescription: INodeProperties[] = [
 		default: '',
 		placeholder: '请输入标题',
 		displayOptions: {
-			show: showOnlySendTaskCard,
+			show: {
+				...showOnlySendTaskCard,
+				taskcard_input_mode: ['form'],
+			},
 		},
 		hint: '不超过128个字节',
 		description:
@@ -33,7 +69,10 @@ export const sendTaskCardDescription: INodeProperties[] = [
 		default: '',
 		placeholder: '请输入描述',
 		displayOptions: {
-			show: showOnlySendTaskCard,
+			show: {
+				...showOnlySendTaskCard,
+				taskcard_input_mode: ['form'],
+			},
 		},
 		hint: '不超过512个字节',
 		description:
@@ -46,7 +85,10 @@ export const sendTaskCardDescription: INodeProperties[] = [
 		default: '',
 		placeholder: 'https://example.com',
 		displayOptions: {
-			show: showOnlySendTaskCard,
+			show: {
+				...showOnlySendTaskCard,
+				taskcard_input_mode: ['form'],
+			},
 		},
 		hint: '小程序或者URL必须填写一个',
 		description:
@@ -60,7 +102,10 @@ export const sendTaskCardDescription: INodeProperties[] = [
 		default: '',
 		placeholder: 'task_001',
 		displayOptions: {
-			show: showOnlySendTaskCard,
+			show: {
+				...showOnlySendTaskCard,
+				taskcard_input_mode: ['form'],
+			},
 		},
 		hint: '只能由数字、字母和"_-@"组成，最长128字节',
 		description:
@@ -77,7 +122,10 @@ export const sendTaskCardDescription: INodeProperties[] = [
 		default: {},
 		placeholder: '添加按钮',
 		displayOptions: {
-			show: showOnlySendTaskCard,
+			show: {
+				...showOnlySendTaskCard,
+				taskcard_input_mode: ['form'],
+			},
 		},
 		description:
 			'按钮列表，按钮个数为1~2个。<a href="https://developer.work.weixin.qq.com/document/path/90236#任务卡片消息" target="_blank">官方文档</a>',
@@ -153,7 +201,10 @@ export const sendTaskCardDescription: INodeProperties[] = [
 		type: 'boolean',
 		default: false,
 		displayOptions: {
-			show: showOnlySendTaskCard,
+			show: {
+				...showOnlySendTaskCard,
+				taskcard_input_mode: ['form'],
+			},
 		},
 		hint: '开启后会将消息中的userid转为@对应成员',
 		description:
@@ -165,7 +216,10 @@ export const sendTaskCardDescription: INodeProperties[] = [
 		type: 'boolean',
 		default: false,
 		displayOptions: {
-			show: showOnlySendTaskCard,
+			show: {
+				...showOnlySendTaskCard,
+				taskcard_input_mode: ['form'],
+			},
 		},
 		hint: '开启后在时间间隔内相同内容的消息不会重复发送',
 		description:
@@ -180,6 +234,7 @@ export const sendTaskCardDescription: INodeProperties[] = [
 			show: {
 				...showOnlySendTaskCard,
 				enable_duplicate_check: [true],
+				taskcard_input_mode: ['form'],
 			},
 		},
 		typeOptions: {
@@ -191,4 +246,3 @@ export const sendTaskCardDescription: INodeProperties[] = [
 			'可选。表示是否重复消息检查的时间间隔，默认1800秒，最大不超过4小时。<a href="https://developer.work.weixin.qq.com/document/path/90236#任务卡片消息" target="_blank">官方文档</a>',
 	},
 ];
-
