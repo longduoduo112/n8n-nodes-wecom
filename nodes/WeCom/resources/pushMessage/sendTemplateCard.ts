@@ -7,11 +7,46 @@ const showOnlyForSendTemplateCard = {
 
 export const sendTemplateCardDescription: INodeProperties[] = [
 	{
+		displayName: '输入方式',
+		name: 'template_card_input_mode',
+		type: 'options',
+		options: [
+			{ name: '表单输入', value: 'form' },
+			{ name: 'JSON输入', value: 'json' },
+		],
+		default: 'form',
+		displayOptions: {
+			show: showOnlyForSendTemplateCard,
+		},
+		description: '选择模板卡片的输入方式',
+	},
+	{
+		displayName: '模板卡片（JSON）',
+		name: 'template_card_json',
+		type: 'json',
+		typeOptions: {
+			rows: 6,
+		},
+		default: '{}',
+		placeholder: '{"card_type":"text_notice","main_title":{"title":"标题","desc":"说明"},"card_action":{"type":1,"url":"https://example.com"}}',
+		displayOptions: {
+			show: {
+				...showOnlyForSendTemplateCard,
+				template_card_input_mode: ['json'],
+			},
+		},
+		hint: 'JSON输入模式下仅展示此字段',
+		description: '可选。使用JSON直接输入template_card对象。<a href="https://developer.work.weixin.qq.com/document/path/99110#%E6%A8%A1%E6%9D%BF%E5%8D%A1%E7%89%87%E7%B1%BB%E5%9E%8B" target="_blank">官方文档</a>',
+	},
+	{
 		displayName: '模板类型',
 		name: 'cardType',
 		type: 'options',
 		displayOptions: {
-			show: showOnlyForSendTemplateCard,
+			show: {
+				...showOnlyForSendTemplateCard,
+				template_card_input_mode: ['form'],
+			},
 		},
 		options: [
 			{
@@ -39,6 +74,7 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				...showOnlyForSendTemplateCard,
+				template_card_input_mode: ['form'],
 				cardType: ['text_notice', 'news_notice'],
 			},
 		},
@@ -93,6 +129,7 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				...showOnlyForSendTemplateCard,
+				template_card_input_mode: ['form'],
 				cardType: ['text_notice', 'news_notice'],
 			},
 		},
@@ -134,6 +171,7 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				...showOnlyForSendTemplateCard,
+				template_card_input_mode: ['form'],
 				cardType: ['text_notice'],
 			},
 		},
@@ -173,6 +211,7 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				...showOnlyForSendTemplateCard,
+				template_card_input_mode: ['form'],
 				cardType: ['news_notice'],
 			},
 		},
@@ -239,6 +278,7 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				...showOnlyForSendTemplateCard,
+				template_card_input_mode: ['form'],
 				cardType: ['text_notice', 'news_notice'],
 			},
 		},
@@ -257,6 +297,7 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				...showOnlyForSendTemplateCard,
+				template_card_input_mode: ['form'],
 				cardType: ['text_notice', 'news_notice'],
 			},
 		},
@@ -299,6 +340,7 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				...showOnlyForSendTemplateCard,
+				template_card_input_mode: ['form'],
 				cardType: ['text_notice', 'news_notice'],
 			},
 		},
@@ -372,6 +414,7 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				...showOnlyForSendTemplateCard,
+				template_card_input_mode: ['form'],
 				cardType: ['text_notice', 'news_notice'],
 			},
 		},
@@ -436,4 +479,3 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 		],
 	},
 ];
-

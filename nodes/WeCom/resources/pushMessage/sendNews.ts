@@ -7,6 +7,38 @@ const showOnlyForSendNews = {
 
 export const sendNewsDescription: INodeProperties[] = [
 	{
+		displayName: '输入方式',
+		name: 'news_input_mode',
+		type: 'options',
+		options: [
+			{ name: '表单输入', value: 'form' },
+			{ name: 'JSON输入', value: 'json' },
+		],
+		default: 'form',
+		displayOptions: {
+			show: showOnlyForSendNews,
+		},
+		description: '选择图文消息的输入方式',
+	},
+	{
+		displayName: '图文列表（JSON）',
+		name: 'news_json',
+		type: 'json',
+		typeOptions: {
+			rows: 4,
+		},
+		default: '[]',
+		placeholder: '[{"title":"标题","description":"摘要","url":"https://example.com","picurl":"https://example.com/image.jpg"}]',
+		displayOptions: {
+			show: {
+				...showOnlyForSendNews,
+				news_input_mode: ['json'],
+			},
+		},
+		hint: 'JSON输入模式下仅展示此字段',
+		description: '可选。使用JSON直接输入图文列表（数组）或对象（包含articles）。<a href="https://developer.work.weixin.qq.com/document/path/99110#%E5%9B%BE%E6%96%87%E7%B1%BB%E5%9E%8B" target="_blank">官方文档</a>',
+	},
+	{
 		displayName: '图文列表',
 		name: 'articles',
 		type: 'fixedCollection',
@@ -14,7 +46,10 @@ export const sendNewsDescription: INodeProperties[] = [
 			multipleValues: true,
 		},
 		displayOptions: {
-			show: showOnlyForSendNews,
+			show: {
+				...showOnlyForSendNews,
+				news_input_mode: ['form'],
+			},
 		},
 		default: {},
 		placeholder: '添加图文',
@@ -69,4 +104,3 @@ export const sendNewsDescription: INodeProperties[] = [
 		],
 	},
 ];
-

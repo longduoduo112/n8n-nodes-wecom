@@ -8,6 +8,31 @@ export async function executePushMessage(
 	items: INodeExecutionData[],
 ): Promise<INodeExecutionData[]> {
 	const returnData: INodeExecutionData[] = [];
+	const parseOptionalJsonParameter = (
+		value: unknown,
+		parameterName: string,
+		itemIndex: number,
+	): IDataObject | IDataObject[] | undefined => {
+		if (value === undefined || value === null) {
+			return undefined;
+		}
+		if (typeof value === 'string') {
+			const trimmed = value.trim();
+			if (!trimmed || trimmed === '{}' || trimmed === '[]') {
+				return undefined;
+			}
+			try {
+				return JSON.parse(trimmed) as IDataObject | IDataObject[];
+			} catch (error) {
+				throw new NodeOperationError(
+					this.getNode(),
+					`${parameterName} 必须是有效的 JSON: ${(error as Error).message}`,
+					{ itemIndex },
+				);
+			}
+		}
+		return value as IDataObject | IDataObject[];
+	};
 
 	for (let i = 0; i < items.length; i++) {
 		try {
@@ -155,8 +180,49 @@ export async function executePushMessage(
 
 			} else if (operation === 'sendNews') {
 				// 发送图文消息
+				const newsInputMode = this.getNodeParameter('news_input_mode', i, 'form') as string;
+				const newsJson = newsInputMode === 'json'
+					? parseOptionalJsonParameter(
+						this.getNodeParameter('news_json', i, '[]') as string,
+						'news_json',
+						i,
+					)
+					: undefined;
 				const articlesData = this.getNodeParameter('articles', i) as IDataObject;
-				const articles = (articlesData.article as IDataObject[]) || [];
+				let articles: IDataObject[] = [];
+
+				if (newsInputMode === 'json') {
+					if (!newsJson) {
+						throw new NodeOperationError(
+							this.getNode(),
+							'请选择 JSON 输入并提供 news_json',
+							{ itemIndex: i },
+						);
+					}
+					if (Array.isArray(newsJson)) {
+						articles = newsJson as IDataObject[];
+					} else if ((newsJson as IDataObject).news) {
+						const newsPayload = (newsJson as IDataObject).news as IDataObject;
+						if (!Array.isArray(newsPayload.articles)) {
+							throw new NodeOperationError(
+								this.getNode(),
+								'news_json.news 必须包含 articles 数组',
+								{ itemIndex: i },
+							);
+						}
+						articles = newsPayload.articles as IDataObject[];
+					} else if (Array.isArray((newsJson as IDataObject).articles)) {
+						articles = (newsJson as IDataObject).articles as IDataObject[];
+					} else {
+						throw new NodeOperationError(
+							this.getNode(),
+							'news_json 必须是图文数组或包含 articles 的对象',
+							{ itemIndex: i },
+						);
+					}
+				} else {
+					articles = (articlesData.article as IDataObject[]) || [];
+				}
 
 				body = {
 					msgtype: 'news',
@@ -205,63 +271,103 @@ export async function executePushMessage(
 
 			} else if (operation === 'sendTemplateCard') {
 				// 发送模板卡片消息
+				const templateCardInputMode = this.getNodeParameter(
+					'template_card_input_mode',
+					i,
+					'form',
+				) as string;
+				const templateCardJson = templateCardInputMode === 'json'
+					? parseOptionalJsonParameter(
+						this.getNodeParameter('template_card_json', i, '{}') as string,
+						'template_card_json',
+						i,
+					)
+					: undefined;
 				const cardType = this.getNodeParameter('cardType', i) as string;
-				
-				// 构建模板卡片数据
-				const templateCard: IDataObject = {
-					card_type: cardType,
-				};
 
-				// 卡片来源
-				const sourceData = this.getNodeParameter('source', i, {}) as IDataObject;
-				if (sourceData.sourceValue) {
-					templateCard.source = sourceData.sourceValue;
-				}
+				let templateCard: IDataObject;
 
-				// 主要内容
-				const mainTitleData = this.getNodeParameter('mainTitle', i) as IDataObject;
-				if (mainTitleData.mainTitleValue) {
-					templateCard.main_title = mainTitleData.mainTitleValue;
-				}
-
-				// 关键数据样式（仅文本通知）
-				if (cardType === 'text_notice') {
-					const emphasisData = this.getNodeParameter('emphasisContent', i, {}) as IDataObject;
-					if (emphasisData.emphasisValue) {
-						templateCard.emphasis_content = emphasisData.emphasisValue;
+				if (templateCardInputMode === 'json') {
+					if (!templateCardJson) {
+						throw new NodeOperationError(
+							this.getNode(),
+							'请选择 JSON 输入并提供 template_card_json',
+							{ itemIndex: i },
+						);
 					}
-				}
-
-				// 图文展示样式（仅图文展示）
-				if (cardType === 'news_notice') {
-					const imageTextData = this.getNodeParameter('imageTextArea', i, {}) as IDataObject;
-					if (imageTextData.imageTextValue) {
-						templateCard.image_text_area = imageTextData.imageTextValue;
+					if (Array.isArray(templateCardJson)) {
+						throw new NodeOperationError(
+							this.getNode(),
+							'template_card_json 必须是对象',
+							{ itemIndex: i },
+						);
 					}
-				}
+					const templateCardPayload = (templateCardJson as IDataObject).template_card as IDataObject | undefined;
+					templateCard = templateCardPayload ?? (templateCardJson as IDataObject);
+					if (!templateCard.card_type) {
+						throw new NodeOperationError(
+							this.getNode(),
+							'template_card_json 必须包含 card_type',
+							{ itemIndex: i },
+						);
+					}
+				} else {
+					// 构建模板卡片数据
+					templateCard = {
+						card_type: cardType,
+					};
 
-				// 二级普通文本
-				const subTitleText = this.getNodeParameter('subTitleText', i, '') as string;
-				if (subTitleText) {
-					templateCard.sub_title_text = subTitleText;
-				}
+					// 卡片来源
+					const sourceData = this.getNodeParameter('source', i, {}) as IDataObject;
+					if (sourceData.sourceValue) {
+						templateCard.source = sourceData.sourceValue;
+					}
 
-				// 二级标题+文本列表
-				const horizontalData = this.getNodeParameter('horizontalContentList', i, {}) as IDataObject;
-				if (horizontalData.item && Array.isArray(horizontalData.item)) {
-					templateCard.horizontal_content_list = horizontalData.item;
-				}
+					// 主要内容
+					const mainTitleData = this.getNodeParameter('mainTitle', i) as IDataObject;
+					if (mainTitleData.mainTitleValue) {
+						templateCard.main_title = mainTitleData.mainTitleValue;
+					}
 
-				// 跳转链接
-				const jumpListData = this.getNodeParameter('jumpList', i, {}) as IDataObject;
-				if (jumpListData.jump && Array.isArray(jumpListData.jump)) {
-					templateCard.jump_list = jumpListData.jump;
-				}
+					// 关键数据样式（仅文本通知）
+					if (cardType === 'text_notice') {
+						const emphasisData = this.getNodeParameter('emphasisContent', i, {}) as IDataObject;
+						if (emphasisData.emphasisValue) {
+							templateCard.emphasis_content = emphasisData.emphasisValue;
+						}
+					}
 
-				// 整体卡片点击跳转
-				const cardActionData = this.getNodeParameter('cardAction', i, {}) as IDataObject;
-				if (cardActionData.actionValue) {
-					templateCard.card_action = cardActionData.actionValue;
+					// 图文展示样式（仅图文展示）
+					if (cardType === 'news_notice') {
+						const imageTextData = this.getNodeParameter('imageTextArea', i, {}) as IDataObject;
+						if (imageTextData.imageTextValue) {
+							templateCard.image_text_area = imageTextData.imageTextValue;
+						}
+					}
+
+					// 二级普通文本
+					const subTitleText = this.getNodeParameter('subTitleText', i, '') as string;
+					if (subTitleText) {
+						templateCard.sub_title_text = subTitleText;
+					}
+
+					// 二级标题+文本列表
+					const horizontalData = this.getNodeParameter('horizontalContentList', i, {}) as IDataObject;
+					if (horizontalData.item && Array.isArray(horizontalData.item)) {
+						templateCard.horizontal_content_list = horizontalData.item;
+					}
+
+					// 跳转链接
+					const jumpListData = this.getNodeParameter('jumpList', i, {}) as IDataObject;
+					if (jumpListData.jump && Array.isArray(jumpListData.jump)) {
+						templateCard.jump_list = jumpListData.jump;
+					}
+
+					// 整体卡片点击跳转
+					const cardActionData = this.getNodeParameter('cardAction', i, {}) as IDataObject;
+					if (cardActionData.actionValue) {
+						templateCard.card_action = cardActionData.actionValue;
+					}
 				}
 
 				body = {

@@ -21,11 +21,47 @@ export const sendTextCardDescription: INodeProperties[] = [
 		hint: '必填。群聊的唯一标识，必须是该应用所创建的群',
 	},
 	{
+		displayName: '输入方式',
+		name: 'textcard_input_mode',
+		type: 'options',
+		options: [
+			{ name: '表单输入', value: 'form' },
+			{ name: 'JSON输入', value: 'json' },
+		],
+		default: 'form',
+		displayOptions: {
+			show: showOnlyForSendTextCard,
+		},
+		description: '选择文本卡片的输入方式',
+	},
+	{
+		displayName: '文本卡片（JSON）',
+		name: 'textcard_json',
+		type: 'json',
+		typeOptions: {
+			rows: 4,
+		},
+		default: '{}',
+		placeholder: '{"title":"标题","description":"描述","url":"https://example.com","btntxt":"详情","safe":0}',
+		displayOptions: {
+			show: {
+				...showOnlyForSendTextCard,
+				textcard_input_mode: ['json'],
+			},
+		},
+		hint: 'JSON输入模式下仅展示此字段',
+		description:
+			'可选。使用JSON直接输入textcard对象。<a href="https://developer.work.weixin.qq.com/document/path/90248" target="_blank">官方文档</a>',
+	},
+	{
 		displayName: '标题',
 		name: 'title',
 		type: 'string',
 		displayOptions: {
-			show: showOnlyForSendTextCard,
+			show: {
+				...showOnlyForSendTextCard,
+				textcard_input_mode: ['form'],
+			},
 		},
 		default: '',
 		placeholder: '领奖通知',
@@ -42,7 +78,10 @@ export const sendTextCardDescription: INodeProperties[] = [
 			rows: 5,
 		},
 		displayOptions: {
-			show: showOnlyForSendTextCard,
+			show: {
+				...showOnlyForSendTextCard,
+				textcard_input_mode: ['form'],
+			},
 		},
 		default: '',
 		placeholder: '<div class="gray">2016年9月26日</div><div class="normal">恭喜你抽中iPhone 7一台</div>',
@@ -56,7 +95,10 @@ export const sendTextCardDescription: INodeProperties[] = [
 		name: 'url',
 		type: 'string',
 		displayOptions: {
-			show: showOnlyForSendTextCard,
+			show: {
+				...showOnlyForSendTextCard,
+				textcard_input_mode: ['form'],
+			},
 		},
 		default: '',
 		placeholder: 'https://work.weixin.qq.com/',
@@ -70,7 +112,10 @@ export const sendTextCardDescription: INodeProperties[] = [
 		name: 'btntxt',
 		type: 'string',
 		displayOptions: {
-			show: showOnlyForSendTextCard,
+			show: {
+				...showOnlyForSendTextCard,
+				textcard_input_mode: ['form'],
+			},
 		},
 		default: '详情',
 		placeholder: '详情',
@@ -83,7 +128,10 @@ export const sendTextCardDescription: INodeProperties[] = [
 		name: 'safe',
 		type: 'boolean',
 		displayOptions: {
-			show: showOnlyForSendTextCard,
+			show: {
+				...showOnlyForSendTextCard,
+				textcard_input_mode: ['form'],
+			},
 		},
 		default: false,
 		description:
