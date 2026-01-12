@@ -1,6 +1,8 @@
 import type {
 	IExecuteFunctions,
+	ILoadOptionsFunctions,
 	INodeExecutionData,
+	INodePropertyOptions,
 	INodeType,
 	INodeTypeDescription,
 } from 'n8n-workflow';
@@ -29,6 +31,7 @@ import { executeJournal } from '../WeCom/resources/journal/execute';
 import { executeHr } from '../WeCom/resources/hr/execute';
 import { executeMeetingroom } from '../WeCom/resources/meetingroom/execute';
 import { executeEmergency } from '../WeCom/resources/emergency/execute';
+import { weComApiRequest } from '../WeCom/shared/transport';
 
 export class WeComOffice implements INodeType {
 	description: INodeTypeDescription = {
@@ -143,6 +146,43 @@ export class WeComOffice implements INodeType {
 			...emergencyDescription,
 		],
 		usableAsTool: true,
+	};
+
+	methods = {
+		loadOptions: {
+			// 获取部门列表
+			async getDepartments(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+				const response = await weComApiRequest.call(this, 'GET', '/cgi-bin/department/list', {});
+				const departments = response.department as Array<{ id: number; name: string }>;
+				return departments.map((dept) => ({
+					name: `${dept.name} (${dept.id})`,
+					value: dept.id.toString(),
+				}));
+			},
+
+			// 获取所有成员列表（从根部门递归获取）
+			async getAllUsers(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
+				const response = await weComApiRequest.call(
+					this,
+					'GET',
+					'/cgi-bin/user/list',
+					{},
+					{
+						department_id: '1',
+						fetch_child: 1,
+					},
+				);
+				const users = response.userlist as Array<{
+					userid: string;
+					name: string;
+					department?: number[];
+				}>;
+				return users.map((user) => ({
+					name: `${user.name} (${user.userid})`,
+					value: user.userid,
+				}));
+			},
+		},
 	};
 
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {

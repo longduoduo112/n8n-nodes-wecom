@@ -62,7 +62,10 @@ function extractFieldValue(cv: IDataObject): string | number | boolean {
 				return (cv.user_json_data as string) || '[]';
 			}
 			// 简单输入模式 - 构建成员数组
-			const userIds = (cv.user_ids as string || '').split(',').map((id) => id.trim()).filter((id) => id);
+			const userIds = ((cv.user_ids as string) || '')
+				.split(',')
+				.map((id) => id.trim())
+				.filter((id) => id);
 			return JSON.stringify(userIds.map((id) => ({ user_id: id })));
 		}
 
@@ -211,7 +214,10 @@ function buildCellValue(valueType: string, value: string): IDataObject[] {
 
 		case 'checkbox':
 			// 复选框类型
-			cellValueItem = { type: 'checkbox', checkbox: value.toLowerCase() === 'true' || value === '1' };
+			cellValueItem = {
+				type: 'checkbox',
+				checkbox: value.toLowerCase() === 'true' || value === '1',
+			};
 			break;
 
 		case 'date_time':
@@ -222,7 +228,8 @@ function buildCellValue(valueType: string, value: string): IDataObject[] {
 		case 'url':
 			// 链接类型 - 支持JSON格式或简单字符串
 			try {
-				const urlData = typeof value === 'string' && value.startsWith('{') ? JSON.parse(value) : null;
+				const urlData =
+					typeof value === 'string' && value.startsWith('{') ? JSON.parse(value) : null;
 				if (urlData && urlData.link) {
 					// JSON格式：{"link": "https://...", "text": "显示文本"}
 					cellValueItem = {
@@ -419,26 +426,26 @@ export async function executeWedoc(
 		try {
 			let response: IDataObject;
 
-		// 管理文档
-		if (operation === 'createDoc') {
-			const doc_type = this.getNodeParameter('doctype', i) as number;
-			const doc_name = this.getNodeParameter('doc_name', i) as string;
-			const admin_users = this.getNodeParameter('admin_users', i, '') as string;
-			const useSpaceId = this.getNodeParameter('useSpaceId', i, false) as boolean;
+			// 管理文档
+			if (operation === 'createDoc') {
+				const doc_type = this.getNodeParameter('doctype', i) as number;
+				const doc_name = this.getNodeParameter('doc_name', i) as string;
+				const admin_users = this.getNodeParameter('admin_users', i, '') as string;
+				const useSpaceId = this.getNodeParameter('useSpaceId', i, false) as boolean;
 
-			const body: IDataObject = { doc_type, doc_name };
-			if (admin_users) {
-				body.admin_users = admin_users.split(',').map((id) => id.trim());
-			}
+				const body: IDataObject = { doc_type, doc_name };
+				if (admin_users) {
+					body.admin_users = admin_users.split(',').map((id) => id.trim());
+				}
 
-			if (useSpaceId) {
-				const spaceid = this.getNodeParameter('spaceid', i) as string;
-				const fatherid = this.getNodeParameter('fatherid', i) as string;
-				body.spaceid = spaceid;
-				body.fatherid = fatherid;
-			}
+				if (useSpaceId) {
+					const spaceid = this.getNodeParameter('spaceid', i) as string;
+					const fatherid = this.getNodeParameter('fatherid', i) as string;
+					body.spaceid = spaceid;
+					body.fatherid = fatherid;
+				}
 
-			response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/create_doc', body);
+				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/create_doc', body);
 			} else if (operation === 'renameDoc') {
 				const docid = this.getNodeParameter('docid', i) as string;
 				const new_name = this.getNodeParameter('new_name', i) as string;
@@ -454,7 +461,9 @@ export async function executeWedoc(
 			} else if (operation === 'getDocInfo') {
 				const docid = this.getNodeParameter('docid', i) as string;
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/doc_get_info', { docid });
+				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/doc_get_info', {
+					docid,
+				});
 			}
 			// 分享文档
 			else if (operation === 'shareDoc') {
@@ -472,7 +481,11 @@ export async function executeWedoc(
 			// 编辑文档
 			else if (operation === 'modDocContent') {
 				const docid = this.getNodeParameter('docid', i) as string;
-				const requestsCollection = this.getNodeParameter('requestsCollection', i, {}) as IDataObject;
+				const requestsCollection = this.getNodeParameter(
+					'requestsCollection',
+					i,
+					{},
+				) as IDataObject;
 
 				const requests: IDataObject[] = [];
 
@@ -516,7 +529,11 @@ export async function executeWedoc(
 				});
 			} else if (operation === 'modSheetContent') {
 				const docid = this.getNodeParameter('docid', i) as string;
-				const requestsCollection = this.getNodeParameter('requestsCollection', i, {}) as IDataObject;
+				const requestsCollection = this.getNodeParameter(
+					'requestsCollection',
+					i,
+					{},
+				) as IDataObject;
 
 				const requests: IDataObject[] = [];
 
@@ -527,18 +544,18 @@ export async function executeWedoc(
 
 						if (req.request_type === 'update_range') {
 							const valuesStr = (req.values as string) || '';
-							const rows = valuesStr.split(';').map((row) =>
-								row.split(',').map((cell) => cell.trim())
-							);
+							const rows = valuesStr
+								.split(';')
+								.map((row) => row.split(',').map((cell) => cell.trim()));
 							request.update_range = {
 								range: `${sheetName}!${req.range || 'A1'}`,
 								values: rows,
 							};
 						} else if (req.request_type === 'append_rows') {
 							const valuesStr = (req.values as string) || '';
-							const rows = valuesStr.split(';').map((row) =>
-								row.split(',').map((cell) => cell.trim())
-							);
+							const rows = valuesStr
+								.split(';')
+								.map((row) => row.split(',').map((cell) => cell.trim()));
 							request.append_rows = {
 								sheet_name: sheetName,
 								values: rows,
@@ -575,10 +592,15 @@ export async function executeWedoc(
 					}
 				}
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/spreadsheet/batch_update', {
-					docid,
-					requests,
-				});
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/wedoc/spreadsheet/batch_update',
+					{
+						docid,
+						requests,
+					},
+				);
 			}
 			// 智能表格操作 - 子表
 			else if (operation === 'addSmartsheetSheet') {
@@ -599,10 +621,15 @@ export async function executeWedoc(
 				const docid = this.getNodeParameter('docid', i) as string;
 				const sheet_id = this.getNodeParameter('sheet_id', i) as string;
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/smartsheet/delete_sheet', {
-					docid,
-					sheet_id,
-				});
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/wedoc/smartsheet/delete_sheet',
+					{
+						docid,
+						sheet_id,
+					},
+				);
 			} else if (operation === 'updateSmartsheetSheet') {
 				const docid = this.getNodeParameter('docid', i) as string;
 				const sheet_id = this.getNodeParameter('sheet_id', i) as string;
@@ -613,11 +640,16 @@ export async function executeWedoc(
 					properties.title = sheet_title;
 				}
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/smartsheet/update_sheet', {
-					docid,
-					sheet_id,
-					properties,
-				});
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/wedoc/smartsheet/update_sheet',
+					{
+						docid,
+						sheet_id,
+						properties,
+					},
+				);
 			}
 			// 智能表格操作 - 视图
 			else if (operation === 'addSmartsheetView') {
@@ -637,11 +669,16 @@ export async function executeWedoc(
 				const sheet_id = this.getNodeParameter('sheet_id', i) as string;
 				const view_id = this.getNodeParameter('view_id', i) as string;
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/smartsheet/delete_view', {
-					docid,
-					sheet_id,
-					view_id,
-				});
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/wedoc/smartsheet/delete_view',
+					{
+						docid,
+						sheet_id,
+						view_id,
+					},
+				);
 			} else if (operation === 'updateSmartsheetView') {
 				const docid = this.getNodeParameter('docid', i) as string;
 				const sheet_id = this.getNodeParameter('sheet_id', i) as string;
@@ -653,7 +690,12 @@ export async function executeWedoc(
 					body.view_title = view_title;
 				}
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/smartsheet/update_view', body);
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/wedoc/smartsheet/update_view',
+					body,
+				);
 			}
 			// 智能表格操作 - 字段
 			else if (operation === 'addSmartsheetField') {
@@ -670,7 +712,12 @@ export async function executeWedoc(
 						};
 
 						// 处理单选/多选的选项
-						if (['FIELD_TYPE_SINGLE_SELECT', 'FIELD_TYPE_MULTI_SELECT'].includes(field.field_type as string) && field.select_options) {
+						if (
+							['FIELD_TYPE_SINGLE_SELECT', 'FIELD_TYPE_MULTI_SELECT'].includes(
+								field.field_type as string,
+							) &&
+							field.select_options
+						) {
 							const options = (field.select_options as string).split(',').map((opt, idx) => ({
 								id: `opt_${idx}`,
 								text: opt.trim(),
@@ -682,26 +729,39 @@ export async function executeWedoc(
 					}
 				}
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/smartsheet/add_fields', {
-					docid,
-					sheet_id,
-					fields,
-				});
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/wedoc/smartsheet/add_fields',
+					{
+						docid,
+						sheet_id,
+						fields,
+					},
+				);
 			} else if (operation === 'delSmartsheetField') {
 				const docid = this.getNodeParameter('docid', i) as string;
 				const sheet_id = this.getNodeParameter('sheet_id', i) as string;
 				const field_ids_str = this.getNodeParameter('field_ids', i) as string;
 
-				const field_ids = field_ids_str.split(',').map((id) => id.trim()).filter((id) => id);
+				const field_ids = field_ids_str
+					.split(',')
+					.map((id) => id.trim())
+					.filter((id) => id);
 				if (field_ids.length === 0) {
 					throw new NodeOperationError(this.getNode(), '至少需要提供一个字段ID', { itemIndex: i });
 				}
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/smartsheet/delete_fields', {
-					docid,
-					sheet_id,
-					field_ids,
-				});
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/wedoc/smartsheet/delete_fields',
+					{
+						docid,
+						sheet_id,
+						field_ids,
+					},
+				);
 			} else if (operation === 'updateSmartsheetField') {
 				const docid = this.getNodeParameter('docid', i) as string;
 				const sheet_id = this.getNodeParameter('sheet_id', i) as string;
@@ -731,17 +791,26 @@ export async function executeWedoc(
 					}
 				}
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/smartsheet/update_fields', {
-					docid,
-					sheet_id,
-					fields,
-				});
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/wedoc/smartsheet/update_fields',
+					{
+						docid,
+						sheet_id,
+						fields,
+					},
+				);
 			}
 			// 智能表格操作 - 记录
 			else if (operation === 'addSmartsheetRecord') {
 				const docid = this.getNodeParameter('docid', i) as string;
 				const sheet_id = this.getNodeParameter('sheet_id', i) as string;
-				const key_type = this.getNodeParameter('key_type', i, 'CELL_VALUE_KEY_TYPE_FIELD_TITLE') as string;
+				const key_type = this.getNodeParameter(
+					'key_type',
+					i,
+					'CELL_VALUE_KEY_TYPE_FIELD_TITLE',
+				) as string;
 				const recordsCollection = this.getNodeParameter('recordsCollection', i, {}) as IDataObject;
 
 				const records: IDataObject[] = [];
@@ -764,26 +833,40 @@ export async function executeWedoc(
 					}
 				}
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/smartsheet/add_records', {
-					docid,
-					sheet_id,
-					key_type,
-					records,
-				});
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/wedoc/smartsheet/add_records',
+					{
+						docid,
+						sheet_id,
+						key_type,
+						records,
+					},
+				);
 			} else if (operation === 'delSmartsheetRecord') {
 				const docid = this.getNodeParameter('docid', i) as string;
 				const sheet_id = this.getNodeParameter('sheet_id', i) as string;
 				const record_ids = this.getNodeParameter('record_ids', i) as string;
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/smartsheet/delete_records', {
-					docid,
-					sheet_id,
-					record_ids: record_ids.split(',').map((id) => id.trim()),
-				});
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/wedoc/smartsheet/delete_records',
+					{
+						docid,
+						sheet_id,
+						record_ids: record_ids.split(',').map((id) => id.trim()),
+					},
+				);
 			} else if (operation === 'updateSmartsheetRecord') {
 				const docid = this.getNodeParameter('docid', i) as string;
 				const sheet_id = this.getNodeParameter('sheet_id', i) as string;
-				const key_type = this.getNodeParameter('key_type', i, 'CELL_VALUE_KEY_TYPE_FIELD_TITLE') as string;
+				const key_type = this.getNodeParameter(
+					'key_type',
+					i,
+					'CELL_VALUE_KEY_TYPE_FIELD_TITLE',
+				) as string;
 				const recordsCollection = this.getNodeParameter('recordsCollection', i, {}) as IDataObject;
 
 				const records: IDataObject[] = [];
@@ -809,22 +892,34 @@ export async function executeWedoc(
 					}
 				}
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/smartsheet/update_records', {
-					docid,
-					sheet_id,
-					key_type,
-					records,
-				});
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/wedoc/smartsheet/update_records',
+					{
+						docid,
+						sheet_id,
+						key_type,
+						records,
+					},
+				);
 			}
 			// 获取文档数据
 			else if (operation === 'getDocData') {
 				const docid = this.getNodeParameter('docid', i) as string;
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/document/get', { docid });
+				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/document/get', {
+					docid,
+				});
 			} else if (operation === 'getSheetRange') {
 				const docid = this.getNodeParameter('docid', i) as string;
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/spreadsheet/get_sheet_properties', { docid });
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/wedoc/spreadsheet/get_sheet_properties',
+					{ docid },
+				);
 			} else if (operation === 'getSheetData') {
 				const docid = this.getNodeParameter('docid', i) as string;
 				const sheet_id = this.getNodeParameter('sheet_id', i) as string;
@@ -832,13 +927,20 @@ export async function executeWedoc(
 
 				const body: IDataObject = { docid, sheet_id, range };
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/spreadsheet/get_sheet_range_data', body);
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/wedoc/spreadsheet/get_sheet_range_data',
+					body,
+				);
 			}
 			// 获取智能表格数据
 			else if (operation === 'querySmartsheetSheet') {
 				const docid = this.getNodeParameter('docid', i) as string;
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/smartsheet/get_sheet', { docid });
+				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/smartsheet/get_sheet', {
+					docid,
+				});
 			} else if (operation === 'querySmartsheetView') {
 				const docid = this.getNodeParameter('docid', i) as string;
 				const sheet_id = this.getNodeParameter('sheet_id', i) as string;
@@ -848,10 +950,18 @@ export async function executeWedoc(
 
 				const body: IDataObject = { docid, sheet_id, offset, limit };
 				if (view_ids_str) {
-					body.view_ids = view_ids_str.split(',').map((id) => id.trim()).filter((id) => id);
+					body.view_ids = view_ids_str
+						.split(',')
+						.map((id) => id.trim())
+						.filter((id) => id);
 				}
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/smartsheet/get_views', body);
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/wedoc/smartsheet/get_views',
+					body,
+				);
 			} else if (operation === 'querySmartsheetField') {
 				const docid = this.getNodeParameter('docid', i) as string;
 				const sheet_id = this.getNodeParameter('sheet_id', i) as string;
@@ -861,15 +971,27 @@ export async function executeWedoc(
 
 				const body: IDataObject = { docid, sheet_id, offset, limit };
 				if (field_ids_str) {
-					body.field_ids = field_ids_str.split(',').map((id) => id.trim()).filter((id) => id);
+					body.field_ids = field_ids_str
+						.split(',')
+						.map((id) => id.trim())
+						.filter((id) => id);
 				}
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/smartsheet/get_fields', body);
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/wedoc/smartsheet/get_fields',
+					body,
+				);
 			} else if (operation === 'querySmartsheetRecord') {
 				const docid = this.getNodeParameter('docid', i) as string;
 				const sheet_id = this.getNodeParameter('sheet_id', i) as string;
 				const view_id = this.getNodeParameter('view_id', i, '') as string;
-				const key_type = this.getNodeParameter('key_type', i, 'CELL_VALUE_KEY_TYPE_FIELD_TITLE') as string;
+				const key_type = this.getNodeParameter(
+					'key_type',
+					i,
+					'CELL_VALUE_KEY_TYPE_FIELD_TITLE',
+				) as string;
 				const record_ids_str = this.getNodeParameter('record_ids', i, '') as string;
 
 				const body: IDataObject = { docid, sheet_id, key_type };
@@ -877,7 +999,10 @@ export async function executeWedoc(
 
 				// 处理记录ID
 				if (record_ids_str) {
-					const record_ids = record_ids_str.split(',').map((id) => id.trim()).filter((id) => id);
+					const record_ids = record_ids_str
+						.split(',')
+						.map((id) => id.trim())
+						.filter((id) => id);
 					if (record_ids.length > 0) {
 						body.record_ids = record_ids;
 					}
@@ -904,8 +1029,14 @@ export async function executeWedoc(
 								operator: condition.operator,
 							};
 
-							if (!['OPERATOR_IS_EMPTY', 'OPERATOR_IS_NOT_EMPTY'].includes(condition.operator) && condition.value) {
-								const values = condition.value.split(',').map((v) => v.trim()).filter((v) => v);
+							if (
+								!['OPERATOR_IS_EMPTY', 'OPERATOR_IS_NOT_EMPTY'].includes(condition.operator) &&
+								condition.value
+							) {
+								const values = condition.value
+									.split(',')
+									.map((v) => v.trim())
+									.filter((v) => v);
 
 								if (condition.field_type === 'FIELD_TYPE_NUMBER') {
 									apiCondition.number_value = { value: values.map((v) => parseFloat(v)) };
@@ -967,25 +1098,38 @@ export async function executeWedoc(
 				// 处理返回字段
 				const returnFields = this.getNodeParameter('returnFields', i, {}) as IDataObject;
 				if (returnFields.field_ids) {
-					const fieldIds = (returnFields.field_ids as string).split(',').map((id) => id.trim()).filter((id) => id);
+					const fieldIds = (returnFields.field_ids as string)
+						.split(',')
+						.map((id) => id.trim())
+						.filter((id) => id);
 					if (fieldIds.length > 0) {
 						body.field_ids = fieldIds;
 					}
 				}
 				if (returnFields.field_titles) {
-					const fieldTitles = (returnFields.field_titles as string).split(',').map((title) => title.trim()).filter((title) => title);
+					const fieldTitles = (returnFields.field_titles as string)
+						.split(',')
+						.map((title) => title.trim())
+						.filter((title) => title);
 					if (fieldTitles.length > 0) {
 						body.field_titles = fieldTitles;
 					}
 				}
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/smartsheet/get_records', body);
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/wedoc/smartsheet/get_records',
+					body,
+				);
 			}
 			// 权限设置
 			else if (operation === 'getDocAuth') {
 				const docid = this.getNodeParameter('docid', i) as string;
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/doc_get_auth', { docid });
+				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/doc_get_auth', {
+					docid,
+				});
 			} else if (operation === 'modDocSafeRule') {
 				const docid = this.getNodeParameter('docid', i) as string;
 				const watermark_enable = this.getNodeParameter('watermark_enable', i, false) as boolean;
@@ -1019,29 +1163,51 @@ export async function executeWedoc(
 				});
 			} else if (operation === 'modDocMemberRule') {
 				const docid = this.getNodeParameter('docid', i) as string;
-				const addMemberCollection = this.getNodeParameter('addMemberCollection', i, {}) as IDataObject;
-				const delMemberCollection = this.getNodeParameter('delMemberCollection', i, {}) as IDataObject;
-				const updateMemberCollection = this.getNodeParameter('updateMemberCollection', i, {}) as IDataObject;
+				const addMemberCollection = this.getNodeParameter(
+					'addMemberCollection',
+					i,
+					{},
+				) as IDataObject;
+				const delMemberCollection = this.getNodeParameter(
+					'delMemberCollection',
+					i,
+					{},
+				) as IDataObject;
+				const updateMemberCollection = this.getNodeParameter(
+					'updateMemberCollection',
+					i,
+					{},
+				) as IDataObject;
 
 				const body: IDataObject = { docid };
 
 				if (addMemberCollection.members && Array.isArray(addMemberCollection.members)) {
-					body.add_member_info = (addMemberCollection.members as IDataObject[]).map(buildMemberInfo);
+					body.add_member_info = (addMemberCollection.members as IDataObject[]).map(
+						buildMemberInfo,
+					);
 				}
 
 				if (delMemberCollection.members && Array.isArray(delMemberCollection.members)) {
-					body.del_member_info = (delMemberCollection.members as IDataObject[]).map(buildMemberInfo);
+					body.del_member_info = (delMemberCollection.members as IDataObject[]).map(
+						buildMemberInfo,
+					);
 				}
 
 				if (updateMemberCollection.members && Array.isArray(updateMemberCollection.members)) {
-					body.update_member_info = (updateMemberCollection.members as IDataObject[]).map(buildMemberInfo);
+					body.update_member_info = (updateMemberCollection.members as IDataObject[]).map(
+						buildMemberInfo,
+					);
 				}
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/mod_doc_member', body);
 			} else if (operation === 'modDocShareScope') {
 				const docid = this.getNodeParameter('docid', i) as string;
 				const coAuthCollection = this.getNodeParameter('coAuthCollection', i, {}) as IDataObject;
-				const enable_readonly_copy = this.getNodeParameter('enable_readonly_copy', i, true) as boolean;
+				const enable_readonly_copy = this.getNodeParameter(
+					'enable_readonly_copy',
+					i,
+					true,
+				) as boolean;
 				const ban_share_external = this.getNodeParameter('ban_share_external', i, false) as boolean;
 				const share_scope = this.getNodeParameter('share_scope', i, 1) as number;
 
@@ -1056,7 +1222,12 @@ export async function executeWedoc(
 					body.co_auth_list = (coAuthCollection.members as IDataObject[]).map(buildMemberInfo);
 				}
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/mod_doc_join_rule', body);
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/wedoc/mod_doc_join_rule',
+					body,
+				);
 			} else if (operation === 'getSmartsheetGroupChatList') {
 				const docid = this.getNodeParameter('docid', i) as string;
 				const cursor = this.getNodeParameter('cursor', i, '') as string;
@@ -1144,7 +1315,11 @@ export async function executeWedoc(
 						body.default_rule = defaultRule;
 					}
 
-					const userRulesCollection = this.getNodeParameter('userRulesCollection', i, {}) as IDataObject;
+					const userRulesCollection = this.getNodeParameter(
+						'userRulesCollection',
+						i,
+						{},
+					) as IDataObject;
 					if (userRulesCollection.rules && Array.isArray(userRulesCollection.rules)) {
 						body.user_rules = (userRulesCollection.rules as IDataObject[]).map((rule) => ({
 							userid: rule.userid,
@@ -1154,7 +1329,12 @@ export async function executeWedoc(
 					}
 				}
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/smartsheet/set_sheet_permissions', body);
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/wedoc/smartsheet/set_sheet_permissions',
+					body,
+				);
 			}
 			// 收集表
 			else if (operation === 'createForm') {
@@ -1162,6 +1342,7 @@ export async function executeWedoc(
 				const fatherid = this.getNodeParameter('fatherid', i, '') as string;
 				const form_title = this.getNodeParameter('form_title', i) as string;
 				const form_description = this.getNodeParameter('form_description', i, '') as string;
+				const form_header = this.getNodeParameter('form_header', i, '') as string;
 				const questionList = this.getNodeParameter('questionList', i, {}) as IDataObject;
 				const formSetting = this.getNodeParameter('formSetting', i, {}) as IDataObject;
 
@@ -1183,6 +1364,10 @@ export async function executeWedoc(
 					form_info.form_desc = form_description;
 				}
 
+				if (form_header) {
+					form_info.form_header = form_header;
+				}
+
 				// 构建问题列表
 				if (questionList.questions && Array.isArray(questionList.questions)) {
 					const items = (questionList.questions as IDataObject[]).map((q, idx) => {
@@ -1195,6 +1380,16 @@ export async function executeWedoc(
 							must_reply: q.is_required || false,
 						};
 
+						// 添加备注
+						if (q.note) {
+							question.note = q.note;
+						}
+
+						// 添加编辑提示
+						if (q.placeholder) {
+							question.placeholder = q.placeholder;
+						}
+
 						// 处理选项（单选/多选/下拉列表）
 						if ([2, 3, 15].includes(q.question_type as number) && q.options) {
 							question.option_item = (q.options as string).split(',').map((opt, optIdx) => ({
@@ -1202,6 +1397,25 @@ export async function executeWedoc(
 								value: opt.trim(),
 								status: 1,
 							}));
+						}
+
+						// 处理问题扩展设置
+						if (q.question_extend_setting) {
+							try {
+								const extendSetting =
+									typeof q.question_extend_setting === 'string'
+										? JSON.parse(q.question_extend_setting as string)
+										: q.question_extend_setting;
+								if (Object.keys(extendSetting).length > 0) {
+									question.question_extend_setting = extendSetting;
+								}
+							} catch (error) {
+								throw new NodeOperationError(
+									this.getNode(),
+									`问题 "${q.question_title}" 的扩展设置JSON格式错误: ${(error as Error).message}`,
+									{ itemIndex: i },
+								);
+							}
 						}
 
 						return question;
@@ -1212,6 +1426,92 @@ export async function executeWedoc(
 
 				// 构建设置
 				if (Object.keys(formSetting).length > 0) {
+					const processedSetting: IDataObject = {};
+
+					// 填写权限
+					if (formSetting.fill_out_auth !== undefined) {
+						processedSetting.fill_out_auth = formSetting.fill_out_auth;
+					}
+
+					// 处理指定填写范围
+					if (formSetting.fill_out_auth === 1) {
+						const fill_in_range: IDataObject = {};
+
+						// 指定填写人员 (multiOptions类型,返回string[])
+						if (formSetting.fill_in_range_userids) {
+							const userids = Array.isArray(formSetting.fill_in_range_userids)
+								? (formSetting.fill_in_range_userids as string[])
+									.map((id) => id.trim())
+									.filter((id) => id)
+								: (formSetting.fill_in_range_userids as string)
+									.split(',')
+									.map((id) => id.trim())
+									.filter((id) => id);
+							if (userids.length > 0) {
+								fill_in_range.userids = userids;
+							}
+						}
+
+						// 指定填写部门 (multiOptions类型,返回string[],需要转换为number[])
+						if (formSetting.fill_in_range_departmentids) {
+							const departmentids = Array.isArray(formSetting.fill_in_range_departmentids)
+								? (formSetting.fill_in_range_departmentids as string[])
+									.map((id) => parseInt(id.trim(), 10))
+									.filter((id) => !isNaN(id))
+								: (formSetting.fill_in_range_departmentids as string)
+									.split(',')
+									.map((id) => parseInt(id.trim(), 10))
+									.filter((id) => !isNaN(id));
+							if (departmentids.length > 0) {
+								fill_in_range.departmentids = departmentids;
+							}
+						}
+
+						if (Object.keys(fill_in_range).length > 0) {
+							processedSetting.fill_in_range = fill_in_range;
+						}
+					}
+
+					// 处理收集表管理员 (multiOptions类型,返回string[])
+					if (formSetting.setting_manager_range) {
+						const userids = Array.isArray(formSetting.setting_manager_range)
+							? (formSetting.setting_manager_range as string[])
+								.map((id) => id.trim())
+								.filter((id) => id)
+							: (formSetting.setting_manager_range as string)
+								.split(',')
+								.map((id) => id.trim())
+								.filter((id) => id);
+
+						if (userids.length > 0) {
+							processedSetting.setting_manager_range = { userids };
+						}
+					}
+
+					// 处理定时重复设置
+					if (formSetting.timed_repeat_info) {
+						try {
+							const timedRepeatInfo =
+								typeof formSetting.timed_repeat_info === 'string'
+									? JSON.parse(formSetting.timed_repeat_info as string)
+									: formSetting.timed_repeat_info;
+							if (Object.keys(timedRepeatInfo).length > 0 && timedRepeatInfo.enable) {
+								processedSetting.timed_repeat_info = timedRepeatInfo;
+							}
+						} catch (error) {
+							throw new NodeOperationError(
+								this.getNode(),
+								`定时重复设置JSON格式错误: ${(error as Error).message}`,
+								{ itemIndex: i },
+							);
+						}
+					}
+
+					// 处理 allow_multi_fill
+					if (formSetting.allow_multi_fill !== undefined) {
+						processedSetting.allow_multi_fill = formSetting.allow_multi_fill;
+					}
+
 					// 处理 timed_finish：将日期时间转换为时间戳并验证
 					if (formSetting.timed_finish) {
 						const timedFinish = formSetting.timed_finish as string;
@@ -1221,30 +1521,29 @@ export async function executeWedoc(
 
 							// 验证：时间不能早于当前时间
 							if (finishTime < currentTime) {
-								throw new Error('定时关闭时间不能早于当前时间');
+								throw new NodeOperationError(this.getNode(), '定时关闭时间不能早于当前时间', {
+									itemIndex: i,
+								});
 							}
 
 							// 转换为秒级时间戳
-							formSetting.timed_finish = Math.floor(finishTime / 1000);
+							processedSetting.timed_finish = Math.floor(finishTime / 1000);
 						}
 					}
 
-					// 处理 setting_manager_range：将逗号分隔的userid字符串转换为对象数组
-					if (formSetting.setting_manager_range) {
-						const managerRange = formSetting.setting_manager_range as string;
-						if (managerRange && managerRange.trim()) {
-							const userids = managerRange.split(',').map((id) => id.trim()).filter((id) => id);
-							if (userids.length > 0) {
-								formSetting.setting_manager_range = { userids };
-							} else {
-								delete formSetting.setting_manager_range;
-							}
-						} else {
-							delete formSetting.setting_manager_range;
-						}
+					// 处理 can_anonymous
+					if (formSetting.can_anonymous !== undefined) {
+						processedSetting.can_anonymous = formSetting.can_anonymous;
 					}
 
-					form_info.form_setting = formSetting;
+					// 处理 can_notify_submit
+					if (formSetting.can_notify_submit !== undefined) {
+						processedSetting.can_notify_submit = formSetting.can_notify_submit;
+					}
+
+					if (Object.keys(processedSetting).length > 0) {
+						form_info.form_setting = processedSetting;
+					}
 				}
 
 				body.form_info = form_info;
@@ -1277,7 +1576,9 @@ export async function executeWedoc(
 			} else if (operation === 'getFormInfo') {
 				const formid = this.getNodeParameter('formid', i) as string;
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/get_form_info', { formid });
+				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/get_form_info', {
+					formid,
+				});
 			}
 			// 收集表的统计信息查询
 			else if (operation === 'getFormStatistic') {
@@ -1316,7 +1617,12 @@ export async function executeWedoc(
 					}
 				}
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/get_form_statistic', body);
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/wedoc/get_form_statistic',
+					body,
+				);
 			}
 			// 读取收集表答案
 			else if (operation === 'getFormAnswer') {
@@ -1334,7 +1640,9 @@ export async function executeWedoc(
 					throw new NodeOperationError(this.getNode(), '答案ID列表不能为空', { itemIndex: i });
 				}
 				if (answer_ids.length > 100) {
-					throw new NodeOperationError(this.getNode(), '答案ID列表最大不能超过100个', { itemIndex: i });
+					throw new NodeOperationError(this.getNode(), '答案ID列表最大不能超过100个', {
+						itemIndex: i,
+					});
 				}
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/get_form_answer', {
@@ -1347,13 +1655,19 @@ export async function executeWedoc(
 				const userid_list = this.getNodeParameter('userid_list', i) as string;
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/vip_batch_add', {
-					userid_list: userid_list.split(',').map((id) => id.trim()).filter((id) => id),
+					userid_list: userid_list
+						.split(',')
+						.map((id) => id.trim())
+						.filter((id) => id),
 				});
 			} else if (operation === 'deallocateAdvancedAccount') {
 				const userid_list = this.getNodeParameter('userid_list', i) as string;
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/vip_batch_del', {
-					userid_list: userid_list.split(',').map((id) => id.trim()).filter((id) => id),
+					userid_list: userid_list
+						.split(',')
+						.map((id) => id.trim())
+						.filter((id) => id),
 				});
 			} else if (operation === 'getAdvancedAccountList') {
 				const limit = this.getNodeParameter('limit', i, 100) as number;
@@ -1363,8 +1677,7 @@ export async function executeWedoc(
 				if (cursor) body.cursor = cursor;
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/wedoc/vip_list', body);
-			}
-			else if (operation === 'uploadDocImage') {
+			} else if (operation === 'uploadDocImage') {
 				const docid = this.getNodeParameter('docid', i) as string;
 				const imageSource = this.getNodeParameter('imageSource', i) as string;
 
