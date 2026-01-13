@@ -8,8 +8,9 @@ export const getSheetDataDescription: INodeProperties[] = [
 		required: true,
 		displayOptions: { show: showOnly },
 		default: '',
-		description: '在线表格唯一标识',
-		hint: '文档ID',
+		description:
+			'在线表格唯一标识。注意：此接口仅支持普通在线表格（spreadsheet），不支持智能表格（smartsheet）。如果您的文档是智能表格，请使用"查询记录"操作',
+		hint: '在线表格ID',
 	},
 	{
 		displayName: '工作表ID',

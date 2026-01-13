@@ -1349,12 +1349,25 @@ export async function executeWedoc(
 
 				const body: IDataObject = { docid, sheet_id, range };
 
-				response = await weComApiRequest.call(
-					this,
-					'POST',
-					'/cgi-bin/wedoc/spreadsheet/get_sheet_range_data',
-					body,
-				);
+				try {
+					response = await weComApiRequest.call(
+						this,
+						'POST',
+						'/cgi-bin/wedoc/spreadsheet/get_sheet_range_data',
+						body,
+					);
+				} catch (error) {
+					const err = error as Error;
+					// 错误码 608668 表示元数据未找到，通常是文档类型不匹配
+					if (err.message.includes('608668') || err.message.includes('meta is not found')) {
+						throw new NodeOperationError(
+							this.getNode(),
+							`获取表格数据失败：文档ID "${docid}" 可能不是普通在线表格（spreadsheet），或者文档不存在。此接口仅支持普通在线表格，不支持智能表格（smartsheet）。如果您的文档是智能表格，请使用"查询记录"操作来获取数据。`,
+							{ itemIndex: i },
+						);
+					}
+					throw error;
+				}
 			}
 			// 获取智能表格数据
 			else if (operation === 'querySmartsheetSheet') {
