@@ -44,6 +44,16 @@ export class WeComApi implements ICredentialType {
 			required: true,
 			description: '应用的密钥',
 			hint: '在"应用管理 - 自建应用"中查看，注意应用需要是启用状态'
+		},
+		{
+			displayName: 'API Base URL',
+			name: 'baseUrl',
+			type: 'string',
+			default: '',
+			required: false,
+			placeholder: 'https://qyapi.weixin.qq.com',
+			description: '企业微信 API 的基础地址（可选，用于代理）',
+			hint: '留空默认使用 https://qyapi.weixin.qq.com'
 		}
 	];
 
@@ -57,7 +67,7 @@ export class WeComApi implements ICredentialType {
 	// 测试认证是否有效
 	test: ICredentialTestRequest = {
 		request: {
-			baseURL: 'https://qyapi.weixin.qq.com',
+			baseURL: '={{$credentials.baseUrl || "https://qyapi.weixin.qq.com"}}',
 			url: '/cgi-bin/user/get',
 			method: 'GET',
 			qs: {
@@ -76,4 +86,3 @@ export class WeComApi implements ICredentialType {
 		],
 	};
 }
-

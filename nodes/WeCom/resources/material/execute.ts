@@ -1,6 +1,6 @@
 import type { IExecuteFunctions, INodeExecutionData, IDataObject } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
-import { getAccessToken } from '../../shared/transport';
+import { getAccessToken, getWeComBaseUrl } from '../../shared/transport';
 
 export async function executeMaterial(
 	this: IExecuteFunctions,
@@ -46,7 +46,7 @@ export async function executeMaterial(
 				const footerBuffer = Buffer.from(footer, 'utf-8');
 				const bodyBuffer = Buffer.concat([headerBuffer, dataBuffer, footerBuffer]);
 
-				const uploadUrl = `https://qyapi.weixin.qq.com/cgi-bin/media/upload?access_token=${accessToken}&type=${type}`;
+				const uploadUrl = `${await getWeComBaseUrl.call(this)}/cgi-bin/media/upload?access_token=${accessToken}&type=${type}`;
 
 				response = (await this.helpers.httpRequest({
 					method: 'POST',
@@ -105,7 +105,7 @@ export async function executeMaterial(
 				const footerBuffer = Buffer.from(footer, 'utf-8');
 				const bodyBuffer = Buffer.concat([headerBuffer, dataBuffer, footerBuffer]);
 
-				const uploadUrl = `https://qyapi.weixin.qq.com/cgi-bin/media/uploadimg?access_token=${accessToken}`;
+				const uploadUrl = `${await getWeComBaseUrl.call(this)}/cgi-bin/media/uploadimg?access_token=${accessToken}`;
 
 				response = (await this.helpers.httpRequest({
 					method: 'POST',
@@ -133,7 +133,7 @@ export async function executeMaterial(
 
 				const downloadOptions = {
 					method: 'GET' as const,
-					url: 'https://qyapi.weixin.qq.com/cgi-bin/media/get',
+					url: `${await getWeComBaseUrl.call(this)}/cgi-bin/media/get`,
 					qs: {
 						access_token: accessToken,
 						media_id,
@@ -234,7 +234,7 @@ export async function executeMaterial(
 
 				const downloadOptions = {
 					method: 'GET' as const,
-					url: 'https://qyapi.weixin.qq.com/cgi-bin/media/get/jssdk',
+					url: `${await getWeComBaseUrl.call(this)}/cgi-bin/media/get/jssdk`,
 					qs: {
 						access_token: accessToken,
 						media_id,
@@ -349,7 +349,7 @@ export async function executeMaterial(
 
 				response = (await this.helpers.httpRequest({
 					method: 'POST',
-					url: `https://qyapi.weixin.qq.com/cgi-bin/media/upload_by_url?access_token=${accessToken}`,
+					url: `${await getWeComBaseUrl.call(this)}/cgi-bin/media/upload_by_url?access_token=${accessToken}`,
 					body: requestBody,
 					json: true,
 				})) as IDataObject;
@@ -369,7 +369,7 @@ export async function executeMaterial(
 
 				response = (await this.helpers.httpRequest({
 					method: 'POST',
-					url: `https://qyapi.weixin.qq.com/cgi-bin/media/get_upload_by_url_result?access_token=${accessToken}`,
+					url: `${await getWeComBaseUrl.call(this)}/cgi-bin/media/get_upload_by_url_result?access_token=${accessToken}`,
 					body: { jobid },
 					json: true,
 				})) as IDataObject;

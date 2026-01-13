@@ -1,5 +1,6 @@
 import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
+import { getWeComBaseUrl } from '../../shared/transport';
 
 /**
  * 查询企业的许可自动激活状态
@@ -43,7 +44,7 @@ export async function getAutoActiveStatus(
 
 	const options: IHttpRequestOptions = {
 		method: 'POST',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/license/get_auto_active_status',
+		url: `${await getWeComBaseUrl.call(this)}/cgi-bin/license/get_auto_active_status`,
 		qs: {
 			provider_access_token: providerAccessToken,
 		},

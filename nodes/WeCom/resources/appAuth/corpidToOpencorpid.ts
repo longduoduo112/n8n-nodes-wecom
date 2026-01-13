@@ -1,5 +1,6 @@
 import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
+import { getWeComBaseUrl } from '../../shared/transport';
 
 /**
  * 明文corpid转换为加密corpid
@@ -40,7 +41,7 @@ export async function corpidToOpencorpid(
 
 	const options: IHttpRequestOptions = {
 		method: 'POST',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/service/corpid_to_opencorpid',
+		url: `${await getWeComBaseUrl.call(this)}/cgi-bin/service/corpid_to_opencorpid`,
 		qs: {
 			provider_access_token: providerAccessToken,
 		},

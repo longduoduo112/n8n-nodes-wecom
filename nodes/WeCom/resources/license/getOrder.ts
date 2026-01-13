@@ -1,5 +1,6 @@
 import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
+import { getWeComBaseUrl } from '../../shared/transport';
 
 /**
  * 获取订单详情
@@ -42,7 +43,7 @@ export async function getOrder(
 
 	const options: IHttpRequestOptions = {
 		method: 'POST',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/license/get_order',
+		url: `${await getWeComBaseUrl.call(this)}/cgi-bin/license/get_order`,
 		qs: {
 			provider_access_token: providerAccessToken,
 		},

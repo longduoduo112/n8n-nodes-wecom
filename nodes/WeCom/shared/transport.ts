@@ -28,6 +28,8 @@ interface TokenCache {
  */
 const accessTokenCache = new Map<string, TokenCache>();
 
+const DEFAULT_WECOM_BASE_URL = 'https://qyapi.weixin.qq.com';
+
 /**
  * 缓存清理配置
  */
@@ -63,6 +65,31 @@ function cleanupExpiredCache(): void {
  */
 function getCacheKey(credentials: IWeComCredentials): string {
 	return `${credentials.corpId}_${credentials.corpSecret}`;
+}
+
+/**
+ * 获取企业微信 API Base URL
+ * 优先从环境变量读取，未设置时使用默认值
+ */
+function normalizeBaseUrl(baseUrl?: string): string {
+	const trimmed = baseUrl?.trim();
+	if (trimmed) {
+		return trimmed.replace(/\/+$/, '');
+	}
+
+	return DEFAULT_WECOM_BASE_URL;
+}
+
+/**
+ * 获取企业微信 API Base URL
+ * 优先从凭证读取，未设置时使用默认值
+ */
+export async function getWeComBaseUrl(
+	this: IExecuteFunctions | ILoadOptionsFunctions,
+	credentialType: 'weComApi' | 'weComWebhookApi' = 'weComApi',
+): Promise<string> {
+	const credentials = (await this.getCredentials(credentialType)) as { baseUrl?: string };
+	return normalizeBaseUrl(credentials.baseUrl);
 }
 
 /**
@@ -136,9 +163,10 @@ async function fetchAccessToken(
 	credentials: IWeComCredentials,
 	cacheKey: string,
 ): Promise<string> {
+	const baseUrl = normalizeBaseUrl(credentials.baseUrl);
 	const options: IHttpRequestOptions = {
 		method: 'GET',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/gettoken',
+		url: `${baseUrl}/cgi-bin/gettoken`,
 		qs: {
 			corpid: credentials.corpId,
 			corpsecret: credentials.corpSecret,
@@ -197,6 +225,7 @@ export async function weComApiRequest(
 	maxRetries: number = 1,
 ): Promise<IDataObject> {
 	const accessToken = await getAccessToken.call(this);
+	const baseUrl = await getWeComBaseUrl.call(this);
 
 	const options: IHttpRequestOptions = {
 		method,
@@ -204,7 +233,7 @@ export async function weComApiRequest(
 			...qs,
 			access_token: accessToken,
 		},
-		url: `https://qyapi.weixin.qq.com${resource}`,
+		url: `${baseUrl}${resource}`,
 		json: true,
 		...option,
 	};
@@ -286,10 +315,11 @@ export async function uploadMedia(
 	filename: string,
 ): Promise<string> {
 	const accessToken = await getAccessToken.call(this);
+	const baseUrl = await getWeComBaseUrl.call(this);
 
 	const options: IHttpRequestOptions = {
 		method: 'POST',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/media/upload',
+		url: `${baseUrl}/cgi-bin/media/upload`,
 		qs: {
 			access_token: accessToken,
 			type: mediaType,

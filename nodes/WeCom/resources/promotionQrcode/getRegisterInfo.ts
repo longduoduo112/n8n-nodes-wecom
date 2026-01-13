@@ -1,5 +1,6 @@
 import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
+import { getWeComBaseUrl } from '../../shared/transport';
 
 /**
  * 查询注册状态
@@ -45,7 +46,7 @@ export async function getRegisterInfo(
 
 	const options: IHttpRequestOptions = {
 		method: 'POST',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/service/get_register_info',
+		url: `${await getWeComBaseUrl.call(this)}/cgi-bin/service/get_register_info`,
 		qs: {
 			provider_access_token: providerAccessToken,
 		},

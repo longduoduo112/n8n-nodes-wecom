@@ -1,5 +1,6 @@
 import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
+import { getWeComBaseUrl } from '../../shared/transport';
 
 export async function finishOpenidMigration(
 	this: IExecuteFunctions,
@@ -35,7 +36,7 @@ export async function finishOpenidMigration(
 
 	const options: IHttpRequestOptions = {
 		method: 'POST',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/service/finish_openid_migration',
+		url: `${await getWeComBaseUrl.call(this)}/cgi-bin/service/finish_openid_migration`,
 		qs: {
 			provider_access_token: providerAccessToken,
 		},

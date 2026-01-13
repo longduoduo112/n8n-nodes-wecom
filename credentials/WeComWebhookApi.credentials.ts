@@ -28,6 +28,16 @@ export class WeComWebhookApi implements ICredentialType {
 			description: '企业微信群机器人的 Webhook 地址',
 			hint: '在企业微信群聊中添加机器人后获取',
 		},
+		{
+			displayName: 'API Base URL',
+			name: 'baseUrl',
+			type: 'string',
+			default: '',
+			required: false,
+			placeholder: 'https://qyapi.weixin.qq.com',
+			description: '企业微信 API 的基础地址（可选，用于代理）',
+			hint: '留空默认使用 https://qyapi.weixin.qq.com',
+		},
 	];
 
 	authenticate: IAuthenticateGeneric = {
@@ -48,4 +58,3 @@ export class WeComWebhookApi implements ICredentialType {
 		},
 	};
 }
-

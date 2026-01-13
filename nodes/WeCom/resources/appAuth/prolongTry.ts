@@ -1,5 +1,6 @@
 import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
+import { getWeComBaseUrl } from '../../shared/transport';
 
 /**
  * 延长试用期
@@ -60,7 +61,7 @@ export async function prolongTry(
 
 	const options: IHttpRequestOptions = {
 		method: 'POST',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/service/prolong_try',
+		url: `${await getWeComBaseUrl.call(this)}/cgi-bin/service/prolong_try`,
 		qs: {
 			suite_access_token: suiteAccessToken,
 		},

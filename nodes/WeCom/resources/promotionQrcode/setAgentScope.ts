@@ -1,5 +1,6 @@
 import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
+import { getWeComBaseUrl } from '../../shared/transport';
 
 /**
  * 设置授权应用可见范围
@@ -67,7 +68,7 @@ export async function setAgentScope(
 
 	const options: IHttpRequestOptions = {
 		method: 'POST',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/agent/set_scope',
+		url: `${await getWeComBaseUrl.call(this)}/cgi-bin/agent/set_scope`,
 		qs: {
 			access_token: accessToken,
 		},

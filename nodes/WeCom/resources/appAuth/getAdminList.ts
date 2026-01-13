@@ -1,5 +1,6 @@
 import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
+import { getWeComBaseUrl } from '../../shared/transport';
 
 /**
  * 获取应用管理员列表
@@ -33,7 +34,7 @@ export async function getAdminList(
 
 	const options: IHttpRequestOptions = {
 		method: 'POST',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/agent/get_admin_list',
+		url: `${await getWeComBaseUrl.call(this)}/cgi-bin/agent/get_admin_list`,
 		qs: {
 			access_token: accessToken,
 		},

@@ -1,5 +1,6 @@
 import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
+import { getWeComBaseUrl } from '../../shared/transport';
 
 /**
  * 设置通讯录同步完成
@@ -31,7 +32,7 @@ export async function setContactSyncSuccess(
 
 	const options: IHttpRequestOptions = {
 		method: 'GET',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/sync/contact_sync_success',
+		url: `${await getWeComBaseUrl.call(this)}/cgi-bin/sync/contact_sync_success`,
 		qs: {
 			access_token: accessToken,
 		},

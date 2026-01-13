@@ -1,5 +1,6 @@
 import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
+import { getWeComBaseUrl } from '../../shared/transport';
 
 /**
  * 获取预授权码
@@ -32,7 +33,7 @@ export async function getPreAuthCode(
 
 	const options: IHttpRequestOptions = {
 		method: 'GET',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/service/get_pre_auth_code',
+		url: `${await getWeComBaseUrl.call(this)}/cgi-bin/service/get_pre_auth_code`,
 		qs: {
 			suite_access_token: suiteAccessToken,
 		},

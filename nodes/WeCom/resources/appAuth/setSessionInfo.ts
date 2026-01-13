@@ -1,5 +1,6 @@
 import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
+import { getWeComBaseUrl } from '../../shared/transport';
 
 /**
  * 设置授权配置
@@ -61,7 +62,7 @@ export async function setSessionInfo(
 
 	const options: IHttpRequestOptions = {
 		method: 'POST',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/service/set_session_info',
+		url: `${await getWeComBaseUrl.call(this)}/cgi-bin/service/set_session_info`,
 		qs: {
 			suite_access_token: suiteAccessToken,
 		},

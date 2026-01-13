@@ -1,5 +1,6 @@
 import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
+import { getWeComBaseUrl } from '../../shared/transport';
 
 /**
  * 分配激活码给下游/下级企业
@@ -101,7 +102,7 @@ export async function batchShareActiveCode(
 
 	const options: IHttpRequestOptions = {
 		method: 'POST',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/license/batch_share_active_code',
+		url: `${await getWeComBaseUrl.call(this)}/cgi-bin/license/batch_share_active_code`,
 		qs: {
 			provider_access_token: providerAccessToken,
 		},

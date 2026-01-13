@@ -1,6 +1,6 @@
 import type { IExecuteFunctions, INodeExecutionData, IDataObject } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
-import { weComApiRequest, getAccessToken } from '../../shared/transport';
+import { getAccessToken, getWeComBaseUrl, weComApiRequest } from '../../shared/transport';
 
 // 辅助函数：从字段值对象中提取实际值
 function extractFieldValue(cv: IDataObject): string | number | boolean {
@@ -2137,7 +2137,7 @@ export async function executeWedoc(
 
 				response = (await this.helpers.httpRequest({
 					method: 'POST',
-					url: `https://qyapi.weixin.qq.com/cgi-bin/wedoc/image_upload?access_token=${accessToken}`,
+					url: `${await getWeComBaseUrl.call(this)}/cgi-bin/wedoc/image_upload?access_token=${accessToken}`,
 					body: requestBody,
 					json: true,
 				})) as IDataObject;

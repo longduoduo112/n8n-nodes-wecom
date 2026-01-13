@@ -1,6 +1,7 @@
 import { createHash } from 'crypto';
 import type { IExecuteFunctions, INodeExecutionData, IDataObject } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
+import { getWeComBaseUrl } from '../../shared/transport';
 
 export async function executePushMessage(
 	this: IExecuteFunctions,
@@ -86,7 +87,8 @@ export async function executePushMessage(
 				const footerBuffer = Buffer.from(footer, 'utf-8');
 				const bodyBuffer = Buffer.concat([headerBuffer, dataBuffer, footerBuffer]);
 
-				const uploadUrl = `https://qyapi.weixin.qq.com/cgi-bin/webhook/upload_media?key=${webhookKey}&type=${mediaType}`;
+				const baseUrl = await getWeComBaseUrl.call(this, 'weComWebhookApi');
+				const uploadUrl = `${baseUrl}/cgi-bin/webhook/upload_media?key=${webhookKey}&type=${mediaType}`;
 
 				const response = (await this.helpers.httpRequest({
 					method: 'POST',

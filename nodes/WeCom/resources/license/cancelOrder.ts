@@ -1,5 +1,6 @@
 import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
+import { getWeComBaseUrl } from '../../shared/transport';
 
 /**
  * 取消订单
@@ -59,7 +60,7 @@ export async function cancelOrder(
 
 	const options: IHttpRequestOptions = {
 		method: 'POST',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/license/cancel_order',
+		url: `${await getWeComBaseUrl.call(this)}/cgi-bin/license/cancel_order`,
 		qs: {
 			provider_access_token: providerAccessToken,
 		},

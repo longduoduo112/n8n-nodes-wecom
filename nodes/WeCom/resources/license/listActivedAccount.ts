@@ -1,5 +1,6 @@
 import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
+import { getWeComBaseUrl } from '../../shared/transport';
 
 /**
  * 获取企业的账号列表
@@ -62,7 +63,7 @@ export async function listActivedAccount(
 
 	const options: IHttpRequestOptions = {
 		method: 'POST',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/license/list_actived_account',
+		url: `${await getWeComBaseUrl.call(this)}/cgi-bin/license/list_actived_account`,
 		qs: {
 			provider_access_token: providerAccessToken,
 		},

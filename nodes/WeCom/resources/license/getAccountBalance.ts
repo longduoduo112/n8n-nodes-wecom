@@ -1,5 +1,6 @@
 import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
+import { getWeComBaseUrl } from '../../shared/transport';
 
 /**
  * 充值账户余额查询
@@ -29,7 +30,7 @@ export async function getAccountBalance(
 
 	const options: IHttpRequestOptions = {
 		method: 'GET',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/service/get_account_balance',
+		url: `${await getWeComBaseUrl.call(this)}/cgi-bin/service/get_account_balance`,
 		qs: {
 			provider_access_token: providerAccessToken,
 		},

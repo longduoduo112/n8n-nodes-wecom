@@ -1,5 +1,6 @@
 import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
+import { getWeComBaseUrl } from '../../shared/transport';
 
 /**
  * 提交多企业新购订单
@@ -49,7 +50,7 @@ export async function submitNewOrderJob(
 
 	const options: IHttpRequestOptions = {
 		method: 'POST',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/license/submit_new_order_job',
+		url: `${await getWeComBaseUrl.call(this)}/cgi-bin/license/submit_new_order_job`,
 		qs: {
 			provider_access_token: providerAccessToken,
 		},

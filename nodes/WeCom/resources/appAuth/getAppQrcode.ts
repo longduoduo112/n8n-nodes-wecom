@@ -5,6 +5,7 @@ import type {
 	INodeExecutionData,
 } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
+import { getWeComBaseUrl } from '../../shared/transport';
 
 /**
  * 获取应用二维码
@@ -67,7 +68,7 @@ export async function getAppQrcode(
 	if (resultType === 1) {
 		options = {
 			method: 'POST',
-			url: 'https://qyapi.weixin.qq.com/cgi-bin/service/get_app_qrcode',
+			url: `${await getWeComBaseUrl.call(this)}/cgi-bin/service/get_app_qrcode`,
 			qs: {
 				suite_access_token: suiteAccessToken,
 			},
@@ -78,7 +79,7 @@ export async function getAppQrcode(
 	} else {
 		options = {
 			method: 'POST',
-			url: 'https://qyapi.weixin.qq.com/cgi-bin/service/get_app_qrcode',
+			url: `${await getWeComBaseUrl.call(this)}/cgi-bin/service/get_app_qrcode`,
 			qs: {
 				suite_access_token: suiteAccessToken,
 			},

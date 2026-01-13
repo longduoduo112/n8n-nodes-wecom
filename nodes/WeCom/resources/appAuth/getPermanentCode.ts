@@ -1,5 +1,6 @@
 import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
+import { getWeComBaseUrl } from '../../shared/transport';
 
 /**
  * 获取企业永久授权码
@@ -43,7 +44,7 @@ export async function getPermanentCode(
 
 	const options: IHttpRequestOptions = {
 		method: 'POST',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/service/v2/get_permanent_code',
+		url: `${await getWeComBaseUrl.call(this)}/cgi-bin/service/v2/get_permanent_code`,
 		qs: {
 			suite_access_token: suiteAccessToken,
 		},

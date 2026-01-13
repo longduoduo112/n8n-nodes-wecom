@@ -1,5 +1,6 @@
 import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
+import { getWeComBaseUrl } from '../../shared/transport';
 
 /**
  * 标记开票状态
@@ -84,7 +85,7 @@ export async function markInvoiceStatus(
 
 	const options: IHttpRequestOptions = {
 		method: 'POST',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/paytool/mark_invoice_status',
+		url: `${await getWeComBaseUrl.call(this)}/cgi-bin/paytool/mark_invoice_status`,
 		qs: {
 			provider_access_token: providerAccessToken,
 		},

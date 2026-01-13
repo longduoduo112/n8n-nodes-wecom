@@ -1,6 +1,7 @@
 import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
 import { createHmac, randomBytes } from 'crypto';
+import { getWeComBaseUrl } from '../../shared/transport';
 
 /**
  * 递归扁平化JSON对象为键值对数组
@@ -135,7 +136,7 @@ export async function getOrderDetail(
 
 	const options: IHttpRequestOptions = {
 		method: 'POST',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/paytool/get_order_detail',
+		url: `${await getWeComBaseUrl.call(this)}/cgi-bin/paytool/get_order_detail`,
 		qs: {
 			provider_access_token: providerAccessToken,
 		},

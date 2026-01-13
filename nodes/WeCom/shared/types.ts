@@ -2,6 +2,7 @@ export interface IWeComCredentials {
 	corpId: string;
 	corpSecret: string;
 	agentId: string;
+	baseUrl?: string;
 }
 
 export interface IWeComAccessTokenResponse {
@@ -10,4 +11,3 @@ export interface IWeComAccessTokenResponse {
 	access_token?: string;
 	expires_in?: number;
 }
-

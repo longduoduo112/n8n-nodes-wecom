@@ -1,5 +1,6 @@
 import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
+import { getWeComBaseUrl } from '../../shared/transport';
 
 /**
  * 获取应用权限详情
@@ -32,7 +33,7 @@ export async function getPermissions(
 
 	const options: IHttpRequestOptions = {
 		method: 'POST',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/agent/get_permissions',
+		url: `${await getWeComBaseUrl.call(this)}/cgi-bin/agent/get_permissions`,
 		qs: {
 			access_token: accessToken,
 		},

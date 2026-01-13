@@ -1,5 +1,6 @@
 import type { IExecuteFunctions, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
+import { getWeComBaseUrl } from '../../shared/transport';
 
 /**
  * 获取第三方应用凭证
@@ -36,7 +37,7 @@ export async function getSuiteToken(this: IExecuteFunctions, index: number): Pro
 
 	const options: IHttpRequestOptions = {
 		method: 'POST',
-		url: 'https://qyapi.weixin.qq.com/cgi-bin/service/get_suite_token',
+		url: `${await getWeComBaseUrl.call(this)}/cgi-bin/service/get_suite_token`,
 		body: {
 			suite_id: suiteId,
 			suite_secret: suiteSecret,
