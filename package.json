@@ -40,6 +40,7 @@
 		"lint": "n8n-node lint",
 		"lint:fix": "n8n-node lint --fix",
 		"release": "n8n-node release",
+    	"release:beta": "npm run lint && npm run build && release-it --preRelease=beta",
 		"prepublishOnly": "n8n-node prerelease"
 	},
 	"files": [
