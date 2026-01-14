@@ -1,34 +1,34 @@
 # n8n-nodes-wecom
 
+[![npm version](https://img.shields.io/npm/v/n8n-nodes-wecom.svg?style=flat-square)](https://www.npmjs.com/package/n8n-nodes-wecom) [![GitHub release](https://img.shields.io/github/v/release/funcodingdev/n8n-nodes-wecom?include_prereleases&style=flat-square)](https://github.com/funcodingdev/n8n-nodes-wecom/releases)
+
 这是一个 n8n 社区节点，让你可以在 [n8n](https://n8n.io/) 工作流中使用企业微信（WeChat Work）API。
 
-## 重要提示
+## ⚠️ 重要提示
 
-> **关于版本更新**
+> **关于版本更新与稳定性**
 >
-> 本插件的设计理念是让开发者和非开发者都可以简单使用，参考 N8N 官方的 Telegram 和 Notion 等节点，让操作尽可能简单直观。为了持续优化用户体验，我们会不断改进节点内部的交互结构。
+> 本插件的设计初衷是提供**简单、稳定**的企业微信集成体验。我们以 N8N 官方原生节点（如 Telegram、Notion等）为标准，力求交互逻辑清晰直观。
 >
-> **请注意：** 版本更新时，节点参数配置可能会发生变化，部分工作流节点参数可能需要重新配置。
+> **开发原则：**
+> 我们会审慎评估每一次代码变更，尽量维持现有节点结构和参数的稳定性，避免对生产环境造成不必要的影响。
 >
-> **建议：** 更新前请查看 [Release 日志](https://github.com/funcodingdev/n8n-nodes-wecom/releases)，了解具体变更内容，以便快速调整你的工作流配置。
+> **注意事项：**
+> 在极少数情况下，为了修复重大缺陷或适配企业微信 API 的关键变更，可能会引入必要的调整。
 >
-> **提示：** 如果更新后出现非企业微信 API 相关的报错，可尝试重启 N8N 服务，以清除节点缓存。
+> **建议：**
+> 生产环境更新前，请查看 [Release 日志](https://github.com/funcodingdev/n8n-nodes-wecom/releases)。如果涉及 Breaking Changes（破坏性变更），我们会显著标记。
 
-## 交流与支持
+## 🤝 交流与支持
 
-如果你在使用过程中遇到问题，可以优先查看[企业微信官方API文档](https://developer.work.weixin.qq.com/document/path/91201)，或者想要与其他用户交流使用经验，欢迎加入我们的交流群。
+遇到问题或有功能建议？欢迎查阅 [企业微信官方文档](https://developer.work.weixin.qq.com/document/path/91201) 或加入我们的交流群。
 
-### 加入交流群
+### 💬 加入社区
 
-你可以通过以下方式加入：
-
-**1. 扫描群二维码直接加入**
-
-<img src="./wechat_group_qrcode.jpg" width="200" alt="微信群二维码" />
-
-**2. 如果群二维码过期，可以添加我的微信号，备注「n8n-wecom」后拉你入群**
-
-<img src="./wechat_qrcode.jpg" width="200" alt="微信号二维码" />
+|                          方式 1：扫码直接入群                          |                     方式 2：联系作者邀请                     |
+| :--------------------------------------------------------------------: | :----------------------------------------------------------: |
+| <img src="./wechat_group_qrcode.jpg" width="200" alt="微信群二维码" /> | <img src="./wechat_qrcode.jpg" width="200" alt="作者微信" /> |
+|                                 (推荐)                                 |               若群码失效，请备注 **n8n** 拉你                |
 
 ### 参与贡献
 
@@ -41,7 +41,7 @@
 
 ---
 
-## 节点分类
+## 🧩 节点分类
 
 本插件按照企业微信官方文档的分类结构，提供以下节点：
 
@@ -87,7 +87,6 @@
 - **微信客服** - 客服账号、接待人员、消息收发、统计管理
 - **家校应用** - 健康上报、上课直播、班级收款
 
-
 ### 4. 企业微信消息接收触发器
 
 接收企业微信的消息和事件推送（支持普通接收和被动回复两种模式）
@@ -96,7 +95,7 @@
 
 接收企业微信第三方应用的指令回调事件（授权、通讯录变更、ticket变化等）
 
-## 隐私与安全
+## 🔒 隐私与安全
 
 **本插件完全基于企业微信官方 API 开发，直连企业微信服务器，不经过任何第三方服务器。**
 
@@ -108,7 +107,7 @@
 
 你的企业数据安全完全由你的 n8n 实例和企业微信官方平台保障。
 
-## 安装
+## 📦 安装
 
 在 n8n 中通过社区节点管理界面搜索 `n8n-nodes-wecom` 进行安装，或使用命令行：
 
@@ -118,7 +117,7 @@ npm install n8n-nodes-wecom
 
 详细安装指南请参考 [n8n 社区节点文档](https://docs.n8n.io/integrations/community-nodes/installation/)。
 
-## 凭证配置
+## 🔑 凭证配置
 
 ### 消息推送凭证（WebHook URL）
 
@@ -152,6 +151,7 @@ npm install n8n-nodes-wecom
 6. 将 Webhook URL 填入企业微信后台的**接收消息服务器配置**中
 
 **重要提示**：
+
 - 企业微信每个应用只能配置一个接收消息 URL
 - 多个工作流可以使用同一个凭证（同一应用ID），它们会共享同一个 Webhook URL 接收消息
 - 不同应用请创建不同的凭证，使用不同的应用ID
@@ -169,11 +169,12 @@ npm install n8n-nodes-wecom
 6. 将 Webhook URL 填入企业微信服务商后台的**指令回调URL**配置中
 
 **重要提示**：
+
 - 第三方应用的指令回调使用SuiteID作为receiveid（而不是CorpID）
 - 服务商收到推送后必须返回字符串 "success"，否则企业微信会把返回内容当作错误信息
 - 支持的事件类型：授权变更、通讯录变更、Suite Ticket推送、应用变更等
 
-## 已实现功能
+## ✨ 已实现功能
 
 以下功能按照企业微信官方文档分类组织：
 
@@ -216,11 +217,13 @@ npm install n8n-nodes-wecom
 - ✅ 支持从工作流输出中读取回复内容
 
 **工作流配置示例：**
+
 ```
 [企业微信消息接收(被动回复)触发器] → [中间处理节点(可选)] → [企业微信-基础 (被动回复)]
 ```
 
 > ⚠️ **重要提示**：
+>
 > - 被动回复节点**必须是工作流的最后一个节点**
 > - 必须在**5秒内**返回响应，否则企业微信会认为请求失败
 > - 请确保工作流处理时间足够快
@@ -265,6 +268,7 @@ npm install n8n-nodes-wecom
 - ✅ 自动返回 "success" 响应（授权相关事件需在1000ms内响应）
 
 **重要提示**：
+
 - 第三方应用的指令回调使用SuiteID作为receiveid（而不是CorpID）
 - 服务商收到推送后必须返回字符串 "success"，否则企业微信会把返回内容当作错误信息
 - 授权相关事件（create_auth、change_auth、cancel_auth、reset_permanent_code）的响应必须在1000ms内完成
@@ -1075,7 +1079,7 @@ npm install n8n-nodes-wecom
 
 ---
 
-## 参考资源
+## 📚 参考资源
 
 - [企业微信开发文档](https://developer.work.weixin.qq.com/document/)
 - [企业微信API全局错误码](https://developer.work.weixin.qq.com/document/path/90313)
@@ -1084,6 +1088,6 @@ npm install n8n-nodes-wecom
 - [n8n 社区节点开发文档](https://docs.n8n.io/integrations/creating-nodes/overview/)
 - [n8n 社区节点开发示例](https://docs.n8n.io/integrations/creating-nodes/build/declarative-style-node/)
 
-## 许可证
+## 📄 许可证
 
 [MIT](LICENSE.md)
