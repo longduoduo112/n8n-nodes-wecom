@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-wecom",
-	"version": "0.3.54",
+	"version": "0.3.55-beta.0",
 	"description": "Complete n8n integration for WeCom (企业微信/WeChat Work). Send messages, manage contacts, departments, customer relations, meetings, documents, email, calendar, approvals, and more. Full-featured enterprise WeChat automation node.",
 	"license": "MIT",
 	"homepage": "https://github.com/funcodingdev/n8n-nodes-wecom",
@@ -40,7 +40,8 @@
 		"lint": "n8n-node lint",
 		"lint:fix": "n8n-node lint --fix",
 		"release": "n8n-node release",
-		"prepublishOnly": "n8n-node prerelease"
+		"release:beta": "npm run lint && npm run build && release-it --preRelease=beta",
+		"prepublishOnly": "npm run lint && npm run build"
 	},
 	"files": [
 		"dist"
