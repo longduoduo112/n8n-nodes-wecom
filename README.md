@@ -20,11 +20,11 @@
 > 生产环境更新前，请查看 [Release 日志](https://github.com/funcodingdev/n8n-nodes-wecom/releases)。如果涉及 Breaking Changes（破坏性变更），我们会显著标记。
 >
 > **文档说明：**
-> 本文档旨在概括插件支持的核心功能。由于企业微信接口众多且更新频繁，本文档可能无法覆盖所有参数细节。遇有疑问，请优先参考 [企业微信官方 API 文档](https://developer.work.weixin.qq.com/document/)。
+> 本文档旨在概括插件支持的核心功能。由于企业微信接口众多且更新频繁，本文档可能无法覆盖所有参数细节。遇有疑问，请优先参考 [企业微信官方 API 文档](https://developer.work.weixin.qq.com/document/path/90664)。
 
 ## 🤝 交流与支持
 
-遇到问题或有功能建议？欢迎查阅 [企业微信官方文档](https://developer.work.weixin.qq.com/document/path/91201) 或加入我们的交流群。
+遇到问题或有功能建议？欢迎查阅 [企业微信官方文档](https://developer.work.weixin.qq.com/document/path/90664) 或加入我们的交流群。
 
 ### 💬 加入社区
 
