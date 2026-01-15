@@ -40,6 +40,27 @@ export async function executeMessage(
 			const credentials = await this.getCredentials('weComApi');
 			const agentId = credentials.agentId as string;
 
+			if (operation === 'recallMessage') {
+				const msgid = this.getNodeParameter('msgid', i) as string;
+
+				const recallBody = {
+					msgid,
+				};
+
+				const response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/message/recall',
+					recallBody,
+				);
+
+				returnData.push({
+					json: response as IDataObject,
+					pairedItem: { item: i },
+				});
+				continue;
+			}
+
 			// 获取接收人信息（支持新旧两种方式）
 			let touser = '';
 			let toparty = '';
@@ -47,7 +68,7 @@ export async function executeMessage(
 
 			// 检查是否使用新的接收人选择方式
 			const recipientType = this.getNodeParameter('recipientType', i, null) as string | null;
-			
+
 			if (recipientType !== null) {
 				// 新方式：使用 recipientType 选择
 				const touserArray = this.getNodeParameter('touser', i, []) as string[];
@@ -1124,26 +1145,6 @@ export async function executeMessage(
 					'POST',
 					'/cgi-bin/message/update_template_card',
 					body,
-				);
-
-				returnData.push({
-					json: response as IDataObject,
-					pairedItem: { item: i },
-				});
-				continue;
-			} else if (operation === 'recallMessage') {
-				const msgid = this.getNodeParameter('msgid', i) as string;
-
-				const recallBody = {
-					msgid,
-				};
-
-				// 使用撤回消息接口
-				const response = await weComApiRequest.call(
-					this,
-					'POST',
-					'/cgi-bin/message/recall',
-					recallBody,
 				);
 
 				returnData.push({
