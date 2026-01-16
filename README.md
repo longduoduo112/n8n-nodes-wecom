@@ -1,34 +1,37 @@
 # n8n-nodes-wecom
 
+[![npm version](https://img.shields.io/npm/v/n8n-nodes-wecom.svg?style=flat-square)](https://www.npmjs.com/package/n8n-nodes-wecom) [![GitHub release](https://img.shields.io/github/v/release/funcodingdev/n8n-nodes-wecom?include_prereleases&style=flat-square)](https://github.com/funcodingdev/n8n-nodes-wecom/releases)
+
 这是一个 n8n 社区节点，让你可以在 [n8n](https://n8n.io/) 工作流中使用企业微信（WeChat Work）API。
 
-## 重要提示
+## ⚠️ 重要提示
 
-> **关于版本更新**
+> **关于版本更新与稳定性**
 >
-> 本插件的设计理念是让开发者和非开发者都可以简单使用，参考 N8N 官方的 Telegram 和 Notion 等节点，让操作尽可能简单直观。为了持续优化用户体验，我们会不断改进节点内部的交互结构。
+> 本插件的设计初衷是提供**简单、稳定**的企业微信集成体验。我们以 N8N 官方原生节点（如 Telegram、Notion等）为标准，力求交互逻辑清晰直观。
 >
-> **请注意：** 版本更新时，节点参数配置可能会发生变化，部分工作流节点参数可能需要重新配置。
+> **开发原则：**
+> 我们会审慎评估每一次代码变更，尽量维持现有节点结构和参数的稳定性，避免对生产环境造成不必要的影响。
 >
-> **建议：** 更新前请查看 [Release 日志](https://github.com/funcodingdev/n8n-nodes-wecom/releases)，了解具体变更内容，以便快速调整你的工作流配置。
+> **注意事项：**
+> 在极少数情况下，为了修复重大缺陷或适配企业微信 API 的关键变更，可能会引入必要的调整。
 >
-> **提示：** 如果更新后出现非企业微信 API 相关的报错，可尝试重启 N8N 服务，以清除节点缓存。
+> **建议：**
+> 生产环境更新前，请查看 [Release 日志](https://github.com/funcodingdev/n8n-nodes-wecom/releases)。如果涉及 Breaking Changes（破坏性变更），我们会显著标记。
+>
+> **文档说明：**
+> 本文档旨在概括插件支持的核心功能。由于企业微信接口众多且更新频繁，本文档可能无法覆盖所有参数细节。遇有疑问，请优先参考 [企业微信官方 API 文档](https://developer.work.weixin.qq.com/document/path/90664)。
 
-## 交流与支持
+## 🤝 交流与支持
 
-如果你在使用过程中遇到问题，可以优先查看[企业微信官方API文档](https://developer.work.weixin.qq.com/document/path/91201)，或者想要与其他用户交流使用经验，欢迎加入我们的交流群。
+遇到问题或有功能建议？欢迎查阅 [企业微信官方文档](https://developer.work.weixin.qq.com/document/path/90664) 或加入我们的交流群。
 
-### 加入交流群
+### 💬 加入社区
 
-你可以通过以下方式加入：
-
-**1. 扫描群二维码直接加入**
-
-<img src="./wechat_group_qrcode.jpg" width="200" alt="微信群二维码" />
-
-**2. 如果群二维码过期，可以添加我的微信号，备注「n8n-wecom」后拉你入群**
-
-<img src="./wechat_qrcode.jpg" width="200" alt="微信号二维码" />
+|                          方式 1：扫码直接入群                          |                     方式 2：联系作者邀请                     |
+| :--------------------------------------------------------------------: | :----------------------------------------------------------: |
+| <img src="./wechat_group_qrcode.jpg" width="200" alt="微信群二维码" /> | <img src="./wechat_qrcode.jpg" width="200" alt="作者微信" /> |
+|                                 (推荐)                                 |               若群码失效，请备注 **n8n** 拉你                |
 
 ### 参与贡献
 
@@ -41,7 +44,7 @@
 
 ---
 
-## 节点分类
+## 🧩 节点分类
 
 本插件按照企业微信官方文档的分类结构，提供以下节点：
 
@@ -57,10 +60,10 @@
 - **素材管理** - 素材上传和管理
 - **电子发票** - 电子发票查询和状态管理
 - **第三方应用授权** - 获取第三方应用凭证
-- **第三方应用接口调用许可** - 接口调用许可管理（下单购买账号）
-- **第三方应用收银台** - 第三方应用收银台（创建收款订单）
-- **第三方应用推广二维码** - 第三方应用推广二维码（获取注册码）
-- **账号 ID** - 自建应用与第三方应用的对接（userid转换、external_userid转换、corpid转换）
+- **第三方应用接口调用许可** - 接口调用许可管理
+- **第三方应用收银台** - 第三方应用收银台
+- **第三方应用推广二维码** - 第三方应用推广二维码
+- **账号 ID** - 自建应用与第三方应用的对接
 
 ### 2. 企业微信-办公
 
@@ -87,7 +90,6 @@
 - **微信客服** - 客服账号、接待人员、消息收发、统计管理
 - **家校应用** - 健康上报、上课直播、班级收款
 
-
 ### 4. 企业微信消息接收触发器
 
 接收企业微信的消息和事件推送（支持普通接收和被动回复两种模式）
@@ -96,7 +98,7 @@
 
 接收企业微信第三方应用的指令回调事件（授权、通讯录变更、ticket变化等）
 
-## 隐私与安全
+## 🔒 隐私与安全
 
 **本插件完全基于企业微信官方 API 开发，直连企业微信服务器，不经过任何第三方服务器。**
 
@@ -108,7 +110,7 @@
 
 你的企业数据安全完全由你的 n8n 实例和企业微信官方平台保障。
 
-## 安装
+## 📦 安装
 
 在 n8n 中通过社区节点管理界面搜索 `n8n-nodes-wecom` 进行安装，或使用命令行：
 
@@ -118,7 +120,7 @@ npm install n8n-nodes-wecom
 
 详细安装指南请参考 [n8n 社区节点文档](https://docs.n8n.io/integrations/community-nodes/installation/)。
 
-## 凭证配置
+## 🔑 凭证配置
 
 ### 消息推送凭证（WebHook URL）
 
@@ -152,6 +154,7 @@ npm install n8n-nodes-wecom
 6. 将 Webhook URL 填入企业微信后台的**接收消息服务器配置**中
 
 **重要提示**：
+
 - 企业微信每个应用只能配置一个接收消息 URL
 - 多个工作流可以使用同一个凭证（同一应用ID），它们会共享同一个 Webhook URL 接收消息
 - 不同应用请创建不同的凭证，使用不同的应用ID
@@ -169,11 +172,12 @@ npm install n8n-nodes-wecom
 6. 将 Webhook URL 填入企业微信服务商后台的**指令回调URL**配置中
 
 **重要提示**：
+
 - 第三方应用的指令回调使用SuiteID作为receiveid（而不是CorpID）
 - 服务商收到推送后必须返回字符串 "success"，否则企业微信会把返回内容当作错误信息
 - 支持的事件类型：授权变更、通讯录变更、Suite Ticket推送、应用变更等
 
-## 已实现功能
+## ✨ 已实现功能
 
 以下功能按照企业微信官方文档分类组织：
 
@@ -216,11 +220,13 @@ npm install n8n-nodes-wecom
 - ✅ 支持从工作流输出中读取回复内容
 
 **工作流配置示例：**
+
 ```
 [企业微信消息接收(被动回复)触发器] → [中间处理节点(可选)] → [企业微信-基础 (被动回复)]
 ```
 
 > ⚠️ **重要提示**：
+>
 > - 被动回复节点**必须是工作流的最后一个节点**
 > - 必须在**5秒内**返回响应，否则企业微信会认为请求失败
 > - 请确保工作流处理时间足够快
@@ -236,35 +242,36 @@ npm install n8n-nodes-wecom
 
 使用「企业微信第三方应用指令回调触发器」接收第三方应用的指令回调事件：
 
-- ✅ [接收授权成功通知](https://developer.work.weixin.qq.com/document/path/91118)（create_auth）
-- ✅ [接收变更授权通知](https://developer.work.weixin.qq.com/document/path/91119)（change_auth）
-- ✅ [接收取消授权通知](https://developer.work.weixin.qq.com/document/path/91120)（cancel_auth）
-- ✅ [接收Suite Ticket推送](https://developer.work.weixin.qq.com/document/path/91117)（suite_ticket）
-- ✅ [接收成员通知事件](https://developer.work.weixin.qq.com/document/path/91121)（change_contact - create_user/update_user/delete_user）
-- ✅ [接收部门通知事件](https://developer.work.weixin.qq.com/document/path/91122)（change_contact - create_party/update_party/delete_party）
-- ✅ [接收标签通知事件](https://developer.work.weixin.qq.com/document/path/91123)（change_contact - update_tag）
-- ✅ [接收共享应用事件回调](https://developer.work.weixin.qq.com/document/path/91124)（share_agent_change/share_chain_change）
-- ✅ [接收重置永久授权码通知](https://developer.work.weixin.qq.com/document/path/95437)（reset_permanent_code）
-- ✅ [接收应用管理员变更通知](https://developer.work.weixin.qq.com/document/path/91125)（change_app_admin）
-- ✅ [接收授权组织架构权限通知](https://developer.work.weixin.qq.com/document/path/91126)（corp_arch_auth）
-- ✅ [接收获客助手权限变更通知](https://developer.work.weixin.qq.com/document/path/91127)（approve_special_auth/cancel_special_auth）
-- ✅ [接收支付成功通知](https://developer.work.weixin.qq.com/document/path/90600)（license_pay_success - 接口调用许可支付成功通知）
-- ✅ [接收退款结果通知](https://developer.work.weixin.qq.com/document/path/90600)（license_refund - 接口调用许可退款结果通知）
-- ✅ [接收自动激活回调通知](https://developer.work.weixin.qq.com/document/path/90600)（auto_activate - 接口调用许可自动激活回调通知）
-- ✅ [接收下单成功通知](https://developer.work.weixin.qq.com/document/path/90600)（open_order - 当企业在应用市场购买付费应用完成下单后，或服务商在管理端为企业代下单后推送）
-- ✅ [接收改单通知](https://developer.work.weixin.qq.com/document/path/90600)（change_order - 当服务商管理员修改订单价格后推送，会产生新的订单号）
-- ✅ [接收支付成功通知](https://developer.work.weixin.qq.com/document/path/90600)（pay_for_app_success - 当企业对某一个订单完成付款后推送）
-- ✅ [接收退款通知](https://developer.work.weixin.qq.com/document/path/90600)（refund - 当某个客户发起有效的退款，经服务商在管理端同意后或过期自动完成退款后推送）
-- ✅ [接收应用版本变更通知](https://developer.work.weixin.qq.com/document/path/90600)（change_editon - 付费版本购买/扩容/续期、退款成功、试用期变更、版本到期等情况下推送）
-- ✅ [接收取消订单通知](https://developer.work.weixin.qq.com/document/path/90600)（cancel_order - 当服务商或客户企业取消订单后推送）
-- ✅ [接收注册完成回调事件](https://developer.work.weixin.qq.com/document/path/90585)（register_corp - 企业通过注册定制化新创建企业注册成功时推送）
-- ✅ [接收扫描推广二维码事件](https://developer.work.weixin.qq.com/document/path/98071)（enter_register_package - 已有授权关系的企业成员扫描推广二维码时触发）
+- ✅ [接收授权成功通知](https://developer.work.weixin.qq.com/document/path/91118)
+- ✅ [接收变更授权通知](https://developer.work.weixin.qq.com/document/path/91119)
+- ✅ [接收取消授权通知](https://developer.work.weixin.qq.com/document/path/91120)
+- ✅ [接收Suite Ticket推送](https://developer.work.weixin.qq.com/document/path/91117)
+- ✅ [接收成员通知事件](https://developer.work.weixin.qq.com/document/path/91121)
+- ✅ [接收部门通知事件](https://developer.work.weixin.qq.com/document/path/91122)
+- ✅ [接收标签通知事件](https://developer.work.weixin.qq.com/document/path/91123)
+- ✅ [接收共享应用事件回调](https://developer.work.weixin.qq.com/document/path/91124)
+- ✅ [接收重置永久授权码通知](https://developer.work.weixin.qq.com/document/path/95437)
+- ✅ [接收应用管理员变更通知](https://developer.work.weixin.qq.com/document/path/91125)
+- ✅ [接收授权组织架构权限通知](https://developer.work.weixin.qq.com/document/path/91126)
+- ✅ [接收获客助手权限变更通知](https://developer.work.weixin.qq.com/document/path/91127)
+- ✅ [接收支付成功通知](https://developer.work.weixin.qq.com/document/path/90600)
+- ✅ [接收退款结果通知](https://developer.work.weixin.qq.com/document/path/90600)
+- ✅ [接收自动激活回调通知](https://developer.work.weixin.qq.com/document/path/90600)
+- ✅ [接收下单成功通知](https://developer.work.weixin.qq.com/document/path/90600)
+- ✅ [接收改单通知](https://developer.work.weixin.qq.com/document/path/90600)
+- ✅ [接收支付成功通知](https://developer.work.weixin.qq.com/document/path/90600)
+- ✅ [接收退款通知](https://developer.work.weixin.qq.com/document/path/90600)
+- ✅ [接收应用版本变更通知](https://developer.work.weixin.qq.com/document/path/90600)
+- ✅ [接收取消订单通知](https://developer.work.weixin.qq.com/document/path/90600)
+- ✅ [接收注册完成回调事件](https://developer.work.weixin.qq.com/document/path/90585)
+- ✅ [接收扫描推广二维码事件](https://developer.work.weixin.qq.com/document/path/98071)
 - ✅ URL 验证
 - ✅ 消息加解密（使用SuiteID作为receiveid）
 - ✅ 签名验证
 - ✅ 自动返回 "success" 响应（授权相关事件需在1000ms内响应）
 
 **重要提示**：
+
 - 第三方应用的指令回调使用SuiteID作为receiveid（而不是CorpID）
 - 服务商收到推送后必须返回字符串 "success"，否则企业微信会把返回内容当作错误信息
 - 授权相关事件（create_auth、change_auth、cancel_auth、reset_permanent_code）的响应必须在1000ms内完成
@@ -311,7 +318,7 @@ npm install n8n-nodes-wecom
 
 - ✅ [创建群聊会话](https://developer.work.weixin.qq.com/document/path/90245)
 - ✅ [获取群聊会话信息](https://developer.work.weixin.qq.com/document/path/98914)
-- ✅ [修改群聊会话](https://developer.work.weixin.qq.com/document/path/98913)（修改群名、群主、添加/删除成员）
+- ✅ [修改群聊会话](https://developer.work.weixin.qq.com/document/path/98913)
 - ✅ [发送消息到群聊](https://developer.work.weixin.qq.com/document/path/90248)
   - 发送文本消息到群聊
   - 发送图片消息到群聊
@@ -333,7 +340,7 @@ npm install n8n-nodes-wecom
 - ✅ [获取部门成员列表](https://developer.work.weixin.qq.com/document/path/90200)
 - ✅ [获取部门成员详情](https://developer.work.weixin.qq.com/document/path/90201)
 - ✅ [获取成员ID列表](https://developer.work.weixin.qq.com/document/path/96067)
-- ✅ [userid与openid互换](https://developer.work.weixin.qq.com/document/path/90202)（UserID转OpenID、OpenID转UserID）
+- ✅ [userid与openid互换](https://developer.work.weixin.qq.com/document/path/90202)
 - ✅ [登录二次验证](https://developer.work.weixin.qq.com/document/path/91623)
 - ✅ [邀请成员](https://developer.work.weixin.qq.com/document/path/90975)
 - ✅ [获取加入企业二维码](https://developer.work.weixin.qq.com/document/path/91714)
@@ -482,37 +489,37 @@ npm install n8n-nodes-wecom
 > [官方文档：接口调用许可](https://developer.work.weixin.qq.com/document/path/95652)
 
 - ✅ [下单购买账号](https://developer.work.weixin.qq.com/document/path/95644)
-- ✅ [下单续期账号](https://developer.work.weixin.qq.com/document/path/95646)（创建续期任务、提交续期订单）
+- ✅ [下单续期账号](https://developer.work.weixin.qq.com/document/path/95646)
 - ✅ [获取订单列表](https://developer.work.weixin.qq.com/document/path/95647)
 - ✅ [获取订单详情](https://developer.work.weixin.qq.com/document/path/95648)
 - ✅ [获取订单中的账号列表](https://developer.work.weixin.qq.com/document/path/95649)
 - ✅ [取消订单](https://developer.work.weixin.qq.com/document/path/96106)
-- ✅ [下单购买多企业账号](https://developer.work.weixin.qq.com/document/path/98892)（创建多企业新购任务、提交多企业新购订单、获取多企业新购订单提交结果）
+- ✅ [下单购买多企业账号](https://developer.work.weixin.qq.com/document/path/98892)
 - ✅ [获取多企业订单详情](https://developer.work.weixin.qq.com/document/path/98893)
 
 ### 第三方应用收银台
 
 > [官方文档：第三方应用收银台](https://developer.work.weixin.qq.com/document/path/97654)
 
-- ✅ [创建收款订单](https://developer.work.weixin.qq.com/document/path/98045)（支持普通第三方应用、代开发应用、行业解决方案三种业务类型）
+- ✅ [创建收款订单](https://developer.work.weixin.qq.com/document/path/98045)
 - ✅ [取消收款订单](https://developer.work.weixin.qq.com/document/path/98046)
 - ✅ [获取收款订单列表](https://developer.work.weixin.qq.com/document/path/98053)
 - ✅ [获取收款订单详情](https://developer.work.weixin.qq.com/document/path/98054)
 - ✅ [获取发票列表](https://developer.work.weixin.qq.com/document/path/99436)
 - ✅ [标记开票状态](https://developer.work.weixin.qq.com/document/path/99437)
 - ✅ [签名算法](https://developer.work.weixin.qq.com/document/path/98768)
-- ✅ [使用余额支付订单](https://developer.work.weixin.qq.com/document/path/99415)（提交余额支付订单任务、获取订单支付结果）
+- ✅ [使用余额支付订单](https://developer.work.weixin.qq.com/document/path/99415)
 
 ### 第三方应用推广二维码
 
 > [官方文档：第三方应用推广二维码](https://developer.work.weixin.qq.com/document/path/90578)
 
-- ✅ [获取注册码](https://developer.work.weixin.qq.com/document/path/90581)（根据注册推广包生成注册码）
-- ✅ [查询注册状态](https://developer.work.weixin.qq.com/document/path/90582)（查询通过注册定制化新创建的企业注册状态）
-- ✅ [设置授权应用可见范围](https://developer.work.weixin.qq.com/document/path/90583)（设置授权应用的可见范围，包括成员、部门、标签）
-- ✅ [设置通讯录同步完成](https://developer.work.weixin.qq.com/document/path/90584)（设置通讯录同步完成，解除通讯录锁定状态）
-- ✅ [激活账号](https://developer.work.weixin.qq.com/document/path/95553)（激活账号、批量激活账号、指定账号类型激活）
-- ✅ [获取激活码详情](https://developer.work.weixin.qq.com/document/path/95552)（获取激活码详情、批量获取激活码详情）
+- ✅ [获取注册码](https://developer.work.weixin.qq.com/document/path/90581)
+- ✅ [查询注册状态](https://developer.work.weixin.qq.com/document/path/90582)
+- ✅ [设置授权应用可见范围](https://developer.work.weixin.qq.com/document/path/90583)
+- ✅ [设置通讯录同步完成](https://developer.work.weixin.qq.com/document/path/90584)
+- ✅ [激活账号](https://developer.work.weixin.qq.com/document/path/95553)
+- ✅ [获取激活码详情](https://developer.work.weixin.qq.com/document/path/95552)
 - ✅ [获取企业的账号列表](https://developer.work.weixin.qq.com/document/path/95544)
 - ✅ [获取成员的激活详情](https://developer.work.weixin.qq.com/document/path/95555)
 - ✅ [账号继承](https://developer.work.weixin.qq.com/document/path/95673)
@@ -521,14 +528,14 @@ npm install n8n-nodes-wecom
 - ✅ [设置企业的许可自动激活状态](https://developer.work.weixin.qq.com/document/path/95873)
 - ✅ [查询企业的许可自动激活状态](https://developer.work.weixin.qq.com/document/path/95874)
 - ✅ [充值账户余额查询](https://developer.work.weixin.qq.com/document/path/100137)
-- ✅ [民生优惠条件查询](https://developer.work.weixin.qq.com/document/path/96515)（注：民生行业接口许可优惠政策于2023年3月31日到期，到期后不再支持查询）
+- ✅ [民生优惠条件查询](https://developer.work.weixin.qq.com/document/path/96515)
 
 **接口调用许可事件通知：**
 
-- ✅ [接口许可失效通知](https://developer.work.weixin.qq.com/document/path/95716)（unlicensed_notify - 当许可账号失效的企业成员访问应用时触发）
-- ✅ [支付成功通知](https://developer.work.weixin.qq.com/document/path/95804)（license_pay_success - 当服务商购买接口调用许可账号并完成付款后推送）
-- ✅ [退款结果通知](https://developer.work.weixin.qq.com/document/path/95805)（license_refund - 当服务商提交退款申请的订单发生状态变更时推送）
-- ✅ [自动激活回调通知](https://developer.work.weixin.qq.com/document/path/95994)（auto_activate - 当企业成员满足自动激活条件并触发自动激活后推送）
+- ✅ [接口许可失效通知](https://developer.work.weixin.qq.com/document/path/95716)
+- ✅ [支付成功通知](https://developer.work.weixin.qq.com/document/path/95804)
+- ✅ [退款结果通知](https://developer.work.weixin.qq.com/document/path/95805)
+- ✅ [自动激活回调通知](https://developer.work.weixin.qq.com/document/path/95994)
 
 ---
 
@@ -592,7 +599,7 @@ npm install n8n-nodes-wecom
 
 #### 管理文档
 
-- ✅ [新建文档](https://developer.work.weixin.qq.com/document/path/97460)（文档/表格/智能表格）
+- ✅ [新建文档](https://developer.work.weixin.qq.com/document/path/97460)
 - ✅ [重命名文档](https://developer.work.weixin.qq.com/document/path/97736)
 - ✅ [删除文档](https://developer.work.weixin.qq.com/document/path/97735)
 - ✅ [获取文档基础信息](https://developer.work.weixin.qq.com/document/path/97734)
@@ -822,8 +829,8 @@ npm install n8n-nodes-wecom
 
 > [官方文档：会议室](https://developer.work.weixin.qq.com/document/path/93618)
 
-- ✅ [会议室管理](https://developer.work.weixin.qq.com/document/path/93619)（添加、编辑、删除、查询、列表）
-- ✅ [会议室预定管理](https://developer.work.weixin.qq.com/document/path/93620)（预定、取消、查询、列表）
+- ✅ [会议室管理](https://developer.work.weixin.qq.com/document/path/93619)
+- ✅ [会议室预定管理](https://developer.work.weixin.qq.com/document/path/93620)
 - ✅ [批量获取申请单ID](https://developer.work.weixin.qq.com/document/path/99883)
 - ✅ [获取申请单详细信息](https://developer.work.weixin.qq.com/document/path/99885)
 - ✅ [设置审批单审批信息](https://developer.work.weixin.qq.com/document/path/99880)
@@ -920,10 +927,10 @@ npm install n8n-nodes-wecom
 
 #### 其他接口
 
-- ✅ [管理商品图册](https://developer.work.weixin.qq.com/document/path/95096)（创建、获取、编辑、删除、列表）
-- ✅ [管理聊天敏感词](https://developer.work.weixin.qq.com/document/path/95097)（新建、获取、修改、删除规则）
+- ✅ [管理商品图册](https://developer.work.weixin.qq.com/document/path/95096)
+- ✅ [管理聊天敏感词](https://developer.work.weixin.qq.com/document/path/95097)
 - ✅ [上传附件资源](https://developer.work.weixin.qq.com/document/path/95098)
-- ✅ [获客助手](https://developer.work.weixin.qq.com/document/path/97297)（链接管理、客户信息、额度统计）
+- ✅ [获客助手](https://developer.work.weixin.qq.com/document/path/97297)
 - ✅ [获取已服务的外部联系人](https://developer.work.weixin.qq.com/document/path/99434)
 
 ### 微信客服
@@ -1075,7 +1082,7 @@ npm install n8n-nodes-wecom
 
 ---
 
-## 参考资源
+## 📚 参考资源
 
 - [企业微信开发文档](https://developer.work.weixin.qq.com/document/)
 - [企业微信API全局错误码](https://developer.work.weixin.qq.com/document/path/90313)
@@ -1084,6 +1091,6 @@ npm install n8n-nodes-wecom
 - [n8n 社区节点开发文档](https://docs.n8n.io/integrations/creating-nodes/overview/)
 - [n8n 社区节点开发示例](https://docs.n8n.io/integrations/creating-nodes/build/declarative-style-node/)
 
-## 许可证
+## 📄 许可证
 
 [MIT](LICENSE.md)

@@ -24,6 +24,12 @@ export const systemDescription: INodeProperties[] = [
 				description: '获取企业微信回调服务器的IP段',
 				action: '获取回调IP段',
 			},
+			{
+				name: '获取AccessToken',
+				value: 'getAccessToken',
+				description: '获取企业微信 Access Token',
+				action: '获取AccessToken',
+			},
 		],
 		default: 'getApiDomainIp',
 	},

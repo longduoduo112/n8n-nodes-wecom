@@ -1,6 +1,7 @@
 import type { IExecuteFunctions, IDataObject } from 'n8n-workflow';
 import { getApiDomainIp } from './getApiDomainIp';
 import { getCallbackIp } from './getCallbackIp';
+import { getAccessToken } from './getAccessToken';
 
 /**
  * 执行系统相关操作
@@ -19,6 +20,9 @@ export async function executeSystem(
 			break;
 		case 'getCallbackIp':
 			responseData = await getCallbackIp.call(this);
+			break;
+		case 'getAccessToken':
+			responseData = await getAccessToken.call(this);
 			break;
 		default:
 			throw new Error(`未知操作: ${operation}`);
