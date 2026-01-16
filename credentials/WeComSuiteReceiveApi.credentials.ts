@@ -51,16 +51,6 @@ export class WeComSuiteReceiveApi implements ICredentialType {
 				'企业微信后台"指令回调URL"配置中设置的密钥（43位字符），两边必须完全一致。用于自动解密消息内容',
 			hint: '用于消息体的加密，长度固定为43个字符。在第三方回调事件中使用加解密算法，receiveid的内容为suiteid',
 		},
-		{
-			displayName: 'API Base URL',
-			name: 'baseUrl',
-			type: 'string',
-			default: 'https://qyapi.weixin.qq.com',
-			required: false,
-			placeholder: 'https://qyapi.weixin.qq.com',
-			description: '企业微信 API 的基础地址（可选，用于代理）',
-			hint: '可选，不填默认走官方 API',
-		},
 	];
 
 	authenticate: IAuthenticateGeneric = {
