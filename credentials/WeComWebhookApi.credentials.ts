@@ -32,11 +32,11 @@ export class WeComWebhookApi implements ICredentialType {
 			displayName: 'API Base URL',
 			name: 'baseUrl',
 			type: 'string',
-			default: '',
+			default: 'https://qyapi.weixin.qq.com',
 			required: false,
 			placeholder: 'https://qyapi.weixin.qq.com',
 			description: '企业微信 API 的基础地址（可选，用于代理）',
-			hint: '留空默认使用 https://qyapi.weixin.qq.com',
+			hint: '可选，不填默认走官方 API',
 		},
 	];
 

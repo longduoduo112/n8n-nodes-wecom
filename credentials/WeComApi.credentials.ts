@@ -24,7 +24,7 @@ export class WeComApi implements ICredentialType {
 			default: '',
 			required: true,
 			description: '企业微信的企业 ID',
-			hint: '在"管理后台 - 我的企业 - 企业信息"中查看'
+			hint: '在"管理后台 - 我的企业 - 企业信息"中查看',
 		},
 		{
 			displayName: '应用 ID (Agent ID)',
@@ -33,7 +33,7 @@ export class WeComApi implements ICredentialType {
 			default: '',
 			required: true,
 			description: '应用的唯一标识',
-			hint: '在"应用管理 - 自建应用"中查看'
+			hint: '在"应用管理 - 自建应用"中查看',
 		},
 		{
 			displayName: '应用 Secret',
@@ -43,18 +43,18 @@ export class WeComApi implements ICredentialType {
 			default: '',
 			required: true,
 			description: '应用的密钥',
-			hint: '在"应用管理 - 自建应用"中查看，注意应用需要是启用状态'
+			hint: '在"应用管理 - 自建应用"中查看，注意应用需要是启用状态',
 		},
 		{
 			displayName: 'API Base URL',
 			name: 'baseUrl',
 			type: 'string',
-			default: '',
+			default: 'https://qyapi.weixin.qq.com',
 			required: false,
 			placeholder: 'https://qyapi.weixin.qq.com',
 			description: '企业微信 API 的基础地址（可选，用于代理）',
-			hint: '留空默认使用 https://qyapi.weixin.qq.com'
-		}
+			hint: '可选，不填默认走官方 API',
+		},
 	];
 
 	// 企业微信需要先获取 access_token，不能直接在这里配置
