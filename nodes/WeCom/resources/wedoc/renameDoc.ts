@@ -55,6 +55,6 @@ export const renameDocDescription: INodeProperties[] = [
 			show: showOnlyForRename,
 		},
 		default: '',
-		hint: '新的文档名称，最多255个字符。',
+		description: '新的文档名称，最多255个字符。',
 	},
 ];

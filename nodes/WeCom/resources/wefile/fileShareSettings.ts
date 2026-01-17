@@ -11,7 +11,6 @@ export const fileShareSettingsDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '文件的ID',
-		hint: '文件ID',
 	},
 	{
 		displayName: '分享范围',

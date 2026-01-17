@@ -17,7 +17,6 @@ export const sendSchoolMessageFileDescription: INodeProperties[] = [
 		default: '',
 		placeholder: 'MEDIA_ID',
 		required: true,
-		description: '文件ID，可以调用上传临时素材接口获取',
-		hint: '必填。文件id，可以调用上传临时素材接口获取',
+		description: '文件ID，可以调用上传临时素材接口获取。必填。文件ID，可以调用上传临时素材接口获取',
 	},
 ];

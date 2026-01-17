@@ -15,8 +15,7 @@ export const delJoinWayDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '加入群聊的配置id',
-		description: '加入群聊的配置ID',
+		description: '加入群聊的配置ID。加入群聊的配置ID',
 	},
 ];
 

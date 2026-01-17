@@ -50,8 +50,7 @@ export const sendSchoolMessageCommonDescription: INodeProperties[] = [
 		default: 'text',
 		required: true,
 		description:
-			'选择要发送的消息类型。<a href="https://developer.work.weixin.qq.com/document/path/92320" target="_blank">官方文档</a>',
-		hint: '选择消息类型',
+			'选择要发送的消息类型。<a href="https://developer.work.weixin.qq.com/document/path/92320" target="_blank">官方文档</a>。选择消息类型',
 	},
 	{
 		displayName: '应用ID',
@@ -62,8 +61,7 @@ export const sendSchoolMessageCommonDescription: INodeProperties[] = [
 		},
 		default: 0,
 		required: true,
-		description: '企业应用的ID，整型。可在应用的设置页面查看',
-		hint: '必填。企业应用的id，整型。可在应用的设置页面查看',
+		description: '企业应用的ID，整型。可在应用的设置页面查看。必填。企业应用的ID，整型。可在应用的设置页面查看',
 	},
 	{
 		displayName: '指定发送对象',
@@ -100,8 +98,7 @@ export const sendSchoolMessageCommonDescription: INodeProperties[] = [
 		default: '',
 		placeholder: 'parent_userid1,parent_userid2',
 		description:
-			'可选。家校通讯录家长列表，recv_scope为0或2表示发送给对应的家长，recv_scope为1忽略，（最多支持1000个）。<a href="https://developer.work.weixin.qq.com/document/path/92320" target="_blank">官方文档</a>',
-		hint: '可选。家校通讯录家长列表，用逗号分隔，最多支持1000个。recv_scope为0或2时生效',
+			'可选。家校通讯录家长列表，recv_scope为0或2表示发送给对应的家长，recv_scope为1忽略，（最多支持1000个）。<a href="https://developer.work.weixin.qq.com/document/path/92320" target="_blank">官方文档</a>。可选。家校通讯录家长列表，用逗号分隔，最多支持1000个。recv_scope为0或2时生效',
 	},
 	{
 		displayName: '学生列表',
@@ -113,8 +110,7 @@ export const sendSchoolMessageCommonDescription: INodeProperties[] = [
 		default: '',
 		placeholder: 'student_userid1,student_userid2',
 		description:
-			'可选。家校通讯录学生列表，recv_scope为0表示发送给学生的所有家长，recv_scope为1表示发送给学生，recv_scope为2表示发送给学生和学生的所有家长（最多支持1000个）。<a href="https://developer.work.weixin.qq.com/document/path/92320" target="_blank">官方文档</a>',
-		hint: '可选。家校通讯录学生列表，用逗号分隔，最多支持1000个。recv_scope为0时发送给学生的所有家长，recv_scope为1时发送给学生，recv_scope为2时发送给学生和学生的所有家长',
+			'可选。家校通讯录学生列表，recv_scope为0表示发送给学生的所有家长，recv_scope为1表示发送给学生，recv_scope为2表示发送给学生和学生的所有家长（最多支持1000个）。<a href="https://developer.work.weixin.qq.com/document/path/92320" target="_blank">官方文档</a>。可选。家校通讯录学生列表，用逗号分隔，最多支持1000个。recv_scope为0时发送给学生的所有家长，recv_scope为1时发送给学生，recv_scope为2时发送给学生和学生的所有家长',
 	},
 	{
 		displayName: '部门列表',
@@ -126,8 +122,7 @@ export const sendSchoolMessageCommonDescription: INodeProperties[] = [
 		default: '',
 		placeholder: 'partyid1,partyid2',
 		description:
-			'可选。家校通讯录部门列表，recv_scope为0表示发送给班级的所有家长，recv_scope为1表示发送给班级的所有学生，recv_scope为2表示发送给班级的所有学生和家长（最多支持100个）。<a href="https://developer.work.weixin.qq.com/document/path/92320" target="_blank">官方文档</a>',
-		hint: '可选。家校通讯录部门列表，用逗号分隔，最多支持100个。recv_scope为0时发送给班级的所有家长，recv_scope为1时发送给班级的所有学生，recv_scope为2时发送给班级的所有学生和家长',
+			'可选。家校通讯录部门列表，recv_scope为0表示发送给班级的所有家长，recv_scope为1表示发送给班级的所有学生，recv_scope为2表示发送给班级的所有学生和家长（最多支持100个）。<a href="https://developer.work.weixin.qq.com/document/path/92320" target="_blank">官方文档</a>。可选。家校通讯录部门列表，用逗号分隔，最多支持100个。recv_scope为0时发送给班级的所有家长，recv_scope为1时发送给班级的所有学生，recv_scope为2时发送给班级的所有学生和家长',
 	},
 	{
 		displayName: '发送给所有人',
@@ -138,8 +133,7 @@ export const sendSchoolMessageCommonDescription: INodeProperties[] = [
 		},
 		default: false,
 		description:
-			'可选。1表示字段生效，0表示字段无效。recv_scope为0表示发送给学校的所有家长，recv_scope为1表示发送给学校的所有学生，recv_scope为2表示发送给学校的所有学生和家长，默认为0。<a href="https://developer.work.weixin.qq.com/document/path/92320" target="_blank">官方文档</a>',
-		hint: '可选。1表示发送给所有人，0表示不发送给所有人，默认0。recv_scope为0时发送给学校的所有家长，recv_scope为1时发送给学校的所有学生，recv_scope为2时发送给学校的所有学生和家长',
+			'可选。1表示字段生效，0表示字段无效。recv_scope为0表示发送给学校的所有家长，recv_scope为1表示发送给学校的所有学生，recv_scope为2表示发送给学校的所有学生和家长，默认为0。<a href="https://developer.work.weixin.qq.com/document/path/92320" target="_blank">官方文档</a>。可选。1表示发送给所有人，0表示不发送给所有人，默认0。recv_scope为0时发送给学校的所有家长，recv_scope为1时发送给学校的所有学生，recv_scope为2时发送给学校的所有学生和家长',
 	},
 	{
 		displayName: '开启重复消息检查',
@@ -150,8 +144,7 @@ export const sendSchoolMessageCommonDescription: INodeProperties[] = [
 		},
 		default: false,
 		description:
-			'可选。表示是否开启重复消息检查，0表示否，1表示是，默认0。开启后，在一定时间间隔内，同样内容的消息不会重复收到。<a href="https://developer.work.weixin.qq.com/document/path/92320" target="_blank">官方文档</a>',
-		hint: '可选。表示是否开启重复消息检查，0表示否，1表示是，默认0',
+			'可选。表示是否开启重复消息检查，0表示否，1表示是，默认0。开启后，在一定时间间隔内，同样内容的消息不会重复收到。<a href="https://developer.work.weixin.qq.com/document/path/92320" target="_blank">官方文档</a>。可选。表示是否开启重复消息检查，0表示否，1表示是，默认0',
 	},
 	{
 		displayName: '重复消息检查时间间隔',
@@ -165,7 +158,6 @@ export const sendSchoolMessageCommonDescription: INodeProperties[] = [
 		},
 		default: 1800,
 		description:
-			'可选。表示重复消息检查的时间间隔，默认1800s，最大不超过4小时（14400秒）。<a href="https://developer.work.weixin.qq.com/document/path/92320" target="_blank">官方文档</a>',
-		hint: '可选。重复消息检查的时间间隔（秒），默认1800秒，最大不超过14400秒（4小时）',
+			'可选。表示重复消息检查的时间间隔，默认1800s，最大不超过4小时（14400秒）。<a href="https://developer.work.weixin.qq.com/document/path/92320" target="_blank">官方文档</a>。可选。重复消息检查的时间间隔（秒），默认1800秒，最大不超过14400秒（4小时）',
 	},
 ];

@@ -15,8 +15,7 @@ export const deleteCustomerAcquisitionLinkDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '获客链接id',
-		description: '获客链接ID',
+		description: '获客链接ID。获客链接ID',
 	},
 ];
 

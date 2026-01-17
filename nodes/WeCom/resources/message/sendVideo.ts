@@ -56,9 +56,8 @@ export const sendVideoDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnlySendVideo,
 		},
-		hint: '开启后消息不可转发、复制等',
 		description:
-			'表示是否是保密消息，0表示可对外分享，1表示不能分享且内容显示水印，默认为0。<a href="https://developer.work.weixin.qq.com/document/path/90236#视频消息" target="_blank">官方文档</a>',
+			'表示是否是保密消息，0表示可对外分享，1表示不能分享且内容显示水印，默认为0。开启后消息不可转发、复制等。<a href="https://developer.work.weixin.qq.com/document/path/90236#视频消息" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '开启重复消息检查',
@@ -68,9 +67,8 @@ export const sendVideoDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnlySendVideo,
 		},
-		hint: '开启后在时间间隔内相同内容的消息不会重复发送',
 		description:
-			'表示是否开启重复消息检查，0表示否，1表示是，默认0。<a href="https://developer.work.weixin.qq.com/document/path/90236#视频消息" target="_blank">官方文档</a>',
+			'表示是否开启重复消息检查，0表示否，1表示是，默认0。开启后在时间间隔内相同内容的消息不会重复发送。<a href="https://developer.work.weixin.qq.com/document/path/90236#视频消息" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '重复消息检查间隔（秒）',
@@ -87,9 +85,8 @@ export const sendVideoDescription: INodeProperties[] = [
 			minValue: 0,
 			maxValue: 14400,
 		},
-		hint: '默认1800秒，最大不超过4小时（14400秒）',
 		description:
-			'表示重复消息检查的时间间隔，默认1800秒，最大不超过4小时。<a href="https://developer.work.weixin.qq.com/document/path/90236#视频消息" target="_blank">官方文档</a>',
+			'表示重复消息检查的时间间隔，默认1800秒，最大不超过4小时（14400秒）。<a href="https://developer.work.weixin.qq.com/document/path/90236#视频消息" target="_blank">官方文档</a>',
 	},
 ];
 

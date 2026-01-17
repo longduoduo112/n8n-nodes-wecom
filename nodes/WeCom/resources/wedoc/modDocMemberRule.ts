@@ -13,7 +13,7 @@ const authOptions = [
 ];
 
 export const modDocMemberRuleDescription: INodeProperties[] = [
-	{ displayName: '文档ID', name: 'docid', type: 'string', required: true, displayOptions: { show: showOnly }, default: '', description: '文档的docid。', hint: '文档ID' },
+	{ displayName: '文档ID', name: 'docid', type: 'string', required: true, displayOptions: { show: showOnly }, default: '', description: '文档的docid' },
 	{
 		displayName: '添加成员',
 		name: 'addMemberCollection',

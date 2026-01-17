@@ -16,8 +16,7 @@ export const createUserDescription: INodeProperties[] = [
 		},
 		default: '',
 		placeholder: 'zhangsan',
-		description: '成员 UserID，企业内必须唯一。长度为1~64个字节，只能由数字、字母和"_-@."四种字符组成，且第一个字符必须是字母或数字。<a href="https://developer.work.weixin.qq.com/document/path/90195" target="_blank">官方文档</a>',
-		hint: '企业内唯一标识，如：zhangsan',
+		description: '成员 UserID，企业内必须唯一。长度为1~64个字节，只能由数字、字母和"_-@."四种字符组成，且第一个字符必须是字母或数字。如：zhangsan。<a href="https://developer.work.weixin.qq.com/document/path/90195" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '姓名',
@@ -30,7 +29,6 @@ export const createUserDescription: INodeProperties[] = [
 		default: '',
 		placeholder: '张三',
 		description: '成员名称，长度为1~64个utf8字符。<a href="https://developer.work.weixin.qq.com/document/path/90195" target="_blank">官方文档</a>',
-		hint: '成员的真实姓名',
 	},
 	{
 		displayName: '手机号',
@@ -41,8 +39,7 @@ export const createUserDescription: INodeProperties[] = [
 		},
 		default: '',
 		placeholder: '13800138000',
-		description: '可选。手机号码，企业内必须唯一，mobile/email 二者不能同时为空。<a href="https://developer.work.weixin.qq.com/document/path/90195" target="_blank">官方文档</a>',
-		hint: '11位手机号码，企业内唯一',
+		description: '可选。手机号码，企业内必须唯一，mobile/email 二者不能同时为空。11位手机号码。<a href="https://developer.work.weixin.qq.com/document/path/90195" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '所属部门',
@@ -55,7 +52,6 @@ export const createUserDescription: INodeProperties[] = [
 		default: '',
 		placeholder: '1,2,3',
 		description: '成员所属部门 ID 列表，不超过100个。多个部门用逗号分隔，部门 ID 为数字。当不填写department或ID为0时，成员会放在其他（待设置部门）下，当填写的部门不存在时，会在在其他（待设置部门）下新建对应部门。<a href="https://developer.work.weixin.qq.com/document/path/90195" target="_blank">官方文档</a>',
-		hint: '部门 ID 列表，如：1,2,3，成员可属于多个部门',
 	},
 	{
 		displayName: '职务信息',
@@ -66,8 +62,7 @@ export const createUserDescription: INodeProperties[] = [
 		},
 		default: '',
 		placeholder: '产品经理',
-		description: '可选。职务信息，长度为0~128个字符。<a href="https://developer.work.weixin.qq.com/document/path/90195" target="_blank">官方文档</a>',
-		hint: '成员的职位/岗位名称',
+		description: '可选。职务信息，长度为0~128个字符。成员的职位/岗位名称。<a href="https://developer.work.weixin.qq.com/document/path/90195" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '性别',
@@ -103,7 +98,6 @@ export const createUserDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '可选。邮箱地址，长度6~64个字节，且为有效的 email 格式。企业内必须唯一，mobile/email 二者不能同时为空。<a href="https://developer.work.weixin.qq.com/document/path/90195" target="_blank">官方文档</a>',
-		hint: '企业内唯一的邮箱地址',
 	},
 	{
 		displayName: '企业邮箱',
@@ -115,7 +109,6 @@ export const createUserDescription: INodeProperties[] = [
 		default: '',
 		placeholder: 'zhangsan@company.com',
 		description: '可选。企业邮箱，仅对开通企业邮箱的企业有效。长度6~64个字节，且为有效的企业邮箱格式。<a href="https://developer.work.weixin.qq.com/document/path/90195" target="_blank">官方文档</a>',
-		hint: '需企业已开通企业邮箱服务',
 	},
 	{
 		displayName: '地址',
@@ -180,7 +173,6 @@ export const createUserDescription: INodeProperties[] = [
 		default: '',
 		placeholder: '请输入头像的 media_id...',
 		description: '可选。成员头像的 mediaid，通过素材管理接口上传图片获得。<a href="https://developer.work.weixin.qq.com/document/path/90195" target="_blank">官方文档</a>',
-		hint: '需先通过素材管理接口上传图片',
 	},
 	{
 		displayName: '成员对外属性',
@@ -192,7 +184,6 @@ export const createUserDescription: INodeProperties[] = [
 		default: '{}',
 		placeholder: '{"external_corp_name":"企业简称","wechat_channels":{"nickname":"视频号名称"},"external_attr":[...]}',
 		description: '可选。成员对外属性，用于配置成员在外部联系人中显示的信息。支持external_corp_name（企业简称）、wechat_channels（视频号）、external_attr（扩展属性）等字段。<a href="https://developer.work.weixin.qq.com/document/path/90195" target="_blank">官方文档</a>',
-		hint: 'JSON 格式，配置对外显示的企业简称、视频号、属性等',
 	},
 	{
 		displayName: '是否邀请该成员使用企业微信',
@@ -214,7 +205,6 @@ export const createUserDescription: INodeProperties[] = [
 		default: '',
 		placeholder: '10,40',
 		description: '可选。部门内的排序值，默认为0，成员次序以创建时间从小到大排列。个数必须和参数department的个数一致，数值越大排序越前面。有效的值范围是[0, 2^32)。<a href="https://developer.work.weixin.qq.com/document/path/90195" target="_blank">官方文档</a>',
-		hint: '部门排序值列表，如：10,40，需与部门ID列表一一对应',
 	},
 	{
 		displayName: '是否为部门负责人',
@@ -226,7 +216,6 @@ export const createUserDescription: INodeProperties[] = [
 		default: '',
 		placeholder: '1,0',
 		description: '可选。个数必须和参数department的个数一致，表示在所在的部门内是否为部门负责人。1表示为部门负责人，0表示非部门负责人。<a href="https://developer.work.weixin.qq.com/document/path/90195" target="_blank">官方文档</a>',
-		hint: '部门负责人标识列表，如：1,0，需与部门ID列表一一对应',
 	},
 	{
 		displayName: '直属上级UserID',
@@ -238,7 +227,6 @@ export const createUserDescription: INodeProperties[] = [
 		default: '',
 		placeholder: 'lisi',
 		description: '可选。直属上级UserID，设置范围为企业内成员，可以设置最多1个上级。多个值用逗号分隔，但API仅支持最多1个上级。<a href="https://developer.work.weixin.qq.com/document/path/90195" target="_blank">官方文档</a>',
-		hint: '直属上级的UserID，如：lisi（最多1个）',
 	},
 	{
 		displayName: '主部门',
@@ -249,7 +237,6 @@ export const createUserDescription: INodeProperties[] = [
 		},
 		default: 0,
 		description: '可选。主部门。<a href="https://developer.work.weixin.qq.com/document/path/90195" target="_blank">官方文档</a>',
-		hint: '主部门ID',
 	},
 	{
 		displayName: '扩展属性',
@@ -261,7 +248,6 @@ export const createUserDescription: INodeProperties[] = [
 		default: '{}',
 		placeholder: '{"attrs":[{"type":0,"name":"文本名称","text":{"value":"文本"}}]}',
 		description: '可选。扩展属性。扩展属性字段需要先在WEB管理端添加，否则忽略未知属性的赋值。<a href="https://developer.work.weixin.qq.com/document/path/90195" target="_blank">官方文档</a>',
-		hint: 'JSON格式，包含attrs数组，支持文本、网页、小程序等类型',
 	},
 	{
 		displayName: '对外职务',
@@ -273,7 +259,6 @@ export const createUserDescription: INodeProperties[] = [
 		default: '',
 		placeholder: '高级产品经理',
 		description: '可选。对外职务，如果设置了该值，则以此作为对外展示的职务，否则以position来展示。长度12个汉字内。<a href="https://developer.work.weixin.qq.com/document/path/90195" target="_blank">官方文档</a>',
-		hint: '对外展示的职务名称',
 	},
 ];
 

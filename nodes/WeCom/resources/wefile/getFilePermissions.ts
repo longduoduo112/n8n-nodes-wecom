@@ -11,6 +11,5 @@ export const getFilePermissionsDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '文件的ID',
-		hint: '文件ID',
 	},
 ];

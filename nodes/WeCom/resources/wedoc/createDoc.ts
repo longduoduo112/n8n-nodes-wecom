@@ -39,7 +39,7 @@ export const createDocDescription: INodeProperties[] = [
 			show: showOnlyForCreate,
 		},
 		default: '',
-		hint: '文件名最多填255个字符, 超过255个字符会被截断',
+		description: '文件名最多填255个字符, 超过255个字符会被截断',
 	},
 	{
 		displayName: '管理员UserID列表 Names or IDs',
@@ -63,7 +63,7 @@ export const createDocDescription: INodeProperties[] = [
 			show: showOnlyForCreate,
 		},
 		default: false,
-		hint: '启用后需同时指定空间ID和父目录ID',
+		description: '启用后需同时指定空间ID和父目录ID',
 	},
 	{
 		displayName: '空间ID',

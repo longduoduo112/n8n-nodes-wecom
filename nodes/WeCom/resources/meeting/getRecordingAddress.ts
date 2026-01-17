@@ -11,7 +11,6 @@ export const getRecordingAddressDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '会议唯一标识ID',
-		hint: '会议ID',
 	},
 	{
 		displayName: '录制文件ID',
@@ -21,6 +20,5 @@ export const getRecordingAddressDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '录制文件的唯一标识ID',
-		hint: '录制文件ID',
 	},
 ];

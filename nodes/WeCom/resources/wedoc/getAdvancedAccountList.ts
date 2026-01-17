@@ -11,8 +11,7 @@ export const getAdvancedAccountListDescription: INodeProperties[] = [
 		},
 		displayOptions: { show: showOnly },
 		default: 50,
-		description: '每页返回的数量，最大1000',
-		hint: '每页数量',
+		description: '每页返回的数量，最大1000。每页数量',
 	},
 	{
 		displayName: '游标',
@@ -20,7 +19,6 @@ export const getAdvancedAccountListDescription: INodeProperties[] = [
 		type: 'string',
 		displayOptions: { show: showOnly },
 		default: '',
-		description: '分页游标，从上一次请求返回结果中获取，首次请求不填。',
-		hint: '分页游标',
+		description: '分页游标，从上一次请求返回结果中获取，首次请求不填。分页游标',
 	},
 ];

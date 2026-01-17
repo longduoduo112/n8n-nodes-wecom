@@ -17,7 +17,6 @@ export const sendSchoolMessageVoiceDescription: INodeProperties[] = [
 		default: '',
 		placeholder: 'MEDIA_ID',
 		required: true,
-		description: '语音文件ID，可以调用上传临时素材接口获取',
-		hint: '必填。语音文件id，可以调用上传临时素材接口获取',
+		description: '语音文件ID，可以调用上传临时素材接口获取。必填。语音文件ID，可以调用上传临时素材接口获取',
 	},
 ];

@@ -40,8 +40,7 @@ export const createAdvancedMeetingDescription: INodeProperties[] = [
 		required: true,
 		displayOptions: { show: showOnly },
 		default: '',
-		description: '会议管理员的企业微信UserID',
-		hint: '会议管理员',
+		description: '会议管理员的企业微信UserID。如果不指定，默认为当前操作用户',
 	},
 	{
 		displayName: '受邀成员',

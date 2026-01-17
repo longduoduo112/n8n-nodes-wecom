@@ -28,7 +28,6 @@ export const updateScheduleDescription: INodeProperties[] = [
 		},
 		default: '{\n  "start_time": 1577836800,\n  "end_time": 1577840400,\n  "summary": "周例会（已调整）"\n}',
 		description: '要更新的日程详情，JSON格式。时间使用秒级Unix时间戳。仅更新提供的字段，未提供的字段保持不变。<a href="https://developer.work.weixin.qq.com/document/path/93649" target="_blank">官方文档</a>',
-		hint: '要更新的日程详情，JSON格式',
 	},
 ];
 

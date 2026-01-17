@@ -15,8 +15,7 @@ export const getGroupChatDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '客户群ID',
-		description: '客户群ID，可以通过"获取客户群列表"接口获取。<a href="https://developer.work.weixin.qq.com/document/path/92122" target="_blank">官方文档</a>',
+		description: '客户群ID，可以通过"获取客户群列表"接口获取。<a href="https://developer.work.weixin.qq.com/document/path/92122" target="_blank">官方文档</a>。客户群ID',
 		placeholder: 'wrXXXXXXXXXXXXXXXXXXXXXXXX',
 	},
 	{
@@ -27,8 +26,7 @@ export const getGroupChatDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '可选。是否需要返回群成员的名字',
-		description: '是否需要返回群成员的名字，默认为true。如果不需要可以设置为false以提升接口响应速度。<a href="https://developer.work.weixin.qq.com/document/path/92122" target="_blank">官方文档</a>',
+		description: '是否需要返回群成员的名字，默认为true。如果不需要可以设置为false以提升接口响应速度。<a href="https://developer.work.weixin.qq.com/document/path/92122" target="_blank">官方文档</a>。可选。是否需要返回群成员的名字',
 	},
 ];
 

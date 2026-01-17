@@ -16,7 +16,6 @@ export const getMonthlyReportDescription: INodeProperties[] = [
 		},
 		default: 0,
 		description: '查询的月份，使用Unix时间戳格式（秒级），例如传入该月第一天的时间戳',
-		hint: '查询的月份，Unix时间戳（如月份第一天）',
 	},
 	{
 		displayName: '成员UserID列表',
@@ -28,7 +27,6 @@ export const getMonthlyReportDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '需要获取月报的成员UserID列表，多个UserID用逗号分隔',
-		hint: '需要获取月报的成员UserID列表，用逗号分隔',
 	},
 ];
 

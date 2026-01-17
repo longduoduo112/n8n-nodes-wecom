@@ -18,8 +18,7 @@ export const resignedTransferCustomerDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '离职成员的UserID',
-		description: '离职成员的企业成员UserID，该成员必须已离职。<a href="https://developer.work.weixin.qq.com/document/path/94081" target="_blank">官方文档</a>.',
+		description: '离职成员的企业成员UserID，该成员必须已离职。<a href="https://developer.work.weixin.qq.com/document/path/94081" target="_blank">官方文档</a>.。离职成员的UserID',
 		placeholder: 'zhangsan',
 	},
 	{
@@ -34,8 +33,7 @@ export const resignedTransferCustomerDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '接替成员的UserID，继承离职成员的客户',
-		description: '接替成员的企业成员UserID，该成员将继承离职成员的客户。<a href="https://developer.work.weixin.qq.com/document/path/94081" target="_blank">官方文档</a>.',
+		description: '接替成员的企业成员UserID，该成员将继承离职成员的客户。<a href="https://developer.work.weixin.qq.com/document/path/94081" target="_blank">官方文档</a>.。接替成员的UserID，继承离职成员的客户',
 		placeholder: 'lisi',
 	},
 	{
@@ -47,8 +45,7 @@ export const resignedTransferCustomerDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '要转移的客户external_userid列表，多个用逗号分隔',
-		description: '要转移的客户external_userid列表，多个用英文逗号分隔，一次最多转移100个客户。只能转移该离职成员的客户。<a href="https://developer.work.weixin.qq.com/document/path/94081" target="_blank">官方文档</a>',
+		description: '要转移的客户external_userid列表，多个用英文逗号分隔，一次最多转移100个客户。只能转移该离职成员的客户。<a href="https://developer.work.weixin.qq.com/document/path/94081" target="_blank">官方文档</a>。要转移的客户external_userid列表，多个用逗号分隔',
 		placeholder: 'wmxxxxxxxxxxxxxxxxxx,wmyyyyyyyyyyyyyyyyyy',
 	},
 ];

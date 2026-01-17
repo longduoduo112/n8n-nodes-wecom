@@ -16,7 +16,6 @@ export const getCustomUserIdDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '上下游的唯一ID。',
-		hint: '上下游ID',
 	},
 	{
 		displayName: '成员UserID列表',
@@ -28,7 +27,6 @@ export const getCustomUserIdDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '成员UserID列表，多个用逗号分隔，最多支持100个。',
-		hint: 'UserID列表，用逗号分隔',
 	},
 ];
 

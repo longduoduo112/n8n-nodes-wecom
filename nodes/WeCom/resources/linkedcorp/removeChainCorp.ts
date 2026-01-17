@@ -16,7 +16,6 @@ export const removeChainCorpDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '上下游的唯一ID。',
-		hint: '上下游ID',
 	},
 	{
 		displayName: '企业CorpID',
@@ -28,7 +27,6 @@ export const removeChainCorpDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '要移除的企业corpid。',
-		hint: '企业CorpID',
 	},
 ];
 

@@ -29,9 +29,8 @@ export const sendVoiceDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnlySendVoice,
 		},
-		hint: '开启后在时间间隔内相同内容的消息不会重复发送',
 		description:
-			'表示是否开启重复消息检查，0表示否，1表示是，默认0。<a href="https://developer.work.weixin.qq.com/document/path/90236#语音消息" target="_blank">官方文档</a>',
+			'表示是否开启重复消息检查，0表示否，1表示是，默认0。开启后在时间间隔内相同内容的消息不会重复发送。<a href="https://developer.work.weixin.qq.com/document/path/90236#语音消息" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '重复消息检查间隔（秒）',
@@ -48,9 +47,8 @@ export const sendVoiceDescription: INodeProperties[] = [
 			minValue: 0,
 			maxValue: 14400,
 		},
-		hint: '默认1800秒，最大不超过4小时（14400秒）',
 		description:
-			'表示重复消息检查的时间间隔，默认1800秒，最大不超过4小时。<a href="https://developer.work.weixin.qq.com/document/path/90236#语音消息" target="_blank">官方文档</a>',
+			'表示重复消息检查的时间间隔，默认1800秒，最大不超过4小时（14400秒）。<a href="https://developer.work.weixin.qq.com/document/path/90236#语音消息" target="_blank">官方文档</a>',
 	},
 ];
 

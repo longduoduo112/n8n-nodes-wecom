@@ -100,8 +100,7 @@ export const passiveReplyDescription: INodeProperties[] = [
 		},
 		default: '',
 		required: true,
-		description: '媒体文件ID（需先通过素材管理接口上传获得）',
-		hint: '可以使用表达式从前面节点获取，如：{{$json.media_id}}',
+		description: '媒体文件ID（需先通过素材管理接口上传获得）。可以使用表达式从前面节点获取，如：{{$JSON.media_id}}',
 	},
 	{
 		displayName: '视频标题',
@@ -962,9 +961,7 @@ export const passiveReplyDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: '可选。按钮替换名称，用于简单的按钮状态更新',
-		placeholder: 'replace_name',
-		hint: '如果只需要更新按钮状态，可以只填写此字段而不填写完整卡片内容',
+		description: '可选。按钮替换名称，用于简单的按钮状态更新。如果只需要更新按钮状态，可以只填写此字段而不填写完整卡片内容',
 	},
 ];
 

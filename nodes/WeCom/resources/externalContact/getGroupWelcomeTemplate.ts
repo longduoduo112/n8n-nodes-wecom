@@ -15,8 +15,7 @@ export const getGroupWelcomeTemplateDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '群欢迎语的模板id',
-		description: '群欢迎语的模板ID',
+		description: '群欢迎语的模板ID。群欢迎语的模板ID',
 	},
 ];
 

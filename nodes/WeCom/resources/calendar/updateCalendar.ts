@@ -16,7 +16,6 @@ export const updateCalendarDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '要更新的日历唯一标识ID',
-		hint: '日历ID',
 	},
 	{
 		displayName: '日历标题',
@@ -27,7 +26,6 @@ export const updateCalendarDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '日历标题，支持中文、英文、数字和部分特殊字符',
-		hint: '日历标题',
 	},
 	{
 		displayName: '日历描述',
@@ -38,7 +36,6 @@ export const updateCalendarDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '日历描述，支持中文、英文、数字和部分特殊字符',
-		hint: '日历描述',
 	},
 	{
 		displayName: '颜色',
@@ -63,7 +60,6 @@ export const updateCalendarDescription: INodeProperties[] = [
 		],
 		default: 0,
 		description: '日历颜色，用于在客户端显示时区分不同日历',
-		hint: '日历颜色',
 	},
 	{
 		displayName: '共享范围',
@@ -74,7 +70,6 @@ export const updateCalendarDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '共享范围，JSON格式数组。可包含userid（成员ID）或partyid（部门ID）',
-		hint: '共享范围，JSON格式数组',
 	},
 ];
 

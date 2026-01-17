@@ -37,7 +37,7 @@ export const sendTaskCardDescription: INodeProperties[] = [
 				taskcard_input_mode: ['json'],
 			},
 		},
-		hint: 'JSON输入模式下仅展示此字段',
+
 		description:
 			'可选。使用JSON直接输入taskcard对象。<a href="https://developer.work.weixin.qq.com/document/path/90236#任务卡片消息" target="_blank">官方文档</a>',
 	},
@@ -54,7 +54,6 @@ export const sendTaskCardDescription: INodeProperties[] = [
 				taskcard_input_mode: ['form'],
 			},
 		},
-		hint: '不超过128个字节',
 		description:
 			'标题，不超过128个字节，超过会自动截断（支持ID转译）。<a href="https://developer.work.weixin.qq.com/document/path/90236#任务卡片消息" target="_blank">官方文档</a>',
 	},
@@ -74,7 +73,6 @@ export const sendTaskCardDescription: INodeProperties[] = [
 				taskcard_input_mode: ['form'],
 			},
 		},
-		hint: '不超过512个字节',
 		description:
 			'描述，不超过512个字节，超过会自动截断（支持ID转译）。<a href="https://developer.work.weixin.qq.com/document/path/90236#任务卡片消息" target="_blank">官方文档</a>',
 	},
@@ -90,9 +88,8 @@ export const sendTaskCardDescription: INodeProperties[] = [
 				taskcard_input_mode: ['form'],
 			},
 		},
-		hint: '小程序或者URL必须填写一个',
 		description:
-			'可选。点击后跳转的链接。最长2048字节，请确保包含了协议头(http/https)。<a href="https://developer.work.weixin.qq.com/document/path/90236#任务卡片消息" target="_blank">官方文档</a>',
+			'可选。点击后跳转的链接。最长2048字节，请确保包含了协议头(http/https)。小程序或者URL必须填写一个。<a href="https://developer.work.weixin.qq.com/document/path/90236#任务卡片消息" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '任务ID',
@@ -107,9 +104,8 @@ export const sendTaskCardDescription: INodeProperties[] = [
 				taskcard_input_mode: ['form'],
 			},
 		},
-		hint: '只能由数字、字母和"_-@"组成，最长128字节',
 		description:
-			'任务 ID，同一个应用发送的任务卡片消息的任务 ID 不能重复。<a href="https://developer.work.weixin.qq.com/document/path/90236#任务卡片消息" target="_blank">官方文档</a>',
+			'任务 ID，同一个应用发送的任务卡片消息的任务 ID 不能重复。只能由数字、字母和"_-@"组成，最长128字节。<a href="https://developer.work.weixin.qq.com/document/path/90236#任务卡片消息" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '按钮列表',
@@ -141,9 +137,8 @@ export const sendTaskCardDescription: INodeProperties[] = [
 						required: true,
 						default: '',
 						placeholder: 'btn_agree',
-						hint: '只能由数字、字母和\'_-@\'组成，最长128字节',
 						description:
-							'按钮key值，用户点击后，会产生任务卡片回调事件，回调事件会将本参数作为EventKey返回。<a href="https://developer.work.weixin.qq.com/document/path/90236#任务卡片消息" target="_blank">官方文档</a>',
+							'按钮key值，用户点击后，会产生任务卡片回调事件，回调事件会将本参数作为EventKey返回。只能由数字、字母和\'_-@\'组成，最长128字节。<a href="https://developer.work.weixin.qq.com/document/path/90236#任务卡片消息" target="_blank">官方文档</a>',
 					},
 					{
 						displayName: '按钮名称',
@@ -160,9 +155,8 @@ export const sendTaskCardDescription: INodeProperties[] = [
 						name: 'is_bold',
 						type: 'boolean',
 						default: false,
-						hint: '按钮字体加粗，默认为否',
 						description:
-							'可选。按钮字体是否加粗。<a href="https://developer.work.weixin.qq.com/document/path/90236#任务卡片消息" target="_blank">官方文档</a>',
+							'可选。按钮字体是否加粗，默认为否。<a href="https://developer.work.weixin.qq.com/document/path/90236#任务卡片消息" target="_blank">官方文档</a>',
 					},
 					{
 						displayName: '按钮字体颜色',
@@ -206,7 +200,6 @@ export const sendTaskCardDescription: INodeProperties[] = [
 				taskcard_input_mode: ['form'],
 			},
 		},
-		hint: '开启后会将消息中的userid转为@对应成员',
 		description:
 			'可选。表示是否开启ID转译，0表示否，1表示是，默认0。开启后，消息中的userid会转译为@对应成员。<a href="https://developer.work.weixin.qq.com/document/path/90236#任务卡片消息" target="_blank">官方文档</a>',
 	},
@@ -221,9 +214,8 @@ export const sendTaskCardDescription: INodeProperties[] = [
 				taskcard_input_mode: ['form'],
 			},
 		},
-		hint: '开启后在时间间隔内相同内容的消息不会重复发送',
 		description:
-			'可选。表示是否开启重复消息检查，0表示否，1表示是，默认0。<a href="https://developer.work.weixin.qq.com/document/path/90236#任务卡片消息" target="_blank">官方文档</a>',
+			'可选。表示是否开启重复消息检查，0表示否，1表示是，默认0。开启后在时间间隔内相同内容的消息不会重复发送。<a href="https://developer.work.weixin.qq.com/document/path/90236#任务卡片消息" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '重复消息检查时间间隔',
@@ -241,8 +233,7 @@ export const sendTaskCardDescription: INodeProperties[] = [
 			minValue: 0,
 			maxValue: 14400,
 		},
-		hint: '默认1800秒，最大不超过4小时（14400秒）',
 		description:
-			'可选。表示是否重复消息检查的时间间隔，默认1800秒，最大不超过4小时。<a href="https://developer.work.weixin.qq.com/document/path/90236#任务卡片消息" target="_blank">官方文档</a>',
+			'可选。表示是否重复消息检查的时间间隔，默认1800秒，最大不超过4小时（14400秒）。<a href="https://developer.work.weixin.qq.com/document/path/90236#任务卡片消息" target="_blank">官方文档</a>',
 	},
 ];

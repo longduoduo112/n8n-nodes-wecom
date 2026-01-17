@@ -16,7 +16,6 @@ export const getSubCorpChainListDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '下级企业的corpid。',
-		hint: '企业CorpID',
 	},
 ];
 

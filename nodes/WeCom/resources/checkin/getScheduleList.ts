@@ -16,7 +16,6 @@ export const getScheduleListDescription: INodeProperties[] = [
 		},
 		default: 0,
 		description: '查询排班的起始时间，使用Unix时间戳格式（秒级）',
-		hint: '查询排班的起始时间（Unix时间戳）',
 	},
 	{
 		displayName: '结束时间',
@@ -28,7 +27,6 @@ export const getScheduleListDescription: INodeProperties[] = [
 		},
 		default: 0,
 		description: '查询排班的结束时间，使用Unix时间戳格式（秒级）',
-		hint: '查询排班的结束时间（Unix时间戳）',
 	},
 	{
 		displayName: '成员UserID列表',
@@ -40,7 +38,6 @@ export const getScheduleListDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '需要获取排班信息的成员UserID列表，多个UserID用逗号分隔',
-		hint: '需要获取排班信息的成员UserID列表，用逗号分隔',
 	},
 ];
 

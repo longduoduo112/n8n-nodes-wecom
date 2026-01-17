@@ -53,8 +53,7 @@ export const promotionQrcodeDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: '服务商provider_access_token',
-		hint: '服务商provider_access_token，获取方法参见服务商的凭证',
+		description: '服务商provider_access_token，获取方法参见服务商的凭证',
 	},
 	{
 		displayName: '推广包ID',
@@ -68,7 +67,7 @@ export const promotionQrcodeDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		hint: '最长为128个字节。在"服务商管理端-应用管理-推广二维码"，创建的推广码详情可查看',
+		description: '推广二维码的模板ID，最长为128个字节。在"服务商管理端-应用管理-推广二维码"，创建的推广码详情可查看',
 	},
 	{
 		displayName: '企业名称',
@@ -81,7 +80,7 @@ export const promotionQrcodeDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		hint: '若传递该参数，则在进入注册企业填写信息时，相应的值会自动填到表格中',
+		description: '企业名称。若传递该参数，则在进入注册企业填写信息时，相应的值会自动填到表格中',
 	},
 	{
 		displayName: '管理员姓名',
@@ -94,7 +93,7 @@ export const promotionQrcodeDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		hint: '若传递该参数，则在进入注册企业填写信息时，相应的值会自动填到表格中',
+		description: '管理员姓名。若传递该参数，则在进入注册企业填写信息时，相应的值会自动填到表格中',
 	},
 	{
 		displayName: '管理员手机号',
@@ -107,7 +106,7 @@ export const promotionQrcodeDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		hint: '若传递该参数，则在进入注册企业填写信息时，相应的值会自动填到表格中',
+		description: '管理员手机号。若传递该参数，则在进入注册企业填写信息时，相应的值会自动填到表格中',
 	},
 	{
 		displayName: 'State值',
@@ -120,8 +119,7 @@ export const promotionQrcodeDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: '用户自定义的状态值',
-		hint: '只支持英文字母和数字，最长为128字节。若指定该参数，接口"查询注册状态"及"注册完成回调事件"会相应返回该字段值',
+		description: '用户自定义的状态值。只支持英文字母和数字，最长为128字节。若指定该参数，接口"查询注册状态"及"注册完成回调事件"会相应返回该字段值',
 	},
 	{
 		displayName: '跟进人userid',
@@ -134,8 +132,7 @@ export const promotionQrcodeDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: '跟进人的userid',
-		hint: '必须是服务商所在企业的成员。若配置该值，则由该注册码创建的企业，在服务商管理后台，该企业的报备记录会自动标注跟进人员为指定成员',
+		description: '跟进人的userid。必须是服务商所在企业的成员。若配置该值，则由该注册码创建的企业，在服务商管理后台，该企业的报备记录会自动标注跟进人员为指定成员',
 	},
 	{
 		displayName: '注册码',
@@ -149,8 +146,7 @@ export const promotionQrcodeDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: '查询的注册码',
-		hint: 'register_code生成后的查询有效期为24小时。仅支持注册完成回调事件或者获取注册码返回的register_code调用',
+		description: '查询的注册码。register_code生成后的查询有效期为24小时。仅支持注册完成回调事件或者获取注册码返回的register_code调用',
 	},
 	{
 		displayName: 'Access Token',
@@ -167,8 +163,7 @@ export const promotionQrcodeDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: '查询注册状态接口返回的access_token',
-		hint: '查询注册状态接口返回的access_token（跟注册完成回调事件的AccessToken参数一致，请注意与provider_access_token的区别）',
+		description: '查询注册状态接口返回的access_token（跟注册完成回调事件的AccessToken参数一致，请注意与provider_access_token的区别）',
 	},
 	{
 		displayName: '授权方应用ID',
@@ -182,7 +177,7 @@ export const promotionQrcodeDescription: INodeProperties[] = [
 			},
 		},
 		default: 1,
-		hint: '需要设置可见范围的应用ID',
+		description: '需要设置可见范围的应用ID',
 	},
 	{
 		displayName: '应用可见范围（成员）',
@@ -195,7 +190,7 @@ export const promotionQrcodeDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		hint: '成员userid列表，多个用逗号分隔。若未填该字段，则清空可见范围中成员列表',
+		description: '成员userid列表，多个用逗号分隔。若未填该字段，则清空可见范围中成员列表',
 		placeholder: '例如: zhansan,lisi',
 	},
 	{
@@ -209,7 +204,7 @@ export const promotionQrcodeDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		hint: '部门ID列表，多个用逗号分隔。若未填该字段，则清空可见范围中部门列表',
+		description: '部门ID列表，多个用逗号分隔。若未填该字段，则清空可见范围中部门列表',
 		placeholder: '例如: 1,2,3',
 	},
 	{
@@ -223,7 +218,7 @@ export const promotionQrcodeDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		hint: '标签ID列表，多个用逗号分隔。若未填该字段，则清空可见范围中标签列表',
+		description: '标签ID列表，多个用逗号分隔。若未填该字段，则清空可见范围中标签列表',
 		placeholder: '例如: 1,2,3',
 	},
 	{
@@ -241,7 +236,6 @@ export const promotionQrcodeDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: '查询注册状态接口返回的access_token',
-		hint: '查询注册状态接口返回的access_token（跟注册完成回调事件的AccessToken参数一致，请注意与provider_access_token的区别）',
+		description: '查询注册状态接口返回的access_token（跟注册完成回调事件的AccessToken参数一致，请注意与provider_access_token的区别）',
 	},
 ];

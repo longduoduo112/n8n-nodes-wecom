@@ -29,7 +29,6 @@ export const getUploadByUrlResultDescription: INodeProperties[] = [
 			show: showOnlyForGetUploadByUrlResult,
 		},
 		default: '',
-		hint: '必填。异步上传任务返回的jobid，最长128字节，60分钟内有效',
 		description: '异步上传任务返回的jobid。最长128字节，60分钟内有效。返回结果中status：1-处理中，2-完成，3-异常失败。当status为2时返回media_id（3天内有效）和created_at。任务结果常见错误码（detail.errcode）：830001-URL非法，830003-URL下载数据失败，45001-文件大小超过限制，301019-文件MD5不匹配',
 		placeholder: 'jobid_S0MrnndvRG5fadSlLwiBqiDDbM143UqTmKP3152FZk4',
 	},

@@ -45,7 +45,6 @@ export const uploadTempDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnlyUploadTemp,
 		},
-		hint: '必填。媒体文件类型，所有文件size必须大于5个字节',
 		description: '媒体文件类型。素材上传得到media_id，该media_id仅三天内有效，media_id在同一企业内应用之间可以共享。<a href="https://developer.work.weixin.qq.com/document/path/90253" target="_blank">官方文档</a>',
 	},
 	{
@@ -57,7 +56,6 @@ export const uploadTempDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnlyUploadTemp,
 		},
-		hint: '必填。要上传的二进制文件属性名称，文件标识名为"media"，应包含filename、filelength、content-type等信息',
 		description: '要上传的二进制文件属性名称。POST的请求包中，form-data中媒体文件标识，应包含有filename、filelength、content-type等信息。filename标识文件展示的名称，使用该media_id发消息时，展示的文件名由该字段控制',
 		placeholder: 'data',
 	},

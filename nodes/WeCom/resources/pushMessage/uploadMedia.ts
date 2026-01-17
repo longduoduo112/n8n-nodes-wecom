@@ -39,7 +39,6 @@ export const uploadMediaDescription: INodeProperties[] = [
 		default: 'data',
 		required: true,
 		placeholder: 'data',
-		description: '包含要上传文件的二进制属性名称',
-		hint: '通常使用 "data"，这是 n8n 中默认的二进制数据属性名',
+		description: '包含要上传文件的二进制属性名称，通常使用 "data"，这是 n8n 中默认的二进制数据属性名。',
 	},
 ];

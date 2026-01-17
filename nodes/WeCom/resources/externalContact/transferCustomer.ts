@@ -18,8 +18,7 @@ export const transferCustomerDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '原跟进成员的UserID，客户将从该成员转出',
-		description: '原跟进成员的企业成员UserID。<a href="https://developer.work.weixin.qq.com/document/path/92125" target="_blank">官方文档</a>.',
+		description: '原跟进成员的企业成员UserID。<a href="https://developer.work.weixin.qq.com/document/path/92125" target="_blank">官方文档</a>.。原跟进成员的UserID，客户将从该成员转出',
 		placeholder: 'zhangsan',
 	},
 	{
@@ -34,8 +33,7 @@ export const transferCustomerDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '接替成员的UserID，客户将转给该成员',
-		description: '接替成员的企业成员UserID。<a href="https://developer.work.weixin.qq.com/document/path/92125" target="_blank">官方文档</a>.',
+		description: '接替成员的企业成员UserID。<a href="https://developer.work.weixin.qq.com/document/path/92125" target="_blank">官方文档</a>.。接替成员的UserID，客户将转给该成员',
 		placeholder: 'lisi',
 	},
 	{
@@ -47,8 +45,7 @@ export const transferCustomerDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '要转移的客户external_userid列表，多个用逗号分隔',
-		description: '要转移的客户external_userid列表，多个用英文逗号分隔，一次最多转移100个客户。<a href="https://developer.work.weixin.qq.com/document/path/92125" target="_blank">官方文档</a>',
+		description: '要转移的客户external_userid列表，多个用英文逗号分隔，一次最多转移100个客户。<a href="https://developer.work.weixin.qq.com/document/path/92125" target="_blank">官方文档</a>。要转移的客户external_userid列表，多个用逗号分隔',
 		placeholder: 'wmxxxxxxxxxxxxxxxxxx,wmyyyyyyyyyyyyyyyyyy',
 	},
 	{
@@ -59,8 +56,7 @@ export const transferCustomerDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '可选。转移成功后发给客户的消息，最多200个字符',
-		description: '转移成功后自动发送给客户的消息，用于告知客户更换跟进人。最多200个字符。<a href="https://developer.work.weixin.qq.com/document/path/92125" target="_blank">官方文档</a>',
+		description: '转移成功后自动发送给客户的消息，用于告知客户更换跟进人。最多200个字符。<a href="https://developer.work.weixin.qq.com/document/path/92125" target="_blank">官方文档</a>。可选。转移成功后发给客户的消息，最多200个字符',
 		placeholder: '您好，您的专属服务人员已更换为xxx',
 	},
 ];

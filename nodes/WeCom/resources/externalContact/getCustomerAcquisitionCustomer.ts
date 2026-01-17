@@ -15,8 +15,7 @@ export const getCustomerAcquisitionCustomerDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '获客链接id',
-		description: '获客链接ID',
+		description: '获客链接ID。获客链接ID',
 	},
 	{
 		displayName: 'Cursor',
@@ -26,7 +25,6 @@ export const getCustomerAcquisitionCustomerDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '用于分页查询的游标',
 		description: '用于分页查询的游标',
 	},
 	{
@@ -40,8 +38,7 @@ export const getCustomerAcquisitionCustomerDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '返回的最大记录数，整型，最大值1000',
-		description: 'Max number of results to return',
+		description: 'Max number of results to return。返回的最大记录数，整型，最大值1000',
 	},
 ];
 

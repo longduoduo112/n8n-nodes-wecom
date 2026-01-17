@@ -17,8 +17,7 @@ export const replyStreamWithTemplateCardDescription: INodeProperties[] = [
 		default: '',
 		placeholder: 'STREAMID',
 		required: true,
-		description: '自定义的唯一ID，首次回复时必须设置',
-		hint: '必填。自定义的唯一id，首次回复时必须设置。后续回调会根据这个id来获取最新的流式消息',
+		description: '自定义的唯一ID，首次回复时必须设置。必填。自定义的唯一ID，首次回复时必须设置。后续回调会根据这个ID来获取最新的流式消息',
 	},
 	{
 		displayName: '是否结束',
@@ -28,8 +27,7 @@ export const replyStreamWithTemplateCardDescription: INodeProperties[] = [
 			show: showOnlyForReplyStreamWithTemplateCard,
 		},
 		default: false,
-		description: '流式消息是否结束',
-		hint: '可选。流式消息是否结束，false表示继续，true表示结束',
+		description: '流式消息是否结束。可选。流式消息是否结束，false表示继续，true表示结束',
 	},
 	{
 		displayName: '消息内容',
@@ -43,8 +41,7 @@ export const replyStreamWithTemplateCardDescription: INodeProperties[] = [
 		},
 		default: '',
 		placeholder: '**广州**今日天气：29度，大部分多云',
-		description: '流式消息内容',
-		hint: '可选。流式消息内容，最长不超过20480个字节，必须是utf8编码。支持markdown格式',
+		description: '流式消息内容。可选。流式消息内容，最长不超过20480个字节，必须是utf8编码。支持markdown格式',
 	},
 	{
 		displayName: '图片列表',
@@ -61,8 +58,7 @@ export const replyStreamWithTemplateCardDescription: INodeProperties[] = [
 		},
 		default: {},
 		placeholder: '添加图片',
-		description: '图文混排消息列表',
-		hint: '可选。图文混排消息列表，目前仅支持图片类型。仅当finish=true时支持',
+		description: '图文混排消息列表。可选。图文混排消息列表，目前仅支持图片类型。仅当finish=true时支持',
 		options: [
 			{
 				name: 'image',
@@ -78,8 +74,7 @@ export const replyStreamWithTemplateCardDescription: INodeProperties[] = [
 						default: '',
 						placeholder: 'BASE64',
 						required: true,
-						description: '图片内容的base64编码',
-						hint: '必填。图片内容的base64编码。图片（base64编码前）最大不能超过10M，支持JPG、PNG格式',
+						description: '图片内容的base64编码。必填。图片内容的base64编码。图片（base64编码前）最大不能超过10M，支持JPG、PNG格式',
 					},
 					{
 						displayName: 'MD5值',
@@ -88,8 +83,7 @@ export const replyStreamWithTemplateCardDescription: INodeProperties[] = [
 						default: '',
 						placeholder: 'MD5',
 						required: true,
-						description: '图片内容的md5值',
-						hint: '必填。图片内容（base64编码前）的md5值',
+						description: '图片内容的md5值。必填。图片内容（base64编码前）的md5值',
 					},
 				],
 			},
@@ -104,7 +98,7 @@ export const replyStreamWithTemplateCardDescription: INodeProperties[] = [
 		},
 		default: '',
 		placeholder: 'FEEDBACKID',
-		hint: '可选。流式消息首次回复时候若字段不为空值，回复的消息被用户反馈时候会触发回调事件。有效长度为256字节以内，必须是utf-8编码',
+		description: '可选。流式消息首次回复时候若字段不为空值，回复的消息被用户反馈时候会触发回调事件。有效长度为256字节以内，必须是utf-8编码',
 	},
 	{
 		displayName: '模板卡片',
@@ -128,6 +122,6 @@ export const replyStreamWithTemplateCardDescription: INodeProperties[] = [
 		},
 		default: '',
 		placeholder: 'FEEDBACKID',
-		hint: '可选。若字段不为空值，回复的消息被用户反馈时候会触发回调事件。有效长度为256字节以内，必须是utf-8编码',
+		description: '可选。若字段不为空值，回复的消息被用户反馈时候会触发回调事件。有效长度为256字节以内，必须是utf-8编码',
 	},
 ];

@@ -65,8 +65,7 @@ export const paytoolDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: '应用服务商的接口调用凭证',
-		hint: '应用服务商的provider_access_token，获取方法参见服务商的凭证',
+		description: '应用服务商的接口调用凭证（provider_access_token），获取方法参见服务商的凭证',
 	},
 	{
 		displayName: '收银台API调用密钥',
@@ -82,8 +81,7 @@ export const paytoolDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: '收银台API调用密钥，用于签名',
-		hint: '获取路径：工作台->企业微信服务商助手->工具->收银台->收银台API调用密钥',
+		description: '收银台API调用密钥，用于签名。获取路径：工作台->企业微信服务商助手->工具->收银台->收银台API调用密钥',
 	},
 	{
 		displayName: '业务类型',
@@ -146,7 +144,7 @@ export const paytoolDescription: INodeProperties[] = [
 		default: 0,
 	},
 	{
-		displayName: '客户企业corpid',
+		displayName: '客户企业corpid（可选）',
 		name: 'customCorpid',
 		type: 'string',
 		displayOptions: {
@@ -156,7 +154,7 @@ export const paytoolDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		hint: '可以不指定，不多于64字节。代开发应用必须指定',
+		description: '可以不指定，不多于64字节。代开发应用必须指定',
 	},
 	{
 		displayName: '银行收款回单media_id',
@@ -170,11 +168,10 @@ export const paytoolDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: '支付方式选择服务商代支付时，需上传企业已支付服务商订单费用的凭证',
-		hint: '该ID即通过服务商上传临时素材上传文件后得到的media_id。支持图片(jpg/png/jpeg/bmp)、pdf。注意调用上传素材接口时，需要指定参数attachment_type=3，专用于收银台',
+		description: '支付方式选择服务商代支付时，需上传企业已支付服务商订单费用的凭证。该ID即通过服务商上传临时素材上传文件后得到的media_id。支持图片(jpg/png/jpeg/bmp)、pdf）。注意调用上传素材接口时，需要指定参数attachment_type=3，专用于收银台',
 	},
 	{
-		displayName: '订单创建人',
+		displayName: '订单创建人（可选）',
 		name: 'creator',
 		type: 'string',
 		displayOptions: {
@@ -184,8 +181,7 @@ export const paytoolDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: '订单创建人的userid',
-		hint: '设置的创建人需要有收银台收款的权限。设置后，如果有「企业取消应用订单」、「应用订单确认失败提醒」的消息会推送给创建人',
+		description: '订单创建人的userid。设置的创建人需要有收银台收款的权限，设置后，如果有「企业取消应用订单」、「应用订单确认失败提醒」的消息会推送给创建人',
 	},
 	// 普通第三方应用相关参数
 	{
@@ -239,7 +235,7 @@ export const paytoolDescription: INodeProperties[] = [
 				},
 				default: {},
 				placeholder: '添加应用',
-				hint: '可填充个数：1 ~ 20',
+				description: '可填充个数：1 ~ 20',
 				options: [
 					{
 						displayName: '应用',
@@ -251,7 +247,7 @@ export const paytoolDescription: INodeProperties[] = [
 								type: 'string',
 								required: true,
 								default: '',
-								hint: '不多于64字节',
+								description: '不多于64字节',
 							},
 							{
 								displayName: '应用ID',
@@ -266,31 +262,28 @@ export const paytoolDescription: INodeProperties[] = [
 								type: 'string',
 								required: true,
 								default: '',
-								hint: '不多于64字节',
+								description: '不多于64字节',
 							},
 							{
 								displayName: '购买人数',
 								name: 'userCount',
 								type: 'number',
 								default: 0,
-								description: '应用的购买人数，单位人',
-								hint: '当购买类型是新购或扩容，且购买的版本非固定总价类型时，需要填。注意对于扩容类型，表示增加的人数。取值范围：1 ~ 1000000',
+								description: '应用的购买人数，单位人。当购买类型是新购或扩容，且购买的版本非固定总价类型时，需要填。注意对于扩容类型，表示增加的人数。取值范围：1 ~ 1000000',
 							},
 							{
 								displayName: '购买时长（天）',
 								name: 'durationDays',
 								type: 'number',
 								default: 0,
-								description: '应用的购买时长，单位天',
-								hint: '当购买类型是新购或续期时必填。取值范围：1 ~ 1825',
+								description: '应用的购买时长，单位天。当购买类型是新购或续期时必填。取值范围：1 ~ 1825',
 							},
 							{
 								displayName: '生效日期',
 								name: 'takeEffectDate',
 								type: 'string',
 								default: '',
-								description: '生效日期，格式如：20221212',
-								hint: '只能是当天之后的日期，最迟不能超过一年。不填表示立即生效。不多于8字节',
+								description: '生效日期，格式如：20221212。只能是当天之后的日期，最迟不能超过一年。不填表示立即生效。不多于8字节',
 							},
 							{
 								displayName: '优惠信息',
@@ -428,7 +421,7 @@ export const paytoolDescription: INodeProperties[] = [
 								type: 'string',
 								required: true,
 								default: '',
-								hint: '不多于64字节',
+								description: '不多于64字节',
 							},
 							{
 								displayName: '应用总价（分）',
@@ -436,32 +429,28 @@ export const paytoolDescription: INodeProperties[] = [
 								type: 'number',
 								required: true,
 								default: 0,
-								description: '应用总价，单位分',
-								hint: '需大于0且不能超过500万',
+								description: '应用总价，单位分。需大于0且不能超过500万',
 							},
 							{
 								displayName: '购买人数',
 								name: 'userCount',
 								type: 'number',
 								default: 0,
-								description: '应用的购买人数，单位人',
-								hint: '当购买类型是新购或扩容时需要填。注意对于扩容类型，表示增加的人数。取值范围：1 ~ 1000000',
+								description: '应用的购买人数，单位人。当购买类型是新购或扩容时需要填。注意对于扩容类型，表示增加的人数。取值范围：1 ~ 1000000',
 							},
 							{
 								displayName: '购买时长（天）',
 								name: 'durationDays',
 								type: 'number',
 								default: 0,
-								description: '应用的购买时长，单位天',
-								hint: '当购买类型是新购或续期时必填。取值范围：1 ~ 1825',
+								description: '应用的购买时长，单位天。当购买类型是新购或续期时必填。取值范围：1 ~ 1825',
 							},
 							{
 								displayName: '生效日期',
 								name: 'takeEffectDate',
 								type: 'string',
 								default: '',
-								description: '生效日期，格式如：20221212',
-								hint: '新购选填，不填默认生效日期为当天。扩容不填，默认生效日期为当天。续期不填，默认生效日期为原生效版本结束日期。从生效日期当天开始计算购买时长。最迟不能超过一年。不多于8字节',
+								description: '生效日期，格式如：20221212。新购选填，不填默认生效日期为当天。扩容不填，默认生效日期为当天。续期不填，默认生效日期为原生效版本结束日期。从生效日期当天开始计算购买时长。最迟不能超过一年。不多于8字节',
 							},
 						],
 					},
@@ -575,7 +564,7 @@ export const paytoolDescription: INodeProperties[] = [
 								type: 'string',
 								required: true,
 								default: '',
-								hint: '不多于64字节',
+								description: '不多于64字节',
 							},
 							{
 								displayName: '应用ID',
@@ -589,8 +578,7 @@ export const paytoolDescription: INodeProperties[] = [
 								name: 'userCount',
 								type: 'number',
 								default: 0,
-								description: '应用的购买人数，单位人',
-								hint: '当购买类型是新购或扩容，且购买的版本非固定总价类型时，需要填。注意对于扩容类型，表示增加的人数。取值范围：1 ~ 1000000',
+								description: '应用的购买人数，单位人。当购买类型是新购或扩容，且购买的版本非固定总价类型时，需要填。注意对于扩容类型，表示增加的人数。取值范围：1 ~ 1000000',
 							},
 						],
 					},
@@ -627,7 +615,7 @@ export const paytoolDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		hint: '不多于64字节',
+		description: '收款订单号，不多于64字节',
 	},
 	// 获取收款订单列表相关参数
 	{
@@ -642,8 +630,7 @@ export const paytoolDescription: INodeProperties[] = [
 			},
 		},
 		default: 100,
-		description: '预期请求的数据量',
-		hint: '取值范围：1 ~ 2000',
+		description: '预期请求的数据量。取值范围：1 ~ 2000',
 		typeOptions: {
 			minValue: 1,
 			maxValue: 2000,
@@ -689,7 +676,7 @@ export const paytoolDescription: INodeProperties[] = [
 			},
 		},
 		default: 0,
-		hint: 'unix时间戳（秒）',
+		description: 'Unix时间戳（秒）',
 	},
 	{
 		displayName: '结束时间',
@@ -702,7 +689,7 @@ export const paytoolDescription: INodeProperties[] = [
 			},
 		},
 		default: 0,
-		hint: 'unix时间戳（秒）',
+		description: 'Unix时间戳（秒）',
 	},
 	{
 		displayName: '分页游标',
@@ -715,8 +702,7 @@ export const paytoolDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: '用于分页查询的游标',
-		hint: '字符串类型，由上一次调用返回，首次调用不填',
+		description: '用于分页查询的游标。字符串类型，由上一次调用返回，首次调用不填',
 	},
 	// 获取收款订单详情相关参数
 	{
@@ -731,7 +717,7 @@ export const paytoolDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		hint: '收款订单号',
+		description: '收款订单号',
 	},
 	// 获取发票列表相关参数
 	{
@@ -745,8 +731,7 @@ export const paytoolDescription: INodeProperties[] = [
 			},
 		},
 		default: 0,
-		description: '开始时间，申请时间',
-		hint: 'unix时间戳（秒）。不能单独指定该字段，start_time和end_time必须同时指定',
+		description: '开始时间（申请时间），unix时间戳（秒）。不能单独指定该字段，start_time和end_time必须同时指定',
 	},
 	{
 		displayName: '结束时间',
@@ -759,8 +744,7 @@ export const paytoolDescription: INodeProperties[] = [
 			},
 		},
 		default: 0,
-		description: '结束时间，申请时间',
-		hint: 'unix时间戳（秒）。不能单独指定该字段，start_time和end_time必须同时指定',
+		description: '结束时间（申请时间），unix时间戳（秒）。不能单独指定该字段，start_time和end_time必须同时指定',
 	},
 	{
 		displayName: '分页游标',
@@ -773,8 +757,7 @@ export const paytoolDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: '用于分页查询的游标',
-		hint: '字符串类型，由上一次调用返回，首次调用可不填',
+		description: '用于分页查询的游标。字符串类型，由上一次调用返回，首次调用可不填',
 	},
 	{
 		displayName: '返回最大记录数',
@@ -787,8 +770,7 @@ export const paytoolDescription: INodeProperties[] = [
 			},
 		},
 		default: 50,
-		description: '返回的最大记录数',
-		hint: '整型，最大值100，默认值50',
+		description: '返回的最大记录数。整型，最大值100，默认值50',
 		typeOptions: {
 			minValue: 1,
 			maxValue: 100,
@@ -808,7 +790,6 @@ export const paytoolDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '要标记开票状态的订单号',
-		hint: '订单号',
 	},
 	{
 		displayName: '操作人userid',
@@ -822,8 +803,7 @@ export const paytoolDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: '标记开票状态的操作人',
-		hint: '操作人需要有「收银台-发票管理」的权限',
+		description: '标记开票状态的操作人。操作人需要有「收银台-发票管理」的权限',
 	},
 	{
 		displayName: '开票状态',
@@ -854,8 +834,7 @@ export const paytoolDescription: INodeProperties[] = [
 			},
 		],
 		default: 1,
-		description: '要标记的开票状态',
-		hint: '若订单对应开票状态为已开票，此次标记将不生效',
+		description: '要标记的开票状态。若订单对应开票状态为已开票，此次标记将不生效',
 	},
 	{
 		displayName: '开票备注',
@@ -869,7 +848,6 @@ export const paytoolDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: '填写开票备注',
-		hint: '例如发票邮寄单号等，客户侧可见。不超过200字节',
+		description: '填写开票备注，例如发票邮寄单号等，客户侧可见。不超过200字节',
 	},
 ];

@@ -8,8 +8,7 @@ export const getFormStatisticDescription: INodeProperties[] = [
 		required: true,
 		displayOptions: { show: showOnly },
 		default: '',
-		description: '操作的收集表的repeated_id，来源于get_form_info的返回',
-		hint: '收集表的repeated_id'
+		description: '操作的收集表的repeated_id，来源于get_form_info的返回。收集表的repeated_id',
 	},
 	{
 		displayName: '请求类型',

@@ -16,7 +16,6 @@ export const getVacationQuotaDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '要查询假期余额的成员UserID',
-		hint: '员工的UserID',
 	},
 ];
 

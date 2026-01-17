@@ -11,7 +11,6 @@ export const renameFileDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '文件或文件夹的ID',
-		hint: '文件ID',
 	},
 	{
 		displayName: '新名称',
@@ -21,6 +20,5 @@ export const renameFileDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '新的文件或文件夹名称',
-		hint: '新名称',
 	},
 ];

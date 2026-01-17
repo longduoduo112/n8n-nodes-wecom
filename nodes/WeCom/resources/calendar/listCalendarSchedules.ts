@@ -16,7 +16,6 @@ export const listCalendarSchedulesDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '要查询日程的日历唯一标识ID',
-		hint: '日历ID',
 	},
 	{
 		displayName: '偏移量',
@@ -27,7 +26,6 @@ export const listCalendarSchedulesDescription: INodeProperties[] = [
 		},
 		default: 0,
 		description: '分页查询的偏移量，用于获取后续页面的数据',
-		hint: '分页偏移量',
 	},
 	{
 		displayName: '限制数量',
@@ -41,7 +39,6 @@ export const listCalendarSchedulesDescription: INodeProperties[] = [
 		},
 		default: 50,
 		description: '单次返回的日程数量上限，最多支持1000个',
-		hint: '返回的日程数量，最多1000',
 	},
 ];
 

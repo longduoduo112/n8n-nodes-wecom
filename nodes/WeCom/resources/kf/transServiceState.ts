@@ -19,7 +19,6 @@ export const transServiceStateDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '客服账号的唯一标识ID。<a href="https://developer.work.weixin.qq.com/document/path/94669" target="_blank">官方文档</a>.',
-		hint: '客服账号',
 		placeholder: 'wkxxxxxxxxxxxxxxxxxx',
 	},
 	{
@@ -31,7 +30,6 @@ export const transServiceStateDescription: INodeProperties[] = [
 			show: showOnlyForTransServiceState,
 		},
 		default: '',
-		hint: '客户的external_userid',
 		description: '客户的外部联系人UserID，以"wm"开头。<a href="https://developer.work.weixin.qq.com/document/path/94669" target="_blank">官方文档</a>',
 		placeholder: 'wmxxxxxxxxxxxxxxxxxx',
 	},
@@ -66,7 +64,6 @@ export const transServiceStateDescription: INodeProperties[] = [
 			},
 		],
 		default: 3,
-		hint: '变更的目标服务状态',
 		description: '变更后的服务状态。0-未处理 1-由智能助手接待 2-待人工接待 3-由人工接待 4-已结束。<a href="https://developer.work.weixin.qq.com/document/path/94669" target="_blank">官方文档</a>',
 	},
 	{
@@ -77,7 +74,6 @@ export const transServiceStateDescription: INodeProperties[] = [
 			show: showOnlyForTransServiceState,
 		},
 		default: '',
-		hint: '可选。接待人员的userid（service_state=3时必填）',
 		description: '接待人员的UserID，当service_state为3（由人工接待）时必填。<a href="https://developer.work.weixin.qq.com/document/path/94669" target="_blank">官方文档</a>',
 		placeholder: 'zhangsan',
 	},

@@ -79,8 +79,7 @@ export const setWorkbenchTemplateDescription: INodeProperties[] = [
 				type: ['keydata'],
 			},
 		},
-		hint: 'items数组不超过4个',
-		description: '关键数据型模版数据。items.key为数据名称，items.data为数据值，items.jump_url为跳转URL，items.pagepath为小程序页面路径',
+		description: '关键数据型模版数据。items数组不超过4个。items.key为数据名称，items.data为数据值，items.jump_url为跳转URL，items.pagepath为小程序页面路径',
 	},
 	{
 		displayName: '图片型配置（JSON）',
@@ -96,8 +95,7 @@ export const setWorkbenchTemplateDescription: INodeProperties[] = [
 				type: ['image'],
 			},
 		},
-		hint: '图片最佳比例为3.35:1',
-		description: '图片型模版数据。URL为图片地址，jump_url为跳转URL，pagepath为小程序页面路径',
+		description: '图片型模版数据。图片最佳比例为3.35:1。URL为图片地址，jump_url为跳转URL，pagepath为小程序页面路径',
 	},
 	{
 		displayName: '列表型配置（JSON）',
@@ -121,8 +119,7 @@ export const setWorkbenchTemplateDescription: INodeProperties[] = [
 				type: ['list'],
 			},
 		},
-		hint: 'items数组不超过3个',
-		description: '列表型模版数据。items.title为显示文字，items.jump_url为跳转URL，items.pagepath为小程序页面路径',
+		description: '列表型模版数据。items数组不超过3个。items.title为显示文字，items.jump_url为跳转URL，items.pagepath为小程序页面路径',
 	},
 	{
 		displayName: 'Webview型配置（JSON）',
@@ -141,8 +138,7 @@ export const setWorkbenchTemplateDescription: INodeProperties[] = [
 				type: ['webview'],
 			},
 		},
-		hint: 'height可选single_row或double_row',
-		description: 'Webview型模版数据。URL为渲染展示的URL，jump_url为跳转URL，height为高度，hide_title是否隐藏标题，enable_webview_click是否开启链接跳转',
+		description: 'Webview型模版数据。height可选single_row或double_row。URL为渲染展示的URL，jump_url为跳转URL，height为高度，hide_title是否隐藏标题，enable_webview_click是否开启链接跳转',
 	},
 	{
 		displayName: '覆盖用户数据',

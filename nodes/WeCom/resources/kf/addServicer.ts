@@ -19,7 +19,6 @@ export const addServicerDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '客服账号的唯一标识ID。<a href="https://developer.work.weixin.qq.com/document/path/94646" target="_blank">官方文档</a>.',
-		hint: '客服账号',
 		placeholder: 'wkxxxxxxxxxxxxxxxxxx',
 	},
 	{
@@ -31,7 +30,6 @@ export const addServicerDescription: INodeProperties[] = [
 			show: showOnlyForAddServicer,
 		},
 		default: '',
-		hint: '接待人员userid列表，多个用逗号分隔',
 		description: '要添加的接待人员UserID列表，多个用英文逗号分隔。<a href="https://developer.work.weixin.qq.com/document/path/94646" target="_blank">官方文档</a>',
 		placeholder: 'zhangsan,lisi',
 	},

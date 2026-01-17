@@ -11,7 +11,6 @@ export const removeMemberDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '会议唯一标识ID',
-		hint: '会议ID',
 	},
 	{
 		displayName: '移除成员',

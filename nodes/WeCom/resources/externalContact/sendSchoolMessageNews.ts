@@ -34,8 +34,7 @@ export const sendSchoolMessageNewsDescription: INodeProperties[] = [
 						default: '',
 						placeholder: '图文标题',
 						required: true,
-						description: '标题，不超过128个字节，超过会自动截断（支持ID转译）。',
-						hint: '必填。标题，不超过128个字节，超过会自动截断，支持id转译',
+						description: '标题，不超过128个字节，超过会自动截断（支持ID转译）。必填。标题，不超过128个字节，超过会自动截断，支持ID转译',
 					},
 					{
 						displayName: '描述',
@@ -46,8 +45,7 @@ export const sendSchoolMessageNewsDescription: INodeProperties[] = [
 						},
 						default: '',
 						placeholder: '图文描述',
-						description: '可选。描述，不超过512个字节，超过会自动截断（支持ID转译）。',
-						hint: '可选。描述，不超过512个字节，超过会自动截断，支持id转译',
+						description: '可选。描述，不超过512个字节，超过会自动截断（支持ID转译）。可选。描述，不超过512个字节，超过会自动截断，支持ID转译',
 					},
 					{
 						displayName: '跳转链接',
@@ -57,8 +55,7 @@ export const sendSchoolMessageNewsDescription: INodeProperties[] = [
 						placeholder: 'https://example.com',
 						required: true,
 						description:
-							'点击后跳转的链接。',
-						hint: '必填。点击后跳转的链接',
+							'点击后跳转的链接。。必填。点击后跳转的链接',
 					},
 					{
 						displayName: '图片链接',
@@ -67,8 +64,7 @@ export const sendSchoolMessageNewsDescription: INodeProperties[] = [
 						default: '',
 						placeholder: 'https://example.com/image.jpg',
 						description:
-							'可选。图文消息的图片链接，支持JPG、PNG格式，较好的效果为大图1068*455，小图150*150。',
-						hint: '可选。图文消息的图片链接，支持JPG、PNG格式，较好的效果为大图1068*455，小图150*150',
+							'可选。图文消息的图片链接，支持JPG、PNG格式，较好的效果为大图1068*455，小图150*150。。可选。图文消息的图片链接，支持JPG、PNG格式，较好的效果为大图1068*455，小图150*150',
 					},
 				],
 			},
@@ -82,7 +78,6 @@ export const sendSchoolMessageNewsDescription: INodeProperties[] = [
 			show: showOnlyForSendSchoolMessageNews,
 		},
 		default: false,
-		description: '可选。表示是否开启ID转译，0表示否，1表示是，默认0。开启后可以将userid/部门ID转成对应的企业通讯录内部的用户名/部门名。',
-		hint: '可选。表示是否开启id转译，0表示否，1表示是，默认0。开启后可以将userid/部门id转成对应的企业通讯录内部的用户名/部门名',
+		description: '可选。表示是否开启ID转译，0表示否，1表示是，默认0。开启后可以将userid/部门ID转成对应的企业通讯录内部的用户名/部门名。可选。表示是否开启ID转译，0表示否，1表示是，默认0。开启后可以将UserID/部门ID转成对应的企业通讯录内部的用户名/部门名',
 	},
 ];

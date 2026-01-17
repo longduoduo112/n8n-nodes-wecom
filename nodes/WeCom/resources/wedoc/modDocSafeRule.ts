@@ -1,7 +1,7 @@
 import type { INodeProperties } from 'n8n-workflow';
 const showOnly = { resource: ['wedoc'], operation: ['modDocSafeRule'] };
 export const modDocSafeRuleDescription: INodeProperties[] = [
-	{ displayName: '文档ID', name: 'docid', type: 'string', required: true, displayOptions: { show: showOnly }, default: '', description: '文档的docid。', hint: '文档ID' },
+	{ displayName: '文档ID', name: 'docid', type: 'string', required: true, displayOptions: { show: showOnly }, default: '', description: '文档的docid' },
 	{
 		displayName: '启用水印',
 		name: 'watermark_enable',

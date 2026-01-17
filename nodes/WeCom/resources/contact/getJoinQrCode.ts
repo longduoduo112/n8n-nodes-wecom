@@ -33,6 +33,5 @@ export const getJoinQrCodeDescription: INodeProperties[] = [
 		],
 		default: 1,
 		description: '可选。Qrcode尺寸类型，1: 171 x 171; 2: 399 x 399; 3: 741 x 741; 4: 2052 x 2052。支持企业用户获取实时成员加入二维码，二维码链接有效期7天。<a href="https://developer.work.weixin.qq.com/document/path/91714" target="_blank">官方文档</a>',
-		hint: '二维码尺寸类型，返回的二维码链接有效期7天',
 	},
 ];

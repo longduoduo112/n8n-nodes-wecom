@@ -15,8 +15,7 @@ export const opengidToChatidDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '客户群的opengid',
-		description: '客户群的opengid',
+		description: '客户群的opengid。客户群的opengid',
 	},
 ];
 

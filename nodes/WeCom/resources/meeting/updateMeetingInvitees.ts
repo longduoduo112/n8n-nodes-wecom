@@ -11,7 +11,6 @@ export const updateMeetingInviteesDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '要更新受邀成员的会议唯一标识ID',
-		hint: '会议ID',
 	},
 	{
 		displayName: '添加成员',

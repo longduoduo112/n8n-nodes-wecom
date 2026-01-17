@@ -16,7 +16,6 @@ export const getUserMeetingsDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '要查询会议列表的用户ID',
-		hint: '用户ID',
 	},
 	{
 		displayName: '游标',
@@ -27,7 +26,6 @@ export const getUserMeetingsDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '分页查询的游标，用于获取后续页面的数据',
-		hint: '分页游标',
 	},
 	{
 		displayName: '限制数量',
@@ -41,7 +39,6 @@ export const getUserMeetingsDescription: INodeProperties[] = [
 		},
 		default: 50,
 		description: '单次返回的会议数量上限',
-		hint: '返回的会议数量',
 	},
 ];
 

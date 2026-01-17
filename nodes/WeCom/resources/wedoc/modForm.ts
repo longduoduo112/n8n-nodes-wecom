@@ -1,7 +1,7 @@
 import type { INodeProperties } from 'n8n-workflow';
 const showOnly = { resource: ['wedoc'], operation: ['modForm'] };
 export const modFormDescription: INodeProperties[] = [
-	{ displayName: '收集表ID', name: 'formid', type: 'string', required: true, displayOptions: { show: showOnly }, default: '', description: '收集表的formid。', hint: '收集表ID' },
+	{ displayName: '收集表ID', name: 'formid', type: 'string', required: true, displayOptions: { show: showOnly }, default: '', description: '收集表的formid。收集表ID' },
 	{
 		displayName: '收集表标题',
 		name: 'form_title',
@@ -9,7 +9,6 @@ export const modFormDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '新的收集表标题，留空则不修改',
-		hint: '新标题',
 	},
 	{
 		displayName: '收集表描述',
@@ -18,7 +17,6 @@ export const modFormDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '新的收集表描述，留空则不修改',
-		hint: '新描述',
 	},
 	{
 		displayName: '收集表设置',

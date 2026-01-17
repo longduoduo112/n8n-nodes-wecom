@@ -20,6 +20,6 @@ export const replyWelcomeTextDescription: INodeProperties[] = [
 		default: '',
 		placeholder: 'hello\nI\'m RobotA',
 		required: true,
-		hint: '必填。文本内容，支持换行符\\n',
+		description: '必填。文本内容，支持换行符\\n',
 	},
 ];

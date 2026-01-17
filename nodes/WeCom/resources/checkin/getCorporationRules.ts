@@ -17,7 +17,6 @@ export const getCorporationRulesDescription: INodeProperties[] = [
 		},
 		options: [],
 		description: '获取企业所有打卡规则，此操作无需额外参数',
-		hint: '获取企业所有打卡规则，无需额外参数',
 	},
 ];
 

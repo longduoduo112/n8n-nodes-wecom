@@ -1,8 +1,8 @@
 import type { INodeProperties } from 'n8n-workflow';
 const showOnly = { resource: ['wedoc'], operation: ['addSmartsheetView'] };
 export const addSmartsheetViewDescription: INodeProperties[] = [
-	{ displayName: '文档ID', name: 'docid', type: 'string', required: true, displayOptions: { show: showOnly }, default: '', description: '智能表格的docid。', hint: '文档ID' },
-	{ displayName: '子表ID', name: 'sheet_id', type: 'string', required: true, displayOptions: { show: showOnly }, default: '', description: '子表的sheet_id。', hint: '子表ID' },
+	{ displayName: '文档ID', name: 'docid', type: 'string', required: true, displayOptions: { show: showOnly }, default: '', description: '智能表格的docid' },
+	{ displayName: '子表ID', name: 'sheet_id', type: 'string', required: true, displayOptions: { show: showOnly }, default: '', description: '子表的sheet_id' },
 	{
 		displayName: '视图名称',
 		name: 'view_title',
@@ -10,8 +10,7 @@ export const addSmartsheetViewDescription: INodeProperties[] = [
 		required: true,
 		displayOptions: { show: showOnly },
 		default: '',
-		description: '视图名称，最多255个字符。',
-		hint: '视图标题',
+		description: '视图名称，最多255个字符。视图标题',
 	},
 	{
 		displayName: '视图类型',

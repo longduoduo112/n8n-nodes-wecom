@@ -19,7 +19,6 @@ export const listKfAccountDescription: INodeProperties[] = [
 		},
 		default: 50,
 		description: '每页返回的记录数量，默认50，最大100。<a href="https://developer.work.weixin.qq.com/document/path/94661" target="_blank">官方文档</a>',
-		hint: '可选。返回的账号数量，取值范围1~100',
 	},
 	{
 		displayName: '游标',
@@ -29,7 +28,6 @@ export const listKfAccountDescription: INodeProperties[] = [
 			show: showOnlyForListKfAccount,
 		},
 		default: '',
-		hint: '可选。分页游标',
 		description: '用于分页查询的游标，首次请求留空，后续请求传入上次返回的next_cursor值。<a href="https://developer.work.weixin.qq.com/document/path/94661" target="_blank">官方文档</a>',
 		placeholder: '',
 	},

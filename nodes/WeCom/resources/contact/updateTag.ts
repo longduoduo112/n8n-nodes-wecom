@@ -17,7 +17,6 @@ export const updateTagDescription: INodeProperties[] = [
 		default: '',
 		placeholder: '12',
 		description: '标签ID。调用的应用必须是指定标签的创建者。<a href="https://developer.work.weixin.qq.com/document/path/90211" target="_blank">官方文档</a>',
-		hint: '要更新的标签 ID',
 	},
 	{
 		displayName: '标签名称',
@@ -30,7 +29,6 @@ export const updateTagDescription: INodeProperties[] = [
 		default: '',
 		placeholder: 'UI design',
 		description: '标签名称，长度限制为32个字（汉字或英文字母），标签不可与其他标签重名。调用的应用必须是指定标签的创建者。<a href="https://developer.work.weixin.qq.com/document/path/90211" target="_blank">官方文档</a>',
-		hint: '标签名称，32字以内，不可与其他标签重名',
 	},
 ];
 

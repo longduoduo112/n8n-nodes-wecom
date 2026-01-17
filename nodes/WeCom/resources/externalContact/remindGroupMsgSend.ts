@@ -15,8 +15,7 @@ export const remindGroupMsgSendDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '群发消息的id',
-		description: '群发消息的ID，由创建企业群发返回',
+		description: '群发消息的ID，由创建企业群发返回。群发消息的ID',
 	},
 ];
 

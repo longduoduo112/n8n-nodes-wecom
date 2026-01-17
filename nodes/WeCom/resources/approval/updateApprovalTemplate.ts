@@ -16,7 +16,6 @@ export const updateApprovalTemplateDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '要更新的审批模板唯一标识ID',
-		hint: '要更新的模板ID',
 	},
 	{
 		displayName: '模板数据',
@@ -28,7 +27,6 @@ export const updateApprovalTemplateDescription: INodeProperties[] = [
 		},
 		default: '{}',
 		description: '更新的审批模板数据，JSON格式。包含template_name（模板名称）等字段',
-		hint: '更新的模板数据，包含template_name等字段',
 	},
 ];
 

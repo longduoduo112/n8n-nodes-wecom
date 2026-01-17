@@ -11,7 +11,6 @@ export const renameSpaceDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '微盘空间的ID',
-		hint: '空间ID',
 	},
 	{
 		displayName: '新空间名称',
@@ -21,6 +20,5 @@ export const renameSpaceDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '新的空间名称',
-		hint: '新名称',
 	},
 ];

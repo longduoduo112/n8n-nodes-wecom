@@ -1,17 +1,15 @@
 import type { INodeProperties } from 'n8n-workflow';
 const showOnly = { resource: ['wedoc'], operation: ['querySmartsheetView'] };
 export const querySmartsheetViewDescription: INodeProperties[] = [
-	{ displayName: '文档ID', name: 'docid', type: 'string', required: true, displayOptions: { show: showOnly }, default: '', description: '智能表格的docid。', hint: '文档ID' },
-	{ displayName: '子表ID', name: 'sheet_id', type: 'string', required: true, displayOptions: { show: showOnly }, default: '', description: '子表的sheet_id。', hint: '子表ID' },
+	{ displayName: '文档ID', name: 'docid', type: 'string', required: true, displayOptions: { show: showOnly }, default: '', description: '智能表格的docid' },
+	{ displayName: '子表ID', name: 'sheet_id', type: 'string', required: true, displayOptions: { show: showOnly }, default: '', description: '子表的sheet_id' },
 	{
 		displayName: '视图ID列表',
 		name: 'view_ids',
 		type: 'string',
 		displayOptions: { show: showOnly },
 		default: '',
-		description: '指定要查询的视图ID列表，用逗号分隔。不填则查询所有视图。',
-		placeholder: '如: view_001,view_002',
-		hint: '留空查询所有视图',
+		description: '指定要查询的视图ID列表，用逗号分隔。不填则查询所有视图。留空查询所有视图',
 	},
 	{
 		displayName: '偏移量',

@@ -16,7 +16,6 @@ export const endMeetingDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '要结束的会议唯一标识ID',
-		hint: '要结束的会议ID',
 	},
 ];
 

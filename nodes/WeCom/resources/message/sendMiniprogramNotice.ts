@@ -37,7 +37,7 @@ export const sendMiniprogramNoticeDescription: INodeProperties[] = [
 				miniprogram_notice_input_mode: ['json'],
 			},
 		},
-		hint: 'JSON输入模式下仅展示此字段',
+
 		description:
 			'可选。使用JSON直接输入miniprogram_notice对象。<a href="https://developer.work.weixin.qq.com/document/path/90236#小程序通知消息" target="_blank">官方文档</a>',
 	},
@@ -69,9 +69,8 @@ export const sendMiniprogramNoticeDescription: INodeProperties[] = [
 				miniprogram_notice_input_mode: ['form'],
 			},
 		},
-		hint: '不填则消息点击后不跳转',
 		description:
-			'可选。点击消息卡片后的小程序页面，最长1024字节，仅限本小程序内的页面。<a href="https://developer.work.weixin.qq.com/document/path/90236#小程序通知消息" target="_blank">官方文档</a>',
+			'可选。点击消息卡片后的小程序页面，最长1024字节，仅限本小程序内的页面。不填则消息点击后不跳转。<a href="https://developer.work.weixin.qq.com/document/path/90236#小程序通知消息" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '消息标题',
@@ -86,7 +85,6 @@ export const sendMiniprogramNoticeDescription: INodeProperties[] = [
 				miniprogram_notice_input_mode: ['form'],
 			},
 		},
-		hint: '长度限制4-12个汉字',
 		description:
 			'消息标题，长度限制4-12个汉字（支持ID转译）。<a href="https://developer.work.weixin.qq.com/document/path/90236#小程序通知消息" target="_blank">官方文档</a>',
 	},
@@ -105,7 +103,6 @@ export const sendMiniprogramNoticeDescription: INodeProperties[] = [
 				miniprogram_notice_input_mode: ['form'],
 			},
 		},
-		hint: '长度限制4-12个汉字',
 		description:
 			'可选。消息描述，长度限制4-12个汉字（支持ID转译）。<a href="https://developer.work.weixin.qq.com/document/path/90236#小程序通知消息" target="_blank">官方文档</a>',
 	},
@@ -120,7 +117,6 @@ export const sendMiniprogramNoticeDescription: INodeProperties[] = [
 				miniprogram_notice_input_mode: ['form'],
 			},
 		},
-		hint: '放大第一个内容项',
 		description:
 			'可选。是否放大第一个content_item。<a href="https://developer.work.weixin.qq.com/document/path/90236#小程序通知消息" target="_blank">官方文档</a>',
 	},
@@ -153,7 +149,6 @@ export const sendMiniprogramNoticeDescription: INodeProperties[] = [
 						required: true,
 						default: '',
 						placeholder: '例如：姓名',
-						hint: '长度10个汉字以内',
 						description:
 							'长度10个汉字以内。<a href="https://developer.work.weixin.qq.com/document/path/90236#小程序通知消息" target="_blank">官方文档</a>',
 					},
@@ -164,7 +159,6 @@ export const sendMiniprogramNoticeDescription: INodeProperties[] = [
 						required: true,
 						default: '',
 						placeholder: '例如：张三',
-						hint: '长度30个汉字以内',
 						description:
 							'长度30个汉字以内（支持ID转译）。<a href="https://developer.work.weixin.qq.com/document/path/90236#小程序通知消息" target="_blank">官方文档</a>',
 					},
@@ -183,7 +177,6 @@ export const sendMiniprogramNoticeDescription: INodeProperties[] = [
 				miniprogram_notice_input_mode: ['form'],
 			},
 		},
-		hint: '开启后会将消息中的userid转为@对应成员',
 		description:
 			'可选。表示是否开启ID转译，0表示否，1表示是，默认0。开启后，消息中的userid会转译为@对应成员。<a href="https://developer.work.weixin.qq.com/document/path/90236#小程序通知消息" target="_blank">官方文档</a>',
 	},
@@ -198,9 +191,8 @@ export const sendMiniprogramNoticeDescription: INodeProperties[] = [
 				miniprogram_notice_input_mode: ['form'],
 			},
 		},
-		hint: '开启后在时间间隔内相同内容的消息不会重复发送',
 		description:
-			'可选。表示是否开启重复消息检查，0表示否，1表示是，默认0。<a href="https://developer.work.weixin.qq.com/document/path/90236#小程序通知消息" target="_blank">官方文档</a>',
+			'可选。表示是否开启重复消息检查，0表示否，1表示是，默认0。开启后在时间间隔内相同内容的消息不会重复发送。<a href="https://developer.work.weixin.qq.com/document/path/90236#小程序通知消息" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '重复消息检查时间间隔',
@@ -218,8 +210,7 @@ export const sendMiniprogramNoticeDescription: INodeProperties[] = [
 			minValue: 0,
 			maxValue: 14400,
 		},
-		hint: '默认1800秒，最大不超过4小时（14400秒）',
 		description:
-			'可选。表示是否重复消息检查的时间间隔，默认1800秒，最大不超过4小时。<a href="https://developer.work.weixin.qq.com/document/path/90236#小程序通知消息" target="_blank">官方文档</a>',
+			'可选。表示是否重复消息检查的时间间隔，默认1800秒，最大不超过4小时（14400秒）。<a href="https://developer.work.weixin.qq.com/document/path/90236#小程序通知消息" target="_blank">官方文档</a>',
 	},
 ];

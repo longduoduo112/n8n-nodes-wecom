@@ -15,8 +15,7 @@ export const delGroupWelcomeTemplateDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '群欢迎语的模板id',
-		description: '群欢迎语的模板ID',
+		description: '群欢迎语的模板ID。群欢迎语的模板ID',
 	},
 	{
 		displayName: '应用ID',
@@ -26,7 +25,6 @@ export const delGroupWelcomeTemplateDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '授权方安装的应用agentid',
 		description: '授权方安装的应用agentid',
 	},
 ];

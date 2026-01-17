@@ -15,7 +15,6 @@ export const deleteProductAlbumDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '商品id',
 	},
 ];
 

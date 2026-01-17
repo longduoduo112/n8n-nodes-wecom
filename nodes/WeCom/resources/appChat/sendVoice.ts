@@ -17,8 +17,7 @@ export const sendVoiceDescription: INodeProperties[] = [
 		placeholder: 'mychat001',
 		required: true,
 		description:
-			'群聊的唯一标识。<a href="https://developer.work.weixin.qq.com/document/path/90248" target="_blank">官方文档</a>',
-		hint: '必填。群聊的唯一标识，必须是该应用所创建的群',
+			'群聊的唯一标识，必须是该应用所创建的群。<a href="https://developer.work.weixin.qq.com/document/path/90248" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: 'Media ID',
@@ -32,6 +31,5 @@ export const sendVoiceDescription: INodeProperties[] = [
 		required: true,
 		description:
 			'语音文件ID，可以调用上传临时素材接口获取。<a href="https://developer.work.weixin.qq.com/document/path/90248" target="_blank">官方文档</a>',
-		hint: '必填。语音文件id，可以调用上传临时素材接口获取',
 	},
 ];

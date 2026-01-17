@@ -77,8 +77,7 @@ export function getRecipientFields(operation: string): INodeProperties[] {
 					recipientType: ['users', 'mixed'],
 				},
 			},
-			hint: '最多支持1000个成员',
-			description: '指定接收消息的成员。<a href="https://developer.work.weixin.qq.com/document/path/90236" target="_blank">官方文档</a>.',
+			description: '指定接收消息的成员，最多支持1000个。<a href="https://developer.work.weixin.qq.com/document/path/90236" target="_blank">官方文档</a>.',
 		},
 		{
 			displayName: '部门 Names or IDs',
@@ -94,8 +93,7 @@ export function getRecipientFields(operation: string): INodeProperties[] {
 					recipientType: ['departments', 'mixed'],
 				},
 			},
-			hint: '最多支持100个部门',
-			description: '指定接收消息的部门。<a href="https://developer.work.weixin.qq.com/document/path/90236" target="_blank">官方文档</a>.',
+			description: '指定接收消息的部门，最多支持100个。<a href="https://developer.work.weixin.qq.com/document/path/90236" target="_blank">官方文档</a>.',
 		},
 		{
 			displayName: '标签 Names or IDs',
@@ -111,8 +109,7 @@ export function getRecipientFields(operation: string): INodeProperties[] {
 					recipientType: ['tags', 'mixed'],
 				},
 			},
-			hint: '最多支持100个标签',
-			description: '指定接收消息的标签。<a href="https://developer.work.weixin.qq.com/document/path/90236" target="_blank">官方文档</a>.',
+			description: '指定接收消息的标签，最多支持100个。<a href="https://developer.work.weixin.qq.com/document/path/90236" target="_blank">官方文档</a>.',
 		},
 		{
 			displayName: '成员ID（手动输入）',
@@ -126,7 +123,6 @@ export function getRecipientFields(operation: string): INodeProperties[] {
 					recipientType: ['manual'],
 				},
 			},
-			hint: '多个接收者用 | 分隔，最多支持1000个',
 			description:
 				'可选。成员ID列表，多个接收者用 | 分隔，最多支持1000个。特殊情况：指定为 @all，则向该企业应用的全部成员发送。<a href="https://developer.work.weixin.qq.com/document/path/90236" target="_blank">官方文档</a>',
 		},
@@ -142,7 +138,6 @@ export function getRecipientFields(operation: string): INodeProperties[] {
 					recipientType: ['manual'],
 				},
 			},
-			hint: '多个接收者用 | 分隔，最多支持100个',
 			description:
 				'可选。部门ID列表，多个接收者用 | 分隔，最多支持100个。<a href="https://developer.work.weixin.qq.com/document/path/90236" target="_blank">官方文档</a>',
 		},
@@ -158,7 +153,6 @@ export function getRecipientFields(operation: string): INodeProperties[] {
 					recipientType: ['manual'],
 				},
 			},
-			hint: '多个接收者用 | 分隔，最多支持100个',
 			description:
 				'可选。标签ID列表，多个接收者用 | 分隔，最多支持100个。<a href="https://developer.work.weixin.qq.com/document/path/90236" target="_blank">官方文档</a>',
 		},

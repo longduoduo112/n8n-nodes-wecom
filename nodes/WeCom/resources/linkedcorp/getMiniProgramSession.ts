@@ -16,7 +16,6 @@ export const getMiniProgramSessionDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '通过wx.qy.login获取的code。',
-		hint: '授权码',
 	},
 	{
 		displayName: '业务类型',
@@ -38,7 +37,6 @@ export const getMiniProgramSessionDescription: INodeProperties[] = [
 		],
 		default: 'linked_corp',
 		description: '业务类型。linked_corp表示互联企业，chain表示上下游。',
-		hint: '业务类型',
 	},
 	{
 		displayName: '下级/下游企业CorpID',
@@ -50,7 +48,6 @@ export const getMiniProgramSessionDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '下级/下游企业的corpid。',
-		hint: '企业CorpID',
 	},
 	{
 		displayName: '应用AgentID',
@@ -61,7 +58,6 @@ export const getMiniProgramSessionDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '上级/上游企业应用的agentid。如果不填，默认使用凭证中的agentid。',
-		hint: '应用AgentID（可选）',
 	},
 ];
 

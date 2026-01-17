@@ -19,7 +19,6 @@ export const getKfAccountLinkDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '客服账号的唯一标识ID。<a href="https://developer.work.weixin.qq.com/document/path/94665" target="_blank">官方文档</a>.',
-		hint: '客服账号',
 		placeholder: 'wkxxxxxxxxxxxxxxxxxx',
 	},
 	{
@@ -30,7 +29,6 @@ export const getKfAccountLinkDescription: INodeProperties[] = [
 			show: showOnlyForGetKfAccountLink,
 		},
 		default: '',
-		hint: '可选。场景值，由开发者自定义',
 		description: '场景值，字符串类型，由开发者自定义，用于区分不同的链接来源。<a href="https://developer.work.weixin.qq.com/document/path/94665" target="_blank">官方文档</a>',
 		placeholder: 'from_website',
 	},

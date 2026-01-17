@@ -11,7 +11,6 @@ export const updateAdvancedMeetingDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '要更新的高级会议唯一标识ID',
-		hint: '会议ID',
 	},
 	{
 		displayName: '会议主题',
@@ -20,7 +19,6 @@ export const updateAdvancedMeetingDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '新的会议主题，留空则不修改',
-		hint: '新会议主题（可选）',
 	},
 	{
 		displayName: '会议开始时间',

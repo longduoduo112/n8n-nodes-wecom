@@ -11,7 +11,6 @@ export const getLiveParticipantsDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '会议唯一标识ID',
-		hint: '会议ID',
 	},
 	{
 		displayName: '分页游标',
@@ -20,7 +19,6 @@ export const getLiveParticipantsDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '分页游标，首次请求留空，后续请求使用返回的cursor',
-		hint: '分页游标（可选）',
 	},
 	{
 		displayName: '每页数量',

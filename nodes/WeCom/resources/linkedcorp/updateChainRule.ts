@@ -11,7 +11,6 @@ export const updateChainRuleDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '上下游的唯一ID',
-		hint: '上下游ID',
 	},
 	{
 		displayName: '规则ID',
@@ -21,7 +20,6 @@ export const updateChainRuleDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '对接规则的唯一ID',
-		hint: '规则ID',
 	},
 	{
 		displayName: '规则名称',
@@ -30,7 +28,6 @@ export const updateChainRuleDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '新的对接规则名称（可选）',
-		hint: '规则名称（可选）',
 	},
 	{
 		displayName: '更新匹配配置',

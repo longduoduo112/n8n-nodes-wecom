@@ -15,7 +15,6 @@ export const getProductAlbumDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '商品id',
 	},
 ];
 

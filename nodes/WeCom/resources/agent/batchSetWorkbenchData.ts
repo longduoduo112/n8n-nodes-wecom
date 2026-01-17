@@ -26,8 +26,7 @@ export const batchSetWorkbenchDataDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnlyBatchSetWorkbenchData,
 		},
-		hint: '多个用户ID用逗号分隔，最多1000个',
-		description: '需要设置的用户userid列表，用逗号分隔',
+		description: '需要设置的用户userid列表，用逗号分隔。多个用户ID用逗号分隔，最多1000个',
 	},
 	{
 		displayName: '模版类型',
@@ -77,7 +76,7 @@ export const batchSetWorkbenchDataDescription: INodeProperties[] = [
 				type: ['keydata'],
 			},
 		},
-		description: '关键数据型模版数据',
+		description: '关键数据型模版数据。items数组不超过4个',
 	},
 	{
 		displayName: '图片型配置（JSON）',
@@ -93,7 +92,7 @@ export const batchSetWorkbenchDataDescription: INodeProperties[] = [
 				type: ['image'],
 			},
 		},
-		description: '图片型模版数据',
+		description: '图片型模版数据。图片最佳比例为3.35:1',
 	},
 	{
 		displayName: '列表型配置（JSON）',
@@ -113,7 +112,7 @@ export const batchSetWorkbenchDataDescription: INodeProperties[] = [
 				type: ['list'],
 			},
 		},
-		description: '列表型模版数据',
+		description: '列表型模版数据。items数组不超过3个',
 	},
 	{
 		displayName: 'Webview型配置（JSON）',
@@ -129,6 +128,6 @@ export const batchSetWorkbenchDataDescription: INodeProperties[] = [
 				type: ['webview'],
 			},
 		},
-		description: 'Webview型模版数据',
+		description: 'Webview型模版数据。height可选single_row或double_row',
 	},
 ];

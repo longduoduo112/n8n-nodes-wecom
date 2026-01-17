@@ -16,7 +16,6 @@ export const cancelScheduleDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '要取消的日程唯一标识ID',
-		hint: '要取消的日程ID',
 	},
 ];
 

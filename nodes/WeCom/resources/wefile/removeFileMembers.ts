@@ -11,7 +11,6 @@ export const removeFileMembersDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '文件或文件夹的ID',
-		hint: '文件ID',
 	},
 	{
 		displayName: '成员列表',

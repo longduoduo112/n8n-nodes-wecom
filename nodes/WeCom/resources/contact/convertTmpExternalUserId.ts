@@ -16,7 +16,6 @@ export const convertTmpExternalUserIdDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '临时外部联系人的userid，由用户在微信上使用客户联系功能产生。',
-		hint: '临时外部联系人ID',
 	},
 ];
 

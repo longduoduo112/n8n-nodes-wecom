@@ -15,7 +15,6 @@ export const deleteInterceptRuleDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '规则id',
 	},
 ];
 

@@ -8,8 +8,7 @@ export const querySmartsheetRecordDescription: INodeProperties[] = [
 		required: true,
 		displayOptions: { show: showOnly },
 		default: '',
-		description: '智能表格的docid',
-		hint: '文档ID',
+		description: '智能表格的docid。文档ID',
 	},
 	{
 		displayName: '子表ID',
@@ -18,8 +17,7 @@ export const querySmartsheetRecordDescription: INodeProperties[] = [
 		required: true,
 		displayOptions: { show: showOnly },
 		default: '',
-		description: '子表的sheet_id',
-		hint: '子表ID',
+		description: '子表的sheet_id。子表ID',
 	},
 	{
 		displayName: '视图ID',
@@ -27,8 +25,7 @@ export const querySmartsheetRecordDescription: INodeProperties[] = [
 		type: 'string',
 		displayOptions: { show: showOnly },
 		default: '',
-		description: '视图的view_id。不填则使用默认视图。',
-		hint: '视图ID（可选）',
+		description: '视图的view_id。不填则使用默认视图。视图ID（可选）',
 	},
 	{
 		displayName: '返回Key类型',
@@ -239,8 +236,7 @@ export const querySmartsheetRecordDescription: INodeProperties[] = [
 					minValue: 1,
 					maxValue: 1000,
 				},
-				description: '每页返回多少条数据，最大值 1000',
-				hint: '默认50条',
+				description: '每页返回多少条数据，最大值 1000。默认50条',
 			},
 			{
 				displayName: '偏移量',

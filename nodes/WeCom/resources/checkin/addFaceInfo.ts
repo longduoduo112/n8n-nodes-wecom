@@ -16,7 +16,6 @@ export const addFaceInfoDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '要添加人脸信息的员工UserID',
-		hint: '员工的UserID',
 	},
 	{
 		displayName: '人脸图片Media ID',
@@ -28,7 +27,6 @@ export const addFaceInfoDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '人脸图片的MediaID，需要先通过素材管理接口上传',
-		hint: '人脸图片的MediaID',
 	},
 ];
 

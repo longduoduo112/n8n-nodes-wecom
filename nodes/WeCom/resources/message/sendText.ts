@@ -21,7 +21,6 @@ export const sendTextDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnlySendText,
 		},
-		hint: '最长不超过2048个字节，支持换行（\\n）和A标签链接',
 		description:
 			'消息内容，最长不超过2048个字节，超过将截断（支持换行、以及A标签，即可打开自定义的网页）。<a href="https://developer.work.weixin.qq.com/document/path/90236#文本消息" target="_blank">官方文档</a>',
 	},
@@ -33,9 +32,8 @@ export const sendTextDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnlySendText,
 		},
-		hint: '保密消息，开启后消息不可转发、复制等',
 		description:
-			'可选。表示是否是保密消息，0表示否，1表示是，默认0。<a href="https://developer.work.weixin.qq.com/document/path/90236#文本消息" target="_blank">官方文档</a>',
+			'可选。表示是否是保密消息，0表示否，1表示是，默认0。开启后消息不可转发、复制等。<a href="https://developer.work.weixin.qq.com/document/path/90236#文本消息" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '是否开启ID转译',
@@ -45,7 +43,6 @@ export const sendTextDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnlySendText,
 		},
-		hint: '开启后会将消息中的userid转为@对应成员',
 		description: '可选。表示是否开启ID转译，0表示否，1表示是，默认0。开启后，消息中的userid会转译为@对应成员。<a href="https://developer.work.weixin.qq.com/document/path/90236#文本消息" target="_blank">官方文档</a>',
 	},
 	{
@@ -56,9 +53,8 @@ export const sendTextDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnlySendText,
 		},
-		hint: '开启后在时间间隔内相同内容的消息不会重复发送',
 		description:
-			'可选。表示是否开启重复消息检查，0表示否，1表示是，默认0。<a href="https://developer.work.weixin.qq.com/document/path/90236#文本消息" target="_blank">官方文档</a>',
+			'可选。表示是否开启重复消息检查，0表示否，1表示是，默认0。开启后在时间间隔内相同内容的消息不会重复发送。<a href="https://developer.work.weixin.qq.com/document/path/90236#文本消息" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '重复消息检查时间间隔',
@@ -75,9 +71,8 @@ export const sendTextDescription: INodeProperties[] = [
 			minValue: 0,
 			maxValue: 14400,
 		},
-		hint: '默认1800秒，最大不超过4小时（14400秒）',
 		description:
-			'可选。表示是否重复消息检查的时间间隔，默认1800秒，最大不超过4小时。<a href="https://developer.work.weixin.qq.com/document/path/90236#文本消息" target="_blank">官方文档</a>',
+			'可选。表示是否重复消息检查的时间间隔，默认1800秒，最大不超过4小时（14400秒）。<a href="https://developer.work.weixin.qq.com/document/path/90236#文本消息" target="_blank">官方文档</a>',
 	},
 ];
 

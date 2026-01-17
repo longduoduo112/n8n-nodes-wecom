@@ -100,7 +100,6 @@ export const accountIdDescription: INodeProperties[] = [
 		},
 		default: 0,
 		description: '企业授权的代开发自建应用或第三方应用的agentid',
-		hint: '企业授权的代开发自建应用或第三方应用的agentid',
 	},
 	{
 		displayName: 'Open Userid列表',
@@ -117,8 +116,7 @@ export const accountIdDescription: INodeProperties[] = [
 			},
 		},
 		default: [],
-		description: 'Open_userid列表，最多不超过1000个',
-		hint: '必须是source_agentid对应的应用所获取的open_userid，多个值请使用"Add Value"按钮添加',
+		description: 'Open_userid列表，最多不超过1000个。必须是source_agentid对应的应用所获取的open_userid，多个值请使用"Add Value"按钮添加',
 	},
 	{
 		displayName: 'External Userid',
@@ -132,8 +130,7 @@ export const accountIdDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: '服务商主体的external_userid',
-		hint: '必须是source_agentid对应的应用所获取的external_userid',
+		description: '服务商主体的external_userid。必须是source_agentid对应的应用所获取的external_userid',
 	},
 	{
 		displayName: '业务类型',
@@ -216,8 +213,7 @@ export const accountIdDescription: INodeProperties[] = [
 			},
 		},
 		default: [],
-		description: '外部用户临时ID列表，最多不超过100个',
-		hint: '外部用户临时id，多个值请使用"Add Value"按钮添加',
+		description: '外部用户临时ID列表，最多不超过100个。外部用户临时ID，多个值请使用"Add Value"按钮添加',
 	},
 	{
 		displayName: 'Provider Access Token',
@@ -234,8 +230,7 @@ export const accountIdDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: '应用服务商的provider_access_token',
-		hint: '应用服务商的provider_access_token，获取方法参见服务商的凭证',
+		description: '应用服务商的provider_access_token，获取方法参见服务商的凭证',
 	},
 	{
 		displayName: '企业ID',
@@ -250,7 +245,6 @@ export const accountIdDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '待获取的企业ID',
-		hint: '待获取的企业ID',
 	},
 	{
 		displayName: 'Userid列表',
@@ -267,8 +261,7 @@ export const accountIdDescription: INodeProperties[] = [
 			},
 		},
 		default: [],
-		description: '获取到的成员ID列表，最多不超过1000个',
-		hint: '获取到的成员ID列表，最多不超过1000个，多个值请使用"Add Value"按钮添加',
+		description: '获取到的成员ID列表，最多不超过1000个。多个值请使用"Add Value"按钮添加',
 	},
 	{
 		displayName: 'External Userid列表',
@@ -285,8 +278,7 @@ export const accountIdDescription: INodeProperties[] = [
 			},
 		},
 		default: [],
-		description: '企业主体下的external_userid列表，建议200个，最多不超过1000个',
-		hint: '企业主体下的external_userid列表，建议200个，最多不超过1000个，多个值请使用"Add Value"按钮添加',
+		description: '企业主体下的external_userid列表，建议200个，最多不超过1000个。多个值请使用"Add Value"按钮添加',
 	},
 	{
 		displayName: '客户群ID',
@@ -300,7 +292,6 @@ export const accountIdDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		hint: '客户群ID',
 	},
 	{
 		displayName: 'Unionid',
@@ -314,7 +305,7 @@ export const accountIdDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		hint: '微信客户的unionid',
+		description: '微信客户的unionid',
 	},
 	{
 		displayName: 'Openid',
@@ -328,7 +319,7 @@ export const accountIdDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		hint: '微信客户的openid',
+		description: '微信客户的openid',
 	},
 	{
 		displayName: '主体类型',
@@ -369,11 +360,10 @@ export const accountIdDescription: INodeProperties[] = [
 			},
 		},
 		default: [],
-		description: '该企业的外部联系人ID，最多可同时查询100个外部联系人',
-		hint: '该企业的外部联系人ID，最多可同时查询100个外部联系人，多个值请使用"Add Value"按钮添加',
+		description: '该企业的外部联系人ID，最多可同时查询100个外部联系人。多个值请使用"Add Value"按钮添加',
 	},
 	{
-		displayName: '客户群ID',
+		displayName: '客户群ID（可选）',
 		name: 'chatId',
 		type: 'string',
 		displayOptions: {
@@ -383,7 +373,7 @@ export const accountIdDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		hint: '群id，如果有传入该参数，则只检查群主是否在可见范围',
+		description: '群ID，如果有传入该参数，则只检查群主是否在可见范围',
 	},
 	{
 		displayName: 'External Tagid列表',
@@ -400,8 +390,7 @@ export const accountIdDescription: INodeProperties[] = [
 			},
 		},
 		default: [],
-		description: '企业主体下的客户标签ID或标签组ID列表，最多不超过1000个',
-		hint: '企业主体下的客户标签ID或标签组ID列表，最多不超过1000个，多个值请使用"Add Value"按钮添加',
+		description: '企业主体下的客户标签ID或标签组ID列表，最多不超过1000个。多个值请使用"Add Value"按钮添加',
 	},
 	{
 		displayName: 'Open Kfid列表',
@@ -418,8 +407,7 @@ export const accountIdDescription: INodeProperties[] = [
 			},
 		},
 		default: [],
-		description: '微信客服ID列表，最多不超过1000个',
-		hint: '微信客服ID列表，最多不超过1000个，多个值请使用"Add Value"按钮添加',
+		description: '微信客服ID列表，最多不超过1000个。多个值请使用"Add Value"按钮添加',
 	},
 	{
 		displayName: 'Provider Access Token',
@@ -436,8 +424,7 @@ export const accountIdDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: '应用提供商的provider_access_token',
-		hint: '应用提供商的provider_access_token，获取方法参见服务商的凭证',
+		description: '应用提供商的provider_access_token，获取方法参见服务商的凭证',
 	},
 	{
 		displayName: '企业ID',
@@ -451,7 +438,7 @@ export const accountIdDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		hint: '企业corpid',
+		description: '企业corpid',
 	},
 	{
 		displayName: 'ID类型',
@@ -480,7 +467,6 @@ export const accountIdDescription: INodeProperties[] = [
 			},
 		],
 		default: 1,
-		description: 'ID类型：1-userid与corpid; 3-external_userid',
-		hint: '多个值请使用"Add Value"按钮添加',
+		description: 'ID类型：1-userid与corpid; 3-external_userid。多个值请使用"Add Value"按钮添加',
 	},
 ];

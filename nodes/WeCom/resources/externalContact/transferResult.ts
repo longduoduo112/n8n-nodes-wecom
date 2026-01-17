@@ -18,8 +18,7 @@ export const transferResultDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '原跟进成员的userid',
-		description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>',
+		description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>。原跟进成员的userid',
 	},
 	{
 		displayName: '接替成员 Name or ID',
@@ -33,8 +32,7 @@ export const transferResultDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '接替成员的userid',
-		description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>',
+		description: 'Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>。接替成员的userid',
 	},
 	{
 		displayName: 'Cursor',
@@ -44,8 +42,7 @@ export const transferResultDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '分页查询的cursor',
-		description: '分页查询的cursor，第一次不填',
+		description: '分页查询的cursor，第一次不填。分页查询的cursor',
 	},
 ];
 

@@ -11,6 +11,5 @@ export const downloadFileDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '要下载的文件ID',
-		hint: '文件ID',
 	},
 ];

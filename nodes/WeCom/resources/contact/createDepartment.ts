@@ -17,7 +17,6 @@ export const createDepartmentDescription: INodeProperties[] = [
 		default: '',
 		placeholder: '技术部',
 		description: '部门名称。同一个层级的部门名称不能重复。长度限制为1~64个UTF-8字符，字符不能包括\\:*?"<>｜。<a href="https://developer.work.weixin.qq.com/document/path/90205" target="_blank">官方文档</a>',
-		hint: '部门名称，同一层级不能重复',
 	},
 	{
 		displayName: '英文名称',
@@ -29,7 +28,6 @@ export const createDepartmentDescription: INodeProperties[] = [
 		default: '',
 		placeholder: 'Technology',
 		description: '可选。英文名称。同一个层级的部门名称不能重复。需要在管理后台开启多语言支持才能生效。长度限制为1~64个字符，字符不能包括\\:*?"<>｜。<a href="https://developer.work.weixin.qq.com/document/path/90205" target="_blank">官方文档</a>',
-		hint: '英文名称，需开启多语言支持',
 	},
 	{
 		displayName: '父部门ID',
@@ -42,7 +40,6 @@ export const createDepartmentDescription: INodeProperties[] = [
 		default: '1',
 		placeholder: '1',
 		description: '父部门 ID，32位整型。根部门 ID 为 1。注意：部门的最大层级为15层；部门总数不能超过3万个；每个部门下的节点不能超过3万个。<a href="https://developer.work.weixin.qq.com/document/path/90205" target="_blank">官方文档</a>',
-		hint: '父部门 ID，1 表示根部门，最大层级15层',
 	},
 	{
 		displayName: '在父部门中的次序值',
@@ -53,7 +50,6 @@ export const createDepartmentDescription: INodeProperties[] = [
 		},
 		default: 1,
 		description: '可选。在父部门中的次序值。order值大的排序靠前。有效的值范围是[0, 2^32)。<a href="https://developer.work.weixin.qq.com/document/path/90205" target="_blank">官方文档</a>',
-		hint: '次序值，值越大排序越靠前',
 	},
 	{
 		displayName: '部门ID',
@@ -65,7 +61,6 @@ export const createDepartmentDescription: INodeProperties[] = [
 		default: '',
 		placeholder: '100',
 		description: '可选。部门 ID，32位整型，指定时必须大于1。若不填该参数，将自动生成 ID。建议保证创建的部门和对应部门成员是串行化处理。<a href="https://developer.work.weixin.qq.com/document/path/90205" target="_blank">官方文档</a>',
-		hint: '部门 ID，不指定则自动生成',
 	},
 ];
 

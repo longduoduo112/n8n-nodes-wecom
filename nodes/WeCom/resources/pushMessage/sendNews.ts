@@ -35,8 +35,8 @@ export const sendNewsDescription: INodeProperties[] = [
 				news_input_mode: ['json'],
 			},
 		},
-		hint: 'JSON输入模式下仅展示此字段',
-		description: '可选。使用JSON直接输入图文列表（数组）或对象（包含articles）。<a href="https://developer.work.weixin.qq.com/document/path/99110#%E5%9B%BE%E6%96%87%E7%B1%BB%E5%9E%8B" target="_blank">官方文档</a>',
+		description:
+			'可选。使用JSON直接输入图文列表（数组）或对象（包含articles）。<a href="https://developer.work.weixin.qq.com/document/path/99110#%E5%9B%BE%E6%96%87%E7%B1%BB%E5%9E%8B" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '图文列表',
@@ -67,7 +67,6 @@ export const sendNewsDescription: INodeProperties[] = [
 						required: true,
 						placeholder: '请输入图文标题...',
 						description: '图文标题，不超过128个字节。<a href="https://developer.work.weixin.qq.com/document/path/99110#%E5%9B%BE%E6%96%87%E7%B1%BB%E5%9E%8B" target="_blank">官方文档</a>',
-						hint: '超过128个字节会自动截断',
 					},
 					{
 						displayName: '描述',
@@ -79,7 +78,6 @@ export const sendNewsDescription: INodeProperties[] = [
 						default: '',
 						placeholder: '请输入图文描述...',
 						description: '可选。图文描述，不超过512个字节。<a href="https://developer.work.weixin.qq.com/document/path/99110#%E5%9B%BE%E6%96%87%E7%B1%BB%E5%9E%8B" target="_blank">官方文档</a>',
-						hint: '超过512个字节会自动截断',
 					},
 					{
 						displayName: '跳转链接',
@@ -96,8 +94,7 @@ export const sendNewsDescription: INodeProperties[] = [
 						type: 'string',
 						default: '',
 						placeholder: 'https://example.com/image.jpg',
-						description: '可选。图文消息的图片链接。<a href="https://developer.work.weixin.qq.com/document/path/99110#%E5%9B%BE%E6%96%87%E7%B1%BB%E5%9E%8B" target="_blank">官方文档</a>',
-						hint: '支持JPG、PNG格式，推荐尺寸：大图640×320，小图80×80',
+						description: '可选。图文消息的图片链接。支持JPG、PNG格式，推荐尺寸：大图640×320，小图80×80。<a href="https://developer.work.weixin.qq.com/document/path/99110#%E5%9B%BE%E6%96%87%E7%B1%BB%E5%9E%8B" target="_blank">官方文档</a>',
 					},
 				],
 			},

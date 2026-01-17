@@ -11,6 +11,5 @@ export const deleteSpaceDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '要删除的微盘空间ID',
-		hint: '空间ID',
 	},
 ];

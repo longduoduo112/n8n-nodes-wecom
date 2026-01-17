@@ -26,7 +26,6 @@ export const getLinkedCustomerDescription: INodeProperties[] = [
 		],
 		default: 'added',
 		description: '客户类型。added表示已添加客户，pending表示未添加客户。<a href="https://developer.work.weixin.qq.com/document/path/93360" target="_blank">官方文档</a>',
-		hint: '客户类型',
 	},
 	{
 		displayName: '外部联系人ID',

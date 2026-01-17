@@ -26,7 +26,6 @@ export const getLinkedCorpTokenDescription: INodeProperties[] = [
 		],
 		default: 'linked_corp',
 		description: '业务类型。linked_corp表示互联企业，chain表示上下游。<a href="https://developer.work.weixin.qq.com/document/path/93360" target="_blank">官方文档</a>',
-		hint: '业务类型',
 	},
 	{
 		displayName: '下级/下游企业CorpID',

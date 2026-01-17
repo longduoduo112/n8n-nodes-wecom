@@ -20,8 +20,7 @@ export const modDocContentDescription: INodeProperties[] = [
 		type: 'number',
 		displayOptions: { show: showOnlyForModContent },
 		default: 0,
-		description: '操作的文档版本，该参数可以通过获取文档内容接口获得。操作后文档版本将更新一版。要更新的文档版本与最新文档版本相差不能超过100个。',
-		hint: '操作的文档版本（可选）'
+		description: '操作的文档版本，该参数可以通过获取文档内容接口获得。操作后文档版本将更新一版。要更新的文档版本与最新文档版本相差不能超过100个。操作的文档版本（可选）',
 	},
 	{
 		displayName: '操作列表',

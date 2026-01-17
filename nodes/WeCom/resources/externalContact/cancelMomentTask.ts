@@ -15,7 +15,6 @@ export const cancelMomentTaskDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '朋友圈的任务ID',
 		description: '朋友圈的任务ID',
 	},
 ];

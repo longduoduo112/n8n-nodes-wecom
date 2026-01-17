@@ -11,6 +11,5 @@ export const getSpaceInviteLinkDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '微盘空间的ID',
-		hint: '空间ID',
 	},
 ];

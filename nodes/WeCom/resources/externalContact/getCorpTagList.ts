@@ -14,8 +14,7 @@ export const getCorpTagListDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '可选。要查询的标签id，多个用逗号分隔',
-		description: '要查询的标签ID列表，多个ID用英文逗号分隔，为空则返回所有标签。<a href="https://developer.work.weixin.qq.com/document/path/92117" target="_blank">官方文档</a>',
+		description: '要查询的标签ID列表，多个ID用英文逗号分隔，为空则返回所有标签。<a href="https://developer.work.weixin.qq.com/document/path/92117" target="_blank">官方文档</a>。可选。要查询的标签ID，多个用逗号分隔',
 		placeholder: 'etXXXXXXXXXX,etYYYYYYYYYY',
 	},
 	{
@@ -26,8 +25,7 @@ export const getCorpTagListDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '可选。要查询的标签组id，多个用逗号分隔',
-		description: '要查询的标签组ID列表，多个ID用英文逗号分隔，返回该标签组及其下属标签。<a href="https://developer.work.weixin.qq.com/document/path/92117" target="_blank">官方文档</a>',
+		description: '要查询的标签组ID列表，多个ID用英文逗号分隔，返回该标签组及其下属标签。<a href="https://developer.work.weixin.qq.com/document/path/92117" target="_blank">官方文档</a>。可选。要查询的标签组ID，多个用逗号分隔',
 		placeholder: 'etXXXXXXXXXX,etYYYYYYYYYY',
 	},
 ];

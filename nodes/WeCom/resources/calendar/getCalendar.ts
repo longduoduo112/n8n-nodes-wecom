@@ -16,7 +16,6 @@ export const getCalendarDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '要查询的日历ID列表，多个日历ID用逗号分隔',
-		hint: '日历ID列表，用逗号分隔',
 	},
 ];
 

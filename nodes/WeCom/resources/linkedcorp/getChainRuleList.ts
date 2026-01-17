@@ -16,7 +16,6 @@ export const getChainRuleListDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '上下游的唯一ID。',
-		hint: '上下游ID',
 	},
 ];
 

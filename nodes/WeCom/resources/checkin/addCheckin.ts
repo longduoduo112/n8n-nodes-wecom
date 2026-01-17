@@ -16,7 +16,6 @@ export const addCheckinDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '需要补卡的员工UserID',
-		hint: '员工的UserID',
 	},
 	{
 		displayName: '打卡时间',
@@ -28,7 +27,6 @@ export const addCheckinDescription: INodeProperties[] = [
 		},
 		default: 0,
 		description: '补卡的打卡时间，使用Unix时间戳格式（秒级）',
-		hint: '补卡的打卡时间（Unix时间戳）',
 	},
 	{
 		displayName: '打卡类型',
@@ -44,7 +42,6 @@ export const addCheckinDescription: INodeProperties[] = [
 		],
 		default: 'OnDuty',
 		description: '打卡类型。OnDuty表示上班打卡，OffDuty表示下班打卡',
-		hint: '打卡类型：OnDuty-上班，OffDuty-下班',
 	},
 ];
 

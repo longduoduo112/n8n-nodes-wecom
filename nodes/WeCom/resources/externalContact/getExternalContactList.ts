@@ -18,8 +18,7 @@ export const getExternalContactListDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '企业成员的userid',
-		description: '企业成员的UserID。<a href="https://developer.work.weixin.qq.com/document/path/92113" target="_blank">官方文档</a>.',
+		description: '企业成员的UserID。<a href="https://developer.work.weixin.qq.com/document/path/92113" target="_blank">官方文档</a>.。企业成员的userid',
 		placeholder: 'zhangsan',
 	},
 ];

@@ -37,7 +37,7 @@ export const sendNewsDescription: INodeProperties[] = [
 				news_input_mode: ['json'],
 			},
 		},
-		hint: 'JSON输入模式下仅展示此字段',
+
 		description:
 			'可选。使用JSON直接输入图文列表（数组）或完整news对象（包含articles）。<a href="https://developer.work.weixin.qq.com/document/path/90236#图文消息" target="_blank">官方文档</a>',
 	},
@@ -71,7 +71,6 @@ export const sendNewsDescription: INodeProperties[] = [
 						required: true,
 						default: '',
 						placeholder: '请输入图文标题',
-						hint: '不超过128个字节，超过会自动截断（支持ID转译）',
 						description:
 							'标题，不超过128个字节，超过会自动截断（支持ID转译）。<a href="https://developer.work.weixin.qq.com/document/path/90236#图文消息" target="_blank">官方文档</a>',
 					},
@@ -84,7 +83,6 @@ export const sendNewsDescription: INodeProperties[] = [
 						},
 						default: '',
 						placeholder: '请输入图文描述',
-						hint: '不超过512个字节，超过会自动截断（支持ID转译）',
 						description:
 							'可选。描述，不超过512个字节，超过会自动截断（支持ID转译）。<a href="https://developer.work.weixin.qq.com/document/path/90236#图文消息" target="_blank">官方文档</a>',
 					},
@@ -116,7 +114,6 @@ export const sendNewsDescription: INodeProperties[] = [
 								jump_type: ['url'],
 							},
 						},
-						hint: '小程序或者url必须填写一个',
 						description: '点击后跳转的链接。最长2048字节，请确保包含了协议头(http/https)，小程序或者URL必须填写一个。<a href="https://developer.work.weixin.qq.com/document/path/90236#图文消息" target="_blank">官方文档</a>',
 					},
 					{
@@ -130,7 +127,6 @@ export const sendNewsDescription: INodeProperties[] = [
 								jump_type: ['miniprogram'],
 							},
 						},
-						hint: '必须是与当前应用关联的小程序，appid和pagepath必须同时填写',
 						description: '小程序appid，必须是与当前应用关联的小程序，appid和pagepath必须同时填写，填写后会忽略URL字段。<a href="https://developer.work.weixin.qq.com/document/path/90236#图文消息" target="_blank">官方文档</a>',
 					},
 					{
@@ -144,7 +140,6 @@ export const sendNewsDescription: INodeProperties[] = [
 								jump_type: ['miniprogram'],
 							},
 						},
-						hint: '最长128字节，仅限本小程序内的页面',
 						description: '点击消息卡片后的小程序页面，最长128字节，仅限本小程序内的页面。appid和pagepath必须同时填写，填写后会忽略URL字段。<a href="https://developer.work.weixin.qq.com/document/path/90236#图文消息" target="_blank">官方文档</a>',
 					},
 					{
@@ -171,7 +166,6 @@ export const sendNewsDescription: INodeProperties[] = [
 				news_input_mode: ['form'],
 			},
 		},
-		hint: '开启后会将消息中的userid转为@对应成员',
 		description: '可选。表示是否开启ID转译，0表示否，1表示是，默认0。开启后会将消息中的userid转为@对应成员显示。<a href="https://developer.work.weixin.qq.com/document/path/90236#图文消息" target="_blank">官方文档</a>',
 	},
 	{
@@ -185,7 +179,6 @@ export const sendNewsDescription: INodeProperties[] = [
 				news_input_mode: ['form'],
 			},
 		},
-		hint: '开启后在时间间隔内相同内容的消息不会重复发送',
 		description: '可选。表示是否开启重复消息检查，0表示否，1表示是，默认0。开启后相同内容的消息在时间间隔内不会重复发送。<a href="https://developer.work.weixin.qq.com/document/path/90236#图文消息" target="_blank">官方文档</a>',
 	},
 	{
@@ -204,8 +197,7 @@ export const sendNewsDescription: INodeProperties[] = [
 			minValue: 0,
 			maxValue: 14400,
 		},
-		hint: '默认1800秒，最大不超过4小时（14400秒）',
 		description:
-			'可选。表示是否重复消息检查的时间间隔，默认1800秒，最大不超过4小时。<a href="https://developer.work.weixin.qq.com/document/path/90236#图文消息" target="_blank">官方文档</a>',
+			'可选。表示是否重复消息检查的时间间隔，默认1800秒，最大不超过4小时（14400秒）。<a href="https://developer.work.weixin.qq.com/document/path/90236#图文消息" target="_blank">官方文档</a>',
 	},
 ];

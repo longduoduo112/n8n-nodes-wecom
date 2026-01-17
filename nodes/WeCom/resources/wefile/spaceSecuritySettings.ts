@@ -11,7 +11,6 @@ export const spaceSecuritySettingsDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '微盘空间的ID',
-		hint: '空间ID',
 	},
 	{
 		displayName: '启用水印',

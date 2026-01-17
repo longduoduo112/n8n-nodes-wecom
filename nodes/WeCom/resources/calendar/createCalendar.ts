@@ -74,7 +74,6 @@ export const createCalendarDescription: INodeProperties[] = [
 		},
 		default: '[{"userid": "userid1"}]',
 		description: '可选。共享范围，JSON数组格式。可包含userid（成员ID）或partyid（部门ID）。<a href="https://developer.work.weixin.qq.com/document/path/93647" target="_blank">官方文档</a>',
-		hint: '共享范围，JSON格式数组',
 	},
 ];
 

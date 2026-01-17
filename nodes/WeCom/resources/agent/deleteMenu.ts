@@ -15,7 +15,6 @@ export const deleteMenuDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnlyDeleteMenu,
 		},
-		hint: '必填。企业应用的唯一标识ID',
 		description: '企业应用的唯一标识。<a href="https://developer.work.weixin.qq.com/document/path/90233" target="_blank">官方文档</a>',
 	},
 ];

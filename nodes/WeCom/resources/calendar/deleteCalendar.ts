@@ -16,7 +16,6 @@ export const deleteCalendarDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '要删除的日历唯一标识ID',
-		hint: '日历ID',
 	},
 ];
 

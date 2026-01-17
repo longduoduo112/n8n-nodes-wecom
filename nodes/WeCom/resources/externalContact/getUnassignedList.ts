@@ -14,8 +14,7 @@ export const getUnassignedListDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '分页查询的page_id，第一个为0',
-		description: '分页查询，从0开始',
+		description: '分页查询，从0开始。分页查询的page_id，第一个为0',
 	},
 	{
 		displayName: '每页数量',
@@ -25,8 +24,7 @@ export const getUnassignedListDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '每次返回的最大记录数，默认1000，最大1000',
-		description: '每次返回的最大记录数',
+		description: '每次返回的最大记录数。每次返回的最大记录数，默认1000，最大1000',
 	},
 	{
 		displayName: 'Cursor',
@@ -36,8 +34,7 @@ export const getUnassignedListDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnly,
 		},
-		hint: '分页查询游标',
-		description: '分页查询游标，字符串类型，由上一次调用返回',
+		description: '分页查询游标，字符串类型，由上一次调用返回。分页查询游标',
 	},
 ];
 

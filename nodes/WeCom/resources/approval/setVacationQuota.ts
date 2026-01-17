@@ -16,7 +16,6 @@ export const setVacationQuotaDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '要修改假期余额的成员UserID',
-		hint: '员工的UserID',
 	},
 	{
 		displayName: '假期配置ID',
@@ -28,7 +27,6 @@ export const setVacationQuotaDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '假期类型的配置ID，可通过获取假期配置接口获取',
-		hint: '假期配置ID',
 	},
 	{
 		displayName: '剩余假期时长',
@@ -40,7 +38,6 @@ export const setVacationQuotaDescription: INodeProperties[] = [
 		},
 		default: 0,
 		description: '剩余假期时长（秒），用于设置成员的假期余额',
-		hint: '剩余假期时长（秒）',
 	},
 	{
 		displayName: '备注',
@@ -51,7 +48,6 @@ export const setVacationQuotaDescription: INodeProperties[] = [
 		},
 		default: '',
 		description: '修改假期余额的备注说明',
-		hint: '修改备注',
 	},
 ];
 

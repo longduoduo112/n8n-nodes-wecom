@@ -11,7 +11,6 @@ export const muteMemberDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '会议唯一标识ID',
-		hint: '会议ID',
 	},
 	{
 		displayName: '操作类型',

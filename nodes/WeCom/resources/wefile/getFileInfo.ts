@@ -11,6 +11,5 @@ export const getFileInfoDescription: INodeProperties[] = [
 		displayOptions: { show: showOnly },
 		default: '',
 		description: '文件或文件夹的ID',
-		hint: '文件ID',
 	},
 ];
