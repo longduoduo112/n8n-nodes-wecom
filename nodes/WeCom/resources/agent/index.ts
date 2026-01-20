@@ -10,6 +10,7 @@ import { getWorkbenchTemplateDescription } from './getWorkbenchTemplate';
 import { setWorkbenchDataDescription } from './setWorkbenchData';
 import { batchSetWorkbenchDataDescription } from './batchSetWorkbenchData';
 import { getWorkbenchDataDescription } from './getWorkbenchData';
+import { listAppShareInfoDescription } from './listAppShareInfo';
 
 const showOnlyForAgent = {
 	resource: ['agent'],
@@ -91,6 +92,12 @@ export const agentDescription: INodeProperties[] = [
 				action: '获取用户工作台数据',
 				description: '获取应用在用户工作台展示的数据',
 			},
+			{
+				name: '获取应用共享信息',
+				value: 'listAppShareInfo',
+				action: '获取应用共享信息',
+				description: '局校互联中的局端或者上下游中的上游企业通过该接口可以获取某个应用分享给的所有企业列表',
+			},
 		],
 		default: 'getAgent',
 	},
@@ -105,4 +112,5 @@ export const agentDescription: INodeProperties[] = [
 	...setWorkbenchDataDescription,
 	...batchSetWorkbenchDataDescription,
 	...getWorkbenchDataDescription,
+	...listAppShareInfoDescription,
 ];

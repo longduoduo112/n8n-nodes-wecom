@@ -248,6 +248,27 @@ export async function executeAgent(
 					break;
 				}
 
+				case 'listAppShareInfo': {
+					const agentid = this.getNodeParameter('agentid', i) as number;
+					const business_type = this.getNodeParameter('business_type', i, 0) as number;
+					const corpid = this.getNodeParameter('corpid', i, '') as string;
+					const limit = this.getNodeParameter('limit', i, 0) as number;
+					const cursor = this.getNodeParameter('cursor', i, '') as string;
+
+					const body: IDataObject = { agentid };
+					if (business_type !== undefined) body.business_type = business_type;
+					if (corpid) body.corpid = corpid;
+					if (limit) body.limit = limit;
+					if (cursor) body.cursor = cursor;
+
+					responseData = await weComApiRequest.call(
+						this,
+						'POST',
+						'/cgi-bin/corpgroup/corp/list_app_share_info',
+						body,
+					);
+					break;
+				}
 				default:
 					throw new Error(`未知操作: ${operation}`);
 			}

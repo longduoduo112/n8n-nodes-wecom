@@ -356,6 +356,28 @@ export async function executeWefile(
 						share_url_no_approve: shareUrlNoApprove,
 					},
 				);
+			} else if (operation === 'getExternalPaymentList') {
+				const beginTime = this.getNodeParameter('beginTime', i) as number;
+				const endTime = this.getNodeParameter('endTime', i) as number;
+				const payee_userid = this.getNodeParameter('payee_userid', i, '') as string;
+				const cursor = this.getNodeParameter('cursor', i, '') as string;
+				const limit = this.getNodeParameter('limit', i, 1000) as number;
+
+				const body: IDataObject = {
+					begin_time: beginTime,
+					end_time: endTime,
+				};
+
+				if (payee_userid) body.payee_userid = payee_userid;
+				if (cursor) body.cursor = cursor;
+				if (limit) body.limit = limit;
+
+				responseData = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/externalpay/get_bill_list',
+					body,
+				);
 			}
 
 			if (responseData) {

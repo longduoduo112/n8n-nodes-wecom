@@ -77,6 +77,7 @@ import { deleteCustomerAcquisitionLinkDescription } from './deleteCustomerAcquis
 import { getCustomerAcquisitionCustomerDescription } from './getCustomerAcquisitionCustomer';
 import { getCustomerAcquisitionChatInfoDescription } from './getCustomerAcquisitionChatInfo';
 import { getServedExternalContactDescription } from './getServedExternalContact';
+import { createOnceKeyDescription } from './createOnceKey';
 import { sendSchoolMessageCommonDescription } from './sendSchoolMessageCommon';
 import { sendSchoolMessageTextDescription } from './sendSchoolMessageText';
 import { sendSchoolMessageImageDescription } from './sendSchoolMessageImage';
@@ -587,6 +588,12 @@ export const externalContactDescription: INodeProperties[] = [
 				action: '获取已服务的外部联系人',
 				description: '批量获取企业已服务的外部联系人',
 			},
+			{
+				name: '生成代支付key',
+				value: 'createOnceKey',
+				action: '生成代支付key',
+				description: '生成用于对应链接代支付的key，key使用一次之后失效',
+			},
 		],
 		default: 'getFollowUserList',
 	},
@@ -668,6 +675,7 @@ export const externalContactDescription: INodeProperties[] = [
 	...getCustomerAcquisitionCustomerDescription,
 	...getCustomerAcquisitionChatInfoDescription,
 	...getServedExternalContactDescription,
+	...createOnceKeyDescription,
 	...sendSchoolMessageCommonDescription,
 	...sendSchoolMessageTextDescription,
 	...sendSchoolMessageImageDescription,

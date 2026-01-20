@@ -1860,6 +1860,19 @@ export async function executeExternalContact(
 					'/cgi-bin/externalcontact/contact_list',
 					body,
 				);
+			} else if (operation === 'createOnceKey') {
+				const link_id = this.getNodeParameter('link_id', i) as string;
+				const key_num = this.getNodeParameter('key_num', i, 100) as number;
+
+				const body: IDataObject = { link_id };
+				if (key_num) body.key_num = key_num;
+
+				response = await weComApiRequest.call(
+					this,
+					'POST',
+					'/cgi-bin/externalcontact/customer_acquisition/create_once_key',
+					body,
+				);
 			} else if (operation === 'sendSchoolMessage') {
 				// 发送学校通知
 				const msgtype = this.getNodeParameter('msgtype', i) as string;

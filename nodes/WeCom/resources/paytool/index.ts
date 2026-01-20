@@ -1,4 +1,5 @@
 import type { INodeProperties } from 'n8n-workflow';
+import { getBillListDescription } from './getBillListDescription';
 
 export const paytoolDescription: INodeProperties[] = [
 	{
@@ -47,6 +48,12 @@ export const paytoolDescription: INodeProperties[] = [
 				value: 'markInvoiceStatus',
 				description: '服务商可以使用该接口标记某个应用订单发票的开票状态',
 				action: '标记开票状态',
+			},
+			{
+				name: '获取代支付流水',
+				value: 'getBillList',
+				description: '服务商可通过此接口获取使用量代付流水',
+				action: '获取代支付流水',
 			},
 		],
 		default: 'createOrder',
@@ -850,4 +857,5 @@ export const paytoolDescription: INodeProperties[] = [
 		default: '',
 		description: '填写开票备注，例如发票邮寄单号等，客户侧可见。不超过200字节',
 	},
+	...getBillListDescription,
 ];

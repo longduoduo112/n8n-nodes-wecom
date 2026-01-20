@@ -1,5 +1,5 @@
-import type { IExecuteFunctions, IDataObject, INodeExecutionData } from 'n8n-workflow';
-import { weComApiRequest } from '../../shared/transport';
+import type { IExecuteFunctions, IDataObject, INodeExecutionData, IHttpRequestOptions } from 'n8n-workflow';
+import { weComApiRequest, getWeComBaseUrl } from '../../shared/transport';
 
 export async function executeSchool(
 	this: IExecuteFunctions,
@@ -232,6 +232,297 @@ export async function executeSchool(
 						'POST',
 						'/cgi-bin/externalcontact/get_trade_detail',
 						{ payment_id },
+					);
+					break;
+				}
+				case 'getAllowScope': {
+					const agentid = this.getNodeParameter('agentid', i) as number;
+					responseData = await weComApiRequest.call(
+						this,
+						'GET',
+						'/cgi-bin/school/agent/get_allow_scope',
+						{},
+						{ agentid },
+					);
+					break;
+				}
+				case 'getUserInfo3rd': {
+					const suiteAccessToken = this.getNodeParameter('suiteAccessToken', i) as string;
+					const code = this.getNodeParameter('code', i) as string;
+					const options: IHttpRequestOptions = {
+						method: 'GET' as const,
+						url: `${await getWeComBaseUrl.call(this)}/cgi-bin/service/school/getuserinfo3rd`,
+						qs: {
+							suite_access_token: suiteAccessToken,
+							code,
+						},
+						json: true,
+					};
+					responseData = await this.helpers.httpRequest(options);
+					break;
+				}
+				case 'createStudent': {
+					const student_userid = this.getNodeParameter('student_userid', i) as string;
+					const name = this.getNodeParameter('name', i) as string;
+					const department = this.getNodeParameter('department', i) as string;
+					const mobile = this.getNodeParameter('mobile', i, '') as string;
+					const to_invite = this.getNodeParameter('to_invite', i, true) as boolean;
+
+					const body: IDataObject = {
+						student_userid,
+						name,
+						department: department.split(',').map((id) => parseInt(id.trim(), 10)),
+					};
+					if (mobile) body.mobile = mobile;
+					if (to_invite !== undefined) body.to_invite = to_invite;
+
+					responseData = await weComApiRequest.call(
+						this,
+						'POST',
+						'/cgi-bin/school/user/create_student',
+						body,
+					);
+					break;
+				}
+				case 'deleteStudent': {
+					const userid = this.getNodeParameter('userid', i) as string;
+					responseData = await weComApiRequest.call(
+						this,
+						'GET',
+						'/cgi-bin/school/user/delete_student',
+						{},
+						{ userid },
+					);
+					break;
+				}
+				case 'updateStudent': {
+					const student_userid = this.getNodeParameter('student_userid', i) as string;
+					const name = this.getNodeParameter('name', i, '') as string;
+					const department = this.getNodeParameter('department', i, '') as string;
+					const mobile = this.getNodeParameter('mobile', i, '') as string;
+					const new_student_userid = this.getNodeParameter('new_student_userid', i, '') as string;
+
+					const body: IDataObject = { student_userid };
+					if (name) body.name = name;
+					if (department) body.department = department.split(',').map((id) => parseInt(id.trim(), 10));
+					if (mobile) body.mobile = mobile;
+					if (new_student_userid) body.new_student_userid = new_student_userid;
+
+					responseData = await weComApiRequest.call(
+						this,
+						'POST',
+						'/cgi-bin/school/user/update_student',
+						body,
+					);
+					break;
+				}
+				case 'batchCreateStudent': {
+					const studentsCollection = this.getNodeParameter('studentsCollection', i, {}) as IDataObject;
+					const students = studentsCollection.students as IDataObject[] | undefined;
+
+					if (!students || students.length === 0) {
+						throw new Error('学生列表不能为空');
+					}
+
+					const formattedStudents = students.map((s) => {
+						const student: IDataObject = {
+							student_userid: s.student_userid,
+							name: s.name,
+							department: (s.department as string).split(',').map((id) => parseInt(id.trim(), 10)),
+						};
+						if (s.mobile) student.mobile = s.mobile;
+						if (s.to_invite !== undefined) student.to_invite = s.to_invite;
+						return student;
+					});
+
+					responseData = await weComApiRequest.call(
+						this,
+						'POST',
+						'/cgi-bin/school/user/batch_create_student',
+						{ students: formattedStudents },
+					);
+					break;
+				}
+				case 'batchDeleteStudent': {
+					const userid_list = this.getNodeParameter('userid_list', i) as string;
+					responseData = await weComApiRequest.call(
+						this,
+						'POST',
+						'/cgi-bin/school/user/batch_delete_student',
+						{ userid_list: userid_list.split(',').map((id) => id.trim()) },
+					);
+					break;
+				}
+				case 'batchUpdateStudent': {
+					const studentsCollection = this.getNodeParameter('studentsCollection', i, {}) as IDataObject;
+					const students = studentsCollection.students as IDataObject[] | undefined;
+
+					if (!students || students.length === 0) {
+						throw new Error('学生列表不能为空');
+					}
+
+					const formattedStudents = students.map((s) => {
+						const student: IDataObject = {
+							student_userid: s.student_userid,
+						};
+						if (s.name) student.name = s.name;
+						if (s.department) student.department = (s.department as string).split(',').map((id) => parseInt(id.trim(), 10));
+						if (s.mobile) student.mobile = s.mobile;
+						if (s.new_student_userid) student.new_student_userid = s.new_student_userid;
+						return student;
+					});
+
+					responseData = await weComApiRequest.call(
+						this,
+						'POST',
+						'/cgi-bin/school/user/batch_update_student',
+						{ students: formattedStudents },
+					);
+					break;
+				}
+				case 'createParent': {
+					const parent_userid = this.getNodeParameter('parent_userid', i) as string;
+					const mobile = this.getNodeParameter('mobile', i) as string;
+					const childrenCollection = this.getNodeParameter('childrenCollection', i, {}) as IDataObject;
+					const children = childrenCollection.children as IDataObject[] | undefined;
+					const to_invite = this.getNodeParameter('to_invite', i, true) as boolean;
+
+					if (!children || children.length === 0) {
+						throw new Error('孩子列表不能为空');
+					}
+
+					const body: IDataObject = {
+						parent_userid,
+						mobile,
+						children: children.map((c) => ({
+							student_userid: c.student_userid,
+							relation: c.relation,
+						})),
+					};
+					if (to_invite !== undefined) body.to_invite = to_invite;
+
+					responseData = await weComApiRequest.call(
+						this,
+						'POST',
+						'/cgi-bin/school/user/create_parent',
+						body,
+					);
+					break;
+				}
+				case 'deleteParent': {
+					const userid = this.getNodeParameter('userid', i) as string;
+					responseData = await weComApiRequest.call(
+						this,
+						'GET',
+						'/cgi-bin/school/user/delete_parent',
+						{},
+						{ userid },
+					);
+					break;
+				}
+				case 'updateParent': {
+					const parent_userid = this.getNodeParameter('parent_userid', i) as string;
+					const mobile = this.getNodeParameter('mobile', i, '') as string;
+					const new_parent_userid = this.getNodeParameter('new_parent_userid', i, '') as string;
+					const childrenCollection = this.getNodeParameter('childrenCollection', i, {}) as IDataObject;
+					const children = childrenCollection.children as IDataObject[] | undefined;
+
+					const body: IDataObject = { parent_userid };
+					if (mobile) body.mobile = mobile;
+					if (new_parent_userid) body.new_parent_userid = new_parent_userid;
+					if (children && children.length > 0) {
+						body.children = children.map((c) => ({
+							student_userid: c.student_userid,
+							relation: c.relation,
+						}));
+					}
+
+					responseData = await weComApiRequest.call(
+						this,
+						'POST',
+						'/cgi-bin/school/user/update_parent',
+						body,
+					);
+					break;
+				}
+				case 'batchCreateParent': {
+					const parentsCollection = this.getNodeParameter('parentsCollection', i, {}) as IDataObject;
+					const parents = parentsCollection.parents as IDataObject[] | undefined;
+
+					if (!parents || parents.length === 0) {
+						throw new Error('家长列表不能为空');
+					}
+
+					const formattedParents = parents.map((p) => {
+						const parent: IDataObject = {
+							parent_userid: p.parent_userid,
+							mobile: p.mobile,
+							children: (p.children as IDataObject[]).map((c) => ({
+								student_userid: c.student_userid,
+								relation: c.relation,
+							})),
+						};
+						if (p.to_invite !== undefined) parent.to_invite = p.to_invite;
+						return parent;
+					});
+
+					responseData = await weComApiRequest.call(
+						this,
+						'POST',
+						'/cgi-bin/school/user/batch_create_parent',
+						{ parents: formattedParents },
+					);
+					break;
+				}
+				case 'batchDeleteParent': {
+					const userid_list = this.getNodeParameter('userid_list', i) as string;
+					responseData = await weComApiRequest.call(
+						this,
+						'POST',
+						'/cgi-bin/school/user/batch_delete_parent',
+						{ userid_list: userid_list.split(',').map((id) => id.trim()) },
+					);
+					break;
+				}
+				case 'batchUpdateParent': {
+					const parentsCollection = this.getNodeParameter('parentsCollection', i, {}) as IDataObject;
+					const parents = parentsCollection.parents as IDataObject[] | undefined;
+
+					if (!parents || parents.length === 0) {
+						throw new Error('家长列表不能为空');
+					}
+
+					const formattedParents = parents.map((p) => {
+						const parent: IDataObject = {
+							parent_userid: p.parent_userid,
+						};
+						if (p.mobile) parent.mobile = p.mobile;
+						if (p.new_parent_userid) parent.new_parent_userid = p.new_parent_userid;
+						if (p.children) {
+							parent.children = (p.children as IDataObject[]).map((c) => ({
+								student_userid: c.student_userid,
+								relation: c.relation,
+							}));
+						}
+						return parent;
+					});
+
+					responseData = await weComApiRequest.call(
+						this,
+						'POST',
+						'/cgi-bin/school/user/batch_update_parent',
+						{ parents: formattedParents },
+					);
+					break;
+				}
+				case 'getSchoolUser': {
+					const userid = this.getNodeParameter('userid', i) as string;
+					responseData = await weComApiRequest.call(
+						this,
+						'GET',
+						'/cgi-bin/school/user/get',
+						{},
+						{ userid },
 					);
 					break;
 				}

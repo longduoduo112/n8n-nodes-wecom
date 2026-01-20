@@ -21,6 +21,7 @@ import { fileShareSettingsDescription } from './fileShareSettings';
 import { getFileShareLinkDescription } from './getFileShareLink';
 import { getFilePermissionsDescription } from './getFilePermissions';
 import { fileSecuritySettingsDescription } from './fileSecuritySettings';
+import { getExternalPaymentListDescription } from './getExternalPaymentList';
 
 const showOnlyForWefile = {
 	resource: ['wefile'],
@@ -127,6 +128,12 @@ export const wefileDescription: INodeProperties[] = [
 			action: '文件安全设置',
 		},
 		{
+			name: '获取对外收款记录',
+			value: 'getExternalPaymentList',
+			description: '获取企业的对外收款记录',
+			action: '获取对外收款记录',
+		},
+		{
 			name: '文件分享设置',
 			value: 'fileShareSettings',
 			description: '设置文件的分享配置',
@@ -193,4 +200,5 @@ export const wefileDescription: INodeProperties[] = [
 	...getFileShareLinkDescription,
 	...getFilePermissionsDescription,
 	...fileSecuritySettingsDescription,
+	...getExternalPaymentListDescription,
 ];

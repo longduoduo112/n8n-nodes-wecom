@@ -5,6 +5,7 @@ import { getOrderList } from './getOrderList';
 import { getOrderDetail } from './getOrderDetail';
 import { getInvoiceList } from './getInvoiceList';
 import { markInvoiceStatus } from './markInvoiceStatus';
+import { getBillList } from './getBillList';
 
 /**
  * 执行第三方应用收银台相关操作
@@ -38,6 +39,9 @@ export async function executePaytool(
 					break;
 				case 'markInvoiceStatus':
 					responseData = await markInvoiceStatus.call(this, i);
+					break;
+				case 'getBillList':
+					responseData = await getBillList.call(this, i);
 					break;
 				default:
 					throw new Error(`未知操作: ${operation}`);

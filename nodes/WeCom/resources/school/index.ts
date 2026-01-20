@@ -12,6 +12,10 @@ import { getLivingWatchStatV2Description } from './getLivingWatchStatV2';
 import { getLivingUnwatchStatV2Description } from './getLivingUnwatchStatV2';
 import { getTradeResultDescription } from './getTradeResult';
 import { getTradeDetailDescription } from './getTradeDetail';
+import { getAllowScopeDescription } from './getAllowScope';
+import { getUserInfo3rdDescription } from './getUserInfo3rd';
+import { createStudentDescription } from './createStudent';
+import { getSchoolUserDescription } from './getSchoolUser';
 
 const showOnlyForSchool = {
 	resource: ['school'],
@@ -105,6 +109,96 @@ export const schoolDescription: INodeProperties[] = [
 				description: '获取班级收款订单详情',
 				action: '获取订单详情',
 			},
+			{
+				name: '获取可使用的家长范围',
+				value: 'getAllowScope',
+				description: '获取可在微信「学校通知-学校应用」使用该应用的家长范围',
+				action: '获取可使用的家长范围',
+			},
+			{
+				name: '获取家校访问用户身份',
+				value: 'getUserInfo3rd',
+				description: '获取家校访问用户身份（需要suite_access_token）',
+				action: '获取家校访问用户身份',
+			},
+			{
+				name: '创建学生',
+				value: 'createStudent',
+				description: '创建学生',
+				action: '创建学生',
+			},
+			{
+				name: '删除学生',
+				value: 'deleteStudent',
+				description: '删除学生',
+				action: '删除学生',
+			},
+			{
+				name: '更新学生',
+				value: 'updateStudent',
+				description: '更新学生信息',
+				action: '更新学生',
+			},
+			{
+				name: '批量创建学生',
+				value: 'batchCreateStudent',
+				description: '批量创建学生，每次最多100个',
+				action: '批量创建学生',
+			},
+			{
+				name: '批量删除学生',
+				value: 'batchDeleteStudent',
+				description: '批量删除学生',
+				action: '批量删除学生',
+			},
+			{
+				name: '批量更新学生',
+				value: 'batchUpdateStudent',
+				description: '批量更新学生信息',
+				action: '批量更新学生',
+			},
+			{
+				name: '创建家长',
+				value: 'createParent',
+				description: '创建家长',
+				action: '创建家长',
+			},
+			{
+				name: '删除家长',
+				value: 'deleteParent',
+				description: '删除家长',
+				action: '删除家长',
+			},
+			{
+				name: '更新家长',
+				value: 'updateParent',
+				description: '更新家长信息',
+				action: '更新家长',
+			},
+			{
+				name: '批量创建家长',
+				value: 'batchCreateParent',
+				description: '批量创建家长',
+				action: '批量创建家长',
+			},
+			{
+				name: '批量删除家长',
+				value: 'batchDeleteParent',
+				description: '批量删除家长',
+				action: '批量删除家长',
+			},
+			{
+				name: '批量更新家长',
+				value: 'batchUpdateParent',
+				description: '批量更新家长信息',
+				action: '批量更新家长',
+			},
+			{
+				name: '读取学生或家长',
+				value: 'getSchoolUser',
+				description: '读取学生或家长信息',
+				action: '读取学生或家长',
+			},
 		],
 		default: 'getHealthReportStat',
 	},
@@ -121,4 +215,8 @@ export const schoolDescription: INodeProperties[] = [
 	...getLivingUnwatchStatV2Description,
 	...getTradeResultDescription,
 	...getTradeDetailDescription,
+	...getAllowScopeDescription,
+	...getUserInfo3rdDescription,
+	...createStudentDescription,
+	...getSchoolUserDescription,
 ];
