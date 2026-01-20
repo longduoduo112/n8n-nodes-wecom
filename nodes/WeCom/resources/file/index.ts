@@ -16,7 +16,7 @@ export const fileDescription: INodeProperties[] = [
 		},
 		options: [
 			{
-				name: '解密文件',
+				name: '[文件解密] 解密文件',
 				value: 'decryptFile',
 				action: '解密文件',
 				description: '下载并解密接收到的加密文件',
