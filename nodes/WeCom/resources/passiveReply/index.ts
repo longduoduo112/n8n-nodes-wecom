@@ -15,7 +15,7 @@ export const passiveReplyDescription: INodeProperties[] = [
 		},
 		options: [
 			{
-				name: '被动回复',
+				name: '[消息接收与发送] 被动回复',
 				value: 'reply',
 				action: '被动回复',
 				description: '被动回复企业微信消息',

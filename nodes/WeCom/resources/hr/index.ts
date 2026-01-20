@@ -19,19 +19,19 @@ export const hrDescription: INodeProperties[] = [
 		},
 		options: [
 			{
-				name: '获取员工字段配置',
+				name: '[人事助手] 获取员工字段配置',
 				value: 'getFieldList',
 				action: '获取员工字段配置',
 				description: '获取员工花名册的字段配置信息',
 			},
 			{
-				name: '获取员工花名册信息',
+				name: '[人事助手] 获取员工花名册信息',
 				value: 'getStaffInfo',
 				action: '获取员工花名册信息',
 				description: '获取指定员工的花名册详细信息',
 			},
 			{
-				name: '更新员工花名册信息',
+				name: '[人事助手] 更新员工花名册信息',
 				value: 'updateStaffInfo',
 				action: '更新员工花名册信息',
 				description: '更新指定员工的花名册信息',

@@ -21,32 +21,35 @@ export const meetingroomDescription: INodeProperties[] = [
 		},
 		 
 		options: [
+			// 会议室管理
 			{
-				name: '管理会议室',
+				name: '[会议室管理] 管理会议室',
 				value: 'manageMeetingroom',
 				action: '管理会议室',
 				description: '管理会议室（添加、编辑、删除、获取、列表）',
 			},
+			// 预定管理
 			{
-				name: '管理预定',
+				name: '[预定管理] 管理预定',
 				value: 'manageBooking',
 				action: '管理预定',
 				description: '管理会议室预定（预定、取消、获取、列表）',
 			},
+			// 审批管理
 			{
-				name: '批量获取申请单ID',
+				name: '[审批管理] 批量获取申请单ID',
 				value: 'getApplicationList',
 				action: '批量获取申请单ID',
 				description: '批量获取会议室申请单ID列表',
 			},
 			{
-				name: '获取申请单详细信息',
+				name: '[审批管理] 获取申请单详细信息',
 				value: 'getApplicationDetail',
 				action: '获取申请单详细信息',
 				description: '获取会议室申请单的详细信息',
 			},
 			{
-				name: '设置审批单审批信息',
+				name: '[审批管理] 设置审批单审批信息',
 				value: 'setApprovalInfo',
 				action: '设置审批单审批信息',
 				description: '设置会议室审批单的审批信息',

@@ -24,56 +24,60 @@ export const liveDescription: INodeProperties[] = [
 			show: showOnlyForLive,
 		},
 		options: [
+			// 直播管理
 			{
-				name: '创建预约直播',
+				name: '[直播管理] 创建预约直播',
 				value: 'createLiving',
 				action: '创建预约直播',
 				description: '创建一个预约直播',
 			},
 			{
-				name: '修改预约直播',
+				name: '[直播管理] 修改预约直播',
 				value: 'modifyLiving',
 				action: '修改预约直播',
 				description: '修改已创建的预约直播信息',
 			},
 			{
-				name: '取消预约直播',
+				name: '[直播管理] 取消预约直播',
 				value: 'cancelLiving',
 				action: '取消预约直播',
 				description: '取消已创建的预约直播',
 			},
 			{
-				name: '删除直播回放',
+				name: '[直播管理] 删除直播回放',
 				value: 'deleteLivingReplayData',
 				action: '删除直播回放',
 				description: '删除指定直播的回放视频',
 			},
+			// 直播信息
 			{
-				name: '获取直播分享信息',
-				value: 'getLivingShareInfo',
-				action: '获取直播分享信息',
-				description: '获取在微信中观看直播或回放的链接',
-			},
-			{
-				name: '获取成员直播ID列表',
+				name: '[直播信息] 获取成员直播ID列表',
 				value: 'getUserAllLivingId',
 				action: '获取成员直播ID列表',
 				description: '获取指定成员创建的直播ID列表',
 			},
 			{
-				name: '获取直播详情',
+				name: '[直播信息] 获取直播详情',
 				value: 'getLivingInfo',
 				action: '获取直播详情',
 				description: '根据直播ID获取直播的详细信息',
 			},
 			{
-				name: '获取直播观看明细',
+				name: '[直播信息] 获取直播分享信息',
+				value: 'getLivingShareInfo',
+				action: '获取直播分享信息',
+				description: '获取在微信中观看直播或回放的链接',
+			},
+			// 直播统计
+			{
+				name: '[直播统计] 获取直播观看明细',
 				value: 'getLivingWatchStat',
 				action: '获取直播观看明细',
 				description: '获取指定直播的观看统计数据和明细',
 			},
+			// 其他
 			{
-				name: '获取直播观众临时码',
+				name: '[其他] 获取直播观众临时码',
 				value: 'getLivingCode',
 				action: '获取直播观众临时码',
 				description: '获取跳转小程序商城的直播观众信息',

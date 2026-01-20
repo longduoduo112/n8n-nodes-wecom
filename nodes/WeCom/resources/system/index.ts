@@ -13,19 +13,19 @@ export const systemDescription: INodeProperties[] = [
 		},
 		options: [
 			{
-				name: '获取接口IP段',
+				name: '[基础] 获取接口IP段',
 				value: 'getApiDomainIp',
 				description: '获取企业微信接口服务器的IP段',
 				action: '获取接口IP段',
 			},
 			{
-				name: '获取回调IP段',
+				name: '[基础] 获取回调IP段',
 				value: 'getCallbackIp',
 				description: '获取企业微信回调服务器的IP段',
 				action: '获取回调IP段',
 			},
 			{
-				name: '获取AccessToken',
+				name: '[基础] 获取AccessToken',
 				value: 'getAccessToken',
 				description: '获取企业微信 Access Token',
 				action: '获取AccessToken',

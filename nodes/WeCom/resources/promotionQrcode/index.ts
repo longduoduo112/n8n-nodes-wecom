@@ -13,25 +13,25 @@ export const promotionQrcodeDescription: INodeProperties[] = [
 		},
 		options: [
 			{
-				name: '获取注册码',
+				name: '[推广二维码] 获取注册码',
 				value: 'getRegisterCode',
 				description: '根据注册推广包生成注册码（register_code）',
 				action: '获取注册码',
 			},
 			{
-				name: '查询注册状态',
+				name: '[推广二维码] 查询注册状态',
 				value: 'getRegisterInfo',
 				description: '查询通过注册定制化新创建的企业注册状态',
 				action: '查询注册状态',
 			},
 			{
-				name: '设置授权应用可见范围',
+				name: '[推广二维码] 设置授权应用可见范围',
 				value: 'setAgentScope',
 				description: '设置授权应用的可见范围（成员、部门、标签）',
 				action: '设置授权应用可见范围',
 			},
 			{
-				name: '设置通讯录同步完成',
+				name: '[推广二维码] 设置通讯录同步完成',
 				value: 'setContactSyncSuccess',
 				description: '设置通讯录同步完成，解除通讯录锁定状态',
 				action: '设置通讯录同步完成',

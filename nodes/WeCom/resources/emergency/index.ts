@@ -18,13 +18,13 @@ export const emergencyDescription: INodeProperties[] = [
 		},
 		options: [
 			{
-				name: '发起语音电话',
+				name: '[紧急通知] 发起语音电话',
 				value: 'makeVoiceCall',
 				action: '发起语音电话',
 				description: '发起紧急通知语音电话',
 			},
 			{
-				name: '获取接听状态',
+				name: '[紧急通知] 获取接听状态',
 				value: 'getCallStatus',
 				action: '获取接听状态',
 				description: '获取语音电话的接听状态',

@@ -45,113 +45,113 @@ export const kfDescription: INodeProperties[] = [
 		options: [
 			// 客服账号管理
 			{
-				name: '添加客服账号',
+				name: '[客服账号管理] 添加客服账号',
 				value: 'addKfAccount',
 				action: '添加客服账号',
 				description: '创建新的客服账号',
 			},
 			{
-				name: '删除客服账号',
+				name: '[客服账号管理] 删除客服账号',
 				value: 'delKfAccount',
 				action: '删除客服账号',
 				description: '删除指定的客服账号',
 			},
 			{
-				name: '修改客服账号',
+				name: '[客服账号管理] 修改客服账号',
 				value: 'updateKfAccount',
 				action: '修改客服账号',
 				description: '修改客服账号信息',
 			},
 			{
-				name: '获取客服账号列表',
+				name: '[客服账号管理] 获取客服账号列表',
 				value: 'listKfAccount',
 				action: '获取客服账号列表',
 				description: '获取企业的客服账号列表',
 			},
 			{
-				name: '获取客服账号链接',
+				name: '[客服账号管理] 获取客服账号链接',
 				value: 'getKfAccountLink',
 				action: '获取客服账号链接',
 				description: '获取客服账号的会话链接',
 			},
 			// 接待人员管理
 			{
-				name: '添加接待人员',
+				name: '[接待人员管理] 添加接待人员',
 				value: 'addServicer',
 				action: '添加接待人员',
 				description: '为客服账号添加接待人员',
 			},
 			{
-				name: '删除接待人员',
+				name: '[接待人员管理] 删除接待人员',
 				value: 'delServicer',
 				action: '删除接待人员',
 				description: '从客服账号中删除接待人员',
 			},
 			{
-				name: '获取接待人员列表',
+				name: '[接待人员管理] 获取接待人员列表',
 				value: 'listServicer',
 				action: '获取接待人员列表',
 				description: '获取客服账号的接待人员列表',
 			},
-			// 会话分配与消息收发
+			// 会话与消息
 			{
-				name: '分配客服会话',
+				name: '[会话与消息] 分配客服会话',
 				value: 'transServiceState',
 				action: '分配客服会话',
 				description: '转接客服会话给其他接待人员',
 			},
 			{
-				name: '发送消息',
+				name: '[会话与消息] 发送消息',
 				value: 'sendKfMsg',
 				action: '发送消息',
 				description: '发送客服消息给客户',
 			},
 			{
-				name: '发送事件响应消息',
+				name: '[会话与消息] 发送事件响应消息',
 				value: 'sendKfEventMsg',
 				action: '发送事件响应消息',
 				description: '发送事件响应类型的客服消息',
 			},
 			{
-				name: '读取消息',
+				name: '[会话与消息] 读取消息',
 				value: 'syncMsg',
 				action: '读取消息',
 				description: '同步读取客服会话消息',
 			},
 			{
-				name: '设置升级服务配置',
+				name: '[会话与消息] 设置升级服务配置',
 				value: 'setUpgradeService',
 				action: '设置升级服务配置',
 				description: '设置客服会话的升级服务配置',
 			},
 			{
-				name: '获取客户基础信息',
+				name: '[会话与消息] 获取客户基础信息',
 				value: 'getCustomerInfo',
 				action: '获取客户基础信息',
 				description: '获取客服会话中客户的基础信息',
 			},
 			// 统计管理
 			{
-				name: '获取企业客服数据统计',
+				name: '[统计管理] 获取企业客服数据统计',
 				value: 'getCorpStatistic',
 				action: '获取企业数据统计',
 				description: '获取企业客服的统计数据',
 			},
 			{
-				name: '获取接待人员数据统计',
+				name: '[统计管理] 获取接待人员数据统计',
 				value: 'getServicerStatistic',
 				action: '获取接待人员统计',
 				description: '获取接待人员的统计数据',
 			},
 			// 机器人管理
 			{
-				name: '管理知识库分组',
+				name: '[机器人管理] 管理知识库分组',
 				value: 'manageKnowledgeGroup',
 				action: '管理知识库分组',
 				description: '管理客服机器人知识库的分组',
 			},
 			{
-				name: '管理知识库问答',
+				name: '[机器人管理] 管理知识库问答',
 				value: 'manageKnowledgeIntent',
 				action: '管理知识库问答',
 				description: '管理客服机器人知识库的问答内容',
