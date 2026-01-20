@@ -49,8 +49,10 @@ export class WeComBase implements INodeType {
 		icon: { light: 'file:../../icons/wecom.png', dark: 'file:../../icons/wecom.dark.png' },
 		group: ['transform'],
 		version: 1,
-		subtitle: '={{$parameter["resource"] === "passiveReply" ? "reply: " + $parameter["resource"] : ($parameter["resource"] === "system" ? $parameter["resource"] : $parameter["operation"] + ": " + $parameter["resource"])}}',
-		description: '企业微信基础功能 - 通讯录、应用消息、群聊、消息推送、企业互联、素材、系统、电子发票、第三方应用授权、第三方应用接口调用许可、第三方应用收银台、第三方应用推广二维码、账号ID',
+		subtitle:
+			'={{$parameter["resource"] === "passiveReply" ? "reply: " + $parameter["resource"] : ($parameter["resource"] === "system" ? $parameter["resource"] : $parameter["operation"] + ": " + $parameter["resource"])}}',
+		description:
+			'企业微信基础功能 - 通讯录、应用消息、群聊、消息推送、企业互联、素材、系统、电子发票、第三方应用授权、第三方应用接口调用许可、第三方应用收银台、第三方应用推广二维码、账号ID',
 		defaults: {
 			name: '企业微信-基础',
 		},
@@ -159,7 +161,7 @@ export class WeComBase implements INodeType {
 				name: 'resource',
 				type: 'options',
 				noDataExpression: true,
-				 
+
 				options: [
 					{
 						name: '通讯录管理',
@@ -202,9 +204,9 @@ export class WeComBase implements INodeType {
 						description: '上传和管理素材文件',
 					},
 					{
-						name: '系统',
+						name: '系统信息',
 						value: 'system',
-						description: '获取企业微信系统信息（IP段等）',
+						description: '获取企业微信系统信息（接口IP段、回调IP段、Access Token）',
 					},
 					{
 						name: '电子发票',
@@ -244,25 +246,25 @@ export class WeComBase implements INodeType {
 				],
 				default: 'pushMessage',
 			},
-		...contactDescription,
-		...messageDescription,
-		...appChatDescription,
-		...pushMessageDescription,
-		...passiveReplyDescription,
-		...aibotPassiveReplyDescription,
-		...linkedcorpDescription,
-		...materialDescription,
-		...systemDescription,
-		...invoiceDescription,
-		...agentDescription,
-		...appAuthDescription,
-		...licenseDescription,
-		...paytoolDescription,
-		...promotionQrcodeDescription,
-		...accountIdDescription,
-	],
-	usableAsTool: true,
-};
+			...contactDescription,
+			...messageDescription,
+			...appChatDescription,
+			...pushMessageDescription,
+			...passiveReplyDescription,
+			...aibotPassiveReplyDescription,
+			...linkedcorpDescription,
+			...materialDescription,
+			...systemDescription,
+			...invoiceDescription,
+			...agentDescription,
+			...appAuthDescription,
+			...licenseDescription,
+			...paytoolDescription,
+			...promotionQrcodeDescription,
+			...accountIdDescription,
+		],
+		usableAsTool: true,
+	};
 
 	methods = {
 		loadOptions: {
