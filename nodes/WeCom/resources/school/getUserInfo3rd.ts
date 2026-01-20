@@ -10,6 +10,7 @@ export const getUserInfo3rdDescription: INodeProperties[] = [
 		displayName: 'Suite Access Token',
 		name: 'suiteAccessToken',
 		type: 'string',
+		typeOptions: { password: true },
 		required: true,
 		displayOptions: {
 			show: showOnly,

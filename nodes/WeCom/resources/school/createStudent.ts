@@ -37,7 +37,7 @@ export const createStudentDescription: INodeProperties[] = [
 			show: showOnly,
 		},
 		default: '',
-		description: '学生所在的班级id列表，不超过20个，用逗号分隔',
+		description: '学生所在的班级ID列表，不超过20个，用逗号分隔',
 	},
 	{
 		displayName: '学生手机号',
@@ -47,7 +47,6 @@ export const createStudentDescription: INodeProperties[] = [
 			show: showOnly,
 		},
 		default: '',
-		description: '学生手机号',
 	},
 	{
 		displayName: '是否发起邀请',

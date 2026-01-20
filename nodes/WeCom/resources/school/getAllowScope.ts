@@ -15,6 +15,5 @@ export const getAllowScopeDescription: INodeProperties[] = [
 			show: showOnly,
 		},
 		default: 0,
-		description: '应用id',
 	},
 ];

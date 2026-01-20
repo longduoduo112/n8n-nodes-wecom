@@ -24,6 +24,7 @@ export default [
 			'n8n-nodes-base/node-param-operation-option-action-miscased': 'off',
 			'n8n-nodes-base/node-param-display-name-miscased': 'off',
 			'n8n-nodes-base/node-param-default-wrong-for-limit': 'off',
+			'n8n-nodes-base/node-param-min-value-wrong-for-limit': 'off',
 		},
 	},
 ];

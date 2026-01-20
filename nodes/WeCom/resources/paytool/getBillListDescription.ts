@@ -10,6 +10,7 @@ export const getBillListDescription: INodeProperties[] = [
 		displayName: 'Suite Access Token',
 		name: 'suiteAccessToken',
 		type: 'string',
+		typeOptions: { password: true },
 		required: true,
 		displayOptions: {
 			show: showOnly,
@@ -48,7 +49,6 @@ export const getBillListDescription: INodeProperties[] = [
 			show: showOnly,
 		},
 		default: '',
-		description: '授权企业corpid',
 	},
 	{
 		displayName: '分页游标',

@@ -15,7 +15,6 @@ export const createOnceKeyDescription: INodeProperties[] = [
 			show: showOnly,
 		},
 		default: '',
-		description: '获客链接id',
 	},
 	{
 		displayName: '生成数量',
