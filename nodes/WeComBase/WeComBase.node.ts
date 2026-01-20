@@ -23,6 +23,7 @@ import { licenseDescription } from '../WeCom/resources/license';
 import { paytoolDescription } from '../WeCom/resources/paytool';
 import { promotionQrcodeDescription } from '../WeCom/resources/promotionQrcode';
 import { accountIdDescription } from '../WeCom/resources/accountId';
+import { fileDescription } from '../WeCom/resources/file';
 import { executeMessage } from '../WeCom/resources/message/execute';
 import { executeContact } from '../WeCom/resources/contact/execute';
 import { executeMaterial } from '../WeCom/resources/material/execute';
@@ -39,6 +40,7 @@ import { executeLicense } from '../WeCom/resources/license/execute';
 import { executePaytool } from '../WeCom/resources/paytool/execute';
 import { executePromotionQrcode } from '../WeCom/resources/promotionQrcode/execute';
 import { executeAccountId } from '../WeCom/resources/accountId/execute';
+import { executeFile } from '../WeCom/resources/file/execute';
 import { weComApiRequest } from '../WeCom/shared/transport';
 
 export class WeComBase implements INodeType {
@@ -147,6 +149,16 @@ export class WeComBase implements INodeType {
 					},
 				},
 			},
+			{
+				// 文件解密可以使用 weComReceiveApi 凭证获取 EncodingAESKey
+				name: 'weComReceiveApi',
+				required: false,
+				displayOptions: {
+					show: {
+						resource: ['file'],
+					},
+				},
+			},
 		],
 		requestDefaults: {
 			baseURL: 'https://qyapi.weixin.qq.com',
@@ -243,6 +255,11 @@ export class WeComBase implements INodeType {
 						value: 'accountId',
 						description: '自建应用与第三方应用的对接（userid转换、external_userid转换）',
 					},
+					{
+						name: '文件解密',
+						value: 'file',
+						description: '解密接收到的加密文件',
+					},
 				],
 				default: 'pushMessage',
 			},
@@ -262,6 +279,7 @@ export class WeComBase implements INodeType {
 			...paytoolDescription,
 			...promotionQrcodeDescription,
 			...accountIdDescription,
+			...fileDescription,
 		],
 		usableAsTool: true,
 	};
@@ -427,6 +445,8 @@ export class WeComBase implements INodeType {
 				returnData = await executePromotionQrcode.call(this, operation, items);
 			} else if (resource === 'accountId') {
 				returnData = await executeAccountId.call(this, operation, items);
+			} else if (resource === 'file') {
+				returnData = await executeFile.call(this, operation, items);
 			}
 		}
 
