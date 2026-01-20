@@ -4,14 +4,30 @@ const showOnly = { resource: ['calendar'], operation: ['createSchedule'] };
 
 export const createScheduleDescription: INodeProperties[] = [
 	{
-		displayName: '组织者UserID',
-		name: 'organizer',
-		type: 'string',
-		required: true,
+		displayName: '日程管理员',
+		name: 'adminsCollection',
+		type: 'fixedCollection',
 		displayOptions: { show: showOnly },
-		default: '',
-		description: '日程组织者的UserID',
-		placeholder: 'zhangsan',
+		default: {},
+		placeholder: '添加管理员',
+		typeOptions: { multipleValues: true },
+		description: '日程的管理员userid列表，管理员必须在共享成员的列表中。最多指定3人',
+		options: [
+			{
+				displayName: '管理员',
+				name: 'admins',
+				values: [
+					{
+						displayName: '成员UserID',
+						name: 'userid',
+						type: 'string',
+						default: '',
+						required: true,
+						description: '管理员的UserID',
+					},
+				],
+			},
+		],
 	},
 	{
 		displayName: '日程主题',

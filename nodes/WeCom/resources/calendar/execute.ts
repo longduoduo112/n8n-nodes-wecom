@@ -73,7 +73,7 @@ export async function executeCalendar(
 			}
 			// 管理日程
 			else if (operation === 'createSchedule') {
-				const organizer = this.getNodeParameter('organizer', i) as string;
+				const adminsCollection = this.getNodeParameter('adminsCollection', i, {}) as IDataObject;
 				const summary = this.getNodeParameter('summary', i) as string;
 				const start_time = this.getNodeParameter('start_time', i) as number;
 				const end_time = this.getNodeParameter('end_time', i) as number;
@@ -84,11 +84,16 @@ export async function executeCalendar(
 				const agentid = this.getNodeParameter('agentid', i, 0) as number;
 
 				const schedule: IDataObject = {
-					organizer,
 					summary,
 					start_time,
 					end_time,
 				};
+
+				// 构建管理员列表
+				if (adminsCollection.admins) {
+					const adminsList = adminsCollection.admins as IDataObject[];
+					schedule.admins = adminsList.map((a) => a.userid);
+				}
 
 				// 构建参与者列表
 				if (attendeesCollection.attendees) {
@@ -107,6 +112,9 @@ export async function executeCalendar(
 			} else if (operation === 'updateSchedule') {
 				const schedule_id = this.getNodeParameter('schedule_id', i) as string;
 				const schedule = this.getNodeParameter('schedule', i) as string;
+				const skip_attendees = this.getNodeParameter('skip_attendees', i, false) as boolean;
+				const op_mode = this.getNodeParameter('op_mode', i, 0) as number;
+				const op_start_time = this.getNodeParameter('op_start_time', i, 0) as number;
 
 				let parsedSchedule;
 				try {
@@ -119,15 +127,30 @@ export async function executeCalendar(
 					);
 				}
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/oa/schedule/update', {
+				const body: IDataObject = {
 					schedule: {
 						schedule_id,
 						...parsedSchedule,
 					},
-				});
+				};
+
+				if (skip_attendees) {
+					body.skip_attendees = skip_attendees ? 1 : 0;
+				}
+				if (op_mode !== 0) {
+					body.op_mode = op_mode;
+				}
+				if (op_start_time > 0 && (op_mode === 1 || op_mode === 2)) {
+					body.op_start_time = op_start_time;
+				}
+
+				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/oa/schedule/update', body);
 			} else if (operation === 'updateRecurringSchedule') {
 				const schedule_id = this.getNodeParameter('schedule_id', i) as string;
 				const schedule = this.getNodeParameter('schedule', i) as string;
+				const skip_attendees = this.getNodeParameter('skip_attendees', i, false) as boolean;
+				const op_mode = this.getNodeParameter('op_mode', i, 1) as number;
+				const op_start_time = this.getNodeParameter('op_start_time', i, 0) as number;
 
 				let parsedSchedule;
 				try {
@@ -140,17 +163,25 @@ export async function executeCalendar(
 					);
 				}
 
-				response = await weComApiRequest.call(
-					this,
-					'POST',
-					'/cgi-bin/oa/schedule/update_by_meetingid',
-					{
-						schedule: {
-							schedule_id,
-							...parsedSchedule,
-						},
+				const body: IDataObject = {
+					schedule: {
+						schedule_id,
+						...parsedSchedule,
 					},
-				);
+				};
+
+				if (skip_attendees) {
+					body.skip_attendees = skip_attendees ? 1 : 0;
+				}
+				if (op_mode !== 0) {
+					body.op_mode = op_mode;
+				}
+				if (op_start_time > 0 && (op_mode === 1 || op_mode === 2)) {
+					body.op_start_time = op_start_time;
+				}
+
+				// 更新重复日程使用相同的接口，通过op_mode和op_start_time控制
+				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/oa/schedule/update', body);
 			} else if (operation === 'addScheduleAttendees') {
 				const schedule_id = this.getNodeParameter('schedule_id', i) as string;
 				const attendeesCollection = this.getNodeParameter('attendeesCollection', i, {}) as IDataObject;
@@ -201,10 +232,21 @@ export async function executeCalendar(
 				});
 			} else if (operation === 'cancelSchedule') {
 				const schedule_id = this.getNodeParameter('schedule_id', i) as string;
+				const op_mode = this.getNodeParameter('op_mode', i, 0) as number;
+				const op_start_time = this.getNodeParameter('op_start_time', i, 0) as number;
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/oa/schedule/del', {
+				const body: IDataObject = {
 					schedule_id,
-				});
+				};
+
+				if (op_mode !== 0) {
+					body.op_mode = op_mode;
+				}
+				if (op_start_time > 0 && (op_mode === 1 || op_mode === 2)) {
+					body.op_start_time = op_start_time;
+				}
+
+				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/oa/schedule/del', body);
 			} else {
 				response = {};
 			}

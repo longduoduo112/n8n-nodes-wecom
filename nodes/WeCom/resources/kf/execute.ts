@@ -58,20 +58,54 @@ export async function executeKf(
 			// 接待人员管理
 			else if (operation === 'addServicer') {
 				const open_kfid = this.getNodeParameter('open_kfid', i) as string;
-				const userid_list = this.getNodeParameter('userid_list', i) as string;
+				const userid_list = this.getNodeParameter('userid_list', i, '') as string;
+				const department_id_list = this.getNodeParameter('department_id_list', i, '') as string;
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/kf/servicer/add', {
-					open_kfid,
-					userid_list: userid_list.split(',').map((id) => id.trim()),
-				});
+				// 验证至少提供一个列表
+				if (!userid_list && !department_id_list) {
+					throw new NodeOperationError(
+						this.getNode(),
+						'接待人员列表和部门列表至少需要填其中一个',
+						{ itemIndex: i },
+					);
+				}
+
+				const body: IDataObject = { open_kfid };
+
+				if (userid_list) {
+					body.userid_list = userid_list.split(',').map((id) => id.trim());
+				}
+
+				if (department_id_list) {
+					body.department_id_list = department_id_list.split(',').map((id) => parseInt(id.trim(), 10));
+				}
+
+				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/kf/servicer/add', body);
 			} else if (operation === 'delServicer') {
 				const open_kfid = this.getNodeParameter('open_kfid', i) as string;
-				const userid_list = this.getNodeParameter('userid_list', i) as string;
+				const userid_list = this.getNodeParameter('userid_list', i, '') as string;
+				const department_id_list = this.getNodeParameter('department_id_list', i, '') as string;
 
-				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/kf/servicer/del', {
-					open_kfid,
-					userid_list: userid_list.split(',').map((id) => id.trim()),
-				});
+				// 验证至少提供一个列表
+				if (!userid_list && !department_id_list) {
+					throw new NodeOperationError(
+						this.getNode(),
+						'接待人员列表和部门列表至少需要填其中一个',
+						{ itemIndex: i },
+					);
+				}
+
+				const body: IDataObject = { open_kfid };
+
+				if (userid_list) {
+					body.userid_list = userid_list.split(',').map((id) => id.trim());
+				}
+
+				if (department_id_list) {
+					body.department_id_list = department_id_list.split(',').map((id) => parseInt(id.trim(), 10));
+				}
+
+				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/kf/servicer/del', body);
 			} else if (operation === 'listServicer') {
 				const open_kfid = this.getNodeParameter('open_kfid', i) as string;
 

@@ -10,7 +10,7 @@ export const sendFileDescription: INodeProperties[] = [
 	...getRecipientFields('sendFile'),
 	{
 		displayName: 'Media ID',
-		name: 'media_ID',
+		name: 'media_id',
 		type: 'string',
 		default: '',
 		required: true,

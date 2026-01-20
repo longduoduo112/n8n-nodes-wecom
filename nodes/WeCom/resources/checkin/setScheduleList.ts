@@ -4,6 +4,16 @@ const showOnly = { resource: ['checkin'], operation: ['setScheduleList'] };
 
 export const setScheduleListDescription: INodeProperties[] = [
 	{
+		displayName: '打卡规则ID',
+		name: 'groupid',
+		type: 'number',
+		required: true,
+		displayOptions: { show: showOnly },
+		default: 0,
+		description: '打卡规则的规则ID，可通过"获取打卡规则"等接口获取。<a href="https://developer.work.weixin.qq.com/document/path/93385" target="_blank">官方文档</a>',
+		typeOptions: { minValue: 0 },
+	},
+	{
 		displayName: '年月',
 		name: 'yearmonth',
 		type: 'number',

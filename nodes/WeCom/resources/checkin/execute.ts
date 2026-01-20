@@ -18,10 +18,12 @@ export async function executeCheckin(
 				responseData = await weComApiRequest.call(this, 'POST', '/cgi-bin/checkin/getcorpcheckinoption', {});
 			} else if (operation === 'getUserRules') {
 				// 获取员工打卡规则
-				// https://developer.work.weixin.qq.com/document/path/90263
-				const userid = this.getNodeParameter('userid', i) as string;
+				// https://developer.work.weixin.qq.com/document/path/94204
+				const datetime = this.getNodeParameter('datetime', i) as number;
+				const useridlist = this.getNodeParameter('useridlist', i) as string;
 				responseData = await weComApiRequest.call(this, 'POST', '/cgi-bin/checkin/getcheckinoption', {
-					userid_list: [userid],
+					datetime,
+					useridlist: useridlist.split(',').map((id) => id.trim()),
 				});
 			} else if (operation === 'getCheckinData') {
 				// 获取打卡记录数据
@@ -51,12 +53,14 @@ export async function executeCheckin(
 				});
 			} else if (operation === 'getMonthlyReport') {
 				// 获取打卡月报数据
-				// https://developer.work.weixin.qq.com/document/path/93387
-				const month = this.getNodeParameter('month', i) as number;
+				// https://developer.work.weixin.qq.com/document/path/94207
+				const starttime = this.getNodeParameter('starttime', i) as number;
+				const endtime = this.getNodeParameter('endtime', i) as number;
 				const useridlist = this.getNodeParameter('useridlist', i) as string;
 
 				responseData = await weComApiRequest.call(this, 'POST', '/cgi-bin/checkin/getcheckin_monthdata', {
-					month,
+					starttime,
+					endtime,
 					useridlist: useridlist.split(',').map((id) => id.trim()),
 				});
 			} else if (operation === 'getScheduleList') {
@@ -79,6 +83,7 @@ export async function executeCheckin(
 			} else if (operation === 'setScheduleList') {
 				// 为打卡人员排班
 				// https://developer.work.weixin.qq.com/document/path/93385
+				const groupid = this.getNodeParameter('groupid', i) as number;
 				const yearmonth = this.getNodeParameter('yearmonth', i) as number;
 				const scheduleCollection = this.getNodeParameter('scheduleCollection', i, {}) as { schedules?: Array<{ userid: string; day: number; schedule_id: number }> };
 
@@ -94,7 +99,7 @@ export async function executeCheckin(
 				}
 
 				responseData = await weComApiRequest.call(this, 'POST', '/cgi-bin/checkin/setcheckinschedulist', {
-					groupid: 0,
+					groupid,
 					items,
 					yearmonth,
 				});

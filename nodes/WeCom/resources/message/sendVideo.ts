@@ -10,7 +10,7 @@ export const sendVideoDescription: INodeProperties[] = [
 	...getRecipientFields('sendVideo'),
 	{
 		displayName: 'Media ID',
-		name: 'media_ID',
+		name: 'media_id',
 		type: 'string',
 		default: '',
 		required: true,

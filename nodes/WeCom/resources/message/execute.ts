@@ -176,7 +176,7 @@ export async function executeMessage(
 					body.duplicate_check_interval = duplicate_check_interval;
 				}
 			} else if (operation === 'sendImage') {
-				const mediaId = this.getNodeParameter('media_ID', i) as string;
+				const mediaId = this.getNodeParameter('media_id', i) as string;
 				const safe = this.getNodeParameter('safe', i, false) as boolean;
 				const enable_duplicate_check = this.getNodeParameter(
 					'enable_duplicate_check',
@@ -203,7 +203,7 @@ export async function executeMessage(
 					body.duplicate_check_interval = duplicate_check_interval;
 				}
 			} else if (operation === 'sendFile') {
-				const mediaId = this.getNodeParameter('media_ID', i) as string;
+				const mediaId = this.getNodeParameter('media_id', i) as string;
 				const safe = this.getNodeParameter('safe', i, false) as boolean;
 				const enable_duplicate_check = this.getNodeParameter(
 					'enable_duplicate_check',
@@ -230,7 +230,7 @@ export async function executeMessage(
 					body.duplicate_check_interval = duplicate_check_interval;
 				}
 			} else if (operation === 'sendVoice') {
-				const mediaId = this.getNodeParameter('media_ID', i) as string;
+				const mediaId = this.getNodeParameter('media_id', i) as string;
 				const enable_duplicate_check = this.getNodeParameter(
 					'enable_duplicate_check',
 					i,
@@ -255,7 +255,7 @@ export async function executeMessage(
 					body.duplicate_check_interval = duplicate_check_interval;
 				}
 			} else if (operation === 'sendVideo') {
-				const mediaId = this.getNodeParameter('media_ID', i) as string;
+				const mediaId = this.getNodeParameter('media_id', i) as string;
 				const title = this.getNodeParameter('title', i, '') as string;
 				const description = this.getNodeParameter('description', i, '') as string;
 				const safe = this.getNodeParameter('safe', i, false) as boolean;

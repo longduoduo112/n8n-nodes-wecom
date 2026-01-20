@@ -25,13 +25,23 @@ export const addServicerDescription: INodeProperties[] = [
 		displayName: '接待人员列表',
 		name: 'userid_list',
 		type: 'string',
-		required: true,
 		displayOptions: {
 			show: showOnlyForAddServicer,
 		},
 		default: '',
-		description: '要添加的接待人员UserID列表，多个用英文逗号分隔。<a href="https://developer.work.weixin.qq.com/document/path/94646" target="_blank">官方文档</a>',
+		description: '要添加的接待人员UserID列表，多个用英文逗号分隔。与部门列表至少填其中一个。<a href="https://developer.work.weixin.qq.com/document/path/94646" target="_blank">官方文档</a>',
 		placeholder: 'zhangsan,lisi',
+	},
+	{
+		displayName: '接待人员部门列表',
+		name: 'department_id_list',
+		type: 'string',
+		displayOptions: {
+			show: showOnlyForAddServicer,
+		},
+		default: '',
+		description: '接待人员部门ID列表，多个用英文逗号分隔，最多20个。与接待人员列表至少填其中一个。<a href="https://developer.work.weixin.qq.com/document/path/94646" target="_blank">官方文档</a>',
+		placeholder: '2,4',
 	},
 ];
 
