@@ -1,6 +1,17 @@
 import type { IExecuteFunctions, INodeExecutionData, IDataObject } from 'n8n-workflow';
 import { weComApiRequest } from '../../shared/transport';
 
+// 辅助函数：将dateTime转换为Unix时间戳（秒级）
+function dateTimeToUnixTimestamp(dateTime: string | number): number {
+	if (typeof dateTime === 'number') {
+		return dateTime;
+	}
+	if (!dateTime || dateTime === '') {
+		return 0;
+	}
+	return Math.floor(new Date(dateTime).getTime() / 1000);
+}
+
 export async function executePhone(
 	this: IExecuteFunctions,
 	operation: string,
@@ -13,8 +24,8 @@ export async function executePhone(
 			let response: IDataObject;
 
 			if (operation === 'getDialRecord') {
-				const startTime = this.getNodeParameter('start_time', i, 0) as number;
-				const endTime = this.getNodeParameter('end_time', i, 0) as number;
+				const startTime = dateTimeToUnixTimestamp(this.getNodeParameter('start_time', i, '') as string | number);
+				const endTime = dateTimeToUnixTimestamp(this.getNodeParameter('end_time', i, '') as string | number);
 				const offset = this.getNodeParameter('offset', i, 0) as number;
 				const limit = this.getNodeParameter('limit', i, 100) as number;
 

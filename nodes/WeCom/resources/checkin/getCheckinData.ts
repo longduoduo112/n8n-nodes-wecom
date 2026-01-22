@@ -9,32 +9,24 @@ export const getCheckinDataDescription: INodeProperties[] = [
 	{
 		displayName: '开始时间',
 		name: 'starttime',
-		type: 'number',
+		type: 'dateTime',
 		required: true,
 		displayOptions: {
 			show: showOnlyForGetCheckinData,
 		},
-		default: 0,
+		default: '',
 		description: '获取打卡数据的起始时间，秒级Unix时间戳。时间跨度不超过30天。<a href="https://developer.work.weixin.qq.com/document/path/90262" target="_blank">官方文档</a>',
-		placeholder: '1640000000',
-		typeOptions: {
-			minValue: 0,
-		},
 	},
 	{
 		displayName: '结束时间',
 		name: 'endtime',
-		type: 'number',
+		type: 'dateTime',
 		required: true,
 		displayOptions: {
 			show: showOnlyForGetCheckinData,
 		},
-		default: 0,
+		default: '',
 		description: '获取打卡数据的结束时间，秒级Unix时间戳。必须大于开始时间，时间跨度不超过30天。<a href="https://developer.work.weixin.qq.com/document/path/90262" target="_blank">官方文档</a>',
-		placeholder: '1640086400',
-		typeOptions: {
-			minValue: 0,
-		},
 	},
 	{
 		displayName: '成员UserID列表',

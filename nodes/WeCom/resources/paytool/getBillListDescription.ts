@@ -21,24 +21,24 @@ export const getBillListDescription: INodeProperties[] = [
 	{
 		displayName: '开始时间',
 		name: 'beginTime',
-		type: 'number',
+		type: 'dateTime',
 		required: true,
 		displayOptions: {
 			show: showOnly,
 		},
-		default: 0,
-		description: '流水记录开始时间戳（秒）',
+		default: '',
+		description: '流水记录开始时间（秒）',
 	},
 	{
 		displayName: '结束时间',
 		name: 'endTime',
-		type: 'number',
+		type: 'dateTime',
 		required: true,
 		displayOptions: {
 			show: showOnly,
 		},
-		default: 0,
-		description: '流水记录结束时间戳（秒），起止间隔不能超过31天',
+		default: '',
+		description: '流水记录结束时间（秒），起止间隔不能超过31天',
 	},
 	{
 		displayName: '授权企业Corpid',

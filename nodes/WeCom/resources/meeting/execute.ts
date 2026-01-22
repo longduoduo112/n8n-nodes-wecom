@@ -1,6 +1,17 @@
 import type { IExecuteFunctions, INodeExecutionData, IDataObject } from 'n8n-workflow';
 import { weComApiRequest } from '../../shared/transport';
 
+// 辅助函数：将dateTime转换为Unix时间戳（秒级）
+function dateTimeToUnixTimestamp(dateTime: string | number): number {
+	if (typeof dateTime === 'number') {
+		return dateTime;
+	}
+	if (!dateTime || dateTime === '') {
+		return 0;
+	}
+	return Math.floor(new Date(dateTime).getTime() / 1000);
+}
+
 export async function executeMeeting(
 	this: IExecuteFunctions,
 	operation: string,
@@ -15,8 +26,8 @@ export async function executeMeeting(
 			// 预约会议基础管理
 			if (operation === 'createMeeting') {
 				const subject = this.getNodeParameter('subject', i) as string;
-				const start_time = this.getNodeParameter('start_time', i) as number;
-				const end_time = this.getNodeParameter('end_time', i) as number;
+				const start_time = dateTimeToUnixTimestamp(this.getNodeParameter('start_time', i) as string | number);
+				const end_time = dateTimeToUnixTimestamp(this.getNodeParameter('end_time', i) as string | number);
 				const type = this.getNodeParameter('type', i) as number;
 				const attendeesCollection = this.getNodeParameter('attendeesCollection', i, {}) as IDataObject;
 
@@ -39,13 +50,19 @@ export async function executeMeeting(
 			} else if (operation === 'updateMeeting') {
 				const meetingid = this.getNodeParameter('meetingid', i) as string;
 				const subject = this.getNodeParameter('subject', i, '') as string;
-				const start_time = this.getNodeParameter('start_time', i, 0) as number;
-				const end_time = this.getNodeParameter('end_time', i, 0) as number;
+				const start_time_raw = this.getNodeParameter('start_time', i, '') as string | number;
+				const end_time_raw = this.getNodeParameter('end_time', i, '') as string | number;
 
 				const body: IDataObject = { meetingid };
 				if (subject) body.subject = subject;
-				if (start_time) body.start_time = start_time;
-				if (end_time) body.end_time = end_time;
+				if (start_time_raw) {
+					const start_time = dateTimeToUnixTimestamp(start_time_raw);
+					if (start_time > 0) body.start_time = start_time;
+				}
+				if (end_time_raw) {
+					const end_time = dateTimeToUnixTimestamp(end_time_raw);
+					if (end_time > 0) body.end_time = end_time;
+				}
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/meeting/update', body);
 			} else if (operation === 'cancelMeeting') {
@@ -73,20 +90,26 @@ export async function executeMeeting(
 			// 会议统计管理
 			else if (operation === 'getMeetingRecords') {
 				const meetingid = this.getNodeParameter('meetingid', i) as string;
-				const start_time = this.getNodeParameter('start_time', i, 0) as number;
-				const end_time = this.getNodeParameter('end_time', i, 0) as number;
+				const start_time_raw = this.getNodeParameter('start_time', i, '') as string | number;
+				const end_time_raw = this.getNodeParameter('end_time', i, '') as string | number;
 
 				const body: IDataObject = { meetingid };
-				if (start_time) body.start_time = start_time;
-				if (end_time) body.end_time = end_time;
+				if (start_time_raw) {
+					const start_time = dateTimeToUnixTimestamp(start_time_raw);
+					if (start_time > 0) body.start_time = start_time;
+				}
+				if (end_time_raw) {
+					const end_time = dateTimeToUnixTimestamp(end_time_raw);
+					if (end_time > 0) body.end_time = end_time;
+				}
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/meeting/get_user_meeting_list', body);
 			}
 			// 预约会议高级管理
 			else if (operation === 'createAdvancedMeeting') {
 				const subject = this.getNodeParameter('subject', i) as string;
-				const start_time = this.getNodeParameter('start_time', i) as number;
-				const end_time = this.getNodeParameter('end_time', i) as number;
+				const start_time = dateTimeToUnixTimestamp(this.getNodeParameter('start_time', i) as string | number);
+				const end_time = dateTimeToUnixTimestamp(this.getNodeParameter('end_time', i) as string | number);
 				const admin_userid = this.getNodeParameter('admin_userid', i) as string;
 				const inviteesCollection = this.getNodeParameter('inviteesCollection', i, {}) as IDataObject;
 				const advancedSettings = this.getNodeParameter('advancedSettings', i, {}) as IDataObject;
@@ -120,14 +143,20 @@ export async function executeMeeting(
 			} else if (operation === 'updateAdvancedMeeting') {
 				const meetingid = this.getNodeParameter('meetingid', i) as string;
 				const subject = this.getNodeParameter('subject', i, '') as string;
-				const start_time = this.getNodeParameter('start_time', i, 0) as number;
-				const end_time = this.getNodeParameter('end_time', i, 0) as number;
+				const start_time_raw = this.getNodeParameter('start_time', i, '') as string | number;
+				const end_time_raw = this.getNodeParameter('end_time', i, '') as string | number;
 				const advancedSettings = this.getNodeParameter('advancedSettings', i, {}) as IDataObject;
 
 				const body: IDataObject = { meetingid };
 				if (subject) body.subject = subject;
-				if (start_time) body.start_time = start_time;
-				if (end_time) body.end_time = end_time;
+				if (start_time_raw) {
+					const start_time = dateTimeToUnixTimestamp(start_time_raw);
+					if (start_time > 0) body.start_time = start_time;
+				}
+				if (end_time_raw) {
+					const end_time = dateTimeToUnixTimestamp(end_time_raw);
+					if (end_time > 0) body.end_time = end_time;
+				}
 
 				// 处理高级设置
 				if (advancedSettings.description) body.description = advancedSettings.description;

@@ -25,13 +25,24 @@ export async function listOrder(
 ): Promise<IDataObject> {
 	const providerAccessToken = this.getNodeParameter('providerAccessToken', index) as string;
 	const corpid = this.getNodeParameter('corpid', index) as string | undefined;
-	const startTimeRaw = this.getNodeParameter('startTime', index) as number | undefined;
-	const endTimeRaw = this.getNodeParameter('endTime', index) as number | undefined;
+	const startTimeRaw = this.getNodeParameter('startTime', index) as string | number | undefined;
+	const endTimeRaw = this.getNodeParameter('endTime', index) as string | number | undefined;
 	const cursor = this.getNodeParameter('cursor', index) as string | undefined;
 	const limit = this.getNodeParameter('limit', index, 500) as number;
 
-	const startTime = startTimeRaw && startTimeRaw > 0 ? startTimeRaw : undefined;
-	const endTime = endTimeRaw && endTimeRaw > 0 ? endTimeRaw : undefined;
+	// 辅助函数：将dateTime转换为Unix时间戳（秒级）
+	function dateTimeToUnixTimestamp(dateTime: string | number | undefined): number | undefined {
+		if (!dateTime || dateTime === '') {
+			return undefined;
+		}
+		if (typeof dateTime === 'number') {
+			return dateTime > 0 ? dateTime : undefined;
+		}
+		return Math.floor(new Date(dateTime).getTime() / 1000);
+	}
+
+	const startTime = dateTimeToUnixTimestamp(startTimeRaw);
+	const endTime = dateTimeToUnixTimestamp(endTimeRaw);
 
 	if (!providerAccessToken) {
 		throw new NodeOperationError(

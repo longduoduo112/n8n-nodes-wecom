@@ -21,9 +21,20 @@ export async function getBillList(
 	this: IExecuteFunctions,
 	index: number,
 ): Promise<IDataObject> {
+	// 辅助函数：将dateTime转换为Unix时间戳（秒级）
+	function dateTimeToUnixTimestamp(dateTime: string | number): number {
+		if (typeof dateTime === 'number') {
+			return dateTime;
+		}
+		if (!dateTime || dateTime === '') {
+			return 0;
+		}
+		return Math.floor(new Date(dateTime).getTime() / 1000);
+	}
+
 	const suiteAccessToken = this.getNodeParameter('suiteAccessToken', index) as string;
-	const beginTime = this.getNodeParameter('beginTime', index) as number;
-	const endTime = this.getNodeParameter('endTime', index) as number;
+	const beginTime = dateTimeToUnixTimestamp(this.getNodeParameter('beginTime', index) as string | number);
+	const endTime = dateTimeToUnixTimestamp(this.getNodeParameter('endTime', index) as string | number);
 	const authCorpid = this.getNodeParameter('authCorpid', index) as string;
 	const cursor = this.getNodeParameter('cursor', index, '') as string | undefined;
 	const limit = this.getNodeParameter('limit', index, 100) as number | undefined;

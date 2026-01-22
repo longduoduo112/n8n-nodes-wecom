@@ -9,23 +9,23 @@ export const getDailyReportDescription: INodeProperties[] = [
 	{
 		displayName: '开始时间',
 		name: 'starttime',
-		type: 'number',
+		type: 'dateTime',
 		required: true,
 		displayOptions: {
 			show: showOnlyForGetDailyReport,
 		},
-		default: 0,
+		default: '',
 		description: '查询的起始日期，使用Unix时间戳格式（秒级）',
 	},
 	{
 		displayName: '结束时间',
 		name: 'endtime',
-		type: 'number',
+		type: 'dateTime',
 		required: true,
 		displayOptions: {
 			show: showOnlyForGetDailyReport,
 		},
-		default: 0,
+		default: '',
 		description: '查询的结束日期，使用Unix时间戳格式（秒级）',
 	},
 	{

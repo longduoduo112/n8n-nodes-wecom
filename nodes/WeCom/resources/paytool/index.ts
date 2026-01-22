@@ -675,27 +675,27 @@ export const paytoolDescription: INodeProperties[] = [
 	{
 		displayName: '起始时间',
 		name: 'startTime',
-		type: 'number',
+		type: 'dateTime',
 		displayOptions: {
 			show: {
 				resource: ['paytool'],
 				operation: ['getOrderList'],
 			},
 		},
-		default: 0,
+		default: '',
 		description: 'Unix时间戳（秒）',
 	},
 	{
 		displayName: '结束时间',
 		name: 'endTime',
-		type: 'number',
+		type: 'dateTime',
 		displayOptions: {
 			show: {
 				resource: ['paytool'],
 				operation: ['getOrderList'],
 			},
 		},
-		default: 0,
+		default: '',
 		description: 'Unix时间戳（秒）',
 	},
 	{
@@ -730,27 +730,27 @@ export const paytoolDescription: INodeProperties[] = [
 	{
 		displayName: '开始时间',
 		name: 'startTime',
-		type: 'number',
+		type: 'dateTime',
 		displayOptions: {
 			show: {
 				resource: ['paytool'],
 				operation: ['getInvoiceList'],
 			},
 		},
-		default: 0,
+		default: '',
 		description: '开始时间（申请时间），unix时间戳（秒）。不能单独指定该字段，start_time和end_time必须同时指定',
 	},
 	{
 		displayName: '结束时间',
 		name: 'endTime',
-		type: 'number',
+		type: 'dateTime',
 		displayOptions: {
 			show: {
 				resource: ['paytool'],
 				operation: ['getInvoiceList'],
 			},
 		},
-		default: 0,
+		default: '',
 		description: '结束时间（申请时间），unix时间戳（秒）。不能单独指定该字段，start_time和end_time必须同时指定',
 	},
 	{

@@ -20,9 +20,20 @@ export async function getInvoiceList(
 	this: IExecuteFunctions,
 	index: number,
 ): Promise<IDataObject> {
+	// 辅助函数：将dateTime转换为Unix时间戳（秒级）
+	function dateTimeToUnixTimestamp(dateTime: string | number | undefined): number | undefined {
+		if (!dateTime || dateTime === '') {
+			return undefined;
+		}
+		if (typeof dateTime === 'number') {
+			return dateTime > 0 ? dateTime : undefined;
+		}
+		return Math.floor(new Date(dateTime).getTime() / 1000);
+	}
+
 	const providerAccessToken = this.getNodeParameter('providerAccessToken', index) as string;
-	const startTime = this.getNodeParameter('startTime', index) as number | undefined;
-	const endTime = this.getNodeParameter('endTime', index) as number | undefined;
+	const startTime = dateTimeToUnixTimestamp(this.getNodeParameter('startTime', index) as string | number | undefined);
+	const endTime = dateTimeToUnixTimestamp(this.getNodeParameter('endTime', index) as string | number | undefined);
 	const cursor = this.getNodeParameter('cursor', index) as string | undefined;
 	const limit = this.getNodeParameter('limit', index) as number | undefined;
 
@@ -34,7 +45,7 @@ export async function getInvoiceList(
 		);
 	}
 
-	if ((startTime !== undefined && startTime !== 0) && (endTime === undefined || endTime === 0)) {
+	if (startTime !== undefined && endTime === undefined) {
 		throw new NodeOperationError(
 			this.getNode(),
 			'start_time和end_time必须同时指定，不能单独指定start_time',
@@ -42,7 +53,7 @@ export async function getInvoiceList(
 		);
 	}
 
-	if ((endTime !== undefined && endTime !== 0) && (startTime === undefined || startTime === 0)) {
+	if (endTime !== undefined && startTime === undefined) {
 		throw new NodeOperationError(
 			this.getNode(),
 			'start_time和end_time必须同时指定，不能单独指定end_time',
@@ -60,11 +71,11 @@ export async function getInvoiceList(
 
 	const body: IDataObject = {};
 
-	if (startTime !== undefined && startTime !== 0) {
+	if (startTime !== undefined) {
 		body.start_time = startTime;
 	}
 
-	if (endTime !== undefined && endTime !== 0) {
+	if (endTime !== undefined) {
 		body.end_time = endTime;
 	}
 

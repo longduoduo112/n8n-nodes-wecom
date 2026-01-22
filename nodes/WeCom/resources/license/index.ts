@@ -421,9 +421,9 @@ export const licenseDescription: INodeProperties[] = [
 		description: '每个月按照31天计算。最多购买60个月。若企业为服务商测试企业，每次续期只能续期1个月',
 	},
 	{
-		displayName: '新到期时间戳',
+		displayName: '新到期时间',
 		name: 'newExpireTime',
-		type: 'number',
+		type: 'dateTime',
 		displayOptions: {
 			show: {
 				resource: ['license'],
@@ -431,8 +431,8 @@ export const licenseDescription: INodeProperties[] = [
 				durationType: ['newExpireTime'],
 			},
 		},
-		default: 0,
-		description: '指定的新到期时间戳。不可为今天和过去的时间，不可为1860天后的时间。须填当天的24时0分0秒，否则系统自动处理为当天的24时0分0秒。若企业为服务商测试企业，不支持指定新的到期时间来续期',
+		default: '',
+		description: '指定的新到期时间。不可为今天和过去的时间，不可为1860天后的时间。须填当天的24时0分0秒，否则系统自动处理为当天的24时0分0秒。若企业为服务商测试企业，不支持指定新的到期时间来续期',
 	},
 	{
 		displayName: '企业ID（可选）',
@@ -450,27 +450,27 @@ export const licenseDescription: INodeProperties[] = [
 	{
 		displayName: '开始时间（可选）',
 		name: 'startTime',
-		type: 'number',
+		type: 'dateTime',
 		displayOptions: {
 			show: {
 				resource: ['license'],
 				operation: ['listOrder'],
 			},
 		},
-		default: 0,
+		default: '',
 		description: '开始时间（下单时间），时间戳（秒）。start_time 和 end_time 必须同时指定，不能单独指定。起始时间跟结束时间不能超过31天',
 	},
 	{
 		displayName: '结束时间（可选）',
 		name: 'endTime',
-		type: 'number',
+		type: 'dateTime',
 		displayOptions: {
 			show: {
 				resource: ['license'],
 				operation: ['listOrder'],
 			},
 		},
-		default: 0,
+		default: '',
 		description: '结束时间（下单时间），时间戳（秒）。start_time 和 end_time 必须同时指定，不能单独指定。起始时间跟结束时间不能超过31天',
 	},
 	{

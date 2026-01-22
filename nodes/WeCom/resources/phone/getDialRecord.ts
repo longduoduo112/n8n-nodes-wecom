@@ -9,24 +9,22 @@ export const getDialRecordDescription: INodeProperties[] = [
 	{
 		displayName: '开始时间',
 		name: 'start_time',
-		type: 'number',
-		noDataExpression: true,
+		type: 'dateTime',
 		displayOptions: {
 			show: showOnly,
 		},
-		description: '查询的起始时间戳，UTC时间戳，单位为秒。如未指定，则默认查询最近30天范围内数据',
-		default: 0,
+		description: '查询的起始时间，UTC时间戳，单位为秒。如未指定，则默认查询最近30天范围内数据',
+		default: '',
 	},
 	{
 		displayName: '结束时间',
 		name: 'end_time',
-		type: 'number',
-		noDataExpression: true,
+		type: 'dateTime',
 		displayOptions: {
 			show: showOnly,
 		},
-		description: '查询的结束时间戳，UTC时间戳，单位为秒。如未指定，则默认查询最近30天范围内数据',
-		default: 0,
+		description: '查询的结束时间，UTC时间戳，单位为秒。如未指定，则默认查询最近30天范围内数据',
+		default: '',
 	},
 	{
 		displayName: '分页偏移量',

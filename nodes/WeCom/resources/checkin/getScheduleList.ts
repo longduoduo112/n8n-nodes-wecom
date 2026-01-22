@@ -9,23 +9,23 @@ export const getScheduleListDescription: INodeProperties[] = [
 	{
 		displayName: '开始时间',
 		name: 'starttime',
-		type: 'number',
+		type: 'dateTime',
 		required: true,
 		displayOptions: {
 			show: showOnlyForGetScheduleList,
 		},
-		default: 0,
+		default: '',
 		description: '查询排班的起始时间，使用Unix时间戳格式（秒级）',
 	},
 	{
 		displayName: '结束时间',
 		name: 'endtime',
-		type: 'number',
+		type: 'dateTime',
 		required: true,
 		displayOptions: {
 			show: showOnlyForGetScheduleList,
 		},
-		default: 0,
+		default: '',
 		description: '查询排班的结束时间，使用Unix时间戳格式（秒级）',
 	},
 	{

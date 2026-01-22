@@ -1,6 +1,17 @@
 import type { IExecuteFunctions, INodeExecutionData, IDataObject } from 'n8n-workflow';
 import { weComApiRequest } from '../../shared/transport';
 
+// 辅助函数：将dateTime转换为Unix时间戳（秒级）
+function dateTimeToUnixTimestamp(dateTime: string | number): number {
+	if (typeof dateTime === 'number') {
+		return dateTime;
+	}
+	if (!dateTime || dateTime === '') {
+		return 0;
+	}
+	return Math.floor(new Date(dateTime).getTime() / 1000);
+}
+
 export async function executeCheckin(
 	this: IExecuteFunctions,
 	operation: string,
@@ -28,8 +39,8 @@ export async function executeCheckin(
 			} else if (operation === 'getCheckinData') {
 				// 获取打卡记录数据
 				// https://developer.work.weixin.qq.com/document/path/90262
-				const starttime = this.getNodeParameter('starttime', i) as number;
-				const endtime = this.getNodeParameter('endtime', i) as number;
+				const starttime = dateTimeToUnixTimestamp(this.getNodeParameter('starttime', i) as string | number);
+				const endtime = dateTimeToUnixTimestamp(this.getNodeParameter('endtime', i) as string | number);
 				const useridlist = this.getNodeParameter('useridlist', i) as string;
 				const opencheckindatatype = this.getNodeParameter('opencheckindatatype', i) as number;
 
@@ -42,8 +53,8 @@ export async function executeCheckin(
 			} else if (operation === 'getDailyReport') {
 				// 获取打卡日报数据
 				// https://developer.work.weixin.qq.com/document/path/93374
-				const starttime = this.getNodeParameter('starttime', i) as number;
-				const endtime = this.getNodeParameter('endtime', i) as number;
+				const starttime = dateTimeToUnixTimestamp(this.getNodeParameter('starttime', i) as string | number);
+				const endtime = dateTimeToUnixTimestamp(this.getNodeParameter('endtime', i) as string | number);
 				const useridlist = this.getNodeParameter('useridlist', i) as string;
 
 				responseData = await weComApiRequest.call(this, 'POST', '/cgi-bin/checkin/getcheckin_daydata', {
@@ -54,8 +65,8 @@ export async function executeCheckin(
 			} else if (operation === 'getMonthlyReport') {
 				// 获取打卡月报数据
 				// https://developer.work.weixin.qq.com/document/path/94207
-				const starttime = this.getNodeParameter('starttime', i) as number;
-				const endtime = this.getNodeParameter('endtime', i) as number;
+				const starttime = dateTimeToUnixTimestamp(this.getNodeParameter('starttime', i) as string | number);
+				const endtime = dateTimeToUnixTimestamp(this.getNodeParameter('endtime', i) as string | number);
 				const useridlist = this.getNodeParameter('useridlist', i) as string;
 
 				responseData = await weComApiRequest.call(this, 'POST', '/cgi-bin/checkin/getcheckin_monthdata', {
@@ -66,8 +77,8 @@ export async function executeCheckin(
 			} else if (operation === 'getScheduleList') {
 				// 获取打卡人员排班信息
 				// https://developer.work.weixin.qq.com/document/path/93380
-				const starttime = this.getNodeParameter('starttime', i) as number;
-				const endtime = this.getNodeParameter('endtime', i) as number;
+				const starttime = dateTimeToUnixTimestamp(this.getNodeParameter('starttime', i) as string | number);
+				const endtime = dateTimeToUnixTimestamp(this.getNodeParameter('endtime', i) as string | number);
 				const useridlist = this.getNodeParameter('useridlist', i) as string;
 
 				responseData = await weComApiRequest.call(
@@ -107,7 +118,7 @@ export async function executeCheckin(
 				// 为打卡人员补卡
 				// https://developer.work.weixin.qq.com/document/path/95803
 				const userid = this.getNodeParameter('userid', i) as string;
-				const checkintime = this.getNodeParameter('checkintime', i) as number;
+				const checkintime = dateTimeToUnixTimestamp(this.getNodeParameter('checkintime', i) as string | number);
 				const checkintype = this.getNodeParameter('checkintype', i) as string;
 
 				responseData = await weComApiRequest.call(this, 'POST', '/cgi-bin/checkin/add_checkin_userface', {
@@ -150,8 +161,8 @@ export async function executeCheckin(
 			} else if (operation === 'getDeviceCheckinData') {
 				// 获取设备打卡数据
 				// https://developer.work.weixin.qq.com/document/path/94126
-				const starttime = this.getNodeParameter('starttime', i) as number;
-				const endtime = this.getNodeParameter('endtime', i) as number;
+				const starttime = dateTimeToUnixTimestamp(this.getNodeParameter('starttime', i) as string | number);
+				const endtime = dateTimeToUnixTimestamp(this.getNodeParameter('endtime', i) as string | number);
 				const useridlist = this.getNodeParameter('useridlist', i) as string;
 
 				responseData = await weComApiRequest.call(

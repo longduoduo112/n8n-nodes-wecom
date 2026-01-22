@@ -32,30 +32,22 @@ export const updateMeetingDescription: INodeProperties[] = [
 	{
 		displayName: '会议开始时间',
 		name: 'start_time',
-		type: 'number',
+		type: 'dateTime',
 		displayOptions: {
 			show: showOnlyForUpdate,
 		},
-		default: 0,
+		default: '',
 		description: '可选。会议开始时间，秒级Unix时间戳。<a href="https://developer.work.weixin.qq.com/document/path/99105" target="_blank">官方文档</a>',
-		placeholder: '1640000000',
-		typeOptions: {
-			minValue: 0,
-		},
 	},
 	{
 		displayName: '会议结束时间',
 		name: 'end_time',
-		type: 'number',
+		type: 'dateTime',
 		displayOptions: {
 			show: showOnlyForUpdate,
 		},
-		default: 0,
+		default: '',
 		description: '可选。会议结束时间，秒级Unix时间戳。必须大于开始时间。<a href="https://developer.work.weixin.qq.com/document/path/99105" target="_blank">官方文档</a>',
-		placeholder: '1640003600',
-		typeOptions: {
-			minValue: 0,
-		},
 	},
 ];
 

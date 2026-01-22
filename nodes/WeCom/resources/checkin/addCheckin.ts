@@ -20,12 +20,12 @@ export const addCheckinDescription: INodeProperties[] = [
 	{
 		displayName: '打卡时间',
 		name: 'checkintime',
-		type: 'number',
+		type: 'dateTime',
 		required: true,
 		displayOptions: {
 			show: showOnlyForAddCheckin,
 		},
-		default: 0,
+		default: '',
 		description: '补卡的打卡时间，使用Unix时间戳格式（秒级）',
 	},
 	{

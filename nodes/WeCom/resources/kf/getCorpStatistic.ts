@@ -24,26 +24,24 @@ export const getCorpStatisticDescription: INodeProperties[] = [
 	{
 		displayName: '起始日期',
 		name: 'start_time',
-		type: 'number',
+		type: 'dateTime',
 		required: true,
 		displayOptions: {
 			show: showOnlyForGetCorpStatistic,
 		},
-		default: 0,
+		default: '',
 		description: '查询统计数据的起始日期，Unix时间戳格式（秒级），必须为当天0点的时间戳。<a href="https://developer.work.weixin.qq.com/document/path/95489" target="_blank">官方文档</a>',
-		placeholder: '1609459200',
 	},
 	{
 		displayName: '结束日期',
 		name: 'end_time',
-		type: 'number',
+		type: 'dateTime',
 		required: true,
 		displayOptions: {
 			show: showOnlyForGetCorpStatistic,
 		},
-		default: 0,
+		default: '',
 		description: '查询统计数据的结束日期，Unix时间戳格式（秒级），必须为当天0点的时间戳，最多支持查询最近180天的数据。<a href="https://developer.work.weixin.qq.com/document/path/95489" target="_blank">官方文档</a>',
-		placeholder: '1609545600',
 	},
 ];
 

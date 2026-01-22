@@ -9,24 +9,24 @@ export const getExternalPaymentListDescription: INodeProperties[] = [
 	{
 		displayName: '开始时间',
 		name: 'beginTime',
-		type: 'number',
+		type: 'dateTime',
 		required: true,
 		displayOptions: {
 			show: showOnly,
 		},
-		default: 0,
-		description: '收款记录开始时间戳，单位为秒',
+		default: '',
+		description: '收款记录开始时间，单位为秒',
 	},
 	{
 		displayName: '结束时间',
 		name: 'endTime',
-		type: 'number',
+		type: 'dateTime',
 		required: true,
 		displayOptions: {
 			show: showOnly,
 		},
-		default: 0,
-		description: '收款记录结束时间戳，单位为秒，起止时间间隔不能超过1个月',
+		default: '',
+		description: '收款记录结束时间，单位为秒，起止时间间隔不能超过1个月',
 	},
 	{
 		displayName: '收款成员UserID',

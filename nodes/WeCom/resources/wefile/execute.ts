@@ -357,8 +357,19 @@ export async function executeWefile(
 					},
 				);
 			} else if (operation === 'getExternalPaymentList') {
-				const beginTime = this.getNodeParameter('beginTime', i) as number;
-				const endTime = this.getNodeParameter('endTime', i) as number;
+				// 辅助函数：将dateTime转换为Unix时间戳（秒级）
+				function dateTimeToUnixTimestamp(dateTime: string | number): number {
+					if (typeof dateTime === 'number') {
+						return dateTime;
+					}
+					if (!dateTime || dateTime === '') {
+						return 0;
+					}
+					return Math.floor(new Date(dateTime).getTime() / 1000);
+				}
+
+				const beginTime = dateTimeToUnixTimestamp(this.getNodeParameter('beginTime', i) as string | number);
+				const endTime = dateTimeToUnixTimestamp(this.getNodeParameter('endTime', i) as string | number);
 				const payee_userid = this.getNodeParameter('payee_userid', i, '') as string;
 				const cursor = this.getNodeParameter('cursor', i, '') as string;
 				const limit = this.getNodeParameter('limit', i, 1000) as number;

@@ -2,6 +2,17 @@ import type { IExecuteFunctions, INodeExecutionData, IDataObject } from 'n8n-wor
 import { NodeOperationError } from 'n8n-workflow';
 import { weComApiRequest } from '../../shared/transport';
 
+// 辅助函数：将dateTime转换为Unix时间戳（秒级）
+function dateTimeToUnixTimestamp(dateTime: string | number): number {
+	if (typeof dateTime === 'number') {
+		return dateTime;
+	}
+	if (!dateTime || dateTime === '') {
+		return 0;
+	}
+	return Math.floor(new Date(dateTime).getTime() / 1000);
+}
+
 export async function executeKf(
 	this: IExecuteFunctions,
 	operation: string,
@@ -382,8 +393,8 @@ export async function executeKf(
 			// 统计管理
 			else if (operation === 'getCorpStatistic') {
 				const open_kfid = this.getNodeParameter('open_kfid', i) as string;
-				const start_time = this.getNodeParameter('start_time', i) as number;
-				const end_time = this.getNodeParameter('end_time', i) as number;
+				const start_time = dateTimeToUnixTimestamp(this.getNodeParameter('start_time', i) as string | number);
+				const end_time = dateTimeToUnixTimestamp(this.getNodeParameter('end_time', i) as string | number);
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/kf/get_corp_statistic', {
 					open_kfid,
@@ -393,8 +404,8 @@ export async function executeKf(
 			} else if (operation === 'getServicerStatistic') {
 				const open_kfid = this.getNodeParameter('open_kfid', i) as string;
 				const servicer_userid = this.getNodeParameter('servicer_userid', i) as string;
-				const start_time = this.getNodeParameter('start_time', i) as number;
-				const end_time = this.getNodeParameter('end_time', i) as number;
+				const start_time = dateTimeToUnixTimestamp(this.getNodeParameter('start_time', i) as string | number);
+				const end_time = dateTimeToUnixTimestamp(this.getNodeParameter('end_time', i) as string | number);
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/kf/get_servicer_statistic', {
 					open_kfid,

@@ -30,7 +30,7 @@ export async function submitOrderJob(
 	const buyerUserid = this.getNodeParameter('buyerUserid', index) as string;
 	const durationType = this.getNodeParameter('durationType', index) as string;
 	const months = this.getNodeParameter('months', index) as number | undefined;
-	const newExpireTime = this.getNodeParameter('newExpireTime', index) as number | undefined;
+	const newExpireTimeRaw = this.getNodeParameter('newExpireTime', index) as string | number | undefined;
 
 	if (!providerAccessToken) {
 		throw new NodeOperationError(
@@ -74,7 +74,18 @@ export async function submitOrderJob(
 		}
 		accountDuration.months = months;
 	} else if (durationType === 'newExpireTime') {
-		if (newExpireTime === undefined || newExpireTime <= 0) {
+		if (!newExpireTimeRaw || newExpireTimeRaw === '') {
+			throw new NodeOperationError(
+				this.getNode(),
+				'新到期时间不能为空',
+				{ itemIndex: index },
+			);
+		}
+		const newExpireTime = typeof newExpireTimeRaw === 'number' 
+			? newExpireTimeRaw 
+			: Math.floor(new Date(newExpireTimeRaw).getTime() / 1000);
+		
+		if (newExpireTime <= 0) {
 			throw new NodeOperationError(
 				this.getNode(),
 				'新到期时间戳必须大于0',
