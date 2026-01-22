@@ -104,6 +104,20 @@ export function clearAccessTokenCache(credentials: IWeComCredentials): void {
 }
 
 /**
+ * Access Token 信息
+ */
+export interface IAccessTokenInfo {
+	/** 企业微信 access_token */
+	access_token: string;
+	/** 过期时间戳（已提前 5 分钟） */
+	expires_at: number;
+	/** 剩余有效时间（秒） */
+	expires_in: number;
+	/** 上一次访问时间戳 */
+	last_access: number;
+}
+
+/**
  * 获取企业微信 Access Token
  * 官方文档：https://developer.work.weixin.qq.com/document/path/91039
  * @returns 有效的 access_token
@@ -144,6 +158,79 @@ export async function getAccessToken(
 	try {
 		const token = await tokenPromise;
 		return token;
+	} catch (error) {
+		// 请求失败时清除缓存，下次重新尝试
+		accessTokenCache.delete(cacheKey);
+		throw error;
+	}
+}
+
+/**
+ * 获取企业微信 Access Token 及其过期信息
+ * 官方文档：https://developer.work.weixin.qq.com/document/path/91039
+ * @returns 包含 access_token 和过期信息的对象
+ */
+export async function getAccessTokenInfo(
+	this: IExecuteFunctions | ILoadOptionsFunctions,
+): Promise<IAccessTokenInfo> {
+	const credentials = (await this.getCredentials('weComApi')) as IWeComCredentials;
+	const cacheKey = getCacheKey(credentials);
+
+	// 执行懒惰清理
+	cleanupExpiredCache();
+
+	const cached = accessTokenCache.get(cacheKey);
+
+	// 如果有正在进行的请求，等待它完成（避免并发重复请求）
+	if (cached?.pending) {
+		await cached.pending;
+		// 重新获取缓存（pending 完成后缓存已更新）
+		const updatedCache = accessTokenCache.get(cacheKey);
+		if (updatedCache) {
+			return {
+				access_token: updatedCache.token,
+				expires_at: updatedCache.expiresAt,
+				expires_in: Math.floor((updatedCache.expiresAt - Date.now()) / 1000),
+				last_access: updatedCache.lastAccess,
+			};
+		}
+	}
+
+	// 如果缓存有效，直接返回
+	if (cached && cached.expiresAt > Date.now()) {
+		cached.lastAccess = Date.now(); // 更新最后访问时间
+		return {
+			access_token: cached.token,
+			expires_at: cached.expiresAt,
+			expires_in: Math.floor((cached.expiresAt - Date.now()) / 1000),
+			last_access: cached.lastAccess,
+		};
+	}
+
+	// 缓存不存在或已过期，重新获取
+	const tokenPromise = fetchAccessToken.call(this, credentials, cacheKey);
+
+	// 保存 pending 状态，防止并发重复请求
+	accessTokenCache.set(cacheKey, {
+		token: '',
+		expiresAt: 0,
+		pending: tokenPromise,
+		lastAccess: Date.now(),
+	});
+
+	try {
+		await tokenPromise;
+		// 重新获取缓存（请求完成后缓存已更新）
+		const updatedCache = accessTokenCache.get(cacheKey);
+		if (updatedCache) {
+			return {
+				access_token: updatedCache.token,
+				expires_at: updatedCache.expiresAt,
+				expires_in: Math.floor((updatedCache.expiresAt - Date.now()) / 1000),
+				last_access: updatedCache.lastAccess,
+			};
+		}
+		throw new NodeOperationError(this.getNode(), '获取 Access Token 信息失败');
 	} catch (error) {
 		// 请求失败时清除缓存，下次重新尝试
 		accessTokenCache.delete(cacheKey);
