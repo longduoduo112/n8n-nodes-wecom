@@ -103,7 +103,7 @@ export const manageMeetingroomDescription: INodeProperties[] = [
 		type: 'number',
 		displayOptions: { show: { ...showOnly, action: ['edit'] } },
 		default: 0,
-		description: '新的容纳人数，0表示不修改',
+		description: '新的容纳人数',
 		typeOptions: { minValue: 0 },
 	},
 	{

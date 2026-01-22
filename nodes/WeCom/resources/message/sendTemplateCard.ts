@@ -257,7 +257,7 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 							},
 						],
 						default: 0,
-						description: '引用文献样式区域点击事件，0或不填代表没有点击事件，1代表跳转URL，2代表跳转小程序',
+						description: '引用文献样式区域点击事件',
 					},
 					{
 						displayName: '小程序Appid（可选）',
@@ -397,7 +397,7 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 							},
 						],
 						default: 0,
-						description: '链接类型，0或不填代表不是链接，1代表跳转URL，2代表下载附件，3代表点击跳转成员详情',
+						description: '链接类型',
 					},
 					{
 						displayName: '跳转链接（可选）',
@@ -482,7 +482,7 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 							},
 						],
 						default: 0,
-						description: '跳转链接类型，0或不填代表不是链接，1代表跳转URL，2代表跳转小程序',
+						description: '跳转链接类型',
 					},
 					{
 						displayName: '标题',
@@ -573,7 +573,7 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 							},
 						],
 						default: 1,
-						description: '跳转事件类型，1代表跳转URL，2代表打开小程序。text_notice必填本字段，取值范围为[1,2]；news_notice必填本字段，取值范围为[1,2]；button_interaction可选，取值范围为[0,1,2]',
+						description: '跳转事件类型。text_notice和news_notice必填本字段；button_interaction可选',
 					},
 					{
 						displayName: '跳转链接（可选）',
@@ -756,7 +756,7 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 							},
 						],
 						default: 0,
-						description: '按钮点击事件类型，0或不填代表回调点击事件，1代表跳转URL',
+						description: '按钮点击事件类型',
 					},
 					{
 						displayName: '按钮文案',
@@ -790,7 +790,7 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 							},
 						],
 						default: 1,
-						description: '按钮样式，目前可填1~4，不填或错填默认1',
+						description: '按钮样式',
 					},
 					{
 						displayName: '按钮Key（可选）',
@@ -1121,7 +1121,7 @@ export const sendTemplateCardDescription: INodeProperties[] = [
 							},
 						],
 						default: 0,
-						description: '左图右文样式区域点击事件，0或不填代表没有点击事件，1代表跳转URL，2代表跳转小程序',
+						description: '左图右文样式区域点击事件',
 					},
 					{
 						displayName: '图片链接',

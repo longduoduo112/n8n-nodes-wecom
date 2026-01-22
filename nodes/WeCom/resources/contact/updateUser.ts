@@ -84,7 +84,7 @@ export const updateUserDescription: INodeProperties[] = [
 			},
 		],
 		default: '0',
-		description: '可选。性别，0表示未定义，1表示男性，2表示女性。<a href="https://developer.work.weixin.qq.com/document/path/90197" target="_blank">官方文档</a>',
+		description: '可选。性别。<a href="https://developer.work.weixin.qq.com/document/path/90197" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '邮箱',
@@ -159,7 +159,7 @@ export const updateUserDescription: INodeProperties[] = [
 			},
 		],
 		default: 1,
-		description: '1表示启用成员，0表示禁用成员。<a href="https://developer.work.weixin.qq.com/document/path/90197" target="_blank">官方文档</a>',
+		description: '是否启用成员。<a href="https://developer.work.weixin.qq.com/document/path/90197" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '头像MediaID',

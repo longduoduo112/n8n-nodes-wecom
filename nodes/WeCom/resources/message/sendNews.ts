@@ -166,7 +166,7 @@ export const sendNewsDescription: INodeProperties[] = [
 				news_input_mode: ['form'],
 			},
 		},
-		description: '可选。表示是否开启ID转译，0表示否，1表示是，默认0。开启后会将消息中的userid转为@对应成员显示。<a href="https://developer.work.weixin.qq.com/document/path/90236#图文消息" target="_blank">官方文档</a>',
+		description: '可选。表示是否开启ID转译，默认否。开启后会将消息中的userid转为@对应成员显示。<a href="https://developer.work.weixin.qq.com/document/path/90236#图文消息" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '是否开启重复消息检查',
@@ -179,7 +179,7 @@ export const sendNewsDescription: INodeProperties[] = [
 				news_input_mode: ['form'],
 			},
 		},
-		description: '可选。表示是否开启重复消息检查，0表示否，1表示是，默认0。开启后相同内容的消息在时间间隔内不会重复发送。<a href="https://developer.work.weixin.qq.com/document/path/90236#图文消息" target="_blank">官方文档</a>',
+		description: '可选。表示是否开启重复消息检查，默认否。开启后相同内容的消息在时间间隔内不会重复发送。<a href="https://developer.work.weixin.qq.com/document/path/90236#图文消息" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '重复消息检查时间间隔',

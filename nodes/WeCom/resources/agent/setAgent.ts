@@ -88,7 +88,7 @@ export const setAgentDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnlySetAgent,
 		},
-		description: '企业应用是否打开地理位置上报。0：不上报；1：进入会话上报',
+		description: '企业应用是否打开地理位置上报',
 	},
 	{
 		displayName: '上报用户进入应用事件',
@@ -108,6 +108,6 @@ export const setAgentDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnlySetAgent,
 		},
-		description: '是否上报用户进入应用事件。0：不接收；1：接收',
+		description: '是否上报用户进入应用事件',
 	},
 ];

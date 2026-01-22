@@ -80,7 +80,7 @@ export const updateContactWayDescription: INodeProperties[] = [
 		type: 'number',
 		default: 0,
 		displayOptions: { show: showOnly },
-		description: '临时会话二维码有效期，以秒为单位。仅在临时会话模式下有效，填0表示不修改',
+		description: '临时会话二维码有效期，以秒为单位。仅在临时会话模式下有效',
 	},
 	{
 		displayName: '会话有效期（秒）',
@@ -88,7 +88,7 @@ export const updateContactWayDescription: INodeProperties[] = [
 		type: 'number',
 		default: 0,
 		displayOptions: { show: showOnly },
-		description: '临时会话有效期，以秒为单位。仅在临时会话模式下有效，填0表示不修改',
+		description: '临时会话有效期，以秒为单位。仅在临时会话模式下有效',
 	},
 	{
 		displayName: '客户UnionID',

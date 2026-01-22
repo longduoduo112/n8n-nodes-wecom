@@ -35,7 +35,6 @@ export const listAppShareInfoDescription: INodeProperties[] = [
 			},
 		],
 		default: 0,
-		description: '填0则为企业互联/局校互联，填1则表示上下游企业',
 	},
 	{
 		displayName: '下级/下游企业Corpid',
@@ -59,7 +58,7 @@ export const listAppShareInfoDescription: INodeProperties[] = [
 			show: showOnly,
 		},
 		default: 0,
-		description: '返回的最大记录数，整型，最大值100，默认情况或者值为0表示下拉取全量数据',
+		description: '返回的最大记录数，整型，最大值100',
 	},
 	{
 		displayName: '分页游标',

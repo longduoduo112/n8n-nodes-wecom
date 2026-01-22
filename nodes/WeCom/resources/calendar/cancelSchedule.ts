@@ -15,7 +15,6 @@ export const cancelScheduleDescription: INodeProperties[] = [
 			show: showOnlyForCancel,
 		},
 		default: '',
-		description: '日程ID',
 		placeholder: '17c7d2bd9f20d652840f72f59e796AAA',
 	},
 	{

@@ -162,7 +162,7 @@ export const updateCalendarDescription: INodeProperties[] = [
 							{ name: '可查看', value: 1 },
 							{ name: '仅查看闲忙状态', value: 3 },
 						],
-						description: '日历通知范围成员权限（不填则默认为「可查看」）。1：可查看；3：仅查看闲忙状态',
+						description: '日历通知范围成员权限（不填则默认为「可查看」）',
 					},
 				],
 			},

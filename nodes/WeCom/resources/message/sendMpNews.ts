@@ -150,7 +150,7 @@ export const sendMpNewsDescription: INodeProperties[] = [
 				mpnews_input_mode: ['form'],
 			},
 		},
-		description: '可选。表示是否是保密消息，0表示可对外分享，1表示不能分享且内容显示水印，2表示仅限在企业内分享，默认为0。注意仅mpnews类型的消息支持safe值为2，其他消息类型不支持。<a href="https://developer.work.weixin.qq.com/document/path/90236#mpnews消息" target="_blank">官方文档</a>',
+		description: '可选。表示是否是保密消息，默认可对外分享。注意仅mpnews类型的消息支持仅限在企业内分享选项，其他消息类型不支持。<a href="https://developer.work.weixin.qq.com/document/path/90236#mpnews消息" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '是否开启ID转译',
@@ -163,7 +163,7 @@ export const sendMpNewsDescription: INodeProperties[] = [
 				mpnews_input_mode: ['form'],
 			},
 		},
-		description: '可选。表示是否开启ID转译，0表示否，1表示是，默认0。开启后会将消息中的userid转为@对应成员显示。<a href="https://developer.work.weixin.qq.com/document/path/90236#mpnews消息" target="_blank">官方文档</a>',
+		description: '可选。表示是否开启ID转译，默认否。开启后会将消息中的userid转为@对应成员显示。<a href="https://developer.work.weixin.qq.com/document/path/90236#mpnews消息" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '是否开启重复消息检查',
@@ -176,7 +176,7 @@ export const sendMpNewsDescription: INodeProperties[] = [
 				mpnews_input_mode: ['form'],
 			},
 		},
-		description: '可选。表示是否开启重复消息检查，0表示否，1表示是，默认0。开启后相同内容的消息在时间间隔内不会重复发送。<a href="https://developer.work.weixin.qq.com/document/path/90236#mpnews消息" target="_blank">官方文档</a>',
+		description: '可选。表示是否开启重复消息检查，默认否。开启后相同内容的消息在时间间隔内不会重复发送。<a href="https://developer.work.weixin.qq.com/document/path/90236#mpnews消息" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '重复消息检查时间间隔',

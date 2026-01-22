@@ -743,7 +743,7 @@ export const licenseDescription: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: '多企业订单ID（订单类型为8：多企业新购订单）',
+		description: '多企业订单ID',
 	},
 	{
 		displayName: '分页游标（可选）',

@@ -109,7 +109,7 @@ export const createScheduleDescription: INodeProperties[] = [
 								is_remind: [true],
 							},
 						},
-						description: '日程开始（start_time）前多少秒提醒，当需要提醒时有效。例如：300表示日程开始前5分钟提醒。目前仅支持以下数值：事件开始时；事件开始前5分钟；事件开始前15分钟；事件开始前1小时；事件开始前1天。该字段与remind_time_diffs仅一个字段会生效，当remind_time_diffs有传值且列表不为空时，优先以remind_time_diffs为准',
+						description: '日程开始（start_time）前多少秒提醒，当需要提醒时有效。该字段与remind_time_diffs仅一个字段会生效，当remind_time_diffs有传值且列表不为空时，优先以remind_time_diffs为准',
 						options: [
 							{ name: '事件开始时', value: 0 },
 							{ name: '事件开始前5分钟', value: 300 },
@@ -128,7 +128,7 @@ export const createScheduleDescription: INodeProperties[] = [
 								is_remind: [true],
 							},
 						},
-						description: '提醒时间与日程开始时间（start_time）的差值，当需要提醒时有效，可以指定多个提醒时间。目前仅支持以下数值：事件开始时；事件开始前5分钟；事件开始前15分钟；事件开始前1小时；事件开始前1天。当是全天日程时，还支持：事件开始当天（09：00）；事件开始前两天；事件开始前1周。该字段与remind_before_event_secs仅一个字段会生效，当该字段有传值且列表不为空时，优先以该字段为准',
+						description: '提醒时间与日程开始时间（start_time）的差值，当需要提醒时有效，可以指定多个提醒时间。当是全天日程时，还支持更多选项。该字段与remind_before_event_secs仅一个字段会生效，当该字段有传值且列表不为空时，优先以该字段为准',
 						options: [
 							{ name: '事件开始时', value: 0 },
 							{ name: '事件开始前5分钟', value: -300 },
@@ -218,7 +218,7 @@ export const createScheduleDescription: INodeProperties[] = [
 								repeat_type: [1],
 							},
 						},
-						description: '每周周几重复。仅当指定为自定义重复且重复类型为每周时有效。取值范围：1 ~ 7，分别表示周一至周日',
+						description: '每周周几重复。仅当指定为自定义重复且重复类型为每周时有效。取值范围：1 ~ 7',
 						options: [
 							{ name: '周一', value: 1 },
 							{ name: '周二', value: 2 },
@@ -241,7 +241,7 @@ export const createScheduleDescription: INodeProperties[] = [
 								repeat_type: [2],
 							},
 						},
-						description: '每月哪几天重复。仅当指定为自定义重复且重复类型为每月时有效。取值范围：1 ~ 31，分别表示1~31号',
+						description: '每月哪几天重复。仅当指定为自定义重复且重复类型为每月时有效。取值范围：1 ~ 31',
 						options: Array.from({ length: 31 }, (_, i) => ({
 							name: `${i + 1}号`,
 							value: i + 1,

@@ -22,7 +22,6 @@ export const getFormStatisticDescription: INodeProperties[] = [
 			{ name: '获取未提交列表', value: 3 },
 		],
 		default: 1,
-		description: '请求类型：1=只获取统计结果, 2=获取已提交列表, 3=获取未提交列表',
 	},
 	{
 		displayName: '开始时间',
@@ -31,7 +30,7 @@ export const getFormStatisticDescription: INodeProperties[] = [
 		required: true,
 		displayOptions: { show: { ...showOnly, req_type: [2] } },
 		default: '',
-		description: '筛选开始时间，以当天的00:00:00开始筛选（仅req_type=2时需要）',
+		description: '筛选开始时间，以当天的00:00:00开始筛选',
 	},
 	{
 		displayName: '结束时间',
@@ -40,7 +39,7 @@ export const getFormStatisticDescription: INodeProperties[] = [
 		required: true,
 		displayOptions: { show: { ...showOnly, req_type: [2] } },
 		default: '',
-		description: '筛选结束时间，以当天的23:59:59结束筛选（仅req_type=2时需要）',
+		description: '筛选结束时间，以当天的23:59:59结束筛选',
 	},
 	{
 		displayName: '每页数量',

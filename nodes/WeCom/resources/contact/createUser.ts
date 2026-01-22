@@ -86,7 +86,7 @@ export const createUserDescription: INodeProperties[] = [
 			},
 		],
 		default: '0',
-		description: '可选。性别，0表示未定义，1表示男性，2表示女性。<a href="https://developer.work.weixin.qq.com/document/path/90195" target="_blank">官方文档</a>',
+		description: '可选。性别。<a href="https://developer.work.weixin.qq.com/document/path/90195" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '邮箱',
@@ -161,7 +161,7 @@ export const createUserDescription: INodeProperties[] = [
 			},
 		],
 		default: 1,
-		description: '1表示启用成员，0表示禁用成员。<a href="https://developer.work.weixin.qq.com/document/path/90195" target="_blank">官方文档</a>',
+		description: '是否启用成员。<a href="https://developer.work.weixin.qq.com/document/path/90195" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '头像MediaID',
@@ -215,7 +215,7 @@ export const createUserDescription: INodeProperties[] = [
 		},
 		default: '',
 		placeholder: '1,0',
-		description: '可选。个数必须和参数department的个数一致，表示在所在的部门内是否为部门负责人。1表示为部门负责人，0表示非部门负责人。<a href="https://developer.work.weixin.qq.com/document/path/90195" target="_blank">官方文档</a>',
+		description: '可选。个数必须和参数department的个数一致，表示在所在的部门内是否为部门负责人。<a href="https://developer.work.weixin.qq.com/document/path/90195" target="_blank">官方文档</a>',
 	},
 	{
 		displayName: '直属上级UserID',

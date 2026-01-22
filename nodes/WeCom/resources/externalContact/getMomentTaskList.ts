@@ -43,7 +43,6 @@ export const getMomentTaskListDescription: INodeProperties[] = [
 		],
 		default: 2,
 		displayOptions: { show: showOnly },
-		description: '朋友圈类型。0：企业发表 1：个人发表 2：所有，包括个人创建以及企业创建',
 	},
 	{
 		displayName: '分页游标',
