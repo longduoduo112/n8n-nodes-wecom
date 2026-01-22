@@ -16,28 +16,67 @@ export async function executeCalendar(
 			// 管理日历
 			if (operation === 'createCalendar') {
 				const summary = this.getNodeParameter('summary', i) as string;
-				const admins = this.getNodeParameter('admins', i) as string;
+				const admins = this.getNodeParameter('admins', i) as string[];
 				const description = this.getNodeParameter('description', i, '') as string;
-				const color = this.getNodeParameter('color', i, 0) as number;
-				const shares = this.getNodeParameter('shares', i, '') as string;
+				const isCorpCalendar = this.getNodeParameter('isCorpCalendar', i, false) as boolean;
+				const advancedSettings = this.getNodeParameter('advancedSettings', i, {}) as IDataObject;
+				const sharesCollection = this.getNodeParameter('sharesCollection', i, {}) as IDataObject;
 
-				const body: IDataObject = {
-					calendar: {
-						summary,
-						admins: admins.split(',').map((id) => ({ userid: id.trim() })),
-					},
+				const calendar: IDataObject = {
+					summary,
+					admins,
 				};
 
+				// 全员日历设置
+				if (isCorpCalendar) {
+					calendar.is_corp_calendar = 1; // 设置为全员日历
+				}
+
+				// 日历描述
 				if (description) {
-					(body.calendar as IDataObject).description = description;
+					calendar.description = description;
 				}
 
-				if (color) {
-					(body.calendar as IDataObject).color = color;
+				// 全员日历不支持颜色
+				if (!isCorpCalendar) {
+					const color = this.getNodeParameter('color', i, '') as string;
+					if (color) {
+						calendar.color = color;
+					}
 				}
 
-				if (shares) {
-					(body.calendar as IDataObject).shares = JSON.parse(shares);
+				// 公开范围
+				if (advancedSettings.publicRange) {
+					const publicRange = advancedSettings.publicRange as IDataObject;
+					const rangeObj: IDataObject = {};
+					if (publicRange.userids && (publicRange.userids as string[]).length > 0) {
+						rangeObj.userids = publicRange.userids as string[];
+					}
+					if (publicRange.partyids && (publicRange.partyids as string[]).length > 0) {
+						rangeObj.partyids = publicRange.partyids as string[];
+					}
+					if (Object.keys(rangeObj).length > 0) {
+						calendar.public_range = rangeObj;
+					}
+				}
+
+				// 构建共享范围
+				if (sharesCollection.shares) {
+					const sharesList = sharesCollection.shares as IDataObject[];
+					const shares: IDataObject[] = [];
+					sharesList.forEach((s) => {
+						const share: IDataObject = { userid: s.userid as string };
+						if (s.permission) {
+							share.permission = s.permission as number;
+						}
+						shares.push(share);
+					});
+					calendar.shares = shares;
+				}
+
+				const body: IDataObject = { calendar };
+				if (advancedSettings.agentid) {
+					body.agentid = advancedSettings.agentid as number;
 				}
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/oa/calendar/add', body);
@@ -45,15 +84,50 @@ export async function executeCalendar(
 				const cal_id = this.getNodeParameter('cal_id', i) as string;
 				const summary = this.getNodeParameter('summary', i, '') as string;
 				const description = this.getNodeParameter('description', i, '') as string;
-				const color = this.getNodeParameter('color', i, -1) as number;
-				const shares = this.getNodeParameter('shares', i, '') as string;
+				const color = this.getNodeParameter('color', i) as string;
+				const publicRange = this.getNodeParameter('publicRange', i, {}) as IDataObject;
+				const sharesCollection = this.getNodeParameter('sharesCollection', i, {}) as IDataObject;
 
 				const calendar: IDataObject = { cal_id };
 
-				if (summary) calendar.summary = summary;
-				if (description) calendar.description = description;
-				if (color >= 0) calendar.color = color;
-				if (shares) calendar.shares = JSON.parse(shares);
+				// 日历设置
+				if (summary) {
+					calendar.summary = summary;
+				}
+				if (description) {
+					calendar.description = description;
+				}
+				if (color) {
+					calendar.color = color;
+				}
+
+				// 公开范围
+				if (publicRange && Object.keys(publicRange).length > 0) {
+					const rangeObj: IDataObject = {};
+					if (publicRange.userids && (publicRange.userids as string[]).length > 0) {
+						rangeObj.userids = publicRange.userids as string[];
+					}
+					if (publicRange.partyids && (publicRange.partyids as string[]).length > 0) {
+						rangeObj.partyids = publicRange.partyids as string[];
+					}
+					if (Object.keys(rangeObj).length > 0) {
+						calendar.public_range = rangeObj;
+					}
+				}
+
+				// 共享范围
+				if (sharesCollection.shares) {
+					const sharesList = sharesCollection.shares as IDataObject[];
+					const shares: IDataObject[] = [];
+					sharesList.forEach((s) => {
+						const share: IDataObject = { userid: s.userid as string };
+						if (s.permission) {
+							share.permission = s.permission as number;
+						}
+						shares.push(share);
+					});
+					calendar.shares = shares;
+				}
 
 				response = await weComApiRequest.call(this, 'POST', '/cgi-bin/oa/calendar/update', {
 					calendar,
