@@ -15,8 +15,8 @@ export const getScheduleDescription: INodeProperties[] = [
 			show: showOnlyForGet,
 		},
 		default: '',
-		description: '日程ID列表，用逗号分隔，最多支持1000个日程ID。<a href="https://developer.work.weixin.qq.com/document/path/93650" target="_blank">官方文档</a>',
-		placeholder: '17c7d2bd-8062-4d73-b2e1-e4e8b8f8c7c8,27c7d2bd-8062-4d73-b2e1-e4e8b8f8c7c9',
+		description: '日程ID列表，用逗号分隔。一次最多拉取1000条',
+		placeholder: '17c7d2bd9f20d652840f72f59e796AAA,27c7d2bd9f20d652840f72f59e796BBB',
 	},
 ];
 

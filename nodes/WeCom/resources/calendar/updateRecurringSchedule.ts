@@ -36,7 +36,7 @@ export const updateRecurringScheduleDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnlyForUpdateRecurring,
 		},
-		description: '是否不更新参与人。0-否；1-是。默认为0',
+		description: '是否不更新参与人。默认为否',
 	},
 	{
 		displayName: '操作模式',
@@ -68,15 +68,15 @@ export const updateRecurringScheduleDescription: INodeProperties[] = [
 	{
 		displayName: '操作起始时间',
 		name: 'op_start_time',
-		type: 'number',
+		type: 'dateTime',
 		displayOptions: {
 			show: {
 				...showOnlyForUpdateRecurring,
 				op_mode: [1, 2],
 			},
 		},
-		default: 0,
-		description: '操作起始时间（Unix时间戳）。',
+		default: '',
+		description: '操作起始时间。仅当操作模式是"仅修改此日程"或"修改将来的所有日程"时有效',
 	},
 ];
 

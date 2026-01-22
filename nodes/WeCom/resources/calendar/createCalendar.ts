@@ -69,7 +69,7 @@ export const createCalendarDescription: INodeProperties[] = [
 			{ name: '芋头紫 (#CC66CC)', value: '#CC66CC' },
 			{ name: '灰色 (#999999)', value: '#999999' },
 		],
-		description: '日历颜色，RGB颜色编码16进制表示（如 #0000FF 表示纯蓝色）。可从列表选择预设颜色，或通过表达式输入自定义RGB格式',
+		description: '日历颜色，RGB颜色编码16进制表示（如 #0000FF 表示纯蓝色）。可从列表选择预设颜色',
 	},
 	{
 		displayName: '是否全员日历',
@@ -79,7 +79,7 @@ export const createCalendarDescription: INodeProperties[] = [
 			show: showOnlyForCreate,
 		},
 		default: false,
-		description: '是否全员日历（0-否；1-是）。注意：每个企业最多可创建20个全员日历；全员日历也是公共日历的一种，创建后&lt;strong&gt;必须指定公开范围&lt;/strong&gt;；全员日历不支持颜色、默认日历、只读权限；该属性不可更新',
+		description: '是否全员日历。注意：每个企业最多可创建20个全员日历；全员日历也是公共日历的一种，创建后&lt;strong&gt;必须指定公开范围&lt;/strong&gt;；全员日历不支持颜色、默认日历、只读权限；该属性不可更新',
 	},
 	{
 		displayName: '日历通知范围',

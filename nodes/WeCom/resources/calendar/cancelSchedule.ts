@@ -15,7 +15,8 @@ export const cancelScheduleDescription: INodeProperties[] = [
 			show: showOnlyForCancel,
 		},
 		default: '',
-		description: '要取消的日程唯一标识ID',
+		description: '日程ID',
+		placeholder: '17c7d2bd9f20d652840f72f59e796AAA',
 	},
 	{
 		displayName: '操作模式',
@@ -23,7 +24,7 @@ export const cancelScheduleDescription: INodeProperties[] = [
 		type: 'options',
 		options: [
 			{
-				name: '删除所有日程',
+				name: '默认删除所有日程',
 				value: 0,
 				description: '默认删除所有日程',
 			},
@@ -42,20 +43,20 @@ export const cancelScheduleDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnlyForCancel,
 		},
-		description: '操作模式。是重复日程时有效。',
+		description: '操作模式。是重复日程时有效',
 	},
 	{
 		displayName: '操作起始时间',
 		name: 'op_start_time',
-		type: 'number',
+		type: 'dateTime',
 		displayOptions: {
 			show: {
 				...showOnlyForCancel,
 				op_mode: [1, 2],
 			},
 		},
-		default: 0,
-		description: '操作起始时间（Unix时间戳）。',
+		default: '',
+		description: '操作起始时间。仅当操作模式是"仅删除此日程"或"删除本次及后续日程"时有效。该时间必须是重复日程的某一次开始时间',
 	},
 ];
 

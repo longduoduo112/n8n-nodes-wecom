@@ -15,7 +15,8 @@ export const listCalendarSchedulesDescription: INodeProperties[] = [
 			show: showOnlyForList,
 		},
 		default: '',
-		description: '要查询日程的日历唯一标识ID',
+		description: '日历ID。仅可获取应用自己创建的日历下的日程',
+		placeholder: 'wcjgewCwAAqeJcPI1d8Pwbjt7nttzAAA',
 	},
 	{
 		displayName: '偏移量',
@@ -24,8 +25,11 @@ export const listCalendarSchedulesDescription: INodeProperties[] = [
 		displayOptions: {
 			show: showOnlyForList,
 		},
+		typeOptions: {
+			minValue: 0,
+		},
 		default: 0,
-		description: '分页查询的偏移量，用于获取后续页面的数据',
+		description: '分页，偏移量。默认为0',
 	},
 	{
 		displayName: '限制数量',
@@ -33,12 +37,13 @@ export const listCalendarSchedulesDescription: INodeProperties[] = [
 		type: 'number',
 		typeOptions: {
 			minValue: 1,
+			maxValue: 1000,
 		},
 		displayOptions: {
 			show: showOnlyForList,
 		},
-		default: 50,
-		description: '单次返回的日程数量上限，最多支持1000个',
+		default: 500,
+		description: '分页，预期请求的数据量。默认为500，取值范围 1 ~ 1000',
 	},
 ];
 
