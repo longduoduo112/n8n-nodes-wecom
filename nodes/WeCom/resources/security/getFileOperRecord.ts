@@ -1,0 +1,163 @@
+import type { INodeProperties } from 'n8n-workflow';
+
+export const getFileOperRecordDescription: INodeProperties[] = [
+	{
+		displayName: '开始时间',
+		name: 'start_time',
+		type: 'dateTime',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['security'],
+				operation: ['getFileOperRecord'],
+			},
+		},
+		default: '',
+		description: '开始时间（Unix时间戳，秒）',
+	},
+	{
+		displayName: '结束时间',
+		name: 'end_time',
+		type: 'dateTime',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['security'],
+				operation: ['getFileOperRecord'],
+			},
+		},
+		default: '',
+		description: '结束时间（Unix时间戳，秒），开始时间到结束时间的范围不能超过14天',
+	},
+	{
+		displayName: '用户ID列表 Names or IDs',
+		name: 'userid_list',
+		type: 'multiOptions',
+		displayOptions: {
+			show: {
+				resource: ['security'],
+				operation: ['getFileOperRecord'],
+			},
+		},
+		typeOptions: {
+			loadOptionsMethod: 'getAllUsers',
+		},
+		default: [],
+		description: '需要查询的文件操作者的userid，单次最多可以传100个用户',
+	},
+	{
+		displayName: '操作类型',
+		name: 'operation_type',
+		type: 'collection',
+		displayOptions: {
+			show: {
+				resource: ['security'],
+				operation: ['getFileOperRecord'],
+			},
+		},
+		default: {},
+		description: '操作类型过滤条件',
+		options: [
+			{
+				displayName: '类型',
+				name: 'type',
+				type: 'options',
+				description: '操作类型',
+				default: 101,
+				options: [
+					{ name: '上传', value: 101 },
+					{ name: '新建文件夹', value: 102 },
+					{ name: '下载', value: 103 },
+					{ name: '更新', value: 104 },
+					{ name: '星标', value: 105 },
+					{ name: '移动', value: 106 },
+					{ name: '复制', value: 107 },
+					{ name: '重命名', value: 108 },
+					{ name: '删除', value: 109 },
+					{ name: '恢复', value: 110 },
+					{ name: '彻底删除', value: 111 },
+					{ name: '转发到企业微信', value: 112 },
+					{ name: '通过链接下载', value: 113 },
+					{ name: '获取分享链接', value: 114 },
+					{ name: '修改分享链接', value: 115 },
+					{ name: '关闭分享链接', value: 116 },
+					{ name: '收藏', value: 117 },
+					{ name: '新建文档', value: 118 },
+					{ name: '新建表格', value: 119 },
+					{ name: '打开', value: 121 },
+					{ name: '导出文件', value: 124 },
+					{ name: '添加文件成员', value: 127 },
+					{ name: '修改文件成员权限', value: 128 },
+					{ name: '移除文件成员', value: 129 },
+					{ name: '设置文档水印', value: 130 },
+					{ name: '修改企业内权限', value: 131 },
+					{ name: '修改企业外权限', value: 132 },
+					{ name: '添加快捷入口', value: 133 },
+					{ name: '转发到微信', value: 134 },
+					{ name: '预览', value: 135 },
+					{ name: '权限管理', value: 136 },
+					{ name: '安全设置', value: 139 },
+					{ name: '通过邮件分享', value: 140 },
+					{ name: '离职成员文件转交', value: 142 },
+					{ name: '通过下载申请', value: 10001 },
+					{ name: '拒绝下载申请', value: 10002 },
+				],
+			},
+			{
+				displayName: '来源',
+				name: 'source',
+				type: 'options',
+				description: '操作来源（在上传或下载时可通过该字段细分操作来源）',
+				default: 401,
+				options: [
+					{ name: '聊天', value: 401 },
+					{ name: '邮件', value: 402 },
+					{ name: '文档', value: 403 },
+					{ name: '微盘', value: 404 },
+					{ name: '日程', value: 405 },
+					{ name: '会议', value: 406 },
+					{ name: '审批', value: 407 },
+					{ name: '汇报', value: 408 },
+					{ name: '收集表', value: 409 },
+					{ name: '客户联系', value: 410 },
+					{ name: '上下游', value: 411 },
+					{ name: '收藏', value: 450 },
+					{ name: '文件列表', value: 451 },
+					{ name: '其他', value: 452 },
+				],
+			},
+		],
+	},
+	{
+		displayName: '游标',
+		name: 'cursor',
+		type: 'string',
+
+		displayOptions: {
+			show: {
+				resource: ['security'],
+				operation: ['getFileOperRecord'],
+			},
+		},
+		default: '',
+		description: '由企业微信后台返回，第一次调用可不填。用于分页查询',
+	},
+	{
+		displayName: '限制条数',
+		name: 'limit',
+		type: 'number',
+
+		displayOptions: {
+			show: {
+				resource: ['security'],
+				operation: ['getFileOperRecord'],
+			},
+		},
+		default: 100,
+		description: '限制返回的条数，最多设置为1000',
+		typeOptions: {
+			minValue: 1,
+			maxValue: 1000,
+		},
+	},
+];

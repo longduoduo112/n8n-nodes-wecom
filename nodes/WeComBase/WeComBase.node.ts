@@ -24,6 +24,7 @@ import { paytoolDescription } from '../WeCom/resources/paytool';
 import { promotionQrcodeDescription } from '../WeCom/resources/promotionQrcode';
 import { accountIdDescription } from '../WeCom/resources/accountId';
 import { fileDescription } from '../WeCom/resources/file';
+import { securityDescription } from '../WeCom/resources/security';
 import { executeMessage } from '../WeCom/resources/message/execute';
 import { executeContact } from '../WeCom/resources/contact/execute';
 import { executeMaterial } from '../WeCom/resources/material/execute';
@@ -41,6 +42,7 @@ import { executePaytool } from '../WeCom/resources/paytool/execute';
 import { executePromotionQrcode } from '../WeCom/resources/promotionQrcode/execute';
 import { executeAccountId } from '../WeCom/resources/accountId/execute';
 import { executeFile } from '../WeCom/resources/file/execute';
+import { executeSecurity } from '../WeCom/resources/security/execute';
 import { weComApiRequest } from '../WeCom/shared/transport';
 
 export class WeComBase implements INodeType {
@@ -54,7 +56,7 @@ export class WeComBase implements INodeType {
 		subtitle:
 			'={{$parameter["resource"] === "passiveReply" ? "reply: " + $parameter["resource"] : ($parameter["resource"] === "system" ? $parameter["resource"] : $parameter["operation"] + ": " + $parameter["resource"])}}',
 		description:
-			'企业微信基础功能 - 通讯录、应用消息、群聊、消息推送、企业互联、素材、系统、电子发票、第三方应用授权、第三方应用接口调用许可、第三方应用收银台、第三方应用推广二维码、账号ID',
+			'企业微信基础功能 - 通讯录、应用消息、群聊、消息推送、企业互联、素材、系统、电子发票、第三方应用授权、第三方应用接口调用许可、第三方应用收银台、第三方应用推广二维码、账号ID、安全管理',
 		defaults: {
 			name: '企业微信-基础',
 		},
@@ -76,6 +78,7 @@ export class WeComBase implements INodeType {
 							'invoice',
 							'agent',
 							'accountId',
+							'security',
 						],
 					},
 				},
@@ -260,6 +263,11 @@ export class WeComBase implements INodeType {
 						value: 'file',
 						description: '解密接收到的加密文件',
 					},
+					{
+						name: '安全管理',
+						value: 'security',
+						description: '文件防泄漏等安全管理功能',
+					},
 				],
 				default: 'pushMessage',
 			},
@@ -280,6 +288,7 @@ export class WeComBase implements INodeType {
 			...promotionQrcodeDescription,
 			...accountIdDescription,
 			...fileDescription,
+			...securityDescription,
 		],
 		usableAsTool: true,
 	};
@@ -447,6 +456,11 @@ export class WeComBase implements INodeType {
 				returnData = await executeAccountId.call(this, operation, items);
 			} else if (resource === 'file') {
 				returnData = await executeFile.call(this, operation, items);
+			} else if (resource === 'security') {
+				for (let i = 0; i < items.length; i++) {
+					const responseData = await executeSecurity.call(this, i);
+					returnData.push({ json: responseData[0], pairedItem: { item: i } });
+				}
 			}
 		}
 

@@ -1,0 +1,157 @@
+import type { INodeProperties } from 'n8n-workflow';
+
+export const importDeviceDescription: INodeProperties[] = [
+	{
+		displayName: '设备列表',
+		name: 'device_list',
+		type: 'fixedCollection',
+		required: true,
+		displayOptions: {
+			show: {
+				resource: ['security'],
+				operation: ['importDevice'],
+			},
+		},
+		typeOptions: {
+			multipleValues: true,
+		},
+		description: '要导入的可信企业设备列表，每次最多导入100条',
+		default: {},
+		options: [
+			{
+				displayName: '设备',
+				name: 'device',
+				placeholder: '添加设备',
+				type: 'collection',
+				default: {},
+				options: [
+					{
+						displayName: '系统类型',
+						name: 'system',
+						type: 'options',
+
+						description: '设备的类型',
+						options: [
+							{
+								name: 'Windows',
+								value: 'Windows',
+								description: 'Windows操作系统',
+							},
+							{
+								name: 'Mac',
+								value: 'Mac',
+								description: 'Mac操作系统',
+							},
+						],
+						default: 'Windows',
+					},
+					{
+						displayName: 'MAC地址列表',
+						name: 'mac_addr',
+						type: 'string',
+						typeOptions: {
+							multipleValues: true,
+						},
+						required: true,
+						placeholder: '50:81:40:29:33:CA',
+						description: '设备MAC地址列表，Windows设备必填，每个设备最多100个',
+						default: [],
+						displayOptions: {
+							show: {
+								system: ['Windows'],
+							},
+						},
+					},
+					{
+						displayName: 'MAC地址列表',
+						name: 'mac_addr',
+						type: 'string',
+						typeOptions: {
+							multipleValues: true,
+						},
+						placeholder: '81:40:50:29:33:DB',
+						description: '设备MAC地址列表，Mac设备选填，每个设备最多100个',
+						default: [],
+						displayOptions: {
+							show: {
+								system: ['Mac'],
+							},
+						},
+					},
+					{
+						displayName: '主板UUID',
+						name: 'motherboard_uuid',
+						type: 'string',
+
+						placeholder: 'MB_UUID',
+						description: '主板UUID，Windows设备可选填',
+						default: '',
+						displayOptions: {
+							show: {
+								system: ['Windows'],
+							},
+						},
+					},
+					{
+						displayName: '硬盘序列号列表',
+						name: 'harddisk_uuid',
+						type: 'string',
+						typeOptions: {
+							multipleValues: true,
+						},
+						placeholder: 'HD_UUID1',
+						description: '硬盘序列号列表，Windows设备可选填，每个设备最多100个',
+						default: [],
+						displayOptions: {
+							show: {
+								system: ['Windows'],
+							},
+						},
+					},
+					{
+						displayName: 'Windows域名',
+						name: 'domain',
+						type: 'string',
+
+						placeholder: 'WINDOWS_DOMAIN',
+						description: 'Windows域名，Windows设备可选填',
+						default: '',
+						displayOptions: {
+							show: {
+								system: ['Windows'],
+							},
+						},
+					},
+					{
+						displayName: '计算机名',
+						name: 'pc_name',
+						type: 'string',
+
+						placeholder: 'PC_001',
+						description: 'Windows计算机名，Windows设备可选填',
+						default: '',
+						displayOptions: {
+							show: {
+								system: ['Windows'],
+							},
+						},
+					},
+					{
+						displayName: 'Mac序列号',
+						name: 'seq_no',
+						type: 'string',
+						required: true,
+						placeholder: 'SEQ_NO',
+						description: 'Mac序列号，Mac设备必填',
+						default: '',
+						displayOptions: {
+							show: {
+								system: ['Mac'],
+							},
+						},
+					},
+				],
+			},
+		],
+	},
+];
