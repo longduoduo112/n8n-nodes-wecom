@@ -24,7 +24,7 @@ export const importDeviceDescription: INodeProperties[] = [
 				placeholder: '添加设备',
 				type: 'collection',
 				default: {},
-				options: [
+				values: [
 					{
 						displayName: '系统类型',
 						name: 'system',
